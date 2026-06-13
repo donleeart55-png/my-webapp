@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ดล's Quest Log</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+:root{--bg:#0e0e12;--surface:#16161e;--surface2:#1e1e2a;--border:#2a2a3a;--accent:#c8a96e;--accent2:#7c6ef5;--green:#4ecb71;--red:#e05c5c;--text:#e8e4dc;--muted:#6b6880;--gold:#f0c040;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;padding:16px 14px 80px;}
+.header{text-align:center;padding:20px 0 14px;border-bottom:1px solid var(--border);margin-bottom:18px;}
+.eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:5px;}
+.header h1{font-size:20px;font-weight:700;}
+.xp-wrap{margin:10px auto 0;max-width:300px;}
+.xp-lbl{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:4px;}
+.xp-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:3px;transition:width .5s;}
+.decay-alert{background:rgba(224,92,92,.1);border:1px solid var(--red);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--red);display:none;}
+.decay-alert.show{display:block;}
+/* STATUS */
+.status-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:18px;}
+.section-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.section-ttl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;}
+.sp-badge{background:rgba(124,110,245,.2);border:1px solid var(--accent2);color:var(--accent2);font-family:'Space Mono',monospace;font-size:11px;padding:3px 10px;border-radius:20px;}
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.stat-item{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:6px 3px;text-align:center;transition:all .2s;}
+.stat-item.can-upgrade{border-color:var(--gold);animation:pgold 1.5s infinite;}
+@keyframes pgold{0%,100%{box-shadow:0 0 0 0 rgba(240,192,64,.3);}50%{box-shadow:0 0 0 4px rgba(240,192,64,0);}}
+.stat-name{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);}
+.stat-val{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;margin:1px 0;}
+.stat-bar{height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:2px;}
+.stat-bar-fill{height:100%;border-radius:2px;transition:width .4s;}
+.today-display{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);text-align:center;margin-bottom:14px;}
+/* NODE CARDS */
+.nodes-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.node-card{background:var(--surface);border-radius:12px;padding:14px;position:relative;overflow:hidden;}
+.node-card.art{border:1px solid var(--accent);}
+.node-card.fit{border:1px solid #e05c8a;}
+.node-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.node-card.art::before{background:linear-gradient(90deg,var(--accent2),var(--accent));}
+.node-card.fit::before{background:linear-gradient(90deg,#e05c8a,var(--red));}
+.node-type{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
+.node-card.art .node-type{color:var(--accent);}
+.node-card.fit .node-type{color:#e05c8a;}
+.rank-badge{font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;border-radius:10px;margin-bottom:6px;display:inline-block;}
+.node-card.art .rank-badge{background:rgba(200,169,110,.15);color:var(--gold);}
+.node-card.fit .rank-badge{background:rgba(224,92,138,.15);color:#e05c8a;}
+.node-hours{font-family:'Space Mono',monospace;font-size:24px;font-weight:700;line-height:1;}
+.node-card.art .node-hours{color:var(--gold);}
+.node-card.fit .node-hours{color:#e05c8a;}
+.node-sub{font-size:10px;color:var(--muted);margin:2px 0 8px;}
+.node-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:8px;}
+.node-bar-fill{height:100%;border-radius:2px;}
+.node-card.art .node-bar-fill{background:linear-gradient(90deg,var(--accent2),var(--gold));}
+.node-card.fit .node-bar-fill{background:linear-gradient(90deg,#e05c8a,var(--red));}
+.rank-progress{font-size:9px;color:var(--muted);margin-bottom:8px;}
+.node-input-row{display:flex;gap:5px;margin-bottom:6px;}
+.n-input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;padding:5px 7px;width:55px;outline:none;}
+.n-input:focus{border-color:var(--accent);}
+.btn-s{border:none;border-radius:6px;padding:5px 9px;font-family:'Sarabun',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:opacity .2s;}
+.btn-s:hover{opacity:.8;}
+.btn-art{background:var(--accent);color:#1a1a00;}
+.btn-fit{background:#e05c8a;color:white;}
+.btn-danger{background:rgba(224,92,92,.15);color:var(--red);border:1px solid var(--red);}
+.hour-log{margin-top:6px;max-height:80px;overflow-y:auto;}
+.hour-entry{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--muted);padding:2px 0;border-bottom:1px solid var(--border);}
+.hour-entry:last-child{border:none;}
+.del-btn{background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;padding:0 3px;}
+/* TABS */
+.tabs{display:flex;gap:3px;margin-bottom:14px;background:var(--surface);padding:4px;border-radius:10px;overflow-x:auto;}
+.tab{flex-shrink:0;text-align:center;padding:7px 8px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);transition:all .2s;white-space:nowrap;}
+.tab.active{background:var(--accent2);color:white;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+/* QUESTS */
+.sec-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.q-section{margin-bottom:20px;}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;overflow:hidden;transition:border-color .2s;}
+.q-card.done{border-color:var(--green);opacity:.65;}
+.q-card.rest-off{opacity:.3;pointer-events:none;}
+.q-card:hover:not(.rest-off){border-color:var(--accent2);}
+.q-row{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;}
+.chk{width:18px;height:18px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.q-card.done .chk{background:var(--green);border-color:var(--green);}
+.q-text{flex:1;font-size:13px;}
+.q-card.done .q-text{text-decoration:line-through;color:var(--muted);}
+.q-meta{display:flex;gap:5px;align-items:center;flex-shrink:0;}
+.q-xp{font-family:'Space Mono',monospace;font-size:9px;color:var(--accent);background:rgba(200,169,110,.1);padding:2px 6px;border-radius:4px;}
+.q-stat{font-family:'Space Mono',monospace;font-size:9px;padding:2px 6px;border-radius:4px;}
+.q-stat.STR{color:#f87171;background:rgba(248,113,113,.1);}
+.q-stat.AGI{color:#34d399;background:rgba(52,211,153,.1);}
+.q-stat.INT{color:#818cf8;background:rgba(129,140,248,.1);}
+.q-stat.VIT{color:#fbbf24;background:rgba(251,191,36,.1);}
+.q-stat.CRE{color:#f0abfc;background:rgba(240,171,252,.1);}
+/* REST inline btn */
+.rest-inline{font-size:9px;padding:2px 6px;border-radius:4px;border:1px solid #e05c8a;background:transparent;color:#e05c8a;cursor:pointer;font-family:'Space Mono',monospace;transition:all .2s;flex-shrink:0;}
+.rest-inline.active{background:#e05c8a;color:white;}
+.rest-inline:hover{opacity:.8;}
+/* CALENDAR */
+.cal-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cal-nav-btn{background:none;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px;transition:all .15s;}
+.cal-nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+.cal-month-lbl{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);font-weight:700;}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;}
+.cal-wd{text-align:center;font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);padding:2px 0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-day{aspect-ratio:1;border-radius:5px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);cursor:pointer;transition:all .15s;}
+.cal-day:hover{border-color:var(--accent2);color:var(--accent2);}
+.cal-day.empty{background:transparent;border-color:transparent;cursor:default;}
+.cal-day.done{background:rgba(78,203,113,.15);border-color:var(--green);color:var(--green);}
+.cal-day.today{border-color:var(--accent);color:var(--accent);font-weight:700;}
+.cal-day.selected{border-color:var(--gold)!important;background:rgba(240,192,64,.2)!important;color:var(--gold)!important;font-weight:700;}
+/* SKILL TREE */
+.tree-lane{margin-bottom:26px;}
+.tree-lane-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.tree-lane-ttl{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;}
+.tree-lane-line{flex:1;height:1px;background:var(--border);}
+.t-node{display:flex;align-items:stretch;gap:0;margin-bottom:0;}
+.t-conn{display:flex;flex-direction:column;align-items:center;width:22px;flex-shrink:0;}
+.t-dot{width:11px;height:11px;border-radius:50%;border:2px solid var(--border);background:var(--bg);flex-shrink:0;transition:all .3s;margin-top:13px;}
+.t-dot.unlocked{background:var(--green);border-color:var(--green);box-shadow:0 0 7px rgba(78,203,113,.5);}
+.t-dot.available{background:var(--gold);border-color:var(--gold);animation:pgold 1.5s infinite;}
+.t-line{width:2px;flex:1;background:var(--border);margin:0 auto;}
+.t-line.lit{background:var(--green);}
+.t-card{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin:3px 0 3px 7px;transition:all .3s;}
+.t-card.unlocked{border-color:var(--green);background:rgba(78,203,113,.04);}
+.t-card.available{border-color:var(--gold);background:rgba(240,192,64,.04);cursor:pointer;}
+.t-card.available:hover{background:rgba(240,192,64,.09);}
+.t-card.locked{opacity:.38;}
+.t-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.t-name{font-size:13px;font-weight:600;}
+.t-card.unlocked .t-name{color:var(--green);}
+.t-card.available .t-name{color:var(--gold);}
+.t-size{font-family:'Space Mono',monospace;font-size:8px;padding:2px 5px;border-radius:4px;text-transform:uppercase;}
+.sz-small{background:rgba(129,140,248,.15);color:#818cf8;}
+.sz-medium{background:rgba(200,169,110,.15);color:var(--accent);}
+.sz-large{background:rgba(240,192,64,.15);color:var(--gold);}
+.sz-keystone{background:rgba(240,171,252,.15);color:#f0abfc;}
+.t-desc{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.t-reward{font-size:10px;color:var(--accent2);font-family:'Space Mono',monospace;}
+.t-cond{font-size:10px;color:var(--muted);margin-top:3px;}
+.t-cond.met{color:var(--green);}
+.t-prog{height:3px;background:var(--border);border-radius:2px;margin-top:5px;overflow:hidden;}
+.t-prog-fill{height:100%;border-radius:2px;background:var(--accent);transition:width .4s;}
+.unlock-btn{margin-top:7px;background:var(--gold);color:#1a1a00;border:none;border-radius:6px;padding:4px 13px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Sarabun',sans-serif;}
+.cross-node{background:var(--surface);border:1px solid #f0abfc;border-radius:10px;padding:11px 13px;margin-bottom:9px;opacity:.45;transition:all .3s;}
+.cross-node.unlocked{opacity:1;border-color:var(--green);}
+.cross-node.available{opacity:1;animation:pgold 1.5s infinite;}
+.cross-title{font-size:13px;font-weight:600;color:#f0abfc;margin-bottom:3px;}
+.cross-node.unlocked .cross-title{color:var(--green);}
+.cross-req{font-size:10px;color:var(--muted);}
+/* STATS TAB */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.sum-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px;text-align:center;}
+.sum-num{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--accent);}
+.sum-lbl{font-size:10px;color:var(--muted);margin-top:2px;}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.dash-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px;}
+.dash-title{font-family:'Space Mono',monospace;font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.dash-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;}
+.dash-val{font-family:'Space Mono',monospace;color:var(--gold);}
+/* CAREER */
+.career-section{margin-bottom:22px;}
+.career-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;}
+.career-title{font-size:14px;font-weight:700;margin-bottom:10px;color:var(--accent);}
+.career-row{display:flex;gap:8px;align-items:center;margin-bottom:7px;}
+.career-label{font-size:12px;color:var(--muted);width:80px;flex-shrink:0;}
+.career-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--text);}
+.c-input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Space Mono',monospace;font-size:12px;padding:5px 8px;flex:1;outline:none;}
+.c-input:focus{border-color:var(--accent);}
+.income-log{margin-top:8px;}
+.income-entry{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px;}
+.income-entry:last-child{border:none;}
+.income-date{color:var(--muted);font-family:'Space Mono',monospace;font-size:9px;}
+.income-amount{color:var(--green);font-family:'Space Mono',monospace;font-weight:700;}
+.follower-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.follower-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;}
+.follower-name{font-size:10px;color:var(--muted);margin-bottom:4px;font-weight:600;}
+.follower-stats{display:flex;gap:8px;margin-bottom:6px;}
+.follower-stat{flex:1;text-align:center;}
+.follower-stat-lbl{font-size:8px;color:var(--muted);}
+.follower-val{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent);}
+.follower-clips{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--accent2);}
+.follower-edit{display:flex;gap:4px;margin-top:4px;}
+.follower-edit input{flex:1;min-width:0;}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-overlay.show{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--gold);border-radius:16px;padding:24px 20px;max-width:320px;width:90%;text-align:center;}
+.modal-title{font-size:20px;font-weight:700;color:var(--gold);margin-bottom:5px;}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.stat-btns{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;}
+.stat-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 4px;cursor:pointer;transition:all .2s;font-family:'Sarabun',sans-serif;}
+.stat-btn:hover{border-color:var(--gold);}
+.stat-btn-name{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;margin-bottom:2px;}
+.stat-btn.STR .stat-btn-name{color:#f87171;}
+.stat-btn.AGI .stat-btn-name{color:#34d399;}
+.stat-btn.INT .stat-btn-name{color:#818cf8;}
+.stat-btn.VIT .stat-btn-name{color:#fbbf24;}
+.stat-btn.CRE .stat-btn-name{color:#f0abfc;}
+.sp-rem{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent2);margin-bottom:10px;}
+.btn-close-modal{background:var(--accent2);color:white;border:none;border-radius:8px;padding:8px 22px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Sarabun',sans-serif;}
+.reset-btn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 13px;font-size:11px;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all .2s;margin-top:7px;}
+.reset-btn:hover{border-color:var(--red);color:var(--red);}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--accent2);color:white;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;transition:transform .3s;z-index:300;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+/* SYNC BAR */
+.sync-bar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 12px;margin-bottom:14px;}
+.sync-status{flex:1;font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);}
+.sync-status.ok{color:var(--green);}
+.sync-status.err{color:var(--red);}
+.sync-status.loading{color:var(--accent);}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s;}
+.sync-dot.ok{background:var(--green);}
+.sync-dot.err{background:var(--red);}
+.sync-dot.loading{background:var(--accent);animation:pgold 1s infinite;}
+.btn-sync{font-size:10px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:'Space Mono',monospace;transition:all .2s;}
+.btn-sync:hover{border-color:var(--accent);color:var(--accent);}
+.sync-setup{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;font-size:12px;}
+.sync-setup-title{font-weight:700;color:var(--accent);margin-bottom:8px;}
+.sync-setup ol{padding-left:18px;color:var(--muted);line-height:2;}
+.sync-setup input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Space Mono',monospace;font-size:10px;padding:6px 8px;width:100%;outline:none;margin-top:8px;}
+.sync-setup input:focus{border-color:var(--accent);}
+/* DATE PICKER */
+.date-input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Space Mono',monospace;font-size:10px;padding:5px 6px;outline:none;width:100%;margin-bottom:5px;}
+.date-input:focus{border-color:var(--accent);}
+/* DREAM */
+.dream-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:8px;transition:all .3s;}
+.dream-item.done{border-color:var(--green);background:rgba(78,203,113,.05);}
+.dream-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.dream-chk{width:22px;height:22px;border:2px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .2s;}
+.dream-item.done .dream-chk{background:var(--green);border-color:var(--green);}
+.dream-name{flex:1;font-size:14px;font-weight:600;}
+.dream-item.done .dream-name{text-decoration:line-through;color:var(--muted);}
+.dream-price{font-family:'Space Mono',monospace;font-size:12px;color:var(--gold);}
+.dream-note{font-size:11px;color:var(--muted);margin-bottom:6px;}
+.dream-actions{display:flex;gap:6px;}
+.dream-edit-row{display:none;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.dream-edit-row.show{display:flex;}
+.diary-section{margin-bottom:20px;}
+.diary-entry{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;}
+.diary-date{font-family:'Space Mono',monospace;font-size:9px;color:var(--accent);margin-bottom:4px;}
+.diary-text{font-size:13px;line-height:1.6;color:var(--text);}
+.diary-meta{font-size:10px;color:var(--muted);margin-top:4px;}
+.diary-textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Sarabun',sans-serif;font-size:13px;padding:10px;width:100%;outline:none;resize:vertical;min-height:80px;line-height:1.6;}
+.diary-textarea:focus{border-color:var(--accent);}
+/* BULK */
+.bulk-textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;padding:8px;width:100%;outline:none;resize:vertical;min-height:80px;}
+.bulk-textarea:focus{border-color:var(--accent);}
+.collapsible{cursor:pointer;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-bottom:6px;user-select:none;}
+.collapsible:hover{color:var(--accent);}
+.collapse-body{display:none;}
+.collapse-body.open{display:block;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="eyebrow">Eat Laew Art Studio</div>
+  <h1>ดล's Quest Log</h1>
+  <div class="xp-wrap">
+    <div class="xp-lbl"><span id="xp-left">XP 0</span><span>Lv.<span id="lv-num">1</span> — <span id="xp-next">200</span> to next</span></div>
+    <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+  </div>
+</div>
+<div class="decay-alert" id="decay-alert"></div>
+<div class="today-display" id="today-display"></div>
+<div class="sync-bar">
+  <div class="sync-dot" id="sync-dot"></div>
+  <div class="sync-status" id="sync-status">กำลังเชื่อม Drive...</div>
+  <button class="btn-sync" onclick="manualLoad()">⬇ Load</button>
+  <button class="btn-sync" onclick="manualSave()">⬆ Save</button>
+</div>
+<div class="status-section">
+  <div class="section-hdr">
+    <div class="section-ttl">◆ Character Status</div>
+    <div class="sp-badge" id="sp-badge">SP: <span id="sp-count">0</span></div>
+  </div>
+  <div class="stats-grid" id="stats-grid"></div>
+</div>
+<div class="nodes-row">
+  <div class="node-card art">
+    <div class="node-type">🖊 Art Practice</div>
+    <div class="rank-badge" id="art-rank">Novice</div>
+    <div class="node-hours" id="art-hours">0</div>
+    <div class="node-sub">/ 10,000 hrs</div>
+    <div class="rank-progress" id="art-rank-progress"></div>
+    <div class="node-bar"><div class="node-bar-fill" id="art-bar" style="width:0%"></div></div>
+    <input type="date" class="date-input" id="date-art">
+    <div class="node-input-row">
+      <input type="number" class="n-input" id="add-art" placeholder="0.5" step="0.5" min="0.1" max="12">
+      <button class="btn-s btn-art" onclick="addHours('art')">+บันทึก</button>
+    </div>
+    <div style="font-size:9px;color:var(--muted);margin-top:4px;line-height:1.6;">1h +15XP · 2h +30XP · 3h +50XP · 4h+ +70XP</div>
+    <div class="collapsible" onclick="toggleCollapse('bulk-art')">▶ Bulk Import หลายวัน</div>
+    <div class="collapse-body" id="bulk-art">
+      <div style="font-size:9px;color:var(--muted);margin-bottom:4px;">รูปแบบ: YYYY-MM-DD, ชั่วโมง (แต่ละบรรทัด)</div>
+      <textarea class="bulk-textarea" id="bulk-art-text" placeholder="2026-05-01, 1.5&#10;2026-05-02, 2&#10;2026-05-03, 0.5"></textarea>
+      <button class="btn-s btn-art" style="margin-top:5px;width:100%;" onclick="bulkImport('art')">Import ทั้งหมด</button>
+    </div>
+    <div class="hour-log" id="art-log"></div>
+  </div>
+  <div class="node-card fit">
+    <div class="node-type">💪 Fitness</div>
+    <div class="rank-badge" id="fit-rank">Iron Beginner</div>
+    <div class="node-hours" id="fit-hours">0</div>
+    <div class="node-sub">/ 10,000 hrs</div>
+    <div class="rank-progress" id="fit-rank-progress"></div>
+    <div class="node-bar"><div class="node-bar-fill" id="fit-bar" style="width:0%"></div></div>
+    <input type="date" class="date-input" id="date-fit">
+    <div class="node-input-row">
+      <input type="number" class="n-input" id="add-fit" placeholder="0.5" step="0.5" min="0.1" max="12">
+      <button class="btn-s btn-fit" onclick="addHours('fit')">+บันทึก</button>
+    </div>
+    <div class="collapsible" onclick="toggleCollapse('bulk-fit')" style="margin-top:4px;">▶ Bulk Import หลายวัน</div>
+    <div class="collapse-body" id="bulk-fit">
+      <div style="font-size:9px;color:var(--muted);margin-bottom:4px;">รูปแบบ: YYYY-MM-DD, ชั่วโมง</div>
+      <textarea class="bulk-textarea" id="bulk-fit-text" placeholder="2026-05-01, 1&#10;2026-05-02, 1.5"></textarea>
+      <button class="btn-s btn-fit" style="margin-top:5px;width:100%;" onclick="bulkImport('fit')">Import ทั้งหมด</button>
+    </div>
+    <div class="hour-log" id="fit-log"></div>
+  </div>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('daily')">วัน</div>
+  <div class="tab" onclick="switchTab('weekly')">สัปดาห์</div>
+  <div class="tab" onclick="switchTab('monthly')">เดือน</div>
+  <div class="tab" onclick="switchTab('tree')">🌳 Tree</div>
+  <div class="tab" onclick="switchTab('career')">💼 Career</div>
+  <div class="tab" onclick="switchTab('dream')">⭐ Dream</div>
+  <div class="tab" onclick="switchTab('diary')">📓 Diary</div>
+  <div class="tab" onclick="switchTab('stats')">Stats</div>
+</div>
+<!-- DAILY -->
+<div class="tab-content active" id="tab-daily">
+  <div class="q-section">
+    <div style="font-family:Space Mono,monospace;font-size:10px;color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+      <span id="daily-showing-date"></span>
+      <button class="btn-s" style="background:var(--border);color:var(--text);font-size:10px;" onclick="resetDailyDate()">กลับวันนี้</button>
+    </div>
+    <div class="sec-title">Daily Quest</div>
+    <div id="daily-quests"></div>
+  </div>
+  <div class="q-section">
+    <div class="sec-title">ปฏิทิน — กดวันเพื่อดู/แก้ quest ย้อนหลัง</div>
+    <div class="cal-wrap">
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="calPrev()">‹</button>
+        <div class="cal-month-lbl" id="cal-month-lbl"></div>
+        <button class="cal-nav-btn" onclick="calNext()">›</button>
+      </div>
+      <div class="cal-weekdays">
+        <div class="cal-wd">อา</div><div class="cal-wd">จ</div><div class="cal-wd">อ</div>
+        <div class="cal-wd">พ</div><div class="cal-wd">พฤ</div><div class="cal-wd">ศ</div><div class="cal-wd">ส</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px">🔥 <span id="streak-count" style="color:var(--accent);font-weight:700">0</span> วันติดต่อกัน</div>
+  </div>
+</div>
+<!-- WEEKLY -->
+<div class="tab-content" id="tab-weekly"><div class="q-section"><div class="sec-title">Weekly Quest</div><div id="weekly-quests"></div></div></div>
+<!-- MONTHLY -->
+<div class="tab-content" id="tab-monthly"><div class="q-section"><div class="sec-title">Monthly Quest</div><div id="monthly-quests"></div></div></div>
+<!-- TREE -->
+<div class="tab-content" id="tab-tree"><div id="tree-container"></div></div>
+<!-- CAREER -->
+<div class="tab-content" id="tab-career">
+  <div class="career-section">
+    <div class="career-card">
+      <div class="career-title">💰 รายได้</div>
+      <div id="income-total-row" class="career-row">
+        <div class="career-label">รวมเดือนนี้</div>
+        <div class="career-val" id="income-month-total">0 ฿</div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <input type="number" class="c-input" id="income-amount" placeholder="จำนวนเงิน (฿)" min="0">
+        <input type="text" class="c-input" id="income-note" placeholder="หมายเหตุ" style="width:90px;">
+        <button class="btn-s btn-art" onclick="addIncome()">+บันทึก</button>
+      </div>
+      <div class="income-log" id="income-log"></div>
+    </div>
+    <div class="career-card">
+      <div class="career-title">🎨 ผลงาน</div>
+      <div class="career-row"><div class="career-label">Commission</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="btn-s btn-danger" onclick="adjustCount('commission',-1)">−</button>
+          <div class="career-val" id="count-commission">0</div>
+          <button class="btn-s btn-art" onclick="adjustCount('commission',1)">+</button>
+        </div>
+      </div>
+      <div class="career-row"><div class="career-label">ภาพขาย</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="btn-s btn-danger" onclick="adjustCount('sold',-1)">−</button>
+          <div class="career-val" id="count-sold">0</div>
+          <button class="btn-s btn-art" onclick="adjustCount('sold',1)">+</button>
+        </div>
+      </div>
+      <div class="career-row"><div class="career-label">ประมูล</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="btn-s btn-danger" onclick="adjustCount('auction',-1)">−</button>
+          <div class="career-val" id="count-auction">0</div>
+          <button class="btn-s btn-art" onclick="adjustCount('auction',1)">+</button>
+        </div>
+      </div>
+      <div class="career-row"><div class="career-label">ลูกค้า</div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="btn-s btn-danger" onclick="adjustCount('clients',-1)">−</button>
+          <div class="career-val" id="count-clients">0</div>
+          <button class="btn-s btn-art" onclick="adjustCount('clients',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="career-card">
+      <div class="career-title">📱 Social Media</div>
+      <div class="follower-grid" id="follower-grid"></div>
+    </div>
+  </div>
+</div>
+<!-- DREAM -->
+<div class="tab-content" id="tab-dream">
+  <div class="career-section">
+    <div class="sec-title">⭐ Dream Tracker — เป้าหมายที่อยากได้</div>
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
+      <input type="text" class="c-input" id="dream-name" placeholder="ชื่อ dream เช่น iPad Air M4">
+      <input type="number" class="c-input" id="dream-price" placeholder="ราคา (฿)" style="width:100px;">
+      <button class="btn-s btn-art" onclick="addDream()">+ เพิ่ม</button>
+    </div>
+    <div id="dream-list"></div>
+  </div>
+</div>
+<!-- DIARY -->
+<div class="tab-content" id="tab-diary">
+  <div class="diary-section">
+    <div class="sec-title">📓 บันทึกประจำวัน</div>
+    <div style="margin-bottom:14px;">
+      <input type="date" class="date-input" id="diary-date">
+      <textarea class="diary-textarea" id="diary-text" placeholder="วันนี้ฝึกอะไร รู้สึกยังไง ความคืบหน้า..."></textarea>
+      <div style="display:flex;gap:6px;margin-top:6px;">
+        <select class="date-input" id="diary-mood" style="width:auto;flex:1;">
+          <option value="">— Mood —</option>
+          <option value="🔥 มีไฟมาก">🔥 มีไฟมาก</option>
+          <option value="✨ โอเค">✨ โอเค</option>
+          <option value="😐 ธรรมดา">😐 ธรรมดา</option>
+          <option value="😴 เหนื่อย">😴 เหนื่อย</option>
+          <option value="💪 ฝืนทำ">💪 ฝืนทำ</option>
+        </select>
+        <button class="btn-s btn-art" onclick="saveDiary()">บันทึก</button>
+      </div>
+    </div>
+    <div id="diary-log"></div>
+  </div>
+</div>
+<!-- STATS -->
+<div class="tab-content" id="tab-stats">
+  <div class="sum-grid">
+    <div class="sum-card"><div class="sum-num" id="s-art-h">0</div><div class="sum-lbl">ชม. วาดรูป</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-fit-h">0</div><div class="sum-lbl">ชม. ออกกำลังกาย</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-days">0</div><div class="sum-lbl">วันที่วาดรูป</div></div>
+    <div class="sum-card"><div class="sum-num" id="s-xp">0</div><div class="sum-lbl">XP รวม</div></div>
+  </div>
+  <div class="dash-grid">
+    <div class="dash-card">
+      <div class="dash-title">🖊 Art Hours</div>
+      <div class="dash-row"><span>วันนี้</span><span class="dash-val" id="d-art-day">0</span></div>
+      <div class="dash-row"><span>สัปดาห์นี้</span><span class="dash-val" id="d-art-week">0</span></div>
+      <div class="dash-row"><span>เดือนนี้</span><span class="dash-val" id="d-art-month">0</span></div>
+      <div class="dash-row"><span>ปีนี้</span><span class="dash-val" id="d-art-year">0</span></div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-title">💪 Fit Hours</div>
+      <div class="dash-row"><span>วันนี้</span><span class="dash-val" id="d-fit-day">0</span></div>
+      <div class="dash-row"><span>สัปดาห์นี้</span><span class="dash-val" id="d-fit-week">0</span></div>
+      <div class="dash-row"><span>เดือนนี้</span><span class="dash-val" id="d-fit-month">0</span></div>
+      <div class="dash-row"><span>ปีนี้</span><span class="dash-val" id="d-fit-year">0</span></div>
+    </div>
+  </div>
+  <div style="text-align:center">
+    <button class="reset-btn" onclick="resetDaily()">Reset Daily</button>
+    <button class="reset-btn" onclick="resetWeekly()" style="margin-left:6px">Reset Weekly</button>
+  </div>
+</div>
+<!-- LEVEL UP MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">⬆ LEVEL UP!</div>
+    <div class="modal-sub">ได้รับ 3 SP — เลือก Stat ที่อยากอัพ</div>
+    <div class="sp-rem">SP คงเหลือ: <span id="modal-sp">0</span></div>
+    <div class="stat-btns" id="stat-btns"></div>
+    <button class="btn-close-modal" onclick="closeModal()">บันทึกและปิด</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const STAT_COLORS={STR:'#f87171',AGI:'#34d399',INT:'#818cf8',VIT:'#fbbf24',CRE:'#f0abfc'};
+const STATS_DEF=[
+  {id:'STR',name:'STR',desc:'ร่างกาย\nกล้ามเนื้อ'},
+  {id:'AGI',name:'AGI',desc:'คล่องตัว\nวาดเร็ว'},
+  {id:'INT',name:'INT',desc:'ความฉลาด\nทฤษฎี'},
+  {id:'VIT',name:'VIT',desc:'ความอึด\nสุขภาพ'},
+  {id:'CRE',name:'CRE',desc:'สร้างสรรค์\nผลงาน'},
+];
+const ART_RANKS=[
+  {name:'Novice',min:0},{name:'Apprentice',min:100},{name:'Artisan',min:500},
+  {name:'Professional',min:1000},{name:'Master Craftsman',min:3000},
+  {name:'Grandmaster',min:5000},{name:'Living Legend',min:8000},{name:'Master of Art',min:10000}
+];
+const FIT_RANKS=[
+  {name:'Iron Beginner',min:0},{name:'Steel Initiate',min:50},{name:'Bronze Warrior',min:200},
+  {name:'Silver Athlete',min:500},{name:'Gold Champion',min:1000},
+  {name:'Platinum Beast',min:3000},{name:'Diamond Titan',min:6000},{name:'Immortal Body',min:10000}
+];
+const XP_PER_LEVEL=200,SP_PER_LEVEL=3;
+const SOCIAL_PLATFORMS=['TikTok','FB Page','Instagram','X (Twitter)','YouTube'];
+const DAILY_QUESTS=[
+  {id:'d1',text:'วาด Practice อย่างน้อย 30 นาที',xp:30,stat:'CRE',rd:null},
+  {id:'d2',text:'Cardio 30 นาที',xp:15,stat:'VIT',rd:'cardio'},
+  {id:'d3',text:'Weight Training',xp:15,stat:'STR',rd:'weight'},
+  {id:'d4',text:'English Lesson / อ่าน / ฟัง',xp:10,stat:'INT',rd:null},
+  {id:'d5',text:'บันทึกชั่วโมงวาดรูปวันนี้',xp:5,stat:'AGI',rd:null},
+  {id:'d6',text:'วาดงานขาย / คืบหน้า Commission',xp:20,stat:'AGI',rd:null},
+  {id:'d7',text:'นอนหลับ 7+ ชม. / กินโปรตีนครบ',xp:10,stat:'VIT',rd:null},
+];
+const WEEKLY_QUESTS=[
+  {id:'w1',text:'โพสต์ผลงานลง Social อย่างน้อย 1 ชิ้น',xp:50,stat:'CRE'},
+  {id:'w2',text:'วาดครบ 5 วันจาก 7 วัน',xp:80,stat:'VIT'},
+  {id:'w3',text:'Copy งานศิลปินที่ชอบ 1 ชิ้น + วิเคราะห์',xp:60,stat:'INT'},
+  {id:'w4',text:'CEO Sunday: ทบทวน + วางแผนสัปดาห์หน้า',xp:40,stat:'INT'},
+  {id:'w5',text:'คืบหน้างาน Commission อย่างน้อย 25%',xp:70,stat:'AGI'},
+];
+const MONTHLY_QUESTS=[
+  {id:'m1',text:'โพสต์ผลงานครบ 8 ชิ้นขึ้นไป',xp:200,stat:'CRE'},
+  {id:'m2',text:'สะสมชั่วโมงวาดรูปครบ 40 ชั่วโมง',xp:300,stat:'CRE'},
+  {id:'m3',text:'ส่งงาน Commission ให้ครบ',xp:250,stat:'AGI'},
+  {id:'m4',text:'สร้าง Portfolio piece ใหม่ 1 ชิ้น',xp:200,stat:'CRE'},
+  {id:'m5',text:'รีวิวพัฒนาการ: เปรียบงานต้นเดือน vs ปลายเดือน',xp:100,stat:'INT'},
+];
+const SKILL_TREE={
+  art:{label:'🎨 ART',color:'#c8a96e',nodes:[
+    {id:'a1',name:'First Blood',size:'small',desc:'วาดครบ 10 ชั่วโมง — เริ่มต้นแล้ว',reward:'+1 CRE',cond:'artHours>=10',cl:'10 ชม. วาดรูป'},
+    {id:'a2',name:'Gesture Foundation',size:'small',desc:'Gesture เป็น habit ประจำวัน',reward:'+1 AGI',cond:'artHours>=30',cl:'30 ชม.'},
+    {id:'a3',name:'Iron Discipline',size:'medium',desc:'วาดต่อเนื่อง 30 วัน ไม่ขาด',reward:'+2 VIT',cond:'streak30',cl:'Streak 30 วัน'},
+    {id:'a4',name:'Construction Basics',size:'small',desc:'เข้าใจ 3D form และ head construction',reward:'+1 INT',cond:'artHours>=80',cl:'80 ชม.'},
+    {id:'a5',name:'Anatomy Warrior',size:'medium',desc:'ฝึก Anatomy อย่างจริงจัง รู้ proportion',reward:'+2 INT, +1 CRE',cond:'artHours>=150',cl:'150 ชม.'},
+    {id:'a6',name:'Color Sense',size:'medium',desc:'เข้าใจ value, color temperature, lighting',reward:'+2 CRE',cond:'artHours>=250',cl:'250 ชม.'},
+    {id:'a7',name:'Semi-realist Unlocked',size:'large',desc:'วาด character semi-realist ได้ครบ face/body',reward:'+2 CRE, +2 SP',cond:'artHours>=500',cl:'500 ชม.'},
+    {id:'a8',name:'The 1,000 Hour Artist',size:'large',desc:'ผ่านด่านที่นักวาดส่วนใหญ่ยอมแพ้ก่อนถึง',reward:'+3 CRE, +2 INT',cond:'artHours>=1000',cl:'1,000 ชม.'},
+    {id:'a9',name:'Signature Style',size:'large',desc:'งานมีสไตล์เฉพาะตัวที่คนจำได้',reward:'+3 CRE',cond:'artHours>=2000',cl:'2,000 ชม.'},
+    {id:'a10',name:'Portfolio Ready',size:'large',desc:'Portfolio 20 ชิ้น แสดงทักษะครบ',reward:'+2 CRE, +2 INT',cond:'artHours>=3000',cl:'3,000 ชม.'},
+    {id:'a11',name:'5,000 Hour Sage',size:'large',desc:'ครึ่งทางของ 10,000 ชั่วโมง — คนส่วนน้อยมาถึงจุดนี้',reward:'+3 CRE, +3 INT, +2 SP',cond:'artHours>=5000',cl:'5,000 ชม.'},
+    {id:'a12',name:'⚡ MASTER OF ART',size:'keystone',desc:'10,000 ชั่วโมง — ระดับที่โลกยอมรับ',reward:'Art XP x1.5 ถาวร',cond:'artHours>=10000',cl:'10,000 ชม.'},
+  ]},
+  income:{label:'💰 INCOME',color:'#4ecb71',nodes:[
+    {id:'i1',name:'Commission Hunter',size:'small',desc:'รับ commission จากลูกค้าได้ครั้งแรก',reward:'+1 AGI, +1 CRE',cond:'manual',cl:'รับงานได้ครั้งแรก'},
+    {id:'i2',name:'First Sale',size:'small',desc:'ขายงาน original ได้ครั้งแรก',reward:'+1 CRE',cond:'manual',cl:'ขายงานได้ครั้งแรก'},
+    {id:'i3',name:'3k/เดือน',size:'small',desc:'รายได้จากงานศิลปะถึง 3,000 บาท/เดือน',reward:'+1 AGI',cond:'manual',cl:'รายได้ถึง 3k/เดือน'},
+    {id:'i4',name:'Auction Regular',size:'medium',desc:'ประมูลงานได้สม่ำเสมอ 3 เดือนติดกัน',reward:'+1 CRE, +1 STR',cond:'manual',cl:'ประมูลงานได้ 3 เดือนติดกัน'},
+    {id:'i5',name:'10k/เดือน',size:'medium',desc:'รายได้ 10,000 บาท/เดือน — เป็นอาชีพได้แล้ว',reward:'+2 AGI, +1 CRE',cond:'manual',cl:'รายได้ถึง 10k/เดือน'},
+    {id:'i6',name:'Debt Slayer',size:'medium',desc:'หนี้หมดแล้ว — อิสระทางการเงินขั้นแรก',reward:'+3 STR, +2 VIT',cond:'manual',cl:'ปลดหนี้ครบ'},
+    {id:'i7',name:'15k/เดือน',size:'large',desc:'เป้าหมายหลัก — ค่าใช้จ่ายครอบครัวครอบคลุม',reward:'+2 STR, +2 AGI',cond:'manual',cl:'รายได้ถึง 15k/เดือน'},
+    {id:'i8',name:'Passive Stream',size:'large',desc:'มี passive income > 3k/เดือน',reward:'+3 CRE, +2 AGI',cond:'manual',cl:'Passive > 3k/เดือน'},
+    {id:'i9',name:'50k/เดือน',size:'large',desc:'รายได้รวม 50,000 บาท/เดือน',reward:'+3 STR, +3 AGI',cond:'manual',cl:'รายได้ถึง 50k/เดือน'},
+    {id:'i10',name:'Gadget Unlocked',size:'large',desc:'ซื้อ Pen Display / iPad / MacBook ได้แล้ว',reward:'+2 CRE',cond:'manual',cl:'ซื้อ gadget ที่ต้องการ'},
+    {id:'i11',name:'100k/เดือน',size:'large',desc:'รายได้ระดับ top — ชีวิตเปลี่ยน',reward:'+5 STR, +5 AGI, +3 SP',cond:'manual',cl:'รายได้ถึง 100k/เดือน'},
+    {id:'i12',name:'⚡ FINANCIAL FREE',size:'keystone',desc:'อิสระทางการเงิน — ทำงานเพราะชอบ ไม่ใช่เพราะต้องทำ',reward:'Income XP x2 ถาวร',cond:'manual',cl:'มีอิสระทางการเงินอย่างแท้จริง'},
+  ]},
+  body:{label:'💪 BODY',color:'#e05c8a',nodes:[
+    {id:'b1',name:'Show Up',size:'small',desc:'ออกกำลังกายครั้งแรกในระบบนี้',reward:'+1 VIT',cond:'fitHours>=1',cl:'1 ชม. fitness'},
+    {id:'b2',name:'Iron Habit',size:'small',desc:'ออกกำลังกายสม่ำเสมอ 2 สัปดาห์',reward:'+1 VIT, +1 STR',cond:'fitHours>=10',cl:'10 ชม. fitness'},
+    {id:'b3',name:'Streak 30',size:'medium',desc:'ขยับร่างกายทุกวัน 30 วันติดกัน',reward:'+2 VIT',cond:'streak30',cl:'Streak 30 วัน'},
+    {id:'b4',name:'Cardio Base',size:'medium',desc:'หายใจดีขึ้น stamina เพิ่ม วิ่งได้นานขึ้น',reward:'+2 VIT',cond:'fitHours>=30',cl:'30 ชม. fitness'},
+    {id:'b5',name:'Strength Base',size:'medium',desc:'ยกได้หนักขึ้น กล้ามเนื้อเริ่มปรากฏ',reward:'+2 STR',cond:'fitHours>=60',cl:'60 ชม. fitness'},
+    {id:'b6',name:'Body Recomp',size:'large',desc:'ไขมันลด กล้ามเนื้อเพิ่ม เห็นผลชัดเจน',reward:'+2 STR, +2 VIT',cond:'fitHours>=150',cl:'150 ชม. fitness'},
+    {id:'b7',name:'150→130 kg',size:'large',desc:'ลดน้ำหนักลง 20 กิโลแรก',reward:'+3 VIT',cond:'manual',cl:'น้ำหนักถึง 130 กก.'},
+    {id:'b8',name:'130→100 kg',size:'large',desc:'ต่ำกว่า 100 กิโล — milestone สำคัญ',reward:'+3 VIT, +2 STR',cond:'manual',cl:'น้ำหนักถึง 100 กก.'},
+    {id:'b9',name:'500 Hour Athlete',size:'large',desc:'ลงทุนกับร่างกายมาแล้ว 500 ชั่วโมง',reward:'+3 STR, +3 VIT',cond:'fitHours>=500',cl:'500 ชม. fitness'},
+    {id:'b10',name:'100→80 kg',size:'large',desc:'ถึงเป้าหมายน้ำหนัก — dream physique เริ่มเห็น',reward:'+3 STR, +3 VIT, +3 AGI',cond:'manual',cl:'น้ำหนักถึง 80 กก.'},
+    {id:'b11',name:'Consistency King',size:'large',desc:'Streak 100 วัน — ไม่มีวันที่ศูนย์',reward:'+4 VIT, +2 STR',cond:'streak100',cl:'Streak 100 วัน'},
+    {id:'b12',name:'⚡ DREAM PHYSIQUE',size:'keystone',desc:'หุ่นที่ต้องการ สุขภาพดีทุกด้าน พลังงานเต็ม',reward:'Fitness XP x1.5 ถาวร',cond:'manual',cl:'เป้าหมายสุดท้ายด้านร่างกาย'},
+  ]}
+};
+const CROSS_NODES=[
+  {id:'c1',name:'🤝 Semi-realist Commission',desc:'รับ commission งาน semi-realist ได้อย่างมั่นใจ',req:'ART node 7 + INCOME node 3',check:s=>s.un.includes('a7')&&s.un.includes('i3'),reward:'+3 CRE, +2 AGI'},
+  {id:'c2',name:'🌟 Known Artist',desc:'มีชื่อเสียง คนรู้จักและติดตาม',req:'ART node 9 + INCOME node 5',check:s=>s.un.includes('a9')&&s.un.includes('i5'),reward:'+3 CRE, +3 INT'},
+  {id:'c3',name:'⚡ LIFE UNLOCKED',desc:'ศิลปิน มีเงิน สุขภาพดี — ครบสามเส้า',req:'ART Keystone + INCOME node 8 + BODY node 6',check:s=>s.un.includes('a12')&&s.un.includes('i8')&&s.un.includes('b6'),reward:'ALL STATS +5'},
+];
+
+let S=JSON.parse(localStorage.getItem('dol-quest4')||'{}');
+const def={artHours:0,fitHours:0,totalXp:0,stats:{STR:1,AGI:1,INT:1,VIT:1,CRE:1},daily:{},dailyByDate:{},weekly:{},monthly:{},streak:[],artDays:0,restCardio:false,restWeight:false,pendingSP:0,un:[],lastActive:null,artLog:[],fitLog:[],incomeLog:[],counts:{commission:0,sold:0,auction:0,clients:0},followers:{TikTok:{f:0,c:0},'FB Page':{f:0,c:0},Instagram:{f:0,c:0},'X (Twitter)':{f:0,c:0},YouTube:{f:0,c:0}},diaryLog:[],dreams:[
+  {id:1,name:'iPad Air M4 + Apple Pencil',price:32000,done:false,note:''},
+  {id:2,name:'Pen Display 22 นิ้ว',price:25000,done:false,note:''},
+  {id:3,name:'MacBook หรือ PC เครื่องใหม่',price:40000,done:false,note:''},
+  {id:4,name:'แอร์เครื่องใหม่',price:15000,done:false,note:''},
+  {id:5,name:'รายได้ 100k/เดือน',price:0,done:false,note:'passive + active income'},
+  {id:6,name:'ปลดหนี้ทั้งหมด',price:0,done:false,note:''},
+  {id:7,name:'เงินเก็บ 100k',price:100000,done:false,note:'emergency fund'},
+]};
+Object.keys(def).forEach(k=>{if(S[k]===undefined)S[k]=def[k];});
+// migrate old followers format
+SOCIAL_PLATFORMS.forEach(p=>{if(typeof S.followers[p]==='number'){S.followers[p]={f:S.followers[p],c:0};}});
+// migrate old daily to dailyByDate
+if(!S.dailyByDate)S.dailyByDate={};
+let currentDailyDate=getTodayStr();
+function getTodayStr(){return new Date().toISOString().split('T')[0];}
+function setDailyDate(){
+  const v=document.getElementById('daily-date').value;
+  if(v){currentDailyDate=v;renderDailyTab();}
+}
+function resetDailyDate(){
+  currentDailyDate=getTodayStr();
+  document.getElementById('daily-date').value='';
+  renderDailyTab();
+}
+function renderDailyTab(){
+  const isToday=currentDailyDate===getTodayStr();
+  const d=new Date(currentDailyDate);
+  const dayNames=['อา','จ','อ','พ','พฤ','ศ','ส'];
+  const fmt=`${dayNames[d.getDay()]} ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()+543}`;
+  document.getElementById('daily-showing-date').textContent=isToday?`📅 วันนี้ — ${fmt}`:`📅 ย้อนหลัง — ${fmt}`;
+  const stateObj=S.dailyByDate[currentDailyDate]||(S.dailyByDate[currentDailyDate]={});
+  renderQuests(DAILY_QUESTS,stateObj,'daily-quests',currentDailyDate);
+}
+function updateTodayDisplay(){
+  const d=new Date();
+  const dayNames=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัส','ศุกร์','เสาร์'];
+  const months=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  document.getElementById('today-display').textContent=`${dayNames[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()+543}`;
+}
+function save(){localStorage.setItem('dol-quest4',JSON.stringify(S));}
+function getLevel(xp){return Math.floor(xp/XP_PER_LEVEL)+1;}
+function getXpInLevel(xp){return xp%XP_PER_LEVEL;}
+function getRank(hours,ranks){
+  let r=ranks[0];
+  for(let i=0;i<ranks.length;i++){if(hours>=ranks[i].min)r=ranks[i];}
+  return r;
+}
+function getNextRank(hours,ranks){
+  for(let i=0;i<ranks.length;i++){if(ranks[i].min>hours)return ranks[i];}
+  return null;
+}
+function getStreak(){
+  const today=new Date();let cur=0;
+  for(let i=0;i<365;i++){const d=new Date(today);d.setDate(d.getDate()-i);if(S.streak.includes(d.toISOString().split('T')[0]))cur++;else break;}
+  return cur;
+}
+function checkDecay(){
+  const today=new Date().toISOString().split('T')[0];
+  if(!S.lastActive){S.lastActive=today;save();return;}
+  const diff=Math.floor((new Date(today)-new Date(S.lastActive))/(864e5));
+  if(diff>=3){
+    const dec=[];
+    if(S.stats.VIT>1){S.stats.VIT--;dec.push('VIT');}
+    if(!S.streak.some(d=>Math.floor((new Date(today)-new Date(d))/(864e5))<=3)&&S.stats.CRE>1){S.stats.CRE--;dec.push('CRE');}
+    if(dec.length){const a=document.getElementById('decay-alert');a.textContent='⚠ Decay: ห่างหายไป '+diff+' วัน — '+dec.join(', ')+' ลด 1';a.classList.add('show');save();}
+  }
+  S.lastActive=today;save();
+}
+function updateXpBar(){
+  const xp=S.totalXp,lv=getLevel(xp),inLv=getXpInLevel(xp);
+  document.getElementById('xp-fill').style.width=(inLv/XP_PER_LEVEL*100)+'%';
+  document.getElementById('xp-left').textContent='XP '+xp;
+  document.getElementById('lv-num').textContent=lv;
+  document.getElementById('xp-next').textContent=(XP_PER_LEVEL-inLv);
+  document.getElementById('s-xp').textContent=xp;
+}
+function renderStats(){
+  const grid=document.getElementById('stats-grid');grid.innerHTML='';
+  const hasSP=S.pendingSP>0;
+  STATS_DEF.forEach(st=>{
+    const val=S.stats[st.id]||1,pct=Math.min(val/20*100,100);
+    const div=document.createElement('div');
+    div.className='stat-item'+(hasSP?' can-upgrade':'');
+    div.innerHTML=`<div class="stat-name">${st.name}</div><div class="stat-val" style="color:${STAT_COLORS[st.id]}">${val}</div><div class="stat-bar"><div class="stat-bar-fill" style="width:${pct}%;background:${STAT_COLORS[st.id]}"></div></div>`;
+    grid.appendChild(div);
+  });
+  document.getElementById('sp-count').textContent=S.pendingSP;
+  const b=document.getElementById('sp-badge');
+  b.style.borderColor=S.pendingSP>0?'var(--gold)':'var(--accent2)';
+  b.style.color=S.pendingSP>0?'var(--gold)':'var(--accent2)';
+}
+function updateNodes(){
+  const ah=parseFloat(S.artHours.toFixed(1)),fh=parseFloat(S.fitHours.toFixed(1));
+  document.getElementById('art-hours').textContent=ah;
+  document.getElementById('fit-hours').textContent=fh;
+  document.getElementById('art-bar').style.width=Math.min(ah/10000*100,100)+'%';
+  document.getElementById('fit-bar').style.width=Math.min(fh/10000*100,100)+'%';
+  const ar=getRank(ah,ART_RANKS),anr=getNextRank(ah,ART_RANKS);
+  const fr=getRank(fh,FIT_RANKS),fnr=getNextRank(fh,FIT_RANKS);
+  document.getElementById('art-rank').textContent=ar.name;
+  document.getElementById('fit-rank').textContent=fr.name;
+  document.getElementById('art-rank-progress').textContent=anr?`Next: ${anr.name} @ ${anr.min}h (${(anr.min-ah).toFixed(1)} to go)`:'MAX RANK';
+  document.getElementById('fit-rank-progress').textContent=fnr?`Next: ${fnr.name} @ ${fnr.min}h (${(fnr.min-fh).toFixed(1)} to go)`:'MAX RANK';
+  document.getElementById('s-art-h').textContent=ah;
+  document.getElementById('s-fit-h').textContent=fh;
+  document.getElementById('s-days').textContent=S.artDays;
+}
+function renderHourLog(type){
+  const log=type==='art'?S.artLog:S.fitLog;
+  const el=document.getElementById(type+'-log');
+  el.innerHTML='';
+  const recent=[...log].reverse().slice(0,5);
+  recent.forEach((e,i)=>{
+    const realIdx=log.length-1-(i);
+    const row=document.createElement('div');
+    row.className='hour-entry';
+    row.innerHTML=`<span>${e.date} — ${e.hrs}h${e.note?' ('+e.note+')':''}</span><button class="del-btn" onclick="deleteHour('${type}',${realIdx})">✕</button>`;
+    el.appendChild(row);
+  });
+}
+function toggleCollapse(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+  const btn=el.previousElementSibling;
+  btn.textContent=btn.textContent.replace(/[▶▼]/,el.classList.contains('open')?'▼':'▶');
+}
+function getArtBonus(hrs){
+  if(hrs>=4)return{xp:70,cre:3,label:'4h+ 🔥 +70XP'};
+  if(hrs>=3)return{xp:50,cre:2,label:'3h+ ⚡ +50XP'};
+  if(hrs>=2)return{xp:30,cre:1,label:'2h+ ✨ +30XP'};
+  if(hrs>=1)return{xp:15,cre:0,label:'1h+ +15XP'};
+  return{xp:0,cre:0,label:''};
+}
+function getTodayStr(){return new Date().toISOString().split('T')[0];}
+function addHours(type){
+  const inp=document.getElementById('add-'+type);
+  const val=parseFloat(inp.value);
+  if(!val||val<=0)return;
+  const dateEl=document.getElementById('date-'+type);
+  const dateStr=dateEl.value||getTodayStr();
+  const entry={date:dateStr,hrs:val};
+  if(type==='art'){
+    S.artHours+=val;S.artDays++;
+    S.artLog.push(entry);
+    if(!S.streak.includes(dateStr))S.streak.push(dateStr);
+    if(dateStr===getTodayStr())S.lastActive=dateStr;
+    const bonus=getArtBonus(val);
+    if(bonus.xp>0){
+      const pl=getLevel(S.totalXp);
+      S.totalXp+=bonus.xp;
+      if(bonus.cre>0)S.stats.CRE=(S.stats.CRE||1)+bonus.cre;
+      const nl=getLevel(S.totalXp);
+      if(nl>pl){S.pendingSP+=(nl-pl)*SP_PER_LEVEL;save();setTimeout(()=>openModal(),600);}
+      showToast('บันทึก '+val+'h ('+dateStr+') '+bonus.label);
+    } else {
+      showToast('บันทึก '+val+'h ('+dateStr+') ✓');
+    }
+  } else {
+    S.fitHours+=val;S.fitLog.push(entry);
+    showToast('บันทึก '+val+'h ('+dateStr+') ✓');
+  }
+  inp.value='';
+  save();updateNodes();renderHourLog(type);renderStreak();updateDashboard();autoUnlock();renderTree();updateXpBar();renderStats();
+}
+function bulkImport(type){
+  const raw=document.getElementById('bulk-'+type+'-text').value.trim();
+  if(!raw)return;
+  const lines=raw.split('\n');
+  let count=0,totalHrs=0;
+  lines.forEach(line=>{
+    const parts=line.split(',');
+    if(parts.length<2)return;
+    const date=parts[0].trim();
+    const hrs=parseFloat(parts[1].trim());
+    if(!date.match(/^\d{4}-\d{2}-\d{2}/)||isNaN(hrs)||hrs<=0)return;
+    const entry={date,hrs};
+    if(type==='art'){
+      S.artHours+=hrs;S.artDays++;
+      S.artLog.push(entry);
+      if(!S.streak.includes(date))S.streak.push(date);
+    } else {
+      S.fitHours+=hrs;S.fitLog.push(entry);
+    }
+    totalHrs+=hrs;count++;
+  });
+  document.getElementById('bulk-'+type+'-text').value='';
+  save();updateNodes();renderHourLog(type);renderStreak();updateDashboard();autoUnlock();renderTree();updateXpBar();renderStats();
+  showToast('Import '+count+' วัน รวม '+totalHrs.toFixed(1)+' ชม. ✓');
+}
+function deleteHour(type,idx){
+  const log=type==='art'?S.artLog:S.fitLog;
+  if(idx<0||idx>=log.length)return;
+  const hrs=log[idx].hrs;
+  if(type==='art'){S.artHours=Math.max(0,S.artHours-hrs);S.artDays=Math.max(0,S.artDays-1);}
+  else S.fitHours=Math.max(0,S.fitHours-hrs);
+  log.splice(idx,1);
+  save();updateNodes();renderHourLog(type);updateDashboard();showToast('ลบแล้ว ✓');
+}
+function updateDashboard(){
+  const today=new Date();
+  const todayStr=today.toISOString().split('T')[0];
+  const wStart=new Date(today);wStart.setDate(today.getDate()-today.getDay());
+  const mStart=new Date(today.getFullYear(),today.getMonth(),1);
+  const yStart=new Date(today.getFullYear(),0,1);
+  function sumLog(log,from,to){
+    return log.filter(e=>e.date>=from&&e.date<=to).reduce((a,e)=>a+e.hrs,0);
+  }
+  const toS=d=>d.toISOString().split('T')[0];
+  document.getElementById('d-art-day').textContent=parseFloat(sumLog(S.artLog,todayStr,todayStr).toFixed(1));
+  document.getElementById('d-art-week').textContent=parseFloat(sumLog(S.artLog,toS(wStart),todayStr).toFixed(1));
+  document.getElementById('d-art-month').textContent=parseFloat(sumLog(S.artLog,toS(mStart),todayStr).toFixed(1));
+  document.getElementById('d-art-year').textContent=parseFloat(sumLog(S.artLog,toS(yStart),todayStr).toFixed(1));
+  document.getElementById('d-fit-day').textContent=parseFloat(sumLog(S.fitLog,todayStr,todayStr).toFixed(1));
+  document.getElementById('d-fit-week').textContent=parseFloat(sumLog(S.fitLog,toS(wStart),todayStr).toFixed(1));
+  document.getElementById('d-fit-month').textContent=parseFloat(sumLog(S.fitLog,toS(mStart),todayStr).toFixed(1));
+  document.getElementById('d-fit-year').textContent=parseFloat(sumLog(S.fitLog,toS(yStart),todayStr).toFixed(1));
+}
+function renderQuests(quests,stateObj,cid,dateKey){
+  const el=document.getElementById(cid);el.innerHTML='';
+  quests.forEach(q=>{
+    const done=!!stateObj[q.id];
+    const isCardio=q.rd==='cardio';
+    const isWeight=q.rd==='weight';
+    const restKey=dateKey||getTodayStr();
+    const restState=S.dailyByDate[restKey]||{};
+    const cardioRest=restState._restCardio||false;
+    const weightRest=restState._restWeight||false;
+    const rd=(isCardio&&cardioRest)||(isWeight&&weightRest);
+    const card=document.createElement('div');
+    card.className='q-card'+(done?' done':'')+(rd?' rest-off':'');
+    let restBtn='';
+    if(isCardio)restBtn=`<button class="rest-inline${cardioRest?' active':''}" onclick="toggleRestInline('cardio','${restKey}',event)">REST</button>`;
+    if(isWeight)restBtn=`<button class="rest-inline${weightRest?' active':''}" onclick="toggleRestInline('weight','${restKey}',event)">REST</button>`;
+    card.innerHTML=`<div class="q-row" onclick="toggleQ('${q.id}','${cid}','${restKey}')"><div class="chk">${done?'✓':''}</div><div class="q-text">${q.text}</div><div class="q-meta">${restBtn}<div class="q-stat ${q.stat}">${q.stat}</div><div class="q-xp">+${q.xp}</div></div></div>`;
+    el.appendChild(card);
+  });
+}
+function toggleRestInline(type,dateKey,e){
+  e.stopPropagation();
+  if(!S.dailyByDate[dateKey])S.dailyByDate[dateKey]={};
+  const key=type==='cardio'?'_restCardio':'_restWeight';
+  S.dailyByDate[dateKey][key]=!S.dailyByDate[dateKey][key];
+  save();renderDailyTab();
+}
+function toggleQ(id,cid,dateKey){
+  let so,qs;
+  const dk=dateKey||getTodayStr();
+  if(cid==='daily-quests'){
+    if(!S.dailyByDate[dk])S.dailyByDate[dk]={};
+    so=S.dailyByDate[dk];qs=DAILY_QUESTS;
+    // sync today's to S.daily for legacy
+    if(dk===getTodayStr())S.daily=so;
+  } else if(cid==='weekly-quests'){so=S.weekly;qs=WEEKLY_QUESTS;}
+  else{so=S.monthly;qs=MONTHLY_QUESTS;}
+  const q=qs.find(x=>x.id===id);
+  const pl=getLevel(S.totalXp);
+  if(!so[id]){so[id]=true;S.totalXp+=q.xp;S.lastActive=getTodayStr();if(id==='d1'&&!S.streak.includes(dk))S.streak.push(dk);showToast('+'+q.xp+' XP · '+q.stat+' ✨');}
+  else{so[id]=false;S.totalXp=Math.max(0,S.totalXp-q.xp);}
+  const nl=getLevel(S.totalXp);
+  if(nl>pl){S.pendingSP+=(nl-pl)*SP_PER_LEVEL;save();setTimeout(()=>openModal(),500);}
+  save();
+  if(cid==='daily-quests')renderDailyTab();
+  else renderQuests(qs,so,cid);
+  updateXpBar();renderStats();renderStreak();
+}
+let calYear=new Date().getFullYear();
+let calMonth=new Date().getMonth();
+function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderStreak();}
+function calNext(){
+  const now=new Date();
+  if(calYear>now.getFullYear()||(calYear===now.getFullYear()&&calMonth>=now.getMonth()))return;
+  calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderStreak();
+}
+function renderStreak(){
+  const todayStr=getTodayStr();
+  const thaiMonths=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  document.getElementById('cal-month-lbl').textContent=`${thaiMonths[calMonth]} ${calYear+543}`;
+  const grid=document.getElementById('cal-grid');grid.innerHTML='';
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  // empty cells
+  for(let i=0;i<firstDay;i++){const e=document.createElement('div');e.className='cal-day empty';grid.appendChild(e);}
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=dateStr===todayStr;
+    const isSelected=dateStr===currentDailyDate;
+    const inStreak=S.streak.includes(dateStr);
+    const hasQuest=S.dailyByDate[dateStr]&&Object.keys(S.dailyByDate[dateStr]).some(k=>!k.startsWith('_')&&S.dailyByDate[dateStr][k]);
+    const div=document.createElement('div');
+    let cls='cal-day'+(inStreak||hasQuest?' done':'')+(isToday?' today':'')+(isSelected?' selected':'');
+    div.className=cls;div.textContent=d;div.title=dateStr;
+    div.onclick=()=>{currentDailyDate=dateStr;renderDailyTab();renderStreak();};
+    grid.appendChild(div);
+  }
+  document.getElementById('streak-count').textContent=getStreak();
+}
+function checkCond(node){
+  if(node.cond==='manual')return false;
+  const artHours=S.artHours,fitHours=S.fitHours,streak30=getStreak()>=30,streak100=getStreak()>=100;
+  try{return eval(node.cond);}catch(e){return false;}
+}
+function autoUnlock(){
+  let changed=false;
+  Object.values(SKILL_TREE).forEach(lane=>lane.nodes.forEach(node=>{
+    if(!S.un.includes(node.id)&&node.cond!=='manual'&&checkCond(node)){S.un.push(node.id);applyReward(node);changed=true;setTimeout(()=>showToast('🔓 '+node.name+' Unlocked!'),400);}
+  }));
+  CROSS_NODES.forEach(cn=>{if(!S.un.includes(cn.id)&&cn.check(S)){S.un.push(cn.id);changed=true;showToast('🌟 '+cn.name+' Unlocked!');}}); 
+  if(changed){save();}
+}
+function applyReward(node){
+  const r=node.reward||'';
+  [['STR',1],['AGI',1],['INT',1],['VIT',1],['CRE',1],['STR',2],['AGI',2],['INT',2],['VIT',2],['CRE',2],['STR',3],['AGI',3],['INT',3],['VIT',3],['CRE',3],['STR',4],['AGI',4],['INT',4],['VIT',4],['CRE',4],['STR',5],['AGI',5],['VIT',5]].forEach(([st,n])=>{
+    if(r.includes('+'+n+' '+st))S.stats[st]=(S.stats[st]||1)+n;
+  });
+  const spM=r.match(/\+(\d+) SP/);if(spM)S.pendingSP+=parseInt(spM[1]);
+  if(r.includes('ALL STATS +5'))Object.keys(S.stats).forEach(k=>S.stats[k]+=5);
+}
+function manualUnlock(nodeId){
+  if(S.un.includes(nodeId))return;
+  let found=null;
+  Object.values(SKILL_TREE).forEach(lane=>lane.nodes.forEach(n=>{if(n.id===nodeId)found=n;}));
+  if(!found)found=CROSS_NODES.find(n=>n.id===nodeId);
+  if(!found)return;
+  S.un.push(nodeId);applyReward(found);save();renderTree();renderStats();showToast('🔓 '+found.name+' Unlocked!');
+}
+function renderTree(){
+  const container=document.getElementById('tree-container');container.innerHTML='';
+  Object.entries(SKILL_TREE).forEach(([key,lane])=>{
+    const lDiv=document.createElement('div');lDiv.className='tree-lane';
+    lDiv.innerHTML=`<div class="tree-lane-hdr"><div class="tree-lane-ttl" style="color:${lane.color}">${lane.label}</div><div class="tree-lane-line"></div></div>`;
+    const nDiv=document.createElement('div');
+    lane.nodes.forEach((node,idx)=>{
+      const isU=S.un.includes(node.id);
+      const met=node.cond!=='manual'&&checkCond(node);
+      const prevU=idx===0||S.un.includes(lane.nodes[idx-1].id);
+      const isA=!isU&&(met||(node.cond==='manual'&&prevU));
+      const status=isU?'unlocked':isA?'available':'locked';
+      let prog=0;
+      if(!isU&&node.cond!=='manual'){const m=node.cond.match(/[\d.]+/);if(m){if(node.cond.includes('artHours'))prog=Math.min(S.artHours/parseFloat(m[0])*100,100);else if(node.cond.includes('fitHours'))prog=Math.min(S.fitHours/parseFloat(m[0])*100,100);}}
+      const row=document.createElement('div');row.className='t-node';
+      const conn=document.createElement('div');conn.className='t-conn';
+      const dot=document.createElement('div');dot.className='t-dot '+status;
+      conn.appendChild(dot);
+      if(idx<lane.nodes.length-1){const line=document.createElement('div');line.className='t-line'+(isU?' lit':'');conn.appendChild(line);}
+      const card=document.createElement('div');card.className='t-card '+status;
+      const szC='sz-'+node.size;const szL={small:'Small',medium:'Medium',large:'Large',keystone:'Keystone'}[node.size];
+      card.innerHTML=`<div class="t-top"><div class="t-name">${isU?'✓ ':''} ${node.name}</div><div class="t-size ${szC}">${szL}</div></div><div class="t-desc">${node.desc}</div><div class="t-reward">${node.reward}</div><div class="t-cond ${met||isU?'met':''}">${isU?'✓ Unlocked':node.cl}</div>${!isU&&prog>0?`<div class="t-prog"><div class="t-prog-fill" style="width:${prog.toFixed(0)}%"></div></div>`:''}${isA&&node.cond==='manual'?`<button class="unlock-btn" onclick="manualUnlock('${node.id}')">Unlock ✓</button>`:''}`;
+      row.appendChild(conn);row.appendChild(card);nDiv.appendChild(row);
+    });
+    lDiv.appendChild(nDiv);container.appendChild(lDiv);
+  });
+  const ch=document.createElement('div');ch.innerHTML=`<div class="sec-title" style="margin:8px 0 10px">◆ Cross Nodes</div>`;container.appendChild(ch);
+  CROSS_NODES.forEach(cn=>{
+    const isU=S.un.includes(cn.id);const isA=!isU&&cn.check(S);
+    const div=document.createElement('div');div.className='cross-node'+(isU?' unlocked':isA?' available':'');
+    div.innerHTML=`<div class="cross-title">${cn.name}</div><div class="cross-req" style="margin-bottom:3px">ต้องการ: ${cn.req}</div><div class="cross-req" style="color:var(--accent2)">${cn.reward}</div>${isA?`<button class="unlock-btn" onclick="manualUnlock('${cn.id}')">Unlock ✓</button>`:''}${isU?`<div style="font-size:10px;color:var(--green);margin-top:4px">✓ Unlocked</div>`:''}`;
+    container.appendChild(div);
+  });
+}
+// CAREER
+function addIncome(){
+  const amt=parseFloat(document.getElementById('income-amount').value);
+  const note=document.getElementById('income-note').value.trim();
+  if(!amt||amt<=0)return;
+  const today=new Date().toISOString().split('T')[0];
+  S.incomeLog.push({date:today,amt,note});
+  document.getElementById('income-amount').value='';
+  document.getElementById('income-note').value='';
+  save();renderCareer();showToast('บันทึกรายได้ '+amt.toLocaleString()+' ฿ ✓');
+}
+function deleteIncome(idx){
+  S.incomeLog.splice(idx,1);save();renderCareer();showToast('ลบแล้ว ✓');
+}
+function adjustCount(key,delta){
+  S.counts[key]=Math.max(0,(S.counts[key]||0)+delta);
+  save();document.getElementById('count-'+key).textContent=S.counts[key];
+}
+function renderCareer(){
+  const today=new Date();
+  const mStart=new Date(today.getFullYear(),today.getMonth(),1).toISOString().split('T')[0];
+  const todayStr=today.toISOString().split('T')[0];
+  const monthTotal=S.incomeLog.filter(e=>e.date>=mStart&&e.date<=todayStr).reduce((a,e)=>a+e.amt,0);
+  document.getElementById('income-month-total').textContent=monthTotal.toLocaleString()+' ฿';
+  const log=document.getElementById('income-log');log.innerHTML='';
+  [...S.incomeLog].reverse().slice(0,10).forEach((e,i)=>{
+    const realIdx=S.incomeLog.length-1-i;
+    const div=document.createElement('div');div.className='income-entry';
+    div.innerHTML=`<div><div class="income-amount">${e.amt.toLocaleString()} ฿</div><div class="income-date">${e.date}${e.note?' — '+e.note:''}</div></div><button class="del-btn" onclick="deleteIncome(${realIdx})">✕</button>`;
+    log.appendChild(div);
+  });
+  ['commission','sold','auction','clients'].forEach(k=>document.getElementById('count-'+k).textContent=S.counts[k]||0);
+  renderFollowers();
+}
+function renderFollowers(){
+  const grid=document.getElementById('follower-grid');grid.innerHTML='';
+  SOCIAL_PLATFORMS.forEach(p=>{
+    const data=S.followers[p]||{f:0,c:0};
+    const key=p.replace(/[\s()]/g,'');
+    const div=document.createElement('div');div.className='follower-item';
+    div.innerHTML=`<div class="follower-name">${p}</div>
+      <div class="follower-stats">
+        <div class="follower-stat"><div class="follower-stat-lbl">Followers</div><div class="follower-val" id="fol-f-${key}">${(data.f||0).toLocaleString()}</div></div>
+        <div class="follower-stat"><div class="follower-stat-lbl">คลิป/โพสต์</div><div class="follower-clips" id="fol-c-${key}">${(data.c||0).toLocaleString()}</div></div>
+      </div>
+      <div class="follower-edit">
+        <input type="number" class="n-input" id="fol-inp-f-${key}" placeholder="followers" style="font-size:10px;">
+        <input type="number" class="n-input" id="fol-inp-c-${key}" placeholder="คลิป" style="font-size:10px;">
+        <button class="btn-s btn-art" style="font-size:10px;padding:4px 7px;" onclick="setFollower('${p}')">บันทึก</button>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+function setFollower(platform){
+  const key=platform.replace(/[\s()]/g,'');
+  const f=parseInt(document.getElementById('fol-inp-f-'+key).value);
+  const c=parseInt(document.getElementById('fol-inp-c-'+key).value);
+  if(!S.followers[platform]||typeof S.followers[platform]==='number')S.followers[platform]={f:0,c:0};
+  if(!isNaN(f)&&f>=0)S.followers[platform].f=f;
+  if(!isNaN(c)&&c>=0)S.followers[platform].c=c;
+  document.getElementById('fol-inp-f-'+key).value='';
+  document.getElementById('fol-inp-c-'+key).value='';
+  save();renderFollowers();showToast(platform+' อัปเดตแล้ว ✓');
+}
+function openModal(){renderModalStats();document.getElementById('modal').classList.add('show');}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+function renderModalStats(){
+  document.getElementById('modal-sp').textContent=S.pendingSP;
+  const el=document.getElementById('stat-btns');el.innerHTML='';
+  STATS_DEF.forEach(st=>{
+    const btn=document.createElement('button');btn.className='stat-btn '+st.id;
+    btn.innerHTML=`<div class="stat-btn-name">${st.name} ${S.stats[st.id]}</div><div style="font-size:9px;color:var(--muted)">${st.desc.replace(/\n/g,'<br>')}</div>`;
+    btn.onclick=()=>allocateSP(st.id);el.appendChild(btn);
+  });
+}
+function allocateSP(statId){
+  if(S.pendingSP<=0)return;
+  S.stats[statId]++;S.pendingSP--;save();renderModalStats();renderStats();showToast(statId+' +1 💪');
+  if(S.pendingSP===0)setTimeout(()=>document.getElementById('modal').classList.remove('show'),600);
+}
+// DREAM TRACKER
+function addDream(){
+  const name=document.getElementById('dream-name').value.trim();
+  const price=parseFloat(document.getElementById('dream-price').value)||0;
+  if(!name)return;
+  if(!S.dreams)S.dreams=[];
+  S.dreams.push({id:Date.now(),name,price,done:false,note:''});
+  document.getElementById('dream-name').value='';
+  document.getElementById('dream-price').value='';
+  save();renderDreams();showToast('เพิ่ม dream แล้ว ⭐');
+}
+function toggleDream(id){
+  if(!S.dreams)return;
+  const d=S.dreams.find(x=>x.id===id);
+  if(d){d.done=!d.done;save();renderDreams();showToast(d.done?'✓ สำเร็จแล้ว! 🎉':'ยังไม่สำเร็จ');}
+}
+function deleteDream(id){
+  if(!S.dreams)return;
+  if(!confirm('ลบ dream นี้?'))return;
+  S.dreams=S.dreams.filter(x=>x.id!==id);
+  save();renderDreams();
+}
+function saveDreamEdit(id){
+  if(!S.dreams)return;
+  const d=S.dreams.find(x=>x.id===id);
+  if(!d)return;
+  const nameEl=document.getElementById('dedit-name-'+id);
+  const priceEl=document.getElementById('dedit-price-'+id);
+  const noteEl=document.getElementById('dedit-note-'+id);
+  if(nameEl&&nameEl.value.trim())d.name=nameEl.value.trim();
+  if(priceEl)d.price=parseFloat(priceEl.value)||d.price;
+  if(noteEl)d.note=noteEl.value.trim();
+  save();renderDreams();showToast('แก้ไขแล้ว ✓');
+}
+function toggleDreamEdit(id){
+  const row=document.getElementById('dedit-'+id);
+  if(row)row.classList.toggle('show');
+}
+function renderDreams(){
+  const el=document.getElementById('dream-list');if(!el)return;
+  if(!S.dreams)S.dreams=[];
+  el.innerHTML='';
+  if(S.dreams.length===0){el.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;padding:20px;">ยังไม่มี dream — เพิ่มได้เลย ⭐</div>';return;}
+  // summary
+  const total=S.dreams.length,done=S.dreams.filter(x=>x.done).length;
+  const totalPrice=S.dreams.filter(x=>!x.done).reduce((a,x)=>a+x.price,0);
+  el.innerHTML=`<div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);margin-bottom:12px;">สำเร็จแล้ว ${done}/${total} · เงินที่ต้องการ ${totalPrice.toLocaleString()} ฿</div>`;
+  // sort: undone first
+  [...S.dreams].sort((a,b)=>a.done-b.done).forEach(d=>{
+    const div=document.createElement('div');
+    div.className='dream-item'+(d.done?' done':'');
+    div.innerHTML=`
+      <div class="dream-top">
+        <div class="dream-chk" onclick="toggleDream(${d.id})">${d.done?'✓':''}</div>
+        <div class="dream-name">${d.name}</div>
+        ${d.price>0?`<div class="dream-price">${d.price.toLocaleString()} ฿`:''}
+      </div>
+      ${d.note?`<div class="dream-note">${d.note}</div>`:''}
+      <div class="dream-actions">
+        <button class="btn-s" style="font-size:10px;background:var(--surface2);color:var(--muted);" onclick="toggleDreamEdit(${d.id})">✏ แก้ไข</button>
+        <button class="btn-s btn-danger" style="font-size:10px;" onclick="deleteDream(${d.id})">✕ ลบ</button>
+      </div>
+      <div class="dream-edit-row" id="dedit-${d.id}">
+        <input class="c-input" id="dedit-name-${d.id}" value="${d.name}" placeholder="ชื่อ" style="flex:1;">
+        <input type="number" class="c-input" id="dedit-price-${d.id}" value="${d.price||''}" placeholder="ราคา" style="width:80px;">
+        <input class="c-input" id="dedit-note-${d.id}" value="${d.note||''}" placeholder="หมายเหตุ" style="flex:1;">
+        <button class="btn-s btn-art" style="font-size:10px;" onclick="saveDreamEdit(${d.id})">บันทึก</button>
+      </div>`;
+    el.appendChild(div);
+  });
+}
+function switchTab(name){
+  const names=['daily','weekly','monthly','tree','career','dream','diary','stats'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='tree')renderTree();
+  if(name==='career')renderCareer();
+  if(name==='stats')updateDashboard();
+  if(name==='diary')renderDiaryLog();
+  if(name==='dream')renderDreams();
+}
+function resetDaily(){if(confirm('Reset daily?')){const dk=currentDailyDate;S.dailyByDate[dk]={};if(dk===getTodayStr())S.daily={};save();renderDailyTab();showToast('Daily reset ✨');}}
+function resetWeekly(){if(confirm('Reset weekly?')){S.weekly={};save();renderQuests(WEEKLY_QUESTS,S.weekly,'weekly-quests');showToast('Weekly reset ✨');}}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+// DIARY
+function saveDiary(){
+  const text=document.getElementById('diary-text').value.trim();
+  const date=document.getElementById('diary-date').value||getTodayStr();
+  const mood=document.getElementById('diary-mood').value;
+  if(!text)return;
+  S.diaryLog.push({date,text,mood});
+  document.getElementById('diary-text').value='';
+  document.getElementById('diary-mood').value='';
+  save();renderDiaryLog();showToast('บันทึก diary แล้ว ✓');
+}
+function deleteDiary(idx){S.diaryLog.splice(idx,1);save();renderDiaryLog();}
+function renderDiaryLog(){
+  const el=document.getElementById('diary-log');if(!el)return;el.innerHTML='';
+  if(!S.diaryLog||S.diaryLog.length===0){el.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;padding:20px;">ยังไม่มีบันทึก</div>';return;}
+  [...S.diaryLog].reverse().forEach((e,i)=>{
+    const realIdx=S.diaryLog.length-1-i;
+    const div=document.createElement('div');div.className='diary-entry';
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;"><div class="diary-date">${e.date}${e.mood?' — '+e.mood:''}</div><button class="del-btn" onclick="deleteDiary(${realIdx})">✕</button></div><div class="diary-text">${e.text.replace(/\n/g,'<br>')}</div>`;
+    el.appendChild(div);
+  });
+}
+// SYNC — ใช้ JSONP แทน fetch (รองรับ local file + mobile)
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbzF5YQ8fUvYs0GKAN8HyoINfVXl7DzL38O_6R4j8PkHEsjmrG5fwNl0pE8NEcdMeLRH/exec';
+function setSyncStatus(status,msg){
+  const dot=document.getElementById('sync-dot');
+  const lbl=document.getElementById('sync-status');
+  if(!dot||!lbl)return;
+  dot.className='sync-dot '+status;
+  lbl.className='sync-status '+status;
+  lbl.textContent=msg;
+}
+function jsonp(url,callback){
+  const cbName='_cb'+Date.now();
+  const script=document.createElement('script');
+  window[cbName]=function(data){
+    delete window[cbName];
+    document.head.removeChild(script);
+    callback(null,data);
+  };
+  script.onerror=function(){
+    delete window[cbName];
+    document.head.removeChild(script);
+    callback(new Error('Network error'));
+  };
+  script.src=url+(url.includes('?')?'&':'?')+'callback='+cbName+'&t='+Date.now();
+  document.head.appendChild(script);
+}
+function manualSave(){
+  setSyncStatus('loading','กำลัง Save...');
+  const encoded=encodeURIComponent(JSON.stringify(S));
+  jsonp(SCRIPT_URL+'?action=save&data='+encoded,function(err,data){
+    if(err||!data){setSyncStatus('err','Save ล้มเหลว');showToast('Save ล้มเหลว ✕');return;}
+    const t=new Date().toLocaleTimeString('th-TH');
+    setSyncStatus('ok','☁ Saved '+t);
+    showToast('Sync สำเร็จ ✓');
+  });
+}
+function manualLoad(){
+  setSyncStatus('loading','กำลัง Load...');
+  jsonp(SCRIPT_URL+'?action=load',function(err,data){
+    if(err||!data){setSyncStatus('err','Load ล้มเหลว — ใช้ข้อมูลในเครื่อง');return;}
+    if(!data||Object.keys(data).length===0){setSyncStatus('ok','Drive ว่าง — ใช้ข้อมูลในเครื่อง');return;}
+    Object.keys(data).forEach(k=>{S[k]=data[k];});
+    save();
+    checkDecay();
+    renderDailyTab();
+    renderQuests(WEEKLY_QUESTS,S.weekly,'weekly-quests');
+    renderQuests(MONTHLY_QUESTS,S.monthly,'monthly-quests');
+    renderStats();updateXpBar();updateNodes();renderStreak();
+    renderHourLog('art');renderHourLog('fit');
+    autoUnlock();
+    const t=new Date().toLocaleTimeString('th-TH');
+    setSyncStatus('ok','☁ Loaded '+t);
+    showToast('Load จาก Drive สำเร็จ ✓');
+  });
+}
+// auto save ทุก 3 นาที
+setInterval(manualSave, 3*60*1000);
+// save ตอนปิดหน้า
+window.addEventListener('pagehide',manualSave);
+// INIT
+checkDecay();
+updateTodayDisplay();
+renderDailyTab();
+renderQuests(WEEKLY_QUESTS,S.weekly,'weekly-quests');
+renderQuests(MONTHLY_QUESTS,S.monthly,'monthly-quests');
+renderStats();updateXpBar();updateNodes();renderStreak();
+renderHourLog('art');renderHourLog('fit');
+autoUnlock();
+if(S.pendingSP>0)setTimeout(openModal,300);
+// Auto load จาก Drive ตอนเปิดแอพ
+setTimeout(manualLoad, 800);
+</script>
+</body>
+</html>

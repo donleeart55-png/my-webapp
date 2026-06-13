@@ -58,6 +58,7 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 .node-input-row{display:flex;gap:5px;margin-bottom:6px;}
 .n-input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;padding:5px 7px;width:55px;outline:none;}
 .n-input:focus{border-color:var(--accent);}
+.time-input{width:86px;}
 .btn-s{border:none;border-radius:6px;padding:5px 9px;font-family:'Sarabun',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:opacity .2s;}
 .btn-s:hover{opacity:.8;}
 .btn-art{background:var(--accent);color:#1a1a00;}
@@ -78,7 +79,8 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 .q-section{margin-bottom:20px;}
 .q-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;overflow:hidden;transition:border-color .2s;}
 .q-card.done{border-color:var(--green);opacity:.65;}
-.q-card.rest-off{opacity:.3;pointer-events:none;}
+.q-card.rest-off{opacity:.45;}
+.q-card.rest-off .q-row{cursor:default;}
 .q-card:hover:not(.rest-off){border-color:var(--accent2);}
 .q-row{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;}
 .chk{width:18px;height:18px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;}
@@ -228,17 +230,22 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 .date-input:focus{border-color:var(--accent);}
 /* DREAM */
 .dream-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:8px;transition:all .3s;}
-.dream-item.done{border-color:var(--green);background:rgba(78,203,113,.05);}
+.dream-item.done{border-color:var(--gold);background:linear-gradient(135deg,rgba(78,203,113,.12),rgba(240,192,64,.10));box-shadow:0 0 0 1px rgba(240,192,64,.18),0 0 18px rgba(240,192,64,.10);}
 .dream-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
 .dream-chk{width:22px;height:22px;border:2px solid var(--border);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .2s;}
-.dream-item.done .dream-chk{background:var(--green);border-color:var(--green);}
+.dream-item.done .dream-chk{background:var(--gold);border-color:var(--gold);color:#1a1a00;}
 .dream-name{flex:1;font-size:14px;font-weight:600;}
-.dream-item.done .dream-name{text-decoration:line-through;color:var(--muted);}
+.dream-item.done .dream-name{text-decoration:none;color:var(--gold);}
 .dream-price{font-family:'Space Mono',monospace;font-size:12px;color:var(--gold);}
+.dream-cat{font-family:'Space Mono',monospace;font-size:9px;color:var(--accent2);background:rgba(124,110,245,.12);border:1px solid rgba(124,110,245,.35);border-radius:5px;padding:2px 6px;}
+.dream-real{font-family:'Space Mono',monospace;font-size:9px;color:#1a1a00;background:var(--gold);border-radius:5px;padding:2px 6px;font-weight:700;}
 .dream-note{font-size:11px;color:var(--muted);margin-bottom:6px;}
 .dream-actions{display:flex;gap:6px;}
 .dream-edit-row{display:none;gap:6px;margin-top:8px;flex-wrap:wrap;}
 .dream-edit-row.show{display:flex;}
+.dream-cat-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.dream-cat-item{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 7px;font-size:11px;}
+.dream-cat-item.active{border-color:var(--accent2);color:var(--accent2);}
 .diary-section{margin-bottom:20px;}
 .diary-entry{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;}
 .diary-date{font-family:'Space Mono',monospace;font-size:9px;color:var(--accent);margin-bottom:4px;}
@@ -249,6 +256,9 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 /* BULK */
 .bulk-textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Space Mono',monospace;font-size:11px;padding:8px;width:100%;outline:none;resize:vertical;min-height:80px;}
 .bulk-textarea:focus{border-color:var(--accent);}
+.bulk-quick{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.bulk-quick .c-input,.bulk-quick .date-input{margin-bottom:0;}
+.bulk-presets{display:flex;gap:5px;flex-wrap:wrap;margin:-2px 0 8px;}
 .collapsible{cursor:pointer;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-bottom:6px;user-select:none;}
 .collapsible:hover{color:var(--accent);}
 .collapse-body{display:none;}
@@ -289,12 +299,24 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
     <div class="node-bar"><div class="node-bar-fill" id="art-bar" style="width:0%"></div></div>
     <input type="date" class="date-input" id="date-art">
     <div class="node-input-row">
-      <input type="number" class="n-input" id="add-art" placeholder="0.5" step="0.5" min="0.1" max="12">
+      <input type="text" class="n-input time-input" id="add-art" placeholder="1h 30m">
       <button class="btn-s btn-art" onclick="addHours('art')">+บันทึก</button>
     </div>
     <div style="font-size:9px;color:var(--muted);margin-top:4px;line-height:1.6;">1h +15XP · 2h +30XP · 3h +50XP · 4h+ +70XP</div>
     <div class="collapsible" onclick="toggleCollapse('bulk-art')">▶ Bulk Import หลายวัน</div>
     <div class="collapse-body" id="bulk-art">
+      <div class="bulk-quick">
+        <input type="date" class="date-input" id="bulk-art-start">
+        <input type="date" class="date-input" id="bulk-art-end">
+        <input type="text" class="c-input" id="bulk-art-duration" placeholder="1h 30m">
+        <button class="btn-s btn-art" onclick="bulkRangeImport('art')">Add Range</button>
+      </div>
+      <div class="bulk-presets">
+        <button class="btn-s" onclick="setBulkDuration('art','30m')">30m</button>
+        <button class="btn-s" onclick="setBulkDuration('art','1h')">1h</button>
+        <button class="btn-s" onclick="setBulkDuration('art','1h 30m')">1h 30m</button>
+        <button class="btn-s" onclick="setBulkDuration('art','2h')">2h</button>
+      </div>
       <div style="font-size:9px;color:var(--muted);margin-bottom:4px;">รูปแบบ: YYYY-MM-DD, ชั่วโมง (แต่ละบรรทัด)</div>
       <textarea class="bulk-textarea" id="bulk-art-text" placeholder="2026-05-01, 1.5&#10;2026-05-02, 2&#10;2026-05-03, 0.5"></textarea>
       <button class="btn-s btn-art" style="margin-top:5px;width:100%;" onclick="bulkImport('art')">Import ทั้งหมด</button>
@@ -310,11 +332,23 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
     <div class="node-bar"><div class="node-bar-fill" id="fit-bar" style="width:0%"></div></div>
     <input type="date" class="date-input" id="date-fit">
     <div class="node-input-row">
-      <input type="number" class="n-input" id="add-fit" placeholder="0.5" step="0.5" min="0.1" max="12">
+      <input type="text" class="n-input time-input" id="add-fit" placeholder="45m">
       <button class="btn-s btn-fit" onclick="addHours('fit')">+บันทึก</button>
     </div>
     <div class="collapsible" onclick="toggleCollapse('bulk-fit')" style="margin-top:4px;">▶ Bulk Import หลายวัน</div>
     <div class="collapse-body" id="bulk-fit">
+      <div class="bulk-quick">
+        <input type="date" class="date-input" id="bulk-fit-start">
+        <input type="date" class="date-input" id="bulk-fit-end">
+        <input type="text" class="c-input" id="bulk-fit-duration" placeholder="45m">
+        <button class="btn-s btn-fit" onclick="bulkRangeImport('fit')">Add Range</button>
+      </div>
+      <div class="bulk-presets">
+        <button class="btn-s" onclick="setBulkDuration('fit','30m')">30m</button>
+        <button class="btn-s" onclick="setBulkDuration('fit','1h')">1h</button>
+        <button class="btn-s" onclick="setBulkDuration('fit','1h 30m')">1h 30m</button>
+        <button class="btn-s" onclick="setBulkDuration('fit','2h')">2h</button>
+      </div>
       <div style="font-size:9px;color:var(--muted);margin-bottom:4px;">รูปแบบ: YYYY-MM-DD, ชั่วโมง</div>
       <textarea class="bulk-textarea" id="bulk-fit-text" placeholder="2026-05-01, 1&#10;2026-05-02, 1.5"></textarea>
       <button class="btn-s btn-fit" style="margin-top:5px;width:100%;" onclick="bulkImport('fit')">Import ทั้งหมด</button>
@@ -337,7 +371,6 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
   <div class="q-section">
     <div style="font-family:Space Mono,monospace;font-size:10px;color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
       <span id="daily-showing-date"></span>
-      <button class="btn-s" style="background:var(--border);color:var(--text);font-size:10px;" onclick="resetDailyDate()">กลับวันนี้</button>
     </div>
     <div class="sec-title">Daily Quest</div>
     <div id="daily-quests"></div>
@@ -422,9 +455,15 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 <div class="tab-content" id="tab-dream">
   <div class="career-section">
     <div class="sec-title">⭐ Dream Tracker — เป้าหมายที่อยากได้</div>
+    <div class="dream-cat-row" id="dream-cat-list"></div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+      <input type="text" class="c-input" id="dream-cat-name" placeholder="หมวดใหม่ เช่น Art Gear">
+      <button class="btn-s btn-art" onclick="addDreamCategory()">+ หมวด</button>
+    </div>
     <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
       <input type="text" class="c-input" id="dream-name" placeholder="ชื่อ dream เช่น iPad Air M4">
       <input type="number" class="c-input" id="dream-price" placeholder="ราคา (฿)" style="width:100px;">
+      <select class="date-input" id="dream-category" style="width:auto;flex:1;margin-bottom:0;"></select>
       <button class="btn-s btn-art" onclick="addDream()">+ เพิ่ม</button>
     </div>
     <div id="dream-list"></div>
@@ -597,6 +636,10 @@ const def={artHours:0,fitHours:0,totalXp:0,stats:{STR:1,AGI:1,INT:1,VIT:1,CRE:1}
   {id:7,name:'เงินเก็บ 100k',price:100000,done:false,note:'emergency fund'},
 ]};
 Object.keys(def).forEach(k=>{if(S[k]===undefined)S[k]=def[k];});
+if(!Array.isArray(S.dreamCategories)||S.dreamCategories.length===0)S.dreamCategories=[{id:'general',name:'General'}];
+if(!S.dreamCategories.some(c=>c.id==='general'))S.dreamCategories.unshift({id:'general',name:'General'});
+if(!Array.isArray(S.dreams))S.dreams=[];
+S.dreams.forEach(d=>{if(!d.cat)d.cat='general';});
 // migrate old followers format
 SOCIAL_PLATFORMS.forEach(p=>{if(typeof S.followers[p]==='number'){S.followers[p]={f:S.followers[p],c:0};}});
 // migrate old daily to dailyByDate
@@ -604,12 +647,14 @@ if(!S.dailyByDate)S.dailyByDate={};
 let currentDailyDate=getTodayStr();
 function getTodayStr(){return new Date().toISOString().split('T')[0];}
 function setDailyDate(){
-  const v=document.getElementById('daily-date').value;
+  const dateEl=document.getElementById('daily-date');
+  const v=dateEl&&dateEl.value;
   if(v){currentDailyDate=v;renderDailyTab();}
 }
 function resetDailyDate(){
   currentDailyDate=getTodayStr();
-  document.getElementById('daily-date').value='';
+  const dateEl=document.getElementById('daily-date');
+  if(dateEl)dateEl.value='';
   renderDailyTab();
 }
 function renderDailyTab(){
@@ -704,7 +749,7 @@ function renderHourLog(type){
     const realIdx=log.length-1-(i);
     const row=document.createElement('div');
     row.className='hour-entry';
-    row.innerHTML=`<span>${e.date} — ${e.hrs}h${e.note?' ('+e.note+')':''}</span><button class="del-btn" onclick="deleteHour('${type}',${realIdx})">✕</button>`;
+    row.innerHTML=`<span>${e.date} — ${formatDuration(e.hrs)}${e.note?' ('+e.note+')':''}</span><button class="del-btn" onclick="deleteHour('${type}',${realIdx})">✕</button>`;
     el.appendChild(row);
   });
 }
@@ -721,10 +766,29 @@ function getArtBonus(hrs){
   if(hrs>=1)return{xp:15,cre:0,label:'1h+ +15XP'};
   return{xp:0,cre:0,label:''};
 }
+function parseDuration(raw){
+  if(raw===undefined||raw===null)return NaN;
+  const text=String(raw).trim().toLowerCase();
+  if(!text)return NaN;
+  if(/^\d+(\.\d+)?$/.test(text))return parseFloat(text);
+  let minutes=0,matched=false;
+  const hourMatch=text.match(/(\d+(?:\.\d+)?)\s*h/);
+  const minMatch=text.match(/(\d+(?:\.\d+)?)\s*m/);
+  if(hourMatch){minutes+=parseFloat(hourMatch[1])*60;matched=true;}
+  if(minMatch){minutes+=parseFloat(minMatch[1]);matched=true;}
+  return matched?minutes/60:NaN;
+}
+function formatDuration(hrs){
+  const total=Math.round((parseFloat(hrs)||0)*60);
+  const h=Math.floor(total/60),m=total%60;
+  if(h&&m)return h+'h '+m+'m';
+  if(h)return h+'h';
+  return m+'m';
+}
 function getTodayStr(){return new Date().toISOString().split('T')[0];}
 function addHours(type){
   const inp=document.getElementById('add-'+type);
-  const val=parseFloat(inp.value);
+  const val=parseDuration(inp.value);
   if(!val||val<=0)return;
   const dateEl=document.getElementById('date-'+type);
   const dateStr=dateEl.value||getTodayStr();
@@ -741,13 +805,13 @@ function addHours(type){
       if(bonus.cre>0)S.stats.CRE=(S.stats.CRE||1)+bonus.cre;
       const nl=getLevel(S.totalXp);
       if(nl>pl){S.pendingSP+=(nl-pl)*SP_PER_LEVEL;save();setTimeout(()=>openModal(),600);}
-      showToast('บันทึก '+val+'h ('+dateStr+') '+bonus.label);
+      showToast('บันทึก '+formatDuration(val)+' ('+dateStr+') '+bonus.label);
     } else {
-      showToast('บันทึก '+val+'h ('+dateStr+') ✓');
+      showToast('บันทึก '+formatDuration(val)+' ('+dateStr+') ✓');
     }
   } else {
     S.fitHours+=val;S.fitLog.push(entry);
-    showToast('บันทึก '+val+'h ('+dateStr+') ✓');
+    showToast('บันทึก '+formatDuration(val)+' ('+dateStr+') ✓');
   }
   inp.value='';
   save();updateNodes();renderHourLog(type);renderStreak();updateDashboard();autoUnlock();renderTree();updateXpBar();renderStats();
@@ -761,7 +825,7 @@ function bulkImport(type){
     const parts=line.split(',');
     if(parts.length<2)return;
     const date=parts[0].trim();
-    const hrs=parseFloat(parts[1].trim());
+    const hrs=parseDuration(parts[1].trim());
     if(!date.match(/^\d{4}-\d{2}-\d{2}/)||isNaN(hrs)||hrs<=0)return;
     const entry={date,hrs};
     if(type==='art'){
@@ -776,6 +840,39 @@ function bulkImport(type){
   document.getElementById('bulk-'+type+'-text').value='';
   save();updateNodes();renderHourLog(type);renderStreak();updateDashboard();autoUnlock();renderTree();updateXpBar();renderStats();
   showToast('Import '+count+' วัน รวม '+totalHrs.toFixed(1)+' ชม. ✓');
+}
+function addBulkEntry(type,date,hrs){
+  const entry={date,hrs};
+  if(type==='art'){
+    S.artHours+=hrs;S.artDays++;
+    S.artLog.push(entry);
+    if(!S.streak.includes(date))S.streak.push(date);
+  } else {
+    S.fitHours+=hrs;S.fitLog.push(entry);
+  }
+}
+function setBulkDuration(type,value){
+  const el=document.getElementById('bulk-'+type+'-duration');
+  if(el)el.value=value;
+}
+function bulkRangeImport(type){
+  const startEl=document.getElementById('bulk-'+type+'-start');
+  const endEl=document.getElementById('bulk-'+type+'-end');
+  const durationEl=document.getElementById('bulk-'+type+'-duration');
+  const start=startEl.value,end=endEl.value||start;
+  const hrs=parseDuration(durationEl.value);
+  if(!start||!end||!hrs||hrs<=0)return;
+  const s=new Date(start),e=new Date(end);
+  if(isNaN(s)||isNaN(e)||e<s)return;
+  let count=0,totalHrs=0;
+  for(let d=new Date(s);d<=e;d.setDate(d.getDate()+1)){
+    const date=d.toISOString().split('T')[0];
+    addBulkEntry(type,date,hrs);
+    totalHrs+=hrs;count++;
+  }
+  startEl.value='';endEl.value='';durationEl.value='';
+  save();updateNodes();renderHourLog(type);renderStreak();updateDashboard();autoUnlock();renderTree();updateXpBar();renderStats();
+  showToast('Import '+count+' วัน รวม '+formatDuration(totalHrs)+' ✓');
 }
 function deleteHour(type,idx){
   const log=type==='art'?S.artLog:S.fitLog;
@@ -843,6 +940,10 @@ function toggleQ(id,cid,dateKey){
   } else if(cid==='weekly-quests'){so=S.weekly;qs=WEEKLY_QUESTS;}
   else{so=S.monthly;qs=MONTHLY_QUESTS;}
   const q=qs.find(x=>x.id===id);
+  if(cid==='daily-quests'&&q&&q.rd){
+    const restKey=q.rd==='cardio'?'_restCardio':'_restWeight';
+    if(so[restKey])return;
+  }
   const pl=getLevel(S.totalXp);
   if(!so[id]){so[id]=true;S.totalXp+=q.xp;S.lastActive=getTodayStr();if(id==='d1'&&!S.streak.includes(dk))S.streak.push(dk);showToast('+'+q.xp+' XP · '+q.stat+' ✨');}
   else{so[id]=false;S.totalXp=Math.max(0,S.totalXp-q.xp);}
@@ -1028,12 +1129,59 @@ function allocateSP(statId){
   if(S.pendingSP===0)setTimeout(()=>document.getElementById('modal').classList.remove('show'),600);
 }
 // DREAM TRACKER
+function getDreamCategoryName(id){
+  const c=(S.dreamCategories||[]).find(x=>x.id===id);
+  return c?c.name:'General';
+}
+function renderDreamCategories(){
+  const list=document.getElementById('dream-cat-list');
+  const select=document.getElementById('dream-category');
+  if(!list||!select)return;
+  if(!Array.isArray(S.dreamCategories)||S.dreamCategories.length===0)S.dreamCategories=[{id:'general',name:'General'}];
+  list.innerHTML='';
+  select.innerHTML='';
+  S.dreamCategories.forEach(c=>{
+    const item=document.createElement('div');
+    item.className='dream-cat-item'+(c.id==='general'?' active':'');
+    item.innerHTML=`<span>${c.name}</span><button class="del-btn" onclick="editDreamCategory('${c.id}')">✎</button>${c.id!=='general'?`<button class="del-btn" onclick="deleteDreamCategory('${c.id}')">✕</button>`:''}`;
+    list.appendChild(item);
+    const opt=document.createElement('option');
+    opt.value=c.id;opt.textContent=c.name;select.appendChild(opt);
+  });
+}
+function addDreamCategory(){
+  const input=document.getElementById('dream-cat-name');
+  const name=input.value.trim();
+  if(!name)return;
+  if(!Array.isArray(S.dreamCategories))S.dreamCategories=[{id:'general',name:'General'}];
+  const id='cat-'+Date.now();
+  S.dreamCategories.push({id,name});
+  input.value='';
+  save();renderDreams();showToast('เพิ่มหมวดแล้ว ✓');
+}
+function editDreamCategory(id){
+  const c=(S.dreamCategories||[]).find(x=>x.id===id);
+  if(!c)return;
+  const name=prompt('ชื่อหมวด',c.name);
+  if(!name||!name.trim())return;
+  c.name=name.trim();
+  save();renderDreams();showToast('แก้ไขหมวดแล้ว ✓');
+}
+function deleteDreamCategory(id){
+  if(id==='general')return;
+  const c=(S.dreamCategories||[]).find(x=>x.id===id);
+  if(!c||!confirm('ลบหมวดนี้? Dreams ในหมวดนี้จะย้ายไป General'))return;
+  S.dreamCategories=S.dreamCategories.filter(x=>x.id!==id);
+  (S.dreams||[]).forEach(d=>{if(d.cat===id)d.cat='general';});
+  save();renderDreams();showToast('ลบหมวดแล้ว ✓');
+}
 function addDream(){
   const name=document.getElementById('dream-name').value.trim();
   const price=parseFloat(document.getElementById('dream-price').value)||0;
+  const cat=(document.getElementById('dream-category')||{}).value||'general';
   if(!name)return;
   if(!S.dreams)S.dreams=[];
-  S.dreams.push({id:Date.now(),name,price,done:false,note:''});
+  S.dreams.push({id:Date.now(),name,price,done:false,note:'',cat});
   document.getElementById('dream-name').value='';
   document.getElementById('dream-price').value='';
   save();renderDreams();showToast('เพิ่ม dream แล้ว ⭐');
@@ -1056,9 +1204,11 @@ function saveDreamEdit(id){
   const nameEl=document.getElementById('dedit-name-'+id);
   const priceEl=document.getElementById('dedit-price-'+id);
   const noteEl=document.getElementById('dedit-note-'+id);
+  const catEl=document.getElementById('dedit-cat-'+id);
   if(nameEl&&nameEl.value.trim())d.name=nameEl.value.trim();
   if(priceEl)d.price=parseFloat(priceEl.value)||d.price;
   if(noteEl)d.note=noteEl.value.trim();
+  if(catEl)d.cat=catEl.value||'general';
   save();renderDreams();showToast('แก้ไขแล้ว ✓');
 }
 function toggleDreamEdit(id){
@@ -1068,6 +1218,8 @@ function toggleDreamEdit(id){
 function renderDreams(){
   const el=document.getElementById('dream-list');if(!el)return;
   if(!S.dreams)S.dreams=[];
+  S.dreams.forEach(d=>{if(!d.cat)d.cat='general';});
+  renderDreamCategories();
   el.innerHTML='';
   if(S.dreams.length===0){el.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;padding:20px;">ยังไม่มี dream — เพิ่มได้เลย ⭐</div>';return;}
   // summary
@@ -1082,6 +1234,8 @@ function renderDreams(){
       <div class="dream-top">
         <div class="dream-chk" onclick="toggleDream(${d.id})">${d.done?'✓':''}</div>
         <div class="dream-name">${d.name}</div>
+        <div class="dream-cat">${getDreamCategoryName(d.cat)}</div>
+        ${d.done?`<div class="dream-real">REALITY</div>`:''}
         ${d.price>0?`<div class="dream-price">${d.price.toLocaleString()} ฿`:''}
       </div>
       ${d.note?`<div class="dream-note">${d.note}</div>`:''}
@@ -1093,6 +1247,7 @@ function renderDreams(){
         <input class="c-input" id="dedit-name-${d.id}" value="${d.name}" placeholder="ชื่อ" style="flex:1;">
         <input type="number" class="c-input" id="dedit-price-${d.id}" value="${d.price||''}" placeholder="ราคา" style="width:80px;">
         <input class="c-input" id="dedit-note-${d.id}" value="${d.note||''}" placeholder="หมายเหตุ" style="flex:1;">
+        <select class="date-input" id="dedit-cat-${d.id}" style="width:auto;flex:1;margin-bottom:0;">${S.dreamCategories.map(c=>`<option value="${c.id}" ${c.id===(d.cat||'general')?'selected':''}>${c.name}</option>`).join('')}</select>
         <button class="btn-s btn-art" style="font-size:10px;" onclick="saveDreamEdit(${d.id})">บันทึก</button>
       </div>`;
     el.appendChild(div);

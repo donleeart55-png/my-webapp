@@ -263,6 +263,322 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 .collapsible:hover{color:var(--accent);}
 .collapse-body{display:none;}
 .collapse-body.open{display:block;}
+
+/* DURATION PICKER STYLES */
+.time-fields-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.time-field-col {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.time-field-label {
+  font-size: 9px;
+  color: var(--muted);
+  margin-bottom: 3px;
+  font-family: 'Space Mono', monospace;
+  text-transform: uppercase;
+}
+.time-fields-row .n-input {
+  width: 100%;
+  text-align: center;
+  padding: 6px 4px;
+}
+.time-preview {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(200, 169, 110, 0.1);
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(200, 169, 110, 0.2);
+  min-width: 65px;
+  text-align: center;
+  align-self: flex-end;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.node-card.fit .time-preview, .bulk-fit-preview-wrapper .time-preview {
+  color: #e05c8a;
+  background: rgba(224, 92, 138, 0.1);
+  border-color: rgba(224, 92, 138, 0.2);
+}
+.slider-container {
+  margin: 6px 0 10px;
+}
+.duration-slider {
+  width: 100%;
+  accent-color: var(--accent);
+  height: 5px;
+  border-radius: 3px;
+  background: var(--border);
+  outline: none;
+  margin: 4px 0;
+  cursor: pointer;
+}
+.node-card.fit .duration-slider, .bulk-fit-slider-wrapper .duration-slider {
+  accent-color: #e05c8a;
+}
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+}
+.quick-btns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.btn-quick {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 4px 0;
+  font-size: 10px;
+  font-family: 'Space Mono', monospace;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.btn-quick:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.node-card.fit .btn-quick:hover, .bulk-fit-quick-wrapper .btn-quick:hover {
+  border-color: #e05c8a;
+  color: #e05c8a;
+}
+.btn-quick.active {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+.node-card.fit .btn-quick.active, .bulk-fit-quick-wrapper .btn-quick.active {
+  background: #e05c8a;
+  border-color: #e05c8a;
+}
+.btn-save-hours {
+  width: 100%;
+  padding: 7px 0;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  font-family: 'Sarabun', sans-serif;
+}
+.btn-save-hours:hover {
+  opacity: 0.9;
+}
+
+/* CAREER MONTHLY DASHBOARD STYLES */
+.career-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+.career-nav-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+.career-nav-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.career-month-lbl {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.career-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.career-stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+.career-stat-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 2px;
+}
+.career-stat-val.income {
+  color: var(--green);
+}
+.career-stat-lbl {
+  font-size: 9px;
+  color: var(--muted);
+}
+.career-overview-section {
+  margin-bottom: 12px;
+}
+.career-overview-header {
+  font-size: 9px;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.career-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.career-overview-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+}
+.career-overview-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+}
+.career-overview-lbl {
+  font-size: 8px;
+  color: var(--muted);
+}
+.job-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.job-form-col-2 {
+  grid-column: span 2;
+}
+.job-reward-preview {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--accent2);
+  background: rgba(124, 110, 245, 0.1);
+  border: 1px solid rgba(124, 110, 245, 0.2);
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.checkbox-row input {
+  cursor: pointer;
+}
+.career-columns {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 12px;
+}
+@media (max-width: 600px) {
+  .career-columns {
+    grid-template-columns: 1fr;
+  }
+}
+.job-log-list {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+.job-entry {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 11px;
+  position: relative;
+}
+.job-info {
+  flex: 1;
+  padding-right: 10px;
+}
+.job-entry-title {
+  font-weight: 600;
+  color: var(--text);
+}
+.job-entry-meta {
+  font-size: 9px;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  margin-top: 2px;
+}
+.job-entry-rewards {
+  font-size: 9px;
+  color: var(--accent2);
+  font-family: 'Space Mono', monospace;
+  margin-top: 2px;
+}
+.job-entry-price {
+  font-family: 'Space Mono', monospace;
+  color: var(--green);
+  font-weight: 700;
+  margin-top: 2px;
+}
+.follower-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.btn-post-quick {
+  background: var(--accent2);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 9px;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  transition: opacity 0.15s;
+}
+.btn-post-quick:hover {
+  opacity: 0.9;
+}
 </style>
 </head>
 <body>
@@ -298,25 +614,71 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
     <div class="rank-progress" id="art-rank-progress"></div>
     <div class="node-bar"><div class="node-bar-fill" id="art-bar" style="width:0%"></div></div>
     <input type="date" class="date-input" id="date-art">
-    <div class="node-input-row">
-      <input type="text" class="n-input time-input" id="add-art" placeholder="1h 30m">
-      <button class="btn-s btn-art" onclick="addHours('art')">+บันทึก</button>
+    <div class="time-fields-row">
+      <div class="time-field-col">
+        <label class="time-field-label">ชม. (h)</label>
+        <input type="number" class="n-input" id="add-art-h" min="0" max="23" placeholder="0" value="0" oninput="onDurationInput('art', false)">
+      </div>
+      <div class="time-field-col">
+        <label class="time-field-label">นาที (m)</label>
+        <input type="number" class="n-input" id="add-art-m" min="0" max="59" placeholder="0" value="0" oninput="onDurationInput('art', false)">
+      </div>
+      <div class="time-preview" id="preview-art">0m</div>
     </div>
-    <div style="font-size:9px;color:var(--muted);margin-top:4px;line-height:1.6;">1h +15XP · 2h +30XP · 3h +50XP · 4h+ +70XP</div>
+    <div class="slider-container">
+      <input type="range" class="duration-slider" id="slider-art" min="0" max="360" step="5" value="0" oninput="onSliderInput('art', false)">
+      <div class="slider-labels">
+        <span>0h</span>
+        <span>2h</span>
+        <span>4h</span>
+        <span>6h</span>
+      </div>
+    </div>
+    <div class="quick-btns">
+      <button class="btn-quick" onclick="setDurationQuick('art', 30, false)">30m</button>
+      <button class="btn-quick" onclick="setDurationQuick('art', 60, false)">1h</button>
+      <button class="btn-quick" onclick="setDurationQuick('art', 90, false)">1.5h</button>
+      <button class="btn-quick" onclick="setDurationQuick('art', 120, false)">2h</button>
+      <button class="btn-quick" onclick="setDurationQuick('art', 150, false)">2.5h</button>
+      <button class="btn-quick" onclick="setDurationQuick('art', 180, false)">3h</button>
+      <button class="btn-quick" onclick="setDurationQuick('art', 240, false)">4h</button>
+      <button class="btn-quick" onclick="setDurationQuick('art', 300, false)">5h</button>
+    </div>
+    <button class="btn-save-hours btn-art" onclick="addHours('art')">+ บันทึกชั่วโมง</button>
+    <div style="font-size:9px;color:var(--muted);margin-top:6px;line-height:1.6;text-align:center;">1h +15XP · 2h +30XP · 3h +50XP · 4h+ +70XP</div>
     <div class="collapsible" onclick="toggleCollapse('bulk-art')">▶ Bulk Import หลายวัน</div>
     <div class="collapse-body" id="bulk-art">
-      <div class="bulk-quick">
-        <input type="date" class="date-input" id="bulk-art-start">
-        <input type="date" class="date-input" id="bulk-art-end">
-        <input type="text" class="c-input" id="bulk-art-duration" placeholder="1h 30m">
-        <button class="btn-s btn-art" onclick="bulkRangeImport('art')">Add Range</button>
+      <div class="bulk-quick" style="display:flex;gap:6px;margin-bottom:8px;">
+        <input type="date" class="date-input" id="bulk-art-start" style="margin-bottom:0;flex:1;">
+        <input type="date" class="date-input" id="bulk-art-end" style="margin-bottom:0;flex:1;">
       </div>
-      <div class="bulk-presets">
-        <button class="btn-s" onclick="setBulkDuration('art','30m')">30m</button>
-        <button class="btn-s" onclick="setBulkDuration('art','1h')">1h</button>
-        <button class="btn-s" onclick="setBulkDuration('art','1h 30m')">1h 30m</button>
-        <button class="btn-s" onclick="setBulkDuration('art','2h')">2h</button>
+      <div class="time-fields-row">
+        <div class="time-field-col">
+          <label class="time-field-label">ชม. (h)</label>
+          <input type="number" class="n-input" id="bulk-art-h" min="0" max="23" placeholder="0" value="0" oninput="onDurationInput('art', true)">
+        </div>
+        <div class="time-field-col">
+          <label class="time-field-label">นาที (m)</label>
+          <input type="number" class="n-input" id="bulk-art-m" min="0" max="59" placeholder="0" value="0" oninput="onDurationInput('art', true)">
+        </div>
+        <div class="time-preview" id="bulk-preview-art">0m</div>
       </div>
+      <div class="slider-container bulk-art-slider-wrapper">
+        <input type="range" class="duration-slider" id="bulk-slider-art" min="0" max="360" step="5" value="0" oninput="onSliderInput('art', true)">
+        <div class="slider-labels">
+          <span>0h</span>
+          <span>2h</span>
+          <span>4h</span>
+          <span>6h</span>
+        </div>
+      </div>
+      <div class="quick-btns bulk-art-quick-wrapper">
+        <button class="btn-quick" onclick="setDurationQuick('art', 30, true)">30m</button>
+        <button class="btn-quick" onclick="setDurationQuick('art', 60, true)">1h</button>
+        <button class="btn-quick" onclick="setDurationQuick('art', 90, true)">1.5h</button>
+        <button class="btn-quick" onclick="setDurationQuick('art', 120, true)">2h</button>
+      </div>
+      <button class="btn-save-hours btn-art" onclick="bulkRangeImport('art')" style="margin-bottom:12px;">Add Range</button>
       <div style="font-size:9px;color:var(--muted);margin-bottom:4px;">รูปแบบ: YYYY-MM-DD, ชั่วโมง (แต่ละบรรทัด)</div>
       <textarea class="bulk-textarea" id="bulk-art-text" placeholder="2026-05-01, 1.5&#10;2026-05-02, 2&#10;2026-05-03, 0.5"></textarea>
       <button class="btn-s btn-art" style="margin-top:5px;width:100%;" onclick="bulkImport('art')">Import ทั้งหมด</button>
@@ -331,24 +693,70 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
     <div class="rank-progress" id="fit-rank-progress"></div>
     <div class="node-bar"><div class="node-bar-fill" id="fit-bar" style="width:0%"></div></div>
     <input type="date" class="date-input" id="date-fit">
-    <div class="node-input-row">
-      <input type="text" class="n-input time-input" id="add-fit" placeholder="45m">
-      <button class="btn-s btn-fit" onclick="addHours('fit')">+บันทึก</button>
+    <div class="time-fields-row">
+      <div class="time-field-col">
+        <label class="time-field-label">ชม. (h)</label>
+        <input type="number" class="n-input" id="add-fit-h" min="0" max="23" placeholder="0" value="0" oninput="onDurationInput('fit', false)">
+      </div>
+      <div class="time-field-col">
+        <label class="time-field-label">นาที (m)</label>
+        <input type="number" class="n-input" id="add-fit-m" min="0" max="59" placeholder="0" value="0" oninput="onDurationInput('fit', false)">
+      </div>
+      <div class="time-preview" id="preview-fit">0m</div>
     </div>
+    <div class="slider-container">
+      <input type="range" class="duration-slider" id="slider-fit" min="0" max="360" step="5" value="0" oninput="onSliderInput('fit', false)">
+      <div class="slider-labels">
+        <span>0h</span>
+        <span>2h</span>
+        <span>4h</span>
+        <span>6h</span>
+      </div>
+    </div>
+    <div class="quick-btns">
+      <button class="btn-quick" onclick="setDurationQuick('fit', 15, false)">15m</button>
+      <button class="btn-quick" onclick="setDurationQuick('fit', 30, false)">30m</button>
+      <button class="btn-quick" onclick="setDurationQuick('fit', 45, false)">45m</button>
+      <button class="btn-quick" onclick="setDurationQuick('fit', 60, false)">1h</button>
+      <button class="btn-quick" onclick="setDurationQuick('fit', 75, false)">1h15m</button>
+      <button class="btn-quick" onclick="setDurationQuick('fit', 90, false)">1.5h</button>
+      <button class="btn-quick" onclick="setDurationQuick('fit', 120, false)">2h</button>
+      <button class="btn-quick" onclick="setDurationQuick('fit', 180, false)">3h</button>
+    </div>
+    <button class="btn-save-hours btn-fit" onclick="addHours('fit')">+ บันทึกชั่วโมง</button>
     <div class="collapsible" onclick="toggleCollapse('bulk-fit')" style="margin-top:4px;">▶ Bulk Import หลายวัน</div>
     <div class="collapse-body" id="bulk-fit">
-      <div class="bulk-quick">
-        <input type="date" class="date-input" id="bulk-fit-start">
-        <input type="date" class="date-input" id="bulk-fit-end">
-        <input type="text" class="c-input" id="bulk-fit-duration" placeholder="45m">
-        <button class="btn-s btn-fit" onclick="bulkRangeImport('fit')">Add Range</button>
+      <div class="bulk-quick" style="display:flex;gap:6px;margin-bottom:8px;">
+        <input type="date" class="date-input" id="bulk-fit-start" style="margin-bottom:0;flex:1;">
+        <input type="date" class="date-input" id="bulk-fit-end" style="margin-bottom:0;flex:1;">
       </div>
-      <div class="bulk-presets">
-        <button class="btn-s" onclick="setBulkDuration('fit','30m')">30m</button>
-        <button class="btn-s" onclick="setBulkDuration('fit','1h')">1h</button>
-        <button class="btn-s" onclick="setBulkDuration('fit','1h 30m')">1h 30m</button>
-        <button class="btn-s" onclick="setBulkDuration('fit','2h')">2h</button>
+      <div class="time-fields-row">
+        <div class="time-field-col">
+          <label class="time-field-label">ชม. (h)</label>
+          <input type="number" class="n-input" id="bulk-fit-h" min="0" max="23" placeholder="0" value="0" oninput="onDurationInput('fit', true)">
+        </div>
+        <div class="time-field-col">
+          <label class="time-field-label">นาที (m)</label>
+          <input type="number" class="n-input" id="bulk-fit-m" min="0" max="59" placeholder="0" value="0" oninput="onDurationInput('fit', true)">
+        </div>
+        <div class="time-preview" id="bulk-preview-fit">0m</div>
       </div>
+      <div class="slider-container bulk-fit-slider-wrapper">
+        <input type="range" class="duration-slider" id="bulk-slider-fit" min="0" max="360" step="5" value="0" oninput="onSliderInput('fit', true)">
+        <div class="slider-labels">
+          <span>0h</span>
+          <span>2h</span>
+          <span>4h</span>
+          <span>6h</span>
+        </div>
+      </div>
+      <div class="quick-btns bulk-fit-quick-wrapper">
+        <button class="btn-quick" onclick="setDurationQuick('fit', 15, true)">15m</button>
+        <button class="btn-quick" onclick="setDurationQuick('fit', 30, true)">30m</button>
+        <button class="btn-quick" onclick="setDurationQuick('fit', 45, true)">45m</button>
+        <button class="btn-quick" onclick="setDurationQuick('fit', 60, true)">1h</button>
+      </div>
+      <button class="btn-save-hours btn-fit" onclick="bulkRangeImport('fit')" style="margin-bottom:12px;">Add Range</button>
       <div style="font-size:9px;color:var(--muted);margin-bottom:4px;">รูปแบบ: YYYY-MM-DD, ชั่วโมง</div>
       <textarea class="bulk-textarea" id="bulk-fit-text" placeholder="2026-05-01, 1&#10;2026-05-02, 1.5"></textarea>
       <button class="btn-s btn-fit" style="margin-top:5px;width:100%;" onclick="bulkImport('fit')">Import ทั้งหมด</button>
@@ -786,10 +1194,80 @@ function formatDuration(hrs){
   return m+'m';
 }
 function getTodayStr(){return new Date().toISOString().split('T')[0];}
+// New helper functions for the Hours/Minutes duration tracker
+function updateDurationDisplay(type, totalMinutes, isBulk) {
+  const hInputId = isBulk ? `bulk-${type}-h` : `add-${type}-h`;
+  const mInputId = isBulk ? `bulk-${type}-m` : `add-${type}-m`;
+  const sliderId = isBulk ? `bulk-slider-${type}` : `slider-${type}`;
+  const previewId = isBulk ? `bulk-preview-${type}` : `preview-${type}`;
+  const wrapperClass = isBulk ? (type === 'art' ? '.bulk-art-quick-wrapper' : '.bulk-fit-quick-wrapper') : `.nodes-row .node-card.${type}`;
+
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+
+  // Update inputs if they differ
+  const hEl = document.getElementById(hInputId);
+  const mEl = document.getElementById(mInputId);
+  if (hEl && parseInt(hEl.value || 0) !== h) hEl.value = h;
+  if (mEl && parseInt(mEl.value || 0) !== m) mEl.value = m;
+
+  // Update slider if it differs
+  const sliderEl = document.getElementById(sliderId);
+  if (sliderEl && parseInt(sliderEl.value || 0) !== totalMinutes) sliderEl.value = totalMinutes;
+
+  // Update preview text
+  const previewEl = document.getElementById(previewId);
+  if (previewEl) {
+    let text = '';
+    if (h > 0 && m > 0) text = `${h}h ${m}m`;
+    else if (h > 0) text = `${h}h`;
+    else text = `${m}m`;
+    previewEl.textContent = text;
+  }
+
+  // Update active state on quick buttons
+  const wrapper = document.querySelector(wrapperClass);
+  if (wrapper) {
+    wrapper.querySelectorAll('.btn-quick').forEach(btn => {
+      const onclickAttr = btn.getAttribute('onclick');
+      if (onclickAttr) {
+        const match = onclickAttr.match(/setDurationQuick\([^,]+,\s*(\d+)/);
+        const btnMins = match ? parseInt(match[1]) : 0;
+        btn.classList.toggle('active', btnMins === totalMinutes);
+      }
+    });
+  }
+}
+
+function onDurationInput(type, isBulk) {
+  const hInputId = isBulk ? `bulk-${type}-h` : `add-${type}-h`;
+  const mInputId = isBulk ? `bulk-${type}-m` : `add-${type}-m`;
+  
+  const h = Math.max(0, parseInt(document.getElementById(hInputId).value) || 0);
+  const m = Math.max(0, parseInt(document.getElementById(mInputId).value) || 0);
+  
+  const totalMinutes = h * 60 + m;
+  updateDurationDisplay(type, totalMinutes, isBulk);
+}
+
+function onSliderInput(type, isBulk) {
+  const sliderId = isBulk ? `bulk-slider-${type}` : `slider-${type}`;
+  const totalMinutes = parseInt(document.getElementById(sliderId).value) || 0;
+  updateDurationDisplay(type, totalMinutes, isBulk);
+}
+
+function setDurationQuick(type, minutes, isBulk) {
+  updateDurationDisplay(type, minutes, isBulk);
+}
+
 function addHours(type){
-  const inp=document.getElementById('add-'+type);
-  const val=parseDuration(inp.value);
-  if(!val||val<=0)return;
+  const hEl = document.getElementById('add-'+type+'-h');
+  const mEl = document.getElementById('add-'+type+'-m');
+  const h = Math.max(0, parseInt(hEl.value) || 0);
+  const m = Math.max(0, parseInt(mEl.value) || 0);
+  const val = (h * 60 + m) / 60; // duration in hours
+  
+  if(!val||val<=0) return;
   const dateEl=document.getElementById('date-'+type);
   const dateStr=dateEl.value||getTodayStr();
   const entry={date:dateStr,hrs:val};
@@ -813,9 +1291,15 @@ function addHours(type){
     S.fitHours+=val;S.fitLog.push(entry);
     showToast('บันทึก '+formatDuration(val)+' ('+dateStr+') ✓');
   }
-  inp.value='';
+  
+  // Reset values
+  hEl.value = 0;
+  mEl.value = 0;
+  updateDurationDisplay(type, 0, false);
+  
   save();updateNodes();renderHourLog(type);renderStreak();updateDashboard();autoUnlock();renderTree();updateXpBar();renderStats();
 }
+
 function bulkImport(type){
   const raw=document.getElementById('bulk-'+type+'-text').value.trim();
   if(!raw)return;
@@ -841,6 +1325,7 @@ function bulkImport(type){
   save();updateNodes();renderHourLog(type);renderStreak();updateDashboard();autoUnlock();renderTree();updateXpBar();renderStats();
   showToast('Import '+count+' วัน รวม '+totalHrs.toFixed(1)+' ชม. ✓');
 }
+
 function addBulkEntry(type,date,hrs){
   const entry={date,hrs};
   if(type==='art'){
@@ -851,16 +1336,16 @@ function addBulkEntry(type,date,hrs){
     S.fitHours+=hrs;S.fitLog.push(entry);
   }
 }
-function setBulkDuration(type,value){
-  const el=document.getElementById('bulk-'+type+'-duration');
-  if(el)el.value=value;
-}
+
 function bulkRangeImport(type){
   const startEl=document.getElementById('bulk-'+type+'-start');
   const endEl=document.getElementById('bulk-'+type+'-end');
-  const durationEl=document.getElementById('bulk-'+type+'-duration');
+  const hEl=document.getElementById('bulk-'+type+'-h');
+  const mEl=document.getElementById('bulk-'+type+'-m');
   const start=startEl.value,end=endEl.value||start;
-  const hrs=parseDuration(durationEl.value);
+  const h=Math.max(0, parseInt(hEl.value) || 0);
+  const m=Math.max(0, parseInt(mEl.value) || 0);
+  const hrs=(h * 60 + m) / 60; // duration in hours
   if(!start||!end||!hrs||hrs<=0)return;
   const s=new Date(start),e=new Date(end);
   if(isNaN(s)||isNaN(e)||e<s)return;
@@ -870,7 +1355,14 @@ function bulkRangeImport(type){
     addBulkEntry(type,date,hrs);
     totalHrs+=hrs;count++;
   }
-  startEl.value='';endEl.value='';durationEl.value='';
+  
+  // Reset inputs
+  startEl.value='';
+  endEl.value='';
+  hEl.value=0;
+  mEl.value=0;
+  updateDurationDisplay(type, 0, true);
+  
   save();updateNodes();renderHourLog(type);renderStreak();updateDashboard();autoUnlock();renderTree();updateXpBar();renderStats();
   showToast('Import '+count+' วัน รวม '+formatDuration(totalHrs)+' ✓');
 }

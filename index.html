@@ -330,7 +330,7 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 <div class="toast" id="toast">บันทึกข้อมูลเรียบร้อย</div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbym1rXd3NFNYoJyqVCtZ3kZuIn9QMLqfhmfMHjVxLqxG879305q_vHNvN7nubr_zR6yGQ/exec'; 
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyb-0GO1UKxKDxQs3yvI2VNuRygRc_iNEArBuby7Dtk8_vlsGlP30fM8xs8aq2Xr7VPrA/exec'; 
 let DAILY_QUESTS = [ {id:'d1', text:'ฝึกวาดรูปศึกษาอนาโตมี่และคู่สีตรงข้ามสไตล์สีน้ำมันดิบ', xp:15, stat:'CRE'}, {id:'d2', text:'ฝึกซ้อมพลังเสียงและไดนามิกการร้องเพลงสไตล์ดิบดุดันแบบ Ado', xp:15, stat:'AGI'}, {id:'d3', text:'Weight Training หรือเวทเทรนนิ่งเพื่อเพิ่มความแข็งแกร่งกล้ามเนื้อแกนกลาง', xp:20, stat:'STR'}, {id:'d4', text:'Cardio ขี่จักรยาน หรือวิ่งโซน 2 เพื่อเพิ่มความฟิตและปอดในการร้องเพลง', xp:20, stat:'VIT'}, {id:'d5', text:'อัปเดตไอเดียสตอรี่บอร์ดงานอาร์ตลงคลังสมุดบันทึกส่วนตัว', xp:10, stat:'INT'} ];
 let WEEKLY_QUESTS = [ {id:'w1', text:'ตัดต่อและโพสต์วิดีโอ Speedpainting หรือคลิปร้องเพลงสั้นลง TikTok', xp:40, stat:'CRE'}, {id:'w2', text:'เขียนเนื้อร้อง/ทำนองเพลงเดโม่ หรือทบทวนทฤษฎีดนตรีเพื่อต่อยอดไอเดีย', xp:50, stat:'INT'}, {id:'w3', text:'ออกกำลังกายสะสมครบ 3 วันในรอบสัปดาห์เพื่อชะล้างสถานะค่าพลังลดถอย', xp:40, stat:'VIT'} ];
 let MONTHLY_QUESTS = [ {id:'m1', text:'วาดงานอาร์ตชิ้นใหญ่หรือส่งมอบคอมมิชชันปิดจ๊อบสมบูรณ์แบบสะสมให้ได้ครบ 6 รูป', xp:150, stat:'CRE'}, {id:'m2', text:'สร้างรายได้หล่อเลี้ยงชีพจากทักษะความรู้ความเชี่ยวชาญแตะเป้าหมาย 15,000 THB', xp:200, stat:'STR'} ];
@@ -411,8 +411,87 @@ function closeQuestManager(){ document.getElementById('qm-modal').classList.remo
 function loadCustomQuestDbs(){ ['daily','weekly','monthly'].forEach(type=>{ const saved=localStorage.getItem(`qm_db_${type}`); if(saved){ const parsed=JSON.parse(saved); if(type==='daily') DAILY_QUESTS=parsed; else if(type==='weekly') WEEKLY_QUESTS=parsed; else MONTHLY_QUESTS=parsed; } }); }
 function jsonp(url,callback){ const callbackName='jsonp_cb_'+Math.round(100000*Math.random()); window[callbackName]=function(data){ delete window[callbackName]; document.body.removeChild(script); callback(null,data); }; const script=document.createElement('script'); script.src=url+(url.indexOf('?')>=0?'&':'?')+'callback='+callbackName; script.onerror=function(){ callback(new Error('เชื่อมต่อล้มเหลว')); }; document.body.appendChild(script); }
 function setSyncStatus(state,msg){ const el=document.getElementById('sync-status'); el.className='sync-status '+state; el.textContent=msg; }
-function manualSave(){ setSyncStatus('loading','กำลัง Backup...'); const encodedData=encodeURIComponent(JSON.stringify(S)); jsonp(SCRIPT_URL+'?action=save&data='+encodedData,function(err,data){ if(err||(data&&data.status!=='success')){ setSyncStatus('err','คลาวด์ขัดข้อง — บันทึกในเครื่อง'); return; } const t=new Date().toLocaleTimeString('th-TH'); setSyncStatus('ok','☁ Cloud Synced '+t); showToast('สำรองข้อมูลขึ้นระบบสำเร็จ'); }); }
-function manualLoad(){ setSyncStatus('loading','กำลังโหลด...'); jsonp(SCRIPT_URL+'?action=load',function(err,data){ if(err||!data){ setSyncStatus('err','ดาวน์โหลดล้มเหลว'); return; } if(Object.keys(data).length===0){ setSyncStatus('ok','คลาวด์ว่างเปล่า'); return; } Object.keys(data).forEach(k=>{ S[k]=data[k]; }); if(!S.savingGoals) S.savingGoals=[]; if(!S.vaultItems) S.vaultItems=[]; if(!S.socialChannels) S.socialChannels=[]; save(); checkDecay(); updateXpBar(); updateNodes(); renderStats(); renderHourLog('art'); renderHourLog('fit'); renderDailyTab(); renderIncomeLogs(); renderDiaryLogs(); renderSocialChannels(); renderVaultItems(); const t=new Date().toLocaleTimeString('th-TH'); setSyncStatus('ok','☁ Loaded '+t); showToast('ดึงข้อมูลจากคลาวด์เสร็จสิ้น'); }); }
+async function manualSave() {
+  const statusDiv = document.getElementById('sync-status');
+  statusDiv.className = 'sync-status loading';
+  statusDiv.textContent = 'กำลัง Backup...';
+  
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(S)
+    });
+    
+    const result = await response.json();
+    if (result.status === 'success') {
+      statusDiv.className = 'sync-status ok';
+      statusDiv.textContent = '☁ Cloud Synced ' + new Date().toLocaleTimeString('th-TH');
+      showToast('สำรองข้อมูลขึ้นระบบสำเร็จ ✓');
+    } else {
+      throw new Error(result.message || 'Unknown error');
+    }
+  } catch (err) {
+    console.error('Save error:', err);
+    statusDiv.className = 'sync-status err';
+    statusDiv.textContent = 'คลาวด์ขัดข้อง — บันทึกในเครื่อง';
+    showToast('บันทึกคลาวด์ล้มเหลว แต่ข้อมูลอยู่ในเครื่องแล้ว');
+  }
+}
+
+async function manualLoad() {
+  const statusDiv = document.getElementById('sync-status');
+  statusDiv.className = 'sync-status loading';
+  statusDiv.textContent = 'กำลังโหลด...';
+  
+  try {
+    const response = await fetch(SCRIPT_URL + '?action=load');
+    const data = await response.json();
+    
+    if (data && typeof data === 'object') {
+      // รวมข้อมูลเก่าและใหม่
+      Object.keys(data).forEach(k => { S[k] = data[k]; });
+      
+      // เติมโครงสร้างใหม่ (เผื่อข้อมูลเก่าขาด property)
+      if (!S.savingGoals) S.savingGoals = [{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}];
+      if (!S.vaultItems) S.vaultItems = [];
+      if (!S.socialChannels) S.socialChannels = [];
+      if (!S.diaryLogs) S.diaryLogs = [];
+      if (!S.incomeLogs) S.incomeLogs = [];
+      if (!S.history) S.history = {};
+      
+      save();  // บันทึกลง localStorage
+      
+      // รีเฟรช UI ทุกส่วน
+      checkDecay();
+      updateXpBar();
+      updateNodes();
+      renderStats();
+      renderHourLog('art');
+      renderHourLog('fit');
+      renderDailyTab();
+      renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+      renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+      renderIncomeLogs();
+      renderDiaryLogs();
+      renderSocialChannels();
+      renderVaultItems();
+      renderSavingGoals();
+      
+      statusDiv.className = 'sync-status ok';
+      statusDiv.textContent = '☁ Loaded ' + new Date().toLocaleTimeString('th-TH');
+      showToast('ดึงข้อมูลจากคลาวด์เสร็จสิ้น ✓');
+    } else {
+      throw new Error('ข้อมูลไม่ถูกต้อง');
+    }
+  } catch (err) {
+    console.error('Load error:', err);
+    statusDiv.className = 'sync-status err';
+    statusDiv.textContent = 'ดาวน์โหลดล้มเหลว — ใช้ข้อมูลเดิม';
+    showToast('โหลดคลาวด์ล้มเหลว');
+  }
+}
 loadCustomQuestDbs(); load(); checkDecay(); updateTodayDisplay(); renderDailyTab(); renderQuests(WEEKLY_QUESTS,null,'weekly-quests'); renderQuests(MONTHLY_QUESTS,null,'monthly-quests'); renderStats(); updateXpBar(); updateNodes(); renderHourLog('art'); renderHourLog('fit'); renderCalendar(); renderSocialChannels(); renderVaultItems(); renderSavingGoals(); setInterval(manualSave,3*60*1000); window.addEventListener('pagehide',manualSave);
 </script>
 </body>

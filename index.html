@@ -415,7 +415,6 @@ async function manualSave() {
   const statusDiv = document.getElementById('sync-status');
   statusDiv.className = 'sync-status loading';
   statusDiv.textContent = 'กำลัง Backup...';
-  
   try {
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
@@ -423,20 +422,19 @@ async function manualSave() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(S)
     });
-    
     const result = await response.json();
     if (result.status === 'success') {
       statusDiv.className = 'sync-status ok';
       statusDiv.textContent = '☁ Cloud Synced ' + new Date().toLocaleTimeString('th-TH');
       showToast('สำรองข้อมูลขึ้นระบบสำเร็จ ✓');
     } else {
-      throw new Error(result.message || 'Unknown error');
+      throw new Error(result.message);
     }
   } catch (err) {
-    console.error('Save error:', err);
+    console.error(err);
     statusDiv.className = 'sync-status err';
     statusDiv.textContent = 'คลาวด์ขัดข้อง — บันทึกในเครื่อง';
-    showToast('บันทึกคลาวด์ล้มเหลว แต่ข้อมูลอยู่ในเครื่องแล้ว');
+    showToast('บันทึกคลาวด์ล้มเหลว');
   }
 }
 
@@ -444,26 +442,15 @@ async function manualLoad() {
   const statusDiv = document.getElementById('sync-status');
   statusDiv.className = 'sync-status loading';
   statusDiv.textContent = 'กำลังโหลด...';
-  
   try {
     const response = await fetch(SCRIPT_URL + '?action=load');
     const data = await response.json();
-    
     if (data && typeof data === 'object') {
-      // รวมข้อมูลเก่าและใหม่
       Object.keys(data).forEach(k => { S[k] = data[k]; });
-      
-      // เติมโครงสร้างใหม่ (เผื่อข้อมูลเก่าขาด property)
       if (!S.savingGoals) S.savingGoals = [{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}];
       if (!S.vaultItems) S.vaultItems = [];
       if (!S.socialChannels) S.socialChannels = [];
-      if (!S.diaryLogs) S.diaryLogs = [];
-      if (!S.incomeLogs) S.incomeLogs = [];
-      if (!S.history) S.history = {};
-      
-      save();  // บันทึกลง localStorage
-      
-      // รีเฟรช UI ทุกส่วน
+      save();
       checkDecay();
       updateXpBar();
       updateNodes();
@@ -478,7 +465,6 @@ async function manualLoad() {
       renderSocialChannels();
       renderVaultItems();
       renderSavingGoals();
-      
       statusDiv.className = 'sync-status ok';
       statusDiv.textContent = '☁ Loaded ' + new Date().toLocaleTimeString('th-TH');
       showToast('ดึงข้อมูลจากคลาวด์เสร็จสิ้น ✓');
@@ -486,7 +472,7 @@ async function manualLoad() {
       throw new Error('ข้อมูลไม่ถูกต้อง');
     }
   } catch (err) {
-    console.error('Load error:', err);
+    console.error(err);
     statusDiv.className = 'sync-status err';
     statusDiv.textContent = 'ดาวน์โหลดล้มเหลว — ใช้ข้อมูลเดิม';
     showToast('โหลดคลาวด์ล้มเหลว');

@@ -278,11 +278,12 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
   </div>
 </div>
 
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('quests')">🎯 Quests Log</div>
-  <div class="tab" onclick="switchTab('skills')">🌳 Skill Tree</div>
-  <div class="tab" onclick="switchTab('career')">💼 Career</div>
-  <div class="tab" onclick="switchTab('vault')">💎 Vault & Diary</div>
+<div class="tab-nav">
+  <button class="tab active" onclick="switchTab('quests')">📜 Quests</button>
+  <button class="tab" onclick="switchTab('skills')">🌳 Skills</button>
+  <button class="tab" onclick="switchTab('career')">💼 Career</button>
+  <button class="tab" onclick="switchTab('vault')">📦 Vault</button>
+  <button class="tab" onclick="switchTab('settings')">⚙️ Setting</button>
 </div>
 
 <div class="tab-content active" id="tab-quests">
@@ -320,6 +321,49 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
   <div class="career-section"><div class="career-title">Dream Vault & เควสส่วนขยาย <button class="btn-s" style="background:rgba(200,169,110,.2); color:var(--accent);" onclick="openVaultManager()">✎ แก้ไข</button></div><div class="vault-grid" id="vault-grid-container"></div></div>
   <div class="career-section" style="margin-top:16px;"><div class="career-title">บันทึกความทรงจำการเดินทาง (Adventure Diary)</div><textarea class="diary-area" id="diary-in" placeholder="บันทึกไอเดียเพลง รูปภาพ อารมณ์ หรืออุปสรรคที่ฝ่าฟันมาได้ในวันนี้..."></textarea><select id="diary-mood" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:5px;margin-bottom:8px;width:100%;"><option value="😊 สดใส">😊 สดใส</option><option value="😢 เศร้า">😢 เศร้า</option><option value="🎉 ตื่นเต้น">🎉 ตื่นเต้น</option><option value="😌 สงบ">😌 สงบ</option><option value="😤 มุ่งมั่น">😤 มุ่งมั่น</option></select><button class="btn-s btn-art" style="width:100%;" onclick="saveDiary()">สลักประวัติศาสตร์การเดินทางวันนี้ลงสมุดบันทึก</button><div class="diary-logs" id="diary-logs"></div></div>
 </div>
+<!-- ========== TAB SETTING ========== -->
+<div class="tab-content" id="tab-settings">
+  
+  <!-- ส่วนที่ 1: Cloud & Backup -->
+  <div class="career-section">
+    <div class="career-title">☁️ การซิงค์และสำรองข้อมูล (Cloud & Backup)</div>
+    <p style="color:var(--text-dim); font-size:0.9em; margin-bottom:12px;">จัดการข้อมูลระหว่างเครื่องนี้และ Google Cloud Storage ของคุณ</p>
+    
+    <div style="display:grid; gap:10px;">
+      <!-- ปุ่ม Manual Load -->
+      <button class="btn-s btn-art" style="width:100%; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="manualLoad()">
+        <span>☁️</span> ดึงข้อมูลล่าสุดจาก Cloud (Manual Load)
+      </button>
+      
+      <!-- ปุ่ม Export / Import วางคู่กัน -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <button class="btn-s" style="background:rgba(76, 175, 80, 0.2); color:#4CAF50; border:1px solid #4CAF50; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="exportToFile()">
+          <span>📥</span> Export (ดาวน์โหลด)
+        </button>
+        <button class="btn-s" style="background:rgba(33, 150, 243, 0.2); color:#2196F3; border:1px solid #2196F3; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="importFromFile()">
+          <span>📤</span> Import (กู้คืนไฟล์)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ส่วนที่ 2: Danger Zone (ล้างข้อมูล) -->
+  <div class="career-section" style="margin-top:16px; border: 1px solid rgba(244, 67, 54, 0.3);">
+    <div class="career-title" style="color:#f44336;">⚠️ เขตอันตราย (Danger Zone)</div>
+    <p style="color:var(--text-dim); font-size:0.9em; margin-bottom:12px;">การดำเนินการนี้ไม่สามารถย้อนกลับได้ โปรด Export ข้อมูลสำรองก่อนทำการล้างข้อมูล</p>
+    <button class="btn-s" style="width:100%; background:rgba(244, 67, 54, 0.2); color:#f44336; border:1px solid #f44336;" onclick="resetAllData()">
+      🗑️ ล้างข้อมูลทั้งหมดและเริ่มใหม่ (Reset App)
+    </button>
+  </div>
+
+  <!-- ส่วนที่ 3: App Info -->
+  <div class="career-section" style="margin-top:16px; text-align:center;">
+    <div class="career-title">เกี่ยวกับแอปพลิเคชัน</div>
+    <p style="color:var(--text-dim); font-size:0.85em; margin-top:8px;">Dol Quest Log v3.1 (IndexedDB + Quicksync Edition)</p>
+    <p style="color:var(--text-dim); font-size:0.85em;">สร้างด้วย ❤️ เพื่อการพัฒนาตนเองด้านศิลปะและดนตรี</p>
+  </div>
+
+</div>
 
 <div class="modal-overlay" id="stat-modal"><div class="modal"><div class="modal-title">Status Distribution</div><div class="modal-sub" id="modal-sp-lbl">0 Status Points Available</div><div class="stat-btns"><button class="stat-btn" onclick="upgradeStat('STR')"><span class="n">STR</span><span class="v">+1</span></button><button class="stat-btn" onclick="upgradeStat('AGI')"><span class="n">AGI</span><span class="v">+1</span></button><button class="stat-btn" onclick="upgradeStat('INT')"><span class="n">INT</span><span class="v">+1</span></button><button class="stat-btn" onclick="upgradeStat('VIT')"><span class="n">VIT</span><span class="v">+1</span></button><button class="stat-btn" onclick="upgradeStat('CRE')"><span class="n">CRE</span><span class="v">+1</span></button></div><button class="btn-m" onclick="closeStatModal()">ปิดหน้าต่างเลือกสถานะ</button></div></div>
 <div class="modal-overlay" id="qm-modal"><div class="modal" style="max-width:420px; width:95%; text-align:left;"><div class="modal-title" id="qm-modal-title" style="text-align:center; margin-bottom:10px;">Manage Quests</div><div class="btn-add-qm" onclick="addNewQuestRow()">+ เพิ่มรายการเควสใหม่</div><div class="qm-container" id="qm-container"></div><div style="display:flex; gap:6px;"><button class="btn-m" style="background:var(--green); flex:1;" onclick="saveQuestManager()">บันทึกข้อมูลและอัปเดต</button><button class="btn-m" style="background:var(--muted); flex:1;" onclick="closeQuestManager()">ยกเลิก</button></div></div></div>
@@ -329,165 +373,1036 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 <div class="modal-overlay" id="vault-manager-modal"><div class="modal" style="max-width:450px;"><div class="modal-title">จัดการ Dream Vault</div><div id="vault-list-container"></div><div style="display:flex; gap:6px; margin-top:12px;"><input type="text" id="new-vault-name" placeholder="ชื่อผลงาน" class="c-input"><input type="number" id="new-vault-progress" placeholder="ความคืบหน้า (%)" class="c-input" style="width:80px;"><button class="btn-s btn-art" onclick="addVaultItem()">เพิ่ม</button></div><button class="btn-m" style="margin-top:12px;" onclick="closeVaultManager()">ปิด</button></div></div>
 <div class="toast" id="toast">บันทึกข้อมูลเรียบร้อย</div>
 
+// ========== ฟังก์ชันล้างข้อมูลทั้งหมด (Reset) ==========
+async function resetAllData() {
+    if (!confirm('⚠️ คุณแน่ใจหรือไม่? \nข้อมูลทั้งหมด (Quest, XP, Log, Diary) จะถูกลบถาวร!\nแนะนำให้อ Export ไฟล์สำรองก่อน')) {
+        return;
+    }
+    if (!confirm('ยืนยันครั้งสุดท้าย: ลบข้อมูลทั้งหมดจริงๆ ใช่ไหม?')) {
+        return;
+    }
+
+    try {
+        // 1. ล้าง IndexedDB
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).clear();
+        
+        // 2. ล้าง localStorage
+        localStorage.removeItem('dol_quest_log_v3');
+        localStorage.removeItem('qm_db_daily');
+        localStorage.removeItem('qm_db_weekly');
+        localStorage.removeItem('qm_db_monthly');
+
+        // 3. รีเซ็ตตัวแปร S กลับเป็นค่าเริ่มต้น
+        S = { xp:0, lvl:1, sp:0, STR:10, AGI:10, INT:10, VIT:10, CRE:10, artHours:0, fitHours:0, artDays:0, artLogs:[], fitLogs:[], incomeLogs:[], diaryLogs:[], history:{}, followers:{}, lastFitDate:null, goalIncome:15000, goalJobs:6, savingGoals:[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}], vaultItems:[], socialChannels:[{id:"tk", name:"TikTok (EATLAEWSHOP)", subs:0, vids:0},{id:"yt", name:"YouTube Artist Channel", subs:0, vids:0}] };
+        lastSyncedDataStr = JSON.stringify(S);
+        
+        // 4. บันทึกค่าเริ่มต้นและรีโหลดหน้าเว็บ
+        save();
+        showToast('🗑️ ล้างข้อมูลสำเร็จ กำลังรีโหลดหน้าเว็บ...');
+        setTimeout(() => { location.reload(); }, 1500);
+        
+    } catch (err) {
+        console.error("Reset failed:", err);
+        alert("เกิดข้อผิดพลาดในการล้างข้อมูล");
+    }
+}
+
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymDUSFHhAhY9mRZf63W8Qd9ULJOSlgeJxe8dsYol8U-ZGI0XW0E0fgKO88L63KCElrjQ/exec'; 
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVIuWzKtUAyInYXavA9OpT5clRAKSNriuI5kVBbc6P4ofYXwBftZ_VQNfxNWJvx82rFw/exec'; 
+
 let DAILY_QUESTS = [ {id:'d1', text:'ฝึกวาดรูปศึกษาอนาโตมี่และคู่สีตรงข้ามสไตล์สีน้ำมันดิบ', xp:15, stat:'CRE'}, {id:'d2', text:'ฝึกซ้อมพลังเสียงและไดนามิกการร้องเพลงสไตล์ดิบดุดันแบบ Ado', xp:15, stat:'AGI'}, {id:'d3', text:'Weight Training หรือเวทเทรนนิ่งเพื่อเพิ่มความแข็งแกร่งกล้ามเนื้อแกนกลาง', xp:20, stat:'STR'}, {id:'d4', text:'Cardio ขี่จักรยาน หรือวิ่งโซน 2 เพื่อเพิ่มความฟิตและปอดในการร้องเพลง', xp:20, stat:'VIT'}, {id:'d5', text:'อัปเดตไอเดียสตอรี่บอร์ดงานอาร์ตลงคลังสมุดบันทึกส่วนตัว', xp:10, stat:'INT'} ];
 let WEEKLY_QUESTS = [ {id:'w1', text:'ตัดต่อและโพสต์วิดีโอ Speedpainting หรือคลิปร้องเพลงสั้นลง TikTok', xp:40, stat:'CRE'}, {id:'w2', text:'เขียนเนื้อร้อง/ทำนองเพลงเดโม่ หรือทบทวนทฤษฎีดนตรีเพื่อต่อยอดไอเดีย', xp:50, stat:'INT'}, {id:'w3', text:'ออกกำลังกายสะสมครบ 3 วันในรอบสัปดาห์เพื่อชะล้างสถานะค่าพลังลดถอย', xp:40, stat:'VIT'} ];
 let MONTHLY_QUESTS = [ {id:'m1', text:'วาดงานอาร์ตชิ้นใหญ่หรือส่งมอบคอมมิชชันปิดจ๊อบสมบูรณ์แบบสะสมให้ได้ครบ 6 รูป', xp:150, stat:'CRE'}, {id:'m2', text:'สร้างรายได้หล่อเลี้ยงชีพจากทักษะความรู้ความเชี่ยวชาญแตะเป้าหมาย 15,000 THB', xp:200, stat:'STR'} ];
+
 const ART_RANKS = [{min:0, name:'Novice'},{min:50, name:'Apprentice'},{min:200, name:'Journeyman'},{min:500, name:'Expert Artisan'},{min:1500, name:'Master Painter'},{min:5000, name:'Grand Creator'},{min:10000, name:'Mythic Illustrator'}];
 const FIT_RANKS = [{min:0, name:'Untrained'},{min:50, name:'Athletic Novice'},{min:200, name:'Vocal/Fit Journeyman'},{min:500, name:'Elite Performer'},{min:1500, name:'Stamina Master'},{min:5000, name:'Vocal Overlord'},{min:10000, name:'Grandmaster Elite'}];
+
 const SKILL_TREE = [{id:'a1', lane:'art', name:'สีน้ำมันเบื้องต้น (Oil Texture Master)', desc:'เข้าใจเทคนิคการลงน้ำหนักและเนื้อสีหยาบเพื่อสร้างความลึกของมิติภาพ', reqType:'art', reqVal:10, reward:'ปลดล็อกการสร้างสรรค์ผลงานธีมทุ่งนาและพอร์ตเทรตอารมณ์', size:'small'},{id:'a2', lane:'art', name:'ผู้พิทักษ์บุปผชาติ (Floral Composition)', desc:'เชี่ยวชาญการจัดองค์ประกอบภาพวาดตระกูลดอกไม้เพื่อสร้างรายได้หลัก', reqType:'art', reqVal:35, reward:'เพิ่มความน่าดึงดูดของงานคอมมิชชัน +15%', size:'medium'},{id:'a3', lane:'art', name:'มหาศิลปินดิจิทัลอาร์ต (Concept Illustrator)', desc:'หลอมรวมแปรงสีน้ำมันเข้ากับ Clip Studio Paint PRO อย่างไร้รอยต่อ', reqType:'art', reqVal:100, reward:'ปลดล็อกคลังภาพซีรีส์ใหญ่ "The Weight of Unfinished Colours"', size:'large'},{id:'f1', lane:'fit', name:'ปอดเหล็กคอนโทรล (Vocal Core)', desc:'ฝึกการคุมลมหายใจจากกะบังลมเพื่อให้ร้องเพลงเสียงสูงพุ่งทะยานได้ไม่ตก', reqType:'fit', reqVal:10, reward:'VIT +3, ร้องเพลงต่อเนื่องได้ยาวนานโดยไม่เหนื่อยล้า', size:'small'},{id:'f2', lane:'fit', name:'แกนกลางเหล็กไหล (Fullbody Endurance)', desc:'ความแข็งแกร่งของแกนกลางลำตัวเพื่อซัพพอร์ตการยืนร้องเพลงและการคุมพู่กันยาว', reqType:'fit', reqVal:40, reward:'STR +5, ลดโอกาสการเกิดอาการออฟฟิศซินโดรม', size:'medium'},{id:'f3', lane:'fit', name:'นักแต่งเพลงผู้สร้างคลื่นเสียง (Melody Songwriter)', desc:'ความสามารถในการแต่งเนื้อร้องทำนองให้มีจิตวิญญาณดุดันแบบขบถและกินใจผู้ฟัง', reqType:'fit', reqVal:120, reward:'INT +6, CRE +6, สามารถผลิตมิวสิกวิดีโอสมบูรณ์แบบชิ้นแรก', size:'large'}];
+
 let S = { xp:0, lvl:1, sp:0, STR:10, AGI:10, INT:10, VIT:10, CRE:10, artHours:0, fitHours:0, artDays:0, artLogs:[], fitLogs:[], incomeLogs:[], diaryLogs:[], history:{}, followers:{}, lastFitDate:null, goalIncome:15000, goalJobs:6, savingGoals:[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}], vaultItems:[{id:"v1", name:"The Weight of Unfinished Colours (First Glance)", progress:40, detail:"ตัวละคร: Don กำลังลงรายละเอียดแสงเงาสีน้ำมันดิบโทนดาร์ก"}], socialChannels:[{id:"tk", name:"TikTok (EATLAEWSHOP)", subs:0, vids:0},{id:"yt", name:"YouTube Artist Channel", subs:0, vids:0}] };
-function save(){ localStorage.setItem('dol_quest_log_v3', JSON.stringify(S)); }
-function load(){ const d = localStorage.getItem('dol_quest_log_v3'); if(d){ const p = JSON.parse(d); Object.keys(p).forEach(k=>{ S[k]=p[k]; }); if(!S.savingGoals) S.savingGoals=[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}]; if(!S.vaultItems) S.vaultItems=[]; if(!S.socialChannels) S.socialChannels=[]; } }
+
+let selectedDateKey=null, currentYear=2026, currentMonth=5, activeManagerType='daily';
+let lastSyncedDataStr = ''; // สำหรับ Quicksync
+let syncTimeout = null;
+
+// ========== IndexedDB (Local Database) ==========
+const DB_NAME = 'DolQuestDB';
+const STORE_NAME = 'appState';
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+            }
+        };
+        request.onsuccess = (e) => resolve(e.target.result);
+        request.onerror = (e) => reject(e.target.error);
+    });
+}
+async function dbSave(data) {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    tx.objectStore(STORE_NAME).put({ id: 'mainState', data: data });
+    return new Promise((resolve, reject) => {
+        tx.oncomplete = () => resolve();
+        tx.onerror = (e) => reject(e.target.error);
+    });
+}
+async function dbLoad() {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const request = tx.objectStore(STORE_NAME).get('mainState');
+    return new Promise((resolve, reject) => {
+        request.onsuccess = (e) => resolve(e.target.result ? e.target.result.data : null);
+        request.onerror = (e) => reject(e.target.error);
+    });
+}
+
+// ========== File-based Sync (Export / Import) ==========
+function exportToFile() {
+    const dataStr = JSON.stringify(S, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dol_quest_backup_${getTodayKey()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('📥 Export ไฟล์สำรองสำเร็จ');
+}
+
+function importFromFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const importedData = JSON.parse(event.target.result);
+                if (confirm('⚠️ การนำเข้าจะทับข้อมูลปัจจุบันทั้งหมด คุณแน่ใจหรือไม่?')) {
+                    Object.keys(importedData).forEach(k => { S[k] = importedData[k]; });
+                    lastSyncedDataStr = JSON.stringify(S);
+                    save();
+                    checkDecay(); updateXpBar(); updateNodes(); renderStats();
+                    renderHourLog('art'); renderHourLog('fit'); renderDailyTab();
+                    renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+                    renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+                    renderIncomeLogs(); renderDiaryLogs(); renderSocialChannels();
+                    renderVaultItems(); renderSavingGoals(); renderCalendar();
+                    showToast('📤 Import ข้อมูลสำเร็จ');
+                }
+            } catch (err) {
+                alert('ไฟล์ผิดพลาด หรือรูปแบบ JSON ไม่ถูกต้อง');
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+// ========== Core Functions ==========
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>{ t.classList.remove('show'); },2500); }
 function getTodayKey(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-function updateTodayDisplay(){ const k=selectedDateKey||getTodayKey(); document.getElementById('today-display').textContent=selectedDateKey?`📅 กำลังดูประวัติวันที่: ${k}`:`📅 วันนี้ปัจจุบัน: ${k}`; document.getElementById('btn-back-today').style.display=(selectedDateKey&&selectedDateKey!==getTodayKey())?'inline-block':'none'; }
-let selectedDateKey=null, currentYear=2026, currentMonth=5, activeManagerType='daily';
-function resetToTodayCalendar(){ selectedDateKey=null; const d=new Date(); currentYear=d.getFullYear(); currentMonth=d.getMonth(); updateTodayDisplay(); renderDailyTab(); renderQuests(WEEKLY_QUESTS,S.history[getTodayKey()]?.weekly||[],'weekly-quests'); renderQuests(MONTHLY_QUESTS,S.history[getTodayKey()]?.monthly||[],'monthly-quests'); renderCalendar(); showToast('กลับสู่วันปัจจุบันเรียบร้อย'); }
-function addXp(amount){ S.xp+=amount; while(S.xp>=S.lvl*100){ S.xp-=S.lvl*100; S.lvl++; S.sp+=5; showToast(`🎉 LEVEL UP! บรรลุสู่อีกขั้นระดับ เลเวล ${S.lvl}`); } updateXpBar(); }
-function updateXpBar(){ document.getElementById('lvl-lbl').textContent=`LV ${S.lvl}`; document.getElementById('xp-lbl').textContent=`${Math.floor(S.xp)} / ${S.lvl*100} XP`; document.getElementById('xp-fill').style.width=Math.min((S.xp/(S.lvl*100))*100,100)+'%'; document.getElementById('sp-badge').textContent=`${S.sp} SP AVAILABLE`; if(S.sp>0) document.getElementById('sp-badge').style.animation='pgold 1s infinite'; else document.getElementById('sp-badge').style.animation='none'; }
-function checkDecay(){ if(!S.lastFitDate) return; const last=new Date(S.lastFitDate), now=new Date(); const diffDays=Math.floor((now-last)/(1000*60*60*24)); if(diffDays>=4){ const intervals=Math.floor((diffDays-1)/3); if(intervals>0){ const loss=intervals*1; S.STR=Math.max(10,S.STR-loss); S.AGI=Math.max(10,S.AGI-loss); S.VIT=Math.max(10,S.VIT-loss); document.getElementById('decay-alert').classList.add('show'); renderStats(); save(); } }else{ document.getElementById('decay-alert').classList.remove('show'); } }
-function renderStats(){ ['STR','AGI','INT','VIT','CRE'].forEach(st=>{ document.getElementById(`val-${st}`).textContent=S[st]; document.getElementById(`bar-${st}`).style.width=Math.min((S[st]/100)*100,100)+'%'; }); }
+
+function updateTodayDisplay(){ 
+    const k=selectedDateKey||getTodayKey(); 
+    document.getElementById('today-display').textContent=selectedDateKey?`📅 กำลังดูประวัติวันที่: ${k}`:`📅 วันนี้ปัจจุบัน: ${k}`; 
+    document.getElementById('btn-back-today').style.display=(selectedDateKey&&selectedDateKey!==getTodayKey())?'inline-block':'none'; 
+}
+
+function resetToTodayCalendar(){ 
+    selectedDateKey=null; 
+    const d=new Date(); 
+    currentYear=d.getFullYear(); 
+    currentMonth=d.getMonth(); 
+    updateTodayDisplay(); 
+    renderDailyTab(); 
+    renderQuests(WEEKLY_QUESTS,S.history[getTodayKey()]?.weekly||[],'weekly-quests'); 
+    renderQuests(MONTHLY_QUESTS,S.history[getTodayKey()]?.monthly||[],'monthly-quests'); 
+    renderCalendar(); 
+    showToast('กลับสู่วันปัจจุบันเรียบร้อย'); 
+}
+
+function addXp(amount){ 
+    S.xp+=amount; 
+    while(S.xp>=S.lvl*100){ 
+        S.xp-=S.lvl*100; 
+        S.lvl++; 
+        S.sp+=5; 
+        showToast(`🎉 LEVEL UP! บรรลุสู่อีกขั้นระดับ เลเวล ${S.lvl}`); 
+    } 
+    updateXpBar(); 
+}
+
+function updateXpBar(){ 
+    document.getElementById('lvl-lbl').textContent=`LV ${S.lvl}`; 
+    document.getElementById('xp-lbl').textContent=`${Math.floor(S.xp)} / ${S.lvl*100} XP`; 
+    document.getElementById('xp-fill').style.width=Math.min((S.xp/(S.lvl*100))*100,100)+'%'; 
+    document.getElementById('sp-badge').textContent=`${S.sp} SP AVAILABLE`; 
+    if(S.sp>0) document.getElementById('sp-badge').style.animation='pgold 1s infinite'; 
+    else document.getElementById('sp-badge').style.animation='none'; 
+}
+
+function checkDecay(){ 
+    if(!S.lastFitDate) return; 
+    const last=new Date(S.lastFitDate), now=new Date(); 
+    const diffDays=Math.floor((now-last)/(1000*60*60*24)); 
+    if(diffDays>=4){ 
+        const intervals=Math.floor((diffDays-1)/3); 
+        if(intervals>0){ 
+            const loss=intervals*1; 
+            S.STR=Math.max(10,S.STR-loss); 
+            S.AGI=Math.max(10,S.AGI-loss); 
+            S.VIT=Math.max(10,S.VIT-loss); 
+            document.getElementById('decay-alert').classList.add('show'); 
+            renderStats(); 
+            save(); 
+        } 
+    } else { 
+        document.getElementById('decay-alert').classList.remove('show'); 
+    } 
+}
+
+function renderStats(){ 
+    ['STR','AGI','INT','VIT','CRE'].forEach(st=>{ 
+        document.getElementById(`val-${st}`).textContent=S[st]; 
+        document.getElementById(`bar-${st}`).style.width=Math.min((S[st]/100)*100,100)+'%'; 
+    }); 
+}
+
 function getRank(hrs,arr){ let r=arr[0]; for(let i=0;i<arr.length;i++) if(hrs>=arr[i].min) r=arr[i]; return r; }
 function getNextRank(hrs,arr){ for(let i=0;i<arr.length;i++) if(arr[i].min>hrs) return arr[i]; return null; }
-function updateNodes(){ const ah=parseFloat(S.artHours.toFixed(1)), fh=parseFloat(S.fitHours.toFixed(1)); document.getElementById('art-hours').textContent=ah; document.getElementById('fit-hours').textContent=fh; document.getElementById('art-bar').style.width=Math.min(ah/10000*100,100)+'%'; document.getElementById('fit-bar').style.width=Math.min(fh/10000*100,100)+'%'; const ar=getRank(ah,ART_RANKS), anr=getNextRank(ah,ART_RANKS), fr=getRank(fh,FIT_RANKS), fnr=getNextRank(fh,FIT_RANKS); document.getElementById('art-rank').textContent=ar.name; document.getElementById('fit-rank').textContent=fr.name; document.getElementById('art-rank-progress').textContent=anr?`Next: ${anr.name} @ ${anr.min}h (${(anr.min-ah).toFixed(1)} to go)`:'MAX RANK'; document.getElementById('fit-rank-progress').textContent=fnr?`Next: ${fnr.name} @ ${fnr.min}h (${(fnr.min-fh).toFixed(1)} to go)`:'MAX RANK'; document.getElementById('s-art-h').textContent=ah; document.getElementById('s-fit-h').textContent=fh; document.getElementById('s-days').textContent=S.artDays; }
-function deleteLog(type,id){ if(!confirm('คุณต้องการลบบันทึกนี้? XP จะถูกหักคืน')) return; let arr=type==='art'?S.artLogs:S.fitLogs; const idx=arr.findIndex(x=>x.id===id); if(idx>-1){ const item=arr[idx]; if(type==='art') S.artHours=Math.max(0,S.artHours-item.val); else S.fitHours=Math.max(0,S.fitHours-item.val); if(item.xpEarned){ S.xp-=item.xpEarned; while(S.xp<0 && S.lvl>1){ S.lvl--; S.xp+=S.lvl*100; S.sp=Math.max(0,S.sp-5); } if(S.xp<0) S.xp=0; } arr.splice(idx,1); updateXpBar(); updateNodes(); renderHourLog(type); save(); showToast('ลบเรียบร้อย'); } }
-function renderHourLog(type){ const container=document.getElementById(`${type}-log`); container.innerHTML=''; const arr=type==='art'?S.artLogs:S.fitLogs; arr.slice(0,10).forEach(x=>{ const e=document.createElement('div'); e.className='hour-entry'; e.innerHTML=`<span><strong>${x.val}h</strong> - ${x.note} <small>(${x.date})</small></span><button class="del-btn" onclick="deleteLog('${type}',${x.id})">✕</button>`; container.appendChild(e); }); }
-function isFitnessQuest(text){ const keywords=['weight training','cardio','workout','run','fitness','ฟิตเนส','เวท','วิ่ง','ออกกำลัง','ซ้อมเสียง','ร้องเพลง','vocal']; return keywords.some(k=>text.toLowerCase().includes(k)); }
-function renderDailyTab(){ const k=selectedDateKey||getTodayKey(); if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; const h=S.history[k]; const container=document.getElementById('daily-quests'); container.innerHTML=''; DAILY_QUESTS.forEach(q=>{ const isDone=h.daily.includes(q.id); const isRest=h.rest && h.rest.includes(q.id); const isFit=isFitnessQuest(q.text); const card=document.createElement('div'); card.className=`q-card ${isDone?'done':''} ${isRest?'rest-off':''}`; let restBtnHtml=isFit?`<button class="rest-inline ${isRest?'active':''}" onclick="event.stopPropagation(); toggleRest('${q.id}')">REST</button>`:''; card.innerHTML=`<div class="q-row" onclick="${isRest?'':'toggleQuest(\'daily\',\''+q.id+'\')'}"><div class="chk">${isDone?'✓':''}</div><div class="q-text">${q.text}</div><div class="q-meta">${restBtnHtml}<span class="q-xp">+${q.xp} XP</span><span class="q-stat ${q.stat}">${q.stat}</span></div></div>`; container.appendChild(card); }); checkDayComplete(k); }
-function renderQuests(database,stateList,elementId){ const k=selectedDateKey||getTodayKey(); if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; const h=S.history[k]; let activeList=(elementId==='weekly-quests')?h.weekly:(elementId==='monthly-quests')?h.monthly:[]; const container=document.getElementById(elementId); container.innerHTML=''; database.forEach(q=>{ const isDone=activeList.includes(q.id); const card=document.createElement('div'); card.className=`q-card ${isDone?'done':''}`; card.innerHTML=`<div class="q-row" onclick="toggleQuestType('${elementId==='weekly-quests'?'weekly':'monthly'}','${q.id}')"><div class="chk">${isDone?'✓':''}</div><div class="q-text">${q.text}</div><div class="q-meta"><span class="q-xp">+${q.xp} XP</span><span class="q-stat ${q.stat}">${q.stat}</span></div></div>`; container.appendChild(card); }); }
-function toggleQuest(type,id){ const k=selectedDateKey||getTodayKey(); if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; let arr=S.history[k].daily; const q=DAILY_QUESTS.find(x=>x.id===id); if(!q) return; const idx=arr.indexOf(id); if(idx>-1){ arr.splice(idx,1); S.xp=Math.max(0,S.xp-q.xp); updateXpBar(); }else{ arr.push(id); S[q.stat]+=1; addXp(q.xp); showToast(`Quest Complete! ได้รับ +${q.xp} XP และพลัง ${q.stat} +1`); } renderDailyTab(); renderStats(); renderCalendar(); save(); }
-function toggleQuestType(type,id){ const k=selectedDateKey||getTodayKey(); if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; if(!S.history[k].weekly) S.history[k].weekly=[]; if(!S.history[k].monthly) S.history[k].monthly=[]; let arr=type==='weekly'?S.history[k].weekly:S.history[k].monthly; const db=type==='weekly'?WEEKLY_QUESTS:MONTHLY_QUESTS; const q=db.find(x=>x.id===id); if(!q) return; const idx=arr.indexOf(id); if(idx>-1){ arr.splice(idx,1); S.xp=Math.max(0,S.xp-q.xp); updateXpBar(); }else{ arr.push(id); S[q.stat]+=2; addXp(q.xp); showToast(`Great Quest Complete! ได้รับ +${q.xp} XP และโบนัสสถานะ ${q.stat} +2`); } if(type==='weekly') renderQuests(WEEKLY_QUESTS,null,'weekly-quests'); else renderQuests(MONTHLY_QUESTS,null,'monthly-quests'); renderStats(); save(); }
-function toggleRest(id){ const k=selectedDateKey||getTodayKey(); if(!S.history[k].rest) S.history[k].rest=[]; let r=S.history[k].rest; const idx=r.indexOf(id); if(idx>-1) r.splice(idx,1); else{ r.push(id); const dIdx=S.history[k].daily.indexOf(id); if(dIdx>-1){ S.history[k].daily.splice(dIdx,1); const q=DAILY_QUESTS.find(x=>x.id===id); if(q) S.xp=Math.max(0,S.xp-q.xp); } } updateXpBar(); renderDailyTab(); save(); }
-function checkDayComplete(k){ const h=S.history[k]; if(!h) return; const totalNeed=DAILY_QUESTS.filter(q=>!(h.rest && h.rest.includes(q.id))).length; h.done=(totalNeed>0 && h.daily.length>=totalNeed); }
-function logHours(type){ const hInput=document.getElementById(`${type}-in`); const nInput=document.getElementById(`${type}-note`); const dateInput=document.getElementById(`${type}-date`); const val=parseFloat(hInput.value); const note=nInput.value.trim()||'ฝึกฝนขัดเกลาฝีมือประจำวัน'; if(isNaN(val)||val<=0){ alert('กรุณาใส่จำนวนชั่วโมงที่ถูกต้อง'); return; } let logDate=dateInput.value; if(!logDate) logDate=getTodayKey(); else logDate=logDate.split('-').reverse().join('-'); const dateObj=new Date(logDate.split('-').reverse().join('-')); const thaiDate=dateObj.toLocaleDateString('th-TH'); if(type==='art') S.artHours+=val; if(type==='fit'){ S.fitHours+=val; S.lastFitDate=new Date().toISOString(); checkDecay(); } const earnedXp=val*10; const logObj={ id:Date.now(), val, note, date:thaiDate, xpEarned:earnedXp, logDateKey:logDate }; if(type==='art') S.artLogs.unshift(logObj); else S.fitLogs.unshift(logObj); if(!S.history[logDate]) S.history[logDate]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; if(!S.history[logDate].loggedHour){ S.history[logDate].loggedHour=true; S.artDays++; } addXp(earnedXp); hInput.value=''; nInput.value=''; dateInput.value=''; updateNodes(); renderHourLog(type); save(); showToast(`บันทึกสำเร็จ! ได้รับ +${earnedXp.toFixed(0)} XP`); }
-function renderCalendar(){ const container=document.getElementById('cal-grid'); container.innerHTML=''; const monthNames=["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"]; document.getElementById('cal-month-lbl').textContent=`${monthNames[currentMonth]} ${currentYear}`; const firstDay=new Date(currentYear,currentMonth,1).getDay(); const totalDays=new Date(currentYear,currentMonth+1,0).getDate(); for(let i=0;i<firstDay;i++){ const e=document.createElement('div'); e.className='cal-day empty'; container.appendChild(e); } const todayStr=getTodayKey(); for(let d=1;d<=totalDays;d++){ const dayStr=`${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const cell=document.createElement('div'); cell.className='cal-day'; cell.textContent=d; if(S.history[dayStr] && S.history[dayStr].done) cell.classList.add('done'); if(dayStr===todayStr) cell.classList.add('today'); if(dayStr===selectedDateKey) cell.classList.add('selected'); cell.onclick=()=>{ selectedDateKey=dayStr; updateTodayDisplay(); renderDailyTab(); renderQuests(WEEKLY_QUESTS,null,'weekly-quests'); renderQuests(MONTHLY_QUESTS,null,'monthly-quests'); renderCalendar(); }; container.appendChild(cell); } }
-function changeMonth(dir){ currentMonth+=dir; if(currentMonth>11){ currentMonth=0; currentYear++; } if(currentMonth<0){ currentMonth=11; currentYear--; } renderCalendar(); }
-function renderSkillTree(){ const artContainer=document.getElementById('art-tree-nodes'); artContainer.innerHTML=''; const fitContainer=document.getElementById('fit-tree-nodes'); fitContainer.innerHTML=''; SKILL_TREE.forEach(node=>{ const currentHrs=node.reqType==='art'?S.artHours:S.fitHours; const isUnlocked=S.artLogs.some(l=>l.note.includes(node.name))||S.fitLogs.some(l=>l.note.includes(node.name))||currentHrs>=node.reqVal; const isAvailable=!isUnlocked && currentHrs>=node.reqVal; const item=document.createElement('div'); item.className='t-node'; item.innerHTML=`<div class="t-conn"><div class="t-dot ${isUnlocked?'unlocked':''} ${isAvailable?'available':''}"></div><div class="t-line ${isUnlocked?'lit':''}"></div></div><div class="t-card ${isUnlocked?'unlocked':''} ${isAvailable?'available':''} ${(!isUnlocked && !isAvailable)?'locked':''}"><div class="t-top"><span class="t-name">${node.name}</span><span class="t-size sz-${node.size}">${node.size}</span></div><div class="t-desc">${node.desc}</div><div class="t-reward">Effect: ${node.reward}</div><div class="t-cond ${isUnlocked||isAvailable?'met':''}">เงื่อนไข: สะสมสาย ${node.reqType} ครบ ${node.reqVal} ชม. (ปัจจุบัน ${currentHrs.toFixed(1)}h)</div></div>`; if(node.lane==='art') artContainer.appendChild(item); else fitContainer.appendChild(item); }); const cross=document.getElementById('cross-node-1'); if(S.artHours>=50 && S.fitHours>=50) cross.className='cross-node unlocked'; else if(S.artHours>=20 || S.fitHours>=20) cross.className='cross-node available'; else cross.className='cross-node'; }
-function updateCareerDisplay(){ let totalIncome=0,totalJobs=0; S.incomeLogs.forEach(l=>{ totalIncome+=l.amount; if(l.isJob) totalJobs++; }); document.getElementById('c-current-income').textContent=totalIncome.toLocaleString(); document.getElementById('c-current-jobs').textContent=totalJobs; document.getElementById('c-goal-income').textContent=(S.goalIncome||15000).toLocaleString(); document.getElementById('c-goal-jobs').textContent=S.goalJobs||6; renderSavingGoals(); }
-function renderIncomeLogs(){ const container=document.getElementById('income-log'); container.innerHTML=''; S.incomeLogs.slice(0,10).forEach(x=>{ const e=document.createElement('div'); e.className='income-entry'; e.innerHTML=`<span class="income-date">${x.date} - ${x.note} ${x.isJob?'(✓ รูปสำเร็จ)':''}</span><span class="income-amount">+${x.amount.toLocaleString()}฿</span><button class="del-btn" onclick="deleteIncome(${x.id})">✕</button>`; container.appendChild(e); }); }
-function deleteIncome(id){ if(!confirm('ลบประวัติรายได้นี้?')) return; const idx=S.incomeLogs.findIndex(l=>l.id===id); if(idx!==-1){ S.incomeLogs.splice(idx,1); updateCareerDisplay(); renderIncomeLogs(); save(); showToast('ลบเรียบร้อย'); } }
-function addIncome(isJobComplete){ const amtIn=document.getElementById('inc-amount'); const noteIn=document.getElementById('inc-note'); const amount=parseInt(amtIn.value); const note=noteIn.value.trim()||'งานศิลปะคอมมิชชันอิสระ'; if(isNaN(amount)||amount<=0){ alert('กรุณาระบุจำนวนรายได้ที่ถูกต้อง'); return; } const log={ id:Date.now(), amount, note, isJob:isJobComplete, date:new Date().toLocaleDateString('th-TH') }; S.incomeLogs.unshift(log); addXp(Math.min(amount*0.1,100)); amtIn.value=''; noteIn.value=''; updateCareerDisplay(); renderIncomeLogs(); save(); showToast(`บันทึกรายรับ +${amount}฿ สำเร็จ!`); }
-function renderSocialChannels(){ const container=document.getElementById('follower-grid-container'); container.innerHTML=''; S.socialChannels.forEach(ch=>{ const div=document.createElement('div'); div.className='follower-item'; div.innerHTML=`<div class="follower-name"><span class="editable-name" data-id="${ch.id}">${ch.name}</span><button class="btn-icon" onclick="editSocialName('${ch.id}')">✎</button><button class="btn-icon" onclick="deleteSocialChannel('${ch.id}')">🗑</button></div><div class="follower-stats"><div class="follower-stat"><div class="follower-stat-lbl">ผู้ติดตาม</div><div class="follower-val" id="f-${ch.id}-subs">${ch.subs}</div></div><div class="follower-stat"><div class="follower-stat-lbl">ลงคลิป</div><div class="follower-clips" id="f-${ch.id}-vids">${ch.vids}</div></div></div><div class="follower-edit"><input type="number" id="in-${ch.id}-subs" placeholder="ผู้ติดตาม"><input type="number" id="in-${ch.id}-vids" placeholder="คลิป"><button class="btn-s btn-art" onclick="updateSocialStats('${ch.id}')">อัปเดต</button></div>`; container.appendChild(div); }); }
-function updateSocialStats(id){ const subs=parseInt(document.getElementById(`in-${id}-subs`).value)||0; const vids=parseInt(document.getElementById(`in-${id}-vids`).value)||0; const ch=S.socialChannels.find(c=>c.id===id); if(ch){ ch.subs=subs; ch.vids=vids; renderSocialChannels(); save(); showToast('อัปเดตสำเร็จ'); } }
-function editSocialName(id){ const newName=prompt('แก้ไขชื่อช่องทาง', S.socialChannels.find(c=>c.id===id).name); if(newName){ S.socialChannels.find(c=>c.id===id).name=newName; renderSocialChannels(); save(); } }
-function deleteSocialChannel(id){ if(confirm('ลบช่องทางนี้?')){ S.socialChannels=S.socialChannels.filter(c=>c.id!==id); renderSocialChannels(); save(); } }
+
+function updateNodes(){ 
+    const ah=parseFloat(S.artHours.toFixed(1)), fh=parseFloat(S.fitHours.toFixed(1)); 
+    document.getElementById('art-hours').textContent=ah; 
+    document.getElementById('fit-hours').textContent=fh; 
+    document.getElementById('art-bar').style.width=Math.min(ah/10000*100,100)+'%'; 
+    document.getElementById('fit-bar').style.width=Math.min(fh/10000*100,100)+'%'; 
+    const ar=getRank(ah,ART_RANKS), anr=getNextRank(ah,ART_RANKS), fr=getRank(fh,FIT_RANKS), fnr=getNextRank(fh,FIT_RANKS); 
+    document.getElementById('art-rank').textContent=ar.name; 
+    document.getElementById('fit-rank').textContent=fr.name; 
+    document.getElementById('art-rank-progress').textContent=anr?`Next: ${anr.name} @ ${anr.min}h (${(anr.min-ah).toFixed(1)} to go)`:'MAX RANK'; 
+    document.getElementById('fit-rank-progress').textContent=fnr?`Next: ${fnr.name} @ ${fnr.min}h (${(fnr.min-fh).toFixed(1)} to go)`:'MAX RANK'; 
+    document.getElementById('s-art-h').textContent=ah; 
+    document.getElementById('s-fit-h').textContent=fh; 
+    document.getElementById('s-days').textContent=S.artDays; 
+}
+
+function deleteLog(type,id){ 
+    if(!confirm('คุณต้องการลบบันทึกนี้? XP จะถูกหักคืน')) return; 
+    let arr=type==='art'?S.artLogs:S.fitLogs; 
+    const idx=arr.findIndex(x=>x.id===id); 
+    if(idx>-1){ 
+        const item=arr[idx]; 
+        if(type==='art') S.artHours=Math.max(0,S.artHours-item.val); 
+        else S.fitHours=Math.max(0,S.fitHours-item.val); 
+        if(item.xpEarned){ 
+            S.xp-=item.xpEarned; 
+            while(S.xp<0 && S.lvl>1){ 
+                S.lvl--; 
+                S.xp+=S.lvl*100; 
+                S.sp=Math.max(0,S.sp-5); 
+            } 
+            if(S.xp<0) S.xp=0; 
+        } 
+        arr.splice(idx,1); 
+        updateXpBar(); 
+        updateNodes(); 
+        renderHourLog(type); 
+        save(); 
+        showToast('ลบเรียบร้อย'); 
+    } 
+}
+
+function renderHourLog(type){ 
+    const container=document.getElementById(`${type}-log`); 
+    container.innerHTML=''; 
+    const arr=type==='art'?S.artLogs:S.fitLogs; 
+    arr.slice(0,10).forEach(x=>{ 
+        const e=document.createElement('div'); 
+        e.className='hour-entry'; 
+        e.innerHTML=`<span><strong>${x.val}h</strong> - ${x.note} <small>(${x.date})</small></span><button class="del-btn" onclick="deleteLog('${type}',${x.id})">✕</button>`; 
+        container.appendChild(e); 
+    }); 
+}
+
+function isFitnessQuest(text){ 
+    const keywords=['weight training','cardio','workout','run','fitness','ฟิตเนส','เวท','วิ่ง','ออกกำลัง','ซ้อมเสียง','ร้องเพลง','vocal']; 
+    return keywords.some(k=>text.toLowerCase().includes(k)); 
+}
+
+function renderDailyTab(){ 
+    const k=selectedDateKey||getTodayKey(); 
+    if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; 
+    const h=S.history[k]; 
+    const container=document.getElementById('daily-quests'); 
+    container.innerHTML=''; 
+    DAILY_QUESTS.forEach(q=>{ 
+        const isDone=h.daily.includes(q.id); 
+        const isRest=h.rest && h.rest.includes(q.id); 
+        const isFit=isFitnessQuest(q.text); 
+        const card=document.createElement('div'); 
+        card.className=`q-card ${isDone?'done':''} ${isRest?'rest-off':''}`; 
+        let restBtnHtml=isFit?`<button class="rest-inline ${isRest?'active':''}" onclick="event.stopPropagation(); toggleRest('${q.id}')">REST</button>`:''; 
+        card.innerHTML=`<div class="q-row" onclick="${isRest?'':'toggleQuest(\'daily\',\''+q.id+'\')'}"><div class="chk">${isDone?'✓':''}</div><div class="q-text">${q.text}</div><div class="q-meta">${restBtnHtml}<span class="q-xp">+${q.xp} XP</span><span class="q-stat ${q.stat}">${q.stat}</span></div></div>`; 
+        container.appendChild(card); 
+    }); 
+    checkDayComplete(k); 
+}
+
+function renderQuests(database,stateList,elementId){ 
+    const k=selectedDateKey||getTodayKey(); 
+    if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; 
+    const h=S.history[k]; 
+    let activeList=(elementId==='weekly-quests')?h.weekly:(elementId==='monthly-quests')?h.monthly:[]; 
+    const container=document.getElementById(elementId); 
+    container.innerHTML=''; 
+    database.forEach(q=>{ 
+        const isDone=activeList.includes(q.id); 
+        const card=document.createElement('div'); 
+        card.className=`q-card ${isDone?'done':''}`; 
+        card.innerHTML=`<div class="q-row" onclick="toggleQuestType('${elementId==='weekly-quests'?'weekly':'monthly'}','${q.id}')"><div class="chk">${isDone?'✓':''}</div><div class="q-text">${q.text}</div><div class="q-meta"><span class="q-xp">+${q.xp} XP</span><span class="q-stat ${q.stat}">${q.stat}</span></div></div>`; 
+        container.appendChild(card); 
+    }); 
+}
+
+function toggleQuest(type,id){ 
+    const k=selectedDateKey||getTodayKey(); 
+    if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; 
+    let arr=S.history[k].daily; 
+    const q=DAILY_QUESTS.find(x=>x.id===id); 
+    if(!q) return; 
+    const idx=arr.indexOf(id); 
+    if(idx>-1){ 
+        arr.splice(idx,1); 
+        S.xp=Math.max(0,S.xp-q.xp); 
+        updateXpBar(); 
+    } else { 
+        arr.push(id); 
+        S[q.stat]+=1; 
+        addXp(q.xp); 
+        showToast(`Quest Complete! ได้รับ +${q.xp} XP และพลัง ${q.stat} +1`); 
+    } 
+    renderDailyTab(); 
+    renderStats(); 
+    renderCalendar(); 
+    save(); 
+}
+
+function toggleQuestType(type,id){ 
+    const k=selectedDateKey||getTodayKey(); 
+    if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; 
+    if(!S.history[k].weekly) S.history[k].weekly=[]; 
+    if(!S.history[k].monthly) S.history[k].monthly=[]; 
+    let arr=type==='weekly'?S.history[k].weekly:S.history[k].monthly; 
+    const db=type==='weekly'?WEEKLY_QUESTS:MONTHLY_QUESTS; 
+    const q=db.find(x=>x.id===id); 
+    if(!q) return; 
+    const idx=arr.indexOf(id); 
+    if(idx>-1){ 
+        arr.splice(idx,1); 
+        S.xp=Math.max(0,S.xp-q.xp); 
+        updateXpBar(); 
+    } else { 
+        arr.push(id); 
+        S[q.stat]+=2; 
+        addXp(q.xp); 
+        showToast(`Great Quest Complete! ได้รับ +${q.xp} XP และโบนัสสถานะ ${q.stat} +2`); 
+    } 
+    if(type==='weekly') renderQuests(WEEKLY_QUESTS,null,'weekly-quests'); 
+    else renderQuests(MONTHLY_QUESTS,null,'monthly-quests'); 
+    renderStats(); 
+    save(); 
+}
+
+function toggleRest(id){ 
+    const k=selectedDateKey||getTodayKey(); 
+    if(!S.history[k].rest) S.history[k].rest=[]; 
+    let r=S.history[k].rest; 
+    const idx=r.indexOf(id); 
+    if(idx>-1) r.splice(idx,1); 
+    else { 
+        r.push(id); 
+        const dIdx=S.history[k].daily.indexOf(id); 
+        if(dIdx>-1){ 
+            S.history[k].daily.splice(dIdx,1); 
+            const q=DAILY_QUESTS.find(x=>x.id===id); 
+            if(q) S.xp=Math.max(0,S.xp-q.xp); 
+        } 
+    } 
+    updateXpBar(); 
+    renderDailyTab(); 
+    save(); 
+}
+
+function checkDayComplete(k){ 
+    const h=S.history[k]; 
+    if(!h) return; 
+    const totalNeed=DAILY_QUESTS.filter(q=>!(h.rest && h.rest.includes(q.id))).length; 
+    h.done=(totalNeed>0 && h.daily.length>=totalNeed); 
+}
+
+function logHours(type){ 
+    const hInput=document.getElementById(`${type}-in`); 
+    const nInput=document.getElementById(`${type}-note`); 
+    const dateInput=document.getElementById(`${type}-date`); 
+    const val=parseFloat(hInput.value); 
+    const note=nInput.value.trim()||'ฝึกฝนขัดเกลาฝีมือประจำวัน'; 
+    if(isNaN(val)||val<=0){ alert('กรุณาใส่จำนวนชั่วโมงที่ถูกต้อง'); return; } 
+    let logDate=dateInput.value; 
+    if(!logDate) logDate=getTodayKey(); 
+    else logDate=logDate.split('-').reverse().join('-'); 
+    const dateObj=new Date(logDate.split('-').reverse().join('-')); 
+    const thaiDate=dateObj.toLocaleDateString('th-TH'); 
+    if(type==='art') S.artHours+=val; 
+    if(type==='fit'){ 
+        S.fitHours+=val; 
+        S.lastFitDate=new Date().toISOString(); 
+        checkDecay(); 
+    } 
+    const earnedXp=val*10; 
+    const logObj={ id:Date.now(), val, note, date:thaiDate, xpEarned:earnedXp, logDateKey:logDate }; 
+    if(type==='art') S.artLogs.unshift(logObj); 
+    else S.fitLogs.unshift(logObj); 
+    if(!S.history[logDate]) S.history[logDate]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; 
+    if(!S.history[logDate].loggedHour){ 
+        S.history[logDate].loggedHour=true; 
+        S.artDays++; 
+    } 
+    addXp(earnedXp); 
+    hInput.value=''; 
+    nInput.value=''; 
+    dateInput.value=''; 
+    updateNodes(); 
+    renderHourLog(type); 
+    save(); 
+    showToast(`บันทึกสำเร็จ! ได้รับ +${earnedXp.toFixed(0)} XP`); 
+}
+
+function renderCalendar(){ 
+    const container=document.getElementById('cal-grid'); 
+    container.innerHTML=''; 
+    const monthNames=["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"]; 
+    document.getElementById('cal-month-lbl').textContent=`${monthNames[currentMonth]} ${currentYear}`; 
+    const firstDay=new Date(currentYear,currentMonth,1).getDay(); 
+    const totalDays=new Date(currentYear,currentMonth+1,0).getDate(); 
+    for(let i=0;i<firstDay;i++){ 
+        const e=document.createElement('div'); 
+        e.className='cal-day empty'; 
+        container.appendChild(e); 
+    } 
+    const todayStr=getTodayKey(); 
+    for(let d=1;d<=totalDays;d++){ 
+        const dayStr=`${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; 
+        const cell=document.createElement('div'); 
+        cell.className='cal-day'; 
+        cell.textContent=d; 
+        if(S.history[dayStr] && S.history[dayStr].done) cell.classList.add('done'); 
+        if(dayStr===todayStr) cell.classList.add('today'); 
+        if(dayStr===selectedDateKey) cell.classList.add('selected'); 
+        cell.onclick=()=>{ 
+            selectedDateKey=dayStr; 
+            updateTodayDisplay(); 
+            renderDailyTab(); 
+            renderQuests(WEEKLY_QUESTS,null,'weekly-quests'); 
+            renderQuests(MONTHLY_QUESTS,null,'monthly-quests'); 
+            renderCalendar(); 
+        }; 
+        container.appendChild(cell); 
+    } 
+}
+
+function changeMonth(dir){ 
+    currentMonth+=dir; 
+    if(currentMonth>11){ currentMonth=0; currentYear++; } 
+    if(currentMonth<0){ currentMonth=11; currentYear--; } 
+    renderCalendar(); 
+}
+
+function renderSkillTree(){ 
+    const artContainer=document.getElementById('art-tree-nodes'); 
+    artContainer.innerHTML=''; 
+    const fitContainer=document.getElementById('fit-tree-nodes'); 
+    fitContainer.innerHTML=''; 
+    SKILL_TREE.forEach(node=>{ 
+        const currentHrs=node.reqType==='art'?S.artHours:S.fitHours; 
+        const isUnlocked=S.artLogs.some(l=>l.note.includes(node.name))||S.fitLogs.some(l=>l.note.includes(node.name))||currentHrs>=node.reqVal; 
+        const isAvailable=!isUnlocked && currentHrs>=node.reqVal; 
+        const item=document.createElement('div'); 
+        item.className='t-node'; 
+        item.innerHTML=`<div class="t-conn"><div class="t-dot ${isUnlocked?'unlocked':''} ${isAvailable?'available':''}"></div><div class="t-line ${isUnlocked?'lit':''}"></div></div><div class="t-card ${isUnlocked?'unlocked':''} ${isAvailable?'available':''} ${(!isUnlocked && !isAvailable)?'locked':''}"><div class="t-top"><span class="t-name">${node.name}</span><span class="t-size sz-${node.size}">${node.size}</span></div><div class="t-desc">${node.desc}</div><div class="t-reward">Effect: ${node.reward}</div><div class="t-cond ${isUnlocked||isAvailable?'met':''}">เงื่อนไข: สะสมสาย ${node.reqType} ครบ ${node.reqVal} ชม. (ปัจจุบัน ${currentHrs.toFixed(1)}h)</div></div>`; 
+        if(node.lane==='art') artContainer.appendChild(item); 
+        else fitContainer.appendChild(item); 
+    }); 
+    const cross=document.getElementById('cross-node-1'); 
+    if(S.artHours>=50 && S.fitHours>=50) cross.className='cross-node unlocked'; 
+    else if(S.artHours>=20 || S.fitHours>=20) cross.className='cross-node available'; 
+    else cross.className='cross-node'; 
+}
+
+function updateCareerDisplay(){ 
+    let totalIncome=0,totalJobs=0; 
+    S.incomeLogs.forEach(l=>{ 
+        totalIncome+=l.amount; 
+        if(l.isJob) totalJobs++; 
+    }); 
+    document.getElementById('c-current-income').textContent=totalIncome.toLocaleString(); 
+    document.getElementById('c-current-jobs').textContent=totalJobs; 
+    document.getElementById('c-goal-income').textContent=(S.goalIncome||15000).toLocaleString(); 
+    document.getElementById('c-goal-jobs').textContent=S.goalJobs||6; 
+    renderSavingGoals(); 
+}
+
+function renderIncomeLogs(){ 
+    const container=document.getElementById('income-log'); 
+    container.innerHTML=''; 
+    S.incomeLogs.slice(0,10).forEach(x=>{ 
+        const e=document.createElement('div'); 
+        e.className='income-entry'; 
+        e.innerHTML=`<span class="income-date">${x.date} - ${x.note} ${x.isJob?'(✓ รูปสำเร็จ)':''}</span><span class="income-amount">+${x.amount.toLocaleString()}฿</span><button class="del-btn" onclick="deleteIncome(${x.id})">✕</button>`; 
+        container.appendChild(e); 
+    }); 
+}
+
+function deleteIncome(id){ 
+    if(!confirm('ลบประวัติรายได้นี้?')) return; 
+    const idx=S.incomeLogs.findIndex(l=>l.id===id); 
+    if(idx!==-1){ 
+        S.incomeLogs.splice(idx,1); 
+        updateCareerDisplay(); 
+        renderIncomeLogs(); 
+        save(); 
+        showToast('ลบเรียบร้อย'); 
+    } 
+}
+
+function addIncome(isJobComplete){ 
+    const amtIn=document.getElementById('inc-amount'); 
+    const noteIn=document.getElementById('inc-note'); 
+    const amount=parseInt(amtIn.value); 
+    const note=noteIn.value.trim()||'งานศิลปะคอมมิชชันอิสระ'; 
+    if(isNaN(amount)||amount<=0){ alert('กรุณาระบุจำนวนรายได้ที่ถูกต้อง'); return; } 
+    const log={ id:Date.now(), amount, note, isJob:isJobComplete, date:new Date().toLocaleDateString('th-TH') }; 
+    S.incomeLogs.unshift(log); 
+    addXp(Math.min(amount*0.1,100)); 
+    amtIn.value=''; 
+    noteIn.value=''; 
+    updateCareerDisplay(); 
+    renderIncomeLogs(); 
+    save(); 
+    showToast(`บันทึกรายรับ +${amount}฿ สำเร็จ!`); 
+}
+
+function renderSocialChannels(){ 
+    const container=document.getElementById('follower-grid-container'); 
+    container.innerHTML=''; 
+    S.socialChannels.forEach(ch=>{ 
+        const div=document.createElement('div'); 
+        div.className='follower-item'; 
+        div.innerHTML=`<div class="follower-name"><span class="editable-name" data-id="${ch.id}">${ch.name}</span><button class="btn-icon" onclick="editSocialName('${ch.id}')">✎</button><button class="btn-icon" onclick="deleteSocialChannel('${ch.id}')">🗑</button></div><div class="follower-stats"><div class="follower-stat"><div class="follower-stat-lbl">ผู้ติดตาม</div><div class="follower-val" id="f-${ch.id}-subs">${ch.subs}</div></div><div class="follower-stat"><div class="follower-stat-lbl">ลงคลิป</div><div class="follower-clips" id="f-${ch.id}-vids">${ch.vids}</div></div></div><div class="follower-edit"><input type="number" id="in-${ch.id}-subs" placeholder="ผู้ติดตาม"><input type="number" id="in-${ch.id}-vids" placeholder="คลิป"><button class="btn-s btn-art" onclick="updateSocialStats('${ch.id}')">อัปเดต</button></div>`; 
+        container.appendChild(div); 
+    }); 
+}
+
+function updateSocialStats(id){ 
+    const subs=parseInt(document.getElementById(`in-${id}-subs`).value)||0; 
+    const vids=parseInt(document.getElementById(`in-${id}-vids`).value)||0; 
+    const ch=S.socialChannels.find(c=>c.id===id); 
+    if(ch){ 
+        ch.subs=subs; 
+        ch.vids=vids; 
+        renderSocialChannels(); 
+        save(); 
+        showToast('อัปเดตสำเร็จ'); 
+    } 
+}
+
+function editSocialName(id){ 
+    const newName=prompt('แก้ไขชื่อช่องทาง', S.socialChannels.find(c=>c.id===id).name); 
+    if(newName){ 
+        S.socialChannels.find(c=>c.id===id).name=newName; 
+        renderSocialChannels(); 
+        save(); 
+    } 
+}
+
+function deleteSocialChannel(id){ 
+    if(confirm('ลบช่องทางนี้?')){ 
+        S.socialChannels=S.socialChannels.filter(c=>c.id!==id); 
+        renderSocialChannels(); 
+        save(); 
+    } 
+}
+
 function openSocialManager(){ document.getElementById('social-manager-modal').classList.add('show'); renderSocialListManager(); }
 function closeSocialManager(){ document.getElementById('social-manager-modal').classList.remove('show'); }
-function renderSocialListManager(){ const container=document.getElementById('social-list-container'); container.innerHTML=''; S.socialChannels.forEach(ch=>{ const div=document.createElement('div'); div.className='qm-row-item'; div.innerHTML=`<input type="text" value="${ch.name}" class="qm-input" style="flex:1" id="edit-name-${ch.id}"><button class="del-btn" onclick="updateSocialNameFromManager('${ch.id}')">💾</button><button class="del-btn" onclick="deleteSocialChannel('${ch.id}'); renderSocialListManager();">✕</button>`; container.appendChild(div); }); }
-function updateSocialNameFromManager(id){ const newName=document.getElementById(`edit-name-${id}`).value; if(newName){ S.socialChannels.find(c=>c.id===id).name=newName; renderSocialListManager(); renderSocialChannels(); save(); } }
-function addSocialChannel(){ const name=document.getElementById('new-social-name').value.trim(); if(!name) return; const newId='social_'+Date.now(); S.socialChannels.push({id:newId, name:name, subs:0, vids:0}); renderSocialListManager(); renderSocialChannels(); document.getElementById('new-social-name').value=''; save(); }
-function renderSavingGoals(){ const container=document.getElementById('saving-goals-list'); if(!container) return; container.innerHTML=''; S.savingGoals.forEach((goal,idx)=>{ const highlightStyle=goal.highlighted?'color:var(--gold);font-weight:bold;':''; container.innerHTML+=`<div class="dash-row" style="${highlightStyle}"><span>${goal.name} :</span><span class="dash-val">${goal.goal.toLocaleString()}฿</span>${goal.highlighted?' 🌟':''}</div>`; }); }
+
+function renderSocialListManager(){ 
+    const container=document.getElementById('social-list-container'); 
+    container.innerHTML=''; 
+    S.socialChannels.forEach(ch=>{ 
+        const div=document.createElement('div'); 
+        div.className='qm-row-item'; 
+        div.innerHTML=`<input type="text" value="${ch.name}" class="qm-input" style="flex:1" id="edit-name-${ch.id}"><button class="del-btn" onclick="updateSocialNameFromManager('${ch.id}')">💾</button><button class="del-btn" onclick="deleteSocialChannel('${ch.id}'); renderSocialListManager();">✕</button>`; 
+        container.appendChild(div); 
+    }); 
+}
+
+function updateSocialNameFromManager(id){ 
+    const newName=document.getElementById(`edit-name-${id}`).value; 
+    if(newName){ 
+        S.socialChannels.find(c=>c.id===id).name=newName; 
+        renderSocialListManager(); 
+        renderSocialChannels(); 
+        save(); 
+    } 
+}
+
+function addSocialChannel(){ 
+    const name=document.getElementById('new-social-name').value.trim(); 
+    if(!name) return; 
+    const newId='social_'+Date.now(); 
+    S.socialChannels.push({id:newId, name:name, subs:0, vids:0}); 
+    renderSocialListManager(); 
+    renderSocialChannels(); 
+    document.getElementById('new-social-name').value=''; 
+    save(); 
+}
+
+function renderSavingGoals(){ 
+    const container=document.getElementById('saving-goals-list'); 
+    if(!container) return; 
+    container.innerHTML=''; 
+    S.savingGoals.forEach((goal,idx)=>{ 
+        const highlightStyle=goal.highlighted?'color:var(--gold);font-weight:bold;':''; 
+        container.innerHTML+=`<div class="dash-row" style="${highlightStyle}"><span>${goal.name} :</span><span class="dash-val">${goal.goal.toLocaleString()}฿</span>${goal.highlighted?' 🌟':''}</div>`; 
+    }); 
+}
+
 function openSavingManager(){ document.getElementById('saving-manager-modal').classList.add('show'); renderSavingManagerList(); }
 function closeSavingManager(){ document.getElementById('saving-manager-modal').classList.remove('show'); }
-function renderSavingManagerList(){ const container=document.getElementById('saving-list-container'); container.innerHTML=''; S.savingGoals.forEach((goal,idx)=>{ const div=document.createElement('div'); div.className='qm-row-item'; div.innerHTML=`<input type="text" value="${goal.name}" class="qm-input" style="flex:2" id="saving-name-${idx}"><input type="number" value="${goal.goal}" class="qm-input" style="width:100px" id="saving-goal-${idx}"><button class="btn-s btn-art" onclick="updateSavingGoal(${idx})">💾</button><button class="btn-s ${goal.highlighted?'btn-fit':'btn-art'}" onclick="setHighlightSaving(${idx})">🌟 ไฮไลต์</button><button class="del-btn" onclick="deleteSavingGoal(${idx})">✕</button>`; container.appendChild(div); }); }
-function updateSavingGoal(idx){ const newName=document.getElementById(`saving-name-${idx}`).value; const newGoal=parseInt(document.getElementById(`saving-goal-${idx}`).value); if(newName) S.savingGoals[idx].name=newName; if(!isNaN(newGoal)) S.savingGoals[idx].goal=newGoal; renderSavingManagerList(); renderSavingGoals(); save(); }
-function setHighlightSaving(idx){ S.savingGoals.forEach((g,i)=>{ g.highlighted=(i===idx); }); renderSavingManagerList(); renderSavingGoals(); save(); }
-function deleteSavingGoal(idx){ S.savingGoals.splice(idx,1); if(S.savingGoals.length===0) S.savingGoals.push({name:"เป้าหมายใหม่", goal:10000, highlighted:true}); renderSavingManagerList(); renderSavingGoals(); save(); }
-function addSavingGoal(){ const name=document.getElementById('new-saving-name').value; const goal=parseInt(document.getElementById('new-saving-goal').value); if(!name || isNaN(goal)) return; S.savingGoals.push({name, goal, highlighted:false}); renderSavingManagerList(); renderSavingGoals(); document.getElementById('new-saving-name').value=''; document.getElementById('new-saving-goal').value=''; save(); }
-function renderVaultItems(){ const container=document.getElementById('vault-grid-container'); container.innerHTML=''; S.vaultItems.forEach(item=>{ const div=document.createElement('div'); div.className='vault-card'; div.innerHTML=`<div class="vault-title">${item.name} <button class="btn-icon" onclick="openVaultManager()">✎</button></div><div>${item.detail||''}</div><div class="vault-progress-bar"><div class="vault-progress-fill" style="width:${item.progress}%"></div></div><div class="vault-meta"><span>ความคืบหน้า</span><span>${item.progress}%</span></div>`; container.appendChild(div); }); }
+
+function renderSavingManagerList(){ 
+    const container=document.getElementById('saving-list-container'); 
+    container.innerHTML=''; 
+    S.savingGoals.forEach((goal,idx)=>{ 
+        const div=document.createElement('div'); 
+        div.className='qm-row-item'; 
+        div.innerHTML=`<input type="text" value="${goal.name}" class="qm-input" style="flex:2" id="saving-name-${idx}"><input type="number" value="${goal.goal}" class="qm-input" style="width:100px" id="saving-goal-${idx}"><button class="btn-s btn-art" onclick="updateSavingGoal(${idx})">💾</button><button class="btn-s ${goal.highlighted?'btn-fit':'btn-art'}" onclick="setHighlightSaving(${idx})">🌟 ไฮไลต์</button><button class="del-btn" onclick="deleteSavingGoal(${idx})">✕</button>`; 
+        container.appendChild(div); 
+    }); 
+}
+
+function updateSavingGoal(idx){ 
+    const newName=document.getElementById(`saving-name-${idx}`).value; 
+    const newGoal=parseInt(document.getElementById(`saving-goal-${idx}`).value); 
+    if(newName) S.savingGoals[idx].name=newName; 
+    if(!isNaN(newGoal)) S.savingGoals[idx].goal=newGoal; 
+    renderSavingManagerList(); 
+    renderSavingGoals(); 
+    save(); 
+}
+
+function setHighlightSaving(idx){ 
+    S.savingGoals.forEach((g,i)=>{ g.highlighted=(i===idx); }); 
+    renderSavingManagerList(); 
+    renderSavingGoals(); 
+    save(); 
+}
+
+function deleteSavingGoal(idx){ 
+    S.savingGoals.splice(idx,1); 
+    if(S.savingGoals.length===0) S.savingGoals.push({name:"เป้าหมายใหม่", goal:10000, highlighted:true}); 
+    renderSavingManagerList(); 
+    renderSavingGoals(); 
+    save(); 
+}
+
+function addSavingGoal(){ 
+    const name=document.getElementById('new-saving-name').value; 
+    const goal=parseInt(document.getElementById('new-saving-goal').value); 
+    if(!name || isNaN(goal)) return; 
+    S.savingGoals.push({name, goal, highlighted:false}); 
+    renderSavingManagerList(); 
+    renderSavingGoals(); 
+    document.getElementById('new-saving-name').value=''; 
+    document.getElementById('new-saving-goal').value=''; 
+    save(); 
+}
+
+function renderVaultItems(){ 
+    const container=document.getElementById('vault-grid-container'); 
+    container.innerHTML=''; 
+    S.vaultItems.forEach(item=>{ 
+        const div=document.createElement('div'); 
+        div.className='vault-card'; 
+        div.innerHTML=`<div class="vault-title">${item.name} <button class="btn-icon" onclick="openVaultManager()">✎</button></div><div>${item.detail||''}</div><div class="vault-progress-bar"><div class="vault-progress-fill" style="width:${item.progress}%"></div></div><div class="vault-meta"><span>ความคืบหน้า</span><span>${item.progress}%</span></div>`; 
+        container.appendChild(div); 
+    }); 
+}
+
 function openVaultManager(){ document.getElementById('vault-manager-modal').classList.add('show'); renderVaultManagerList(); }
 function closeVaultManager(){ document.getElementById('vault-manager-modal').classList.remove('show'); }
-function renderVaultManagerList(){ const container=document.getElementById('vault-list-container'); container.innerHTML=''; S.vaultItems.forEach((item,idx)=>{ const div=document.createElement('div'); div.className='qm-row-item'; div.innerHTML=`<input type="text" value="${item.name}" class="qm-input" style="flex:2" id="vault-name-${idx}"><input type="number" value="${item.progress}" class="qm-input" style="width:70px" id="vault-prog-${idx}"><input type="text" value="${item.detail||''}" class="qm-input" style="flex:2" id="vault-detail-${idx}" placeholder="รายละเอียด"><button class="btn-s btn-art" onclick="updateVaultItem(${idx})">💾</button><button class="del-btn" onclick="deleteVaultItem(${idx})">✕</button>`; container.appendChild(div); }); }
-function updateVaultItem(idx){ S.vaultItems[idx].name=document.getElementById(`vault-name-${idx}`).value; S.vaultItems[idx].progress=parseInt(document.getElementById(`vault-prog-${idx}`).value)||0; S.vaultItems[idx].detail=document.getElementById(`vault-detail-${idx}`).value; renderVaultManagerList(); renderVaultItems(); save(); }
-function deleteVaultItem(idx){ S.vaultItems.splice(idx,1); renderVaultManagerList(); renderVaultItems(); save(); }
-function addVaultItem(){ const name=document.getElementById('new-vault-name').value; const progress=parseInt(document.getElementById('new-vault-progress').value)||0; if(!name) return; S.vaultItems.push({id:'v'+Date.now(), name, progress, detail:''}); renderVaultManagerList(); renderVaultItems(); document.getElementById('new-vault-name').value=''; document.getElementById('new-vault-progress').value=''; save(); }
-function saveDiary(){ const text=document.getElementById('diary-in').value.trim(); const mood=document.getElementById('diary-mood').value; if(!text){ alert('กรุณาเขียนบันทึก'); return; } const log={ id:Date.now(), text, mood, date:new Date().toLocaleString('th-TH') }; S.diaryLogs.unshift(log); document.getElementById('diary-in').value=''; renderDiaryLogs(); save(); showToast('บันทึกไดอารี่สำเร็จ'); }
-function renderDiaryLogs(){ const container=document.getElementById('diary-logs'); container.innerHTML=''; S.diaryLogs.forEach(x=>{ const e=document.createElement('div'); e.className='diary-item'; e.innerHTML=`<div class="diary-meta"><span>🕒 ${x.date}</span><span class="diary-mood">${x.mood||'😊'}</span><button class="del-btn" onclick="deleteDiary(${x.id})">✕</button></div><div>${x.text}</div>`; container.appendChild(e); }); }
-function deleteDiary(id){ if(confirm('ลบบันทึกนี้?')){ S.diaryLogs=S.diaryLogs.filter(d=>d.id!==id); renderDiaryLogs(); save(); } }
-function openCareerManager(){ document.getElementById('cm-goal-income-input').value=S.goalIncome||15000; document.getElementById('cm-goal-jobs-input').value=S.goalJobs||6; document.getElementById('cm-modal').classList.add('show'); }
-function saveCareerManager(){ S.goalIncome=parseInt(document.getElementById('cm-goal-income-input').value)||15000; S.goalJobs=parseInt(document.getElementById('cm-goal-jobs-input').value)||6; document.getElementById('c-goal-income').textContent=S.goalIncome.toLocaleString(); document.getElementById('c-goal-jobs').textContent=S.goalJobs; closeCareerManager(); save(); showToast('ปรับปรุงเป้าหมายสำเร็จ'); }
+
+function renderVaultManagerList(){ 
+    const container=document.getElementById('vault-list-container'); 
+    container.innerHTML=''; 
+    S.vaultItems.forEach((item,idx)=>{ 
+        const div=document.createElement('div'); 
+        div.className='qm-row-item'; 
+        div.innerHTML=`<input type="text" value="${item.name}" class="qm-input" style="flex:2" id="vault-name-${idx}"><input type="number" value="${item.progress}" class="qm-input" style="width:70px" id="vault-prog-${idx}"><input type="text" value="${item.detail||''}" class="qm-input" style="flex:2" id="vault-detail-${idx}" placeholder="รายละเอียด"><button class="btn-s btn-art" onclick="updateVaultItem(${idx})">💾</button><button class="del-btn" onclick="deleteVaultItem(${idx})">✕</button>`; 
+        container.appendChild(div); 
+    }); 
+}
+
+function updateVaultItem(idx){ 
+    S.vaultItems[idx].name=document.getElementById(`vault-name-${idx}`).value; 
+    S.vaultItems[idx].progress=parseInt(document.getElementById(`vault-prog-${idx}`).value)||0; 
+    S.vaultItems[idx].detail=document.getElementById(`vault-detail-${idx}`).value; 
+    renderVaultManagerList(); 
+    renderVaultItems(); 
+    save(); 
+}
+
+function deleteVaultItem(idx){ 
+    S.vaultItems.splice(idx,1); 
+    renderVaultManagerList(); 
+    renderVaultItems(); 
+    save(); 
+}
+
+function addVaultItem(){ 
+    const name=document.getElementById('new-vault-name').value; 
+    const progress=parseInt(document.getElementById('new-vault-progress').value)||0; 
+    if(!name) return; 
+    S.vaultItems.push({id:'v'+Date.now(), name, progress, detail:''}); 
+    renderVaultManagerList(); 
+    renderVaultItems(); 
+    document.getElementById('new-vault-name').value=''; 
+    document.getElementById('new-vault-progress').value=''; 
+    save(); 
+}
+
+function saveDiary(){ 
+    const text=document.getElementById('diary-in').value.trim(); 
+    const mood=document.getElementById('diary-mood').value; 
+    if(!text){ alert('กรุณาเขียนบันทึก'); return; } 
+    const log={ id:Date.now(), text, mood, date:new Date().toLocaleString('th-TH') }; 
+    S.diaryLogs.unshift(log); 
+    document.getElementById('diary-in').value=''; 
+    renderDiaryLogs(); 
+    save(); 
+    showToast('บันทึกไดอารี่สำเร็จ'); 
+}
+
+function renderDiaryLogs(){ 
+    const container=document.getElementById('diary-logs'); 
+    container.innerHTML=''; 
+    S.diaryLogs.forEach(x=>{ 
+        const e=document.createElement('div'); 
+        e.className='diary-item'; 
+        e.innerHTML=`<div class="diary-meta"><span>🕒 ${x.date}</span><span class="diary-mood">${x.mood||'😊'}</span><button class="del-btn" onclick="deleteDiary(${x.id})">✕</button></div><div>${x.text}</div>`; 
+        container.appendChild(e); 
+    }); 
+}
+
+function deleteDiary(id){ 
+    if(confirm('ลบบันทึกนี้?')){ 
+        S.diaryLogs=S.diaryLogs.filter(d=>d.id!==id); 
+        renderDiaryLogs(); 
+        save(); 
+    } 
+}
+
+function openCareerManager(){ 
+    document.getElementById('cm-goal-income-input').value=S.goalIncome||15000; 
+    document.getElementById('cm-goal-jobs-input').value=S.goalJobs||6; 
+    document.getElementById('cm-modal').classList.add('show'); 
+}
+
+function saveCareerManager(){ 
+    S.goalIncome=parseInt(document.getElementById('cm-goal-income-input').value)||15000; 
+    S.goalJobs=parseInt(document.getElementById('cm-goal-jobs-input').value)||6; 
+    document.getElementById('c-goal-income').textContent=S.goalIncome.toLocaleString(); 
+    document.getElementById('c-goal-jobs').textContent=S.goalJobs; 
+    closeCareerManager(); 
+    save(); 
+    showToast('ปรับปรุงเป้าหมายสำเร็จ'); 
+}
+
 function closeCareerManager(){ document.getElementById('cm-modal').classList.remove('show'); }
 function openStatModal(){ document.getElementById('stat-modal').classList.add('show'); document.getElementById('modal-sp-lbl').textContent=`${S.sp} สเตตัสพอยท์คงเหลือ`; }
 function closeStatModal(){ document.getElementById('stat-modal').classList.remove('show'); }
-function upgradeStat(st){ if(S.sp<=0){ alert('ไม่มีแต้มสเตตัส'); return; } S.sp--; S[st]++; renderStats(); updateXpBar(); save(); document.getElementById('modal-sp-lbl').textContent=`${S.sp} สเตตัสพอยท์คงเหลือ`; showToast(`เพิ่ม ${st} เป็น ${S[st]}`); }
-function switchTab(t){ document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active')); const idx={quests:0,skills:1,career:2,vault:3}[t]; if(idx!==undefined) document.querySelectorAll('.tab')[idx].classList.add('active'); if(t==='quests'){ document.getElementById('tab-quests').classList.add('active'); renderDailyTab(); renderCalendar(); } else if(t==='skills'){ document.getElementById('tab-skills').classList.add('active'); renderSkillTree(); } else if(t==='career'){ document.getElementById('tab-career').classList.add('active'); updateCareerDisplay(); renderIncomeLogs(); renderSocialChannels(); } else if(t==='vault'){ document.getElementById('tab-vault').classList.add('active'); renderDiaryLogs(); renderVaultItems(); } }
-function openQuestManager(type){ activeManagerType=type; const modal=document.getElementById('qm-modal'); const title=document.getElementById('qm-modal-title'); const container=document.getElementById('qm-container'); let label='Daily Quests', db=DAILY_QUESTS; if(type==='weekly'){ label='Weekly Quests'; db=WEEKLY_QUESTS; } if(type==='monthly'){ label='Monthly Quests'; db=MONTHLY_QUESTS; } title.textContent=`จัดการแผนข้อมูล ${label}`; container.innerHTML=''; db.forEach((q,idx)=>{ appendQuestRow(q.id,q.text,q.xp,q.stat); }); modal.classList.add('show'); }
-function appendQuestRow(id,text,xp,stat){ const container=document.getElementById('qm-container'); const row=document.createElement('div'); row.className='qm-row-item'; row.dataset.id=id; row.innerHTML=`<input type="text" class="qm-input qm-text-in" value="${text.replace(/"/g,'&quot;')}"><input type="number" class="qm-input qm-num-in" value="${xp}"><select class="qm-sel-in"><option value="CRE" ${stat==='CRE'?'selected':''}>CRE</option><option value="STR" ${stat==='STR'?'selected':''}>STR</option><option value="AGI" ${stat==='AGI'?'selected':''}>AGI</option><option value="INT" ${stat==='INT'?'selected':''}>INT</option><option value="VIT" ${stat==='VIT'?'selected':''}>VIT</option></select><button class="del-btn" onclick="this.parentElement.remove()">✕</button>`; container.appendChild(row); }
-function addNewQuestRow(){ const prefix=activeManagerType.charAt(0); appendQuestRow(prefix+'_'+Date.now(),'',15,'CRE'); }
-function saveQuestManager(){ const container=document.getElementById('qm-container'); const rows=container.querySelectorAll('.qm-row-item'); let newDb=[]; rows.forEach(r=>{ const id=r.dataset.id; const text=r.querySelector('.qm-text-in').value.trim(); const xp=parseInt(r.querySelector('.qm-num-in').value)||10; const stat=r.querySelector('.qm-sel-in').value; if(text) newDb.push({id,text,xp,stat}); }); if(newDb.length===0){ alert('กรุณาเหลือเควสไว้อย่างน้อย 1 รายการ'); return; } if(activeManagerType==='daily') DAILY_QUESTS=newDb; else if(activeManagerType==='weekly') WEEKLY_QUESTS=newDb; else MONTHLY_QUESTS=newDb; localStorage.setItem(`qm_db_${activeManagerType}`,JSON.stringify(newDb)); closeQuestManager(); renderDailyTab(); renderQuests(WEEKLY_QUESTS,null,'weekly-quests'); renderQuests(MONTHLY_QUESTS,null,'monthly-quests'); showToast('อัปเดตโครงสร้างรายการภารกิจสมบูรณ์'); }
-function closeQuestManager(){ document.getElementById('qm-modal').classList.remove('show'); }
-function loadCustomQuestDbs(){ ['daily','weekly','monthly'].forEach(type=>{ const saved=localStorage.getItem(`qm_db_${type}`); if(saved){ const parsed=JSON.parse(saved); if(type==='daily') DAILY_QUESTS=parsed; else if(type==='weekly') WEEKLY_QUESTS=parsed; else MONTHLY_QUESTS=parsed; } }); }
-function jsonp(url,callback){ const callbackName='jsonp_cb_'+Math.round(100000*Math.random()); window[callbackName]=function(data){ delete window[callbackName]; document.body.removeChild(script); callback(null,data); }; const script=document.createElement('script'); script.src=url+(url.indexOf('?')>=0?'&':'?')+'callback='+callbackName; script.onerror=function(){ callback(new Error('เชื่อมต่อล้มเหลว')); }; document.body.appendChild(script); }
-function setSyncStatus(state,msg){ const el=document.getElementById('sync-status'); el.className='sync-status '+state; el.textContent=msg; }
-function manualSave(dataToSave) {
-  const url = 'URL_ของ_GOOGLE_APPS_SCRIPT_ตัวล่าสุดของคุณ';
 
-  fetch(url, {
-    method: 'POST',
-    // 💡 ส่งแบบ Plain Text ชัด ๆ เพื่อตัดปัญหา CORS และช่วยให้ e.postData.contents ฝั่ง Google ไม่เป็น undefined
-    headers: {
-      'Content-Type': 'text/plain'
-    },
-    body: JSON.stringify(dataToSave)
-  })
-  .then(res => {
-    // 🔍 เช็ก HTTP Status ตรงนี้ก่อน (เช่น 200, 404, 500) ในขณะที่มันยังเป็น Response ดิบอยู่
-    console.log("รหัสตอบกลับจาก Google:", res.status, res.statusText);
-    
-    if (!res.ok) {
-      throw new Error(`เซิร์ฟเวอร์ตอบกลับด้วยรหัส: ${res.status}`);
+function upgradeStat(st){ 
+    if(S.sp<=0){ alert('ไม่มีแต้มสเตตัส'); return; } 
+    S.sp--; 
+    S[st]++; 
+    renderStats(); 
+    updateXpBar(); 
+    save(); 
+    document.getElementById('modal-sp-lbl').textContent=`${S.sp} สเตตัสพอยท์คงเหลือ`; 
+    showToast(`เพิ่ม ${st} เป็น ${S[st]}`); 
+}
+
+function switchTab(t){ 
+    document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active')); 
+    document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active')); 
+    const idx={quests:0,skills:1,career:2,vault:3,settings:4}[t]; 
+    if(idx!==undefined) document.querySelectorAll('.tab')[idx].classList.add('active'); 
+    if(t==='quests'){ 
+        document.getElementById('tab-quests').classList.add('active'); 
+        renderDailyTab(); 
+        renderCalendar(); 
+    } else if(t==='skills'){ 
+        document.getElementById('tab-skills').classList.add('active'); 
+        renderSkillTree(); 
+    } else if(t==='career'){ 
+        document.getElementById('tab-career').classList.add('active'); 
+        updateCareerDisplay(); 
+        renderIncomeLogs(); 
+        renderSocialChannels(); 
+    } else if(t==='vault'){ 
+        document.getElementById('tab-vault').classList.add('active'); 
+        renderDiaryLogs(); 
+        renderVaultItems(); 
+    } else if(t==='settings'){ 
+        // เพิ่มส่วนนี้เพื่อให้ tab settings ทำงาน
+        document.getElementById('tab-settings').classList.add('active'); 
+    } 
+}
+
+function openQuestManager(type){ 
+    activeManagerType=type; 
+    const modal=document.getElementById('qm-modal'); 
+    const title=document.getElementById('qm-modal-title'); 
+    const container=document.getElementById('qm-container'); 
+    let label='Daily Quests', db=DAILY_QUESTS; 
+    if(type==='weekly'){ label='Weekly Quests'; db=WEEKLY_QUESTS; } 
+    if(type==='monthly'){ label='Monthly Quests'; db=MONTHLY_QUESTS; } 
+    title.textContent=`จัดการแผนข้อมูล ${label}`; 
+    container.innerHTML=''; 
+    db.forEach((q,idx)=>{ appendQuestRow(q.id,q.text,q.xp,q.stat); }); 
+    modal.classList.add('show'); 
+}
+
+function appendQuestRow(id,text,xp,stat){ 
+    const container=document.getElementById('qm-container'); 
+    const row=document.createElement('div'); 
+    row.className='qm-row-item'; 
+    row.dataset.id=id; 
+    row.innerHTML=`<input type="text" class="qm-input qm-text-in" value="${text.replace(/"/g,'&quot;')}"><input type="number" class="qm-input qm-num-in" value="${xp}"><select class="qm-sel-in"><option value="CRE" ${stat==='CRE'?'selected':''}>CRE</option><option value="STR" ${stat==='STR'?'selected':''}>STR</option><option value="AGI" ${stat==='AGI'?'selected':''}>AGI</option><option value="INT" ${stat==='INT'?'selected':''}>INT</option><option value="VIT" ${stat==='VIT'?'selected':''}>VIT</option></select><button class="del-btn" onclick="this.parentElement.remove()">✕</button>`; 
+    container.appendChild(row); 
+}
+
+function addNewQuestRow(){ 
+    const prefix=activeManagerType.charAt(0); 
+    appendQuestRow(prefix+'_'+Date.now(),'',15,'CRE'); 
+}
+
+function saveQuestManager(){ 
+    const container=document.getElementById('qm-container'); 
+    const rows=container.querySelectorAll('.qm-row-item'); 
+    let newDb=[]; 
+    rows.forEach(r=>{ 
+        const id=r.dataset.id; 
+        const text=r.querySelector('.qm-text-in').value.trim(); 
+        const xp=parseInt(r.querySelector('.qm-num-in').value)||10; 
+        const stat=r.querySelector('.qm-sel-in').value; 
+        if(text) newDb.push({id,text,xp,stat}); 
+    }); 
+    if(newDb.length===0){ alert('กรุณาเหลือเควสไว้อย่างน้อย 1 รายการ'); return; } 
+    if(activeManagerType==='daily') DAILY_QUESTS=newDb; 
+    else if(activeManagerType==='weekly') WEEKLY_QUESTS=newDb; 
+    else MONTHLY_QUESTS=newDb; 
+    localStorage.setItem(`qm_db_${activeManagerType}`,JSON.stringify(newDb)); 
+    closeQuestManager(); 
+    renderDailyTab(); 
+    renderQuests(WEEKLY_QUESTS,null,'weekly-quests'); 
+    renderQuests(MONTHLY_QUESTS,null,'monthly-quests'); 
+    showToast('อัปเดตโครงสร้างรายการภารกิจสมบูรณ์'); 
+}
+
+function closeQuestManager(){ document.getElementById('qm-modal').classList.remove('show'); }
+
+function loadCustomQuestDbs(){ 
+    ['daily','weekly','monthly'].forEach(type=>{ 
+        const saved=localStorage.getItem(`qm_db_${type}`); 
+        if(saved){ 
+            const parsed=JSON.parse(saved); 
+            if(type==='daily') DAILY_QUESTS=parsed; 
+            else if(type==='weekly') WEEKLY_QUESTS=parsed; 
+            else MONTHLY_QUESTS=parsed; 
+        } 
+    }); 
+}
+
+// ========== Sync System ==========
+function setSyncStatus(state,msg){ 
+    const el=document.getElementById('sync-status'); 
+    if(!el) return;
+    el.className='sync-status '+state; 
+    el.textContent=msg; 
+}
+
+function trimLogs() {
+    const MAX_LOGS = 200;
+    if (S.artLogs && S.artLogs.length > MAX_LOGS) S.artLogs = S.artLogs.slice(0, MAX_LOGS);
+    if (S.fitLogs && S.fitLogs.length > MAX_LOGS) S.fitLogs = S.fitLogs.slice(0, MAX_LOGS);
+    if (S.diaryLogs && S.diaryLogs.length > MAX_LOGS) S.diaryLogs = S.diaryLogs.slice(0, MAX_LOGS);
+    if (S.incomeLogs && S.incomeLogs.length > MAX_LOGS) S.incomeLogs = S.incomeLogs.slice(0, MAX_LOGS);
+}
+
+// ========== Save / Load (IndexedDB + localStorage) ==========
+function save() {
+    dbSave(S).catch(err => console.error("IndexedDB save error:", err));
+    localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
+    quickSync(false);
+}
+
+async function load() {
+    try {
+        const d = await dbLoad();
+        if (d) {
+            Object.keys(d).forEach(k => { S[k] = d[k]; });
+        } else {
+            const localD = localStorage.getItem('dol_quest_log_v3');
+            if (localD) {
+                const p = JSON.parse(localD);
+                Object.keys(p).forEach(k => { S[k] = p[k]; });
+            }
+        }
+    } catch (e) {
+        console.error("IndexedDB load failed, using localStorage", e);
+        const localD = localStorage.getItem('dol_quest_log_v3');
+        if (localD) {
+            const p = JSON.parse(localD);
+            Object.keys(p).forEach(k => { S[k] = p[k]; });
+        }
     }
-    return res.json(); // แปลงเป็น JSON Object แค่ "ครั้งเดียว" ตรงนี้
-  })
-  .then(result => {
-    // 🎉 ข้อมูลที่แกะเสร็จแล้วจะวิ่งมาที่นี่อย่างปลอดภัย
-    console.log('บันทึกสำเร็จ:', result);
+    if(!S.savingGoals) S.savingGoals=[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}]; 
+    if(!S.vaultItems) S.vaultItems=[]; 
+    if(!S.socialChannels) S.socialChannels=[]; 
+}
+
+// ========== Quicksync (Optimized Cloud Sync) ==========
+function quickSync(isClosing = false) {
+    clearTimeout(syncTimeout);
     
-    // ดักส่องดูผลลัพธ์จาก Google Apps Script ในคอนโซล
-    if (result.status === 'success') {
-      console.log('Google บันทึกข้อมูลเรียบร้อย:', result.message);
+    const doSync = () => {
+        trimLogs();
+        const currentDataStr = JSON.stringify(S);
+        
+        if (currentDataStr === lastSyncedDataStr) return;
+        
+        if (!isClosing) setSyncStatus('loading', '⚡ Quick Syncing...');
+        
+        if (isClosing && navigator.sendBeacon) {
+            const blob = new Blob([currentDataStr], { type: 'text/plain' });
+            const success = navigator.sendBeacon(SCRIPT_URL, blob);
+            if (success) {
+                lastSyncedDataStr = currentDataStr;
+                console.log('✅ Beacon sent successfully on pagehide');
+            }
+            return;
+        }
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: currentDataStr
+        })
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+        })
+        .then(result => {
+            if (result.status === 'success') {
+                lastSyncedDataStr = currentDataStr;
+                if (!isClosing) setSyncStatus('ok', '☁ Synced ' + new Date().toLocaleTimeString('th-TH'));
+            } else {
+                console.error('Sync Error:', result.error);
+                if (!isClosing) setSyncStatus('err', 'Sync Failed');
+            }
+        })
+        .catch(err => {
+            console.error('QuickSync Network Error:', err);
+            if (!isClosing) setSyncStatus('err', 'Offline');
+        });
+    };
+
+    if (isClosing) {
+        doSync();
     } else {
-      console.error('Google ส่งเออร์เรอร์กลับมา:', result.error);
+        syncTimeout = setTimeout(doSync, 2000);
     }
-  })
-  .catch(error => {
-    console.error('เกิดข้อผิดพลาดในการ Fetch:', error);
-  });
 }
 
 async function manualLoad() {
-  const statusDiv = document.getElementById('sync-status');
-  statusDiv.className = 'sync-status loading';
-  statusDiv.textContent = 'กำลังโหลด...';
-  try {
-    const response = await fetch(SCRIPT_URL + '?action=load');
-    const data = await response.json();
-    if (data && typeof data === 'object') {
-      Object.keys(data).forEach(k => { S[k] = data[k]; });
-      if (!S.savingGoals) S.savingGoals = [{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}];
-      if (!S.vaultItems) S.vaultItems = [];
-      if (!S.socialChannels) S.socialChannels = [];
-      save();
-      checkDecay();
-      updateXpBar();
-      updateNodes();
-      renderStats();
-      renderHourLog('art');
-      renderHourLog('fit');
-      renderDailyTab();
-      renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
-      renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-      renderIncomeLogs();
-      renderDiaryLogs();
-      renderSocialChannels();
-      renderVaultItems();
-      renderSavingGoals();
-      statusDiv.className = 'sync-status ok';
-      statusDiv.textContent = '☁ Loaded ' + new Date().toLocaleTimeString('th-TH');
-      showToast('ดึงข้อมูลจากคลาวด์เสร็จสิ้น ✓');
-    } else {
-      throw new Error('ข้อมูลไม่ถูกต้อง');
+    const statusDiv = document.getElementById('sync-status');
+    statusDiv.className = 'sync-status loading';
+    statusDiv.textContent = 'กำลังโหลด...';
+    try {
+        const response = await fetch(SCRIPT_URL + '?action=load');
+        const data = await response.json();
+        if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+            Object.keys(data).forEach(k => { S[k] = data[k]; });
+            if(!S.savingGoals) S.savingGoals=[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}];
+            if(!S.vaultItems) S.vaultItems=[];
+            if(!S.socialChannels) S.socialChannels=[];
+            
+            lastSyncedDataStr = JSON.stringify(S);
+            save();
+            
+            checkDecay(); updateXpBar(); updateNodes(); renderStats();
+            renderHourLog('art'); renderHourLog('fit'); renderDailyTab();
+            renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+            renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+            renderIncomeLogs(); renderDiaryLogs(); renderSocialChannels();
+            renderVaultItems(); renderSavingGoals(); renderCalendar();
+            
+            statusDiv.className = 'sync-status ok';
+            statusDiv.textContent = '☁ Loaded ' + new Date().toLocaleTimeString('th-TH');
+            showToast('ดึงข้อมูลจากคลาวด์เสร็จสิ้น ✓');
+        } else {
+            throw new Error('ไม่พบข้อมูลบนคลาวด์');
+        }
+    } catch (err) {
+        console.error(err);
+        statusDiv.className = 'sync-status err';
+        statusDiv.textContent = 'ดาวน์โหลดล้มเหลว';
+        showToast('โหลดคลาวด์ล้มเหลว');
     }
-  } catch (err) {
-    console.error(err);
-    statusDiv.className = 'sync-status err';
-    statusDiv.textContent = 'ดาวน์โหลดล้มเหลว — ใช้ข้อมูลเดิม';
-    showToast('โหลดคลาวด์ล้มเหลว');
-  }
 }
-loadCustomQuestDbs(); load(); checkDecay(); updateTodayDisplay(); renderDailyTab(); renderQuests(WEEKLY_QUESTS,null,'weekly-quests'); renderQuests(MONTHLY_QUESTS,null,'monthly-quests'); renderStats(); updateXpBar(); updateNodes(); renderHourLog('art'); renderHourLog('fit'); renderCalendar(); renderSocialChannels(); renderVaultItems(); renderSavingGoals(); setInterval(manualSave,3*60*1000); window.addEventListener('pagehide',manualSave);
+
+// ========== Initialization ==========
+async function initApp() {
+    loadCustomQuestDbs(); 
+    await load(); 
+    
+    lastSyncedDataStr = JSON.stringify(S);
+
+    checkDecay(); updateTodayDisplay(); renderDailyTab(); 
+    renderQuests(WEEKLY_QUESTS,null,'weekly-quests'); 
+    renderQuests(MONTHLY_QUESTS,null,'monthly-quests'); 
+    renderStats(); updateXpBar(); updateNodes(); 
+    renderHourLog('art'); renderHourLog('fit'); renderCalendar(); 
+    renderSocialChannels(); renderVaultItems(); renderSavingGoals(); 
+    
+    setInterval(() => quickSync(false), 60 * 1000); 
+    window.addEventListener('pagehide', () => quickSync(true)); 
+}
+
+initApp();
 </script>
-</body>
-</html>

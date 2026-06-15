@@ -330,7 +330,7 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 <div class="toast" id="toast">บันทึกข้อมูลเรียบร้อย</div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwsi7OHIkAp5viAcZDll2jjDWVmQWfWxfDHQveMSO22dupDGpGuq7__znF3sH8Tcbw0ZQ/exec'; 
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymDUSFHhAhY9mRZf63W8Qd9ULJOSlgeJxe8dsYol8U-ZGI0XW0E0fgKO88L63KCElrjQ/exec'; 
 let DAILY_QUESTS = [ {id:'d1', text:'ฝึกวาดรูปศึกษาอนาโตมี่และคู่สีตรงข้ามสไตล์สีน้ำมันดิบ', xp:15, stat:'CRE'}, {id:'d2', text:'ฝึกซ้อมพลังเสียงและไดนามิกการร้องเพลงสไตล์ดิบดุดันแบบ Ado', xp:15, stat:'AGI'}, {id:'d3', text:'Weight Training หรือเวทเทรนนิ่งเพื่อเพิ่มความแข็งแกร่งกล้ามเนื้อแกนกลาง', xp:20, stat:'STR'}, {id:'d4', text:'Cardio ขี่จักรยาน หรือวิ่งโซน 2 เพื่อเพิ่มความฟิตและปอดในการร้องเพลง', xp:20, stat:'VIT'}, {id:'d5', text:'อัปเดตไอเดียสตอรี่บอร์ดงานอาร์ตลงคลังสมุดบันทึกส่วนตัว', xp:10, stat:'INT'} ];
 let WEEKLY_QUESTS = [ {id:'w1', text:'ตัดต่อและโพสต์วิดีโอ Speedpainting หรือคลิปร้องเพลงสั้นลง TikTok', xp:40, stat:'CRE'}, {id:'w2', text:'เขียนเนื้อร้อง/ทำนองเพลงเดโม่ หรือทบทวนทฤษฎีดนตรีเพื่อต่อยอดไอเดีย', xp:50, stat:'INT'}, {id:'w3', text:'ออกกำลังกายสะสมครบ 3 วันในรอบสัปดาห์เพื่อชะล้างสถานะค่าพลังลดถอย', xp:40, stat:'VIT'} ];
 let MONTHLY_QUESTS = [ {id:'m1', text:'วาดงานอาร์ตชิ้นใหญ่หรือส่งมอบคอมมิชชันปิดจ๊อบสมบูรณ์แบบสะสมให้ได้ครบ 6 รูป', xp:150, stat:'CRE'}, {id:'m2', text:'สร้างรายได้หล่อเลี้ยงชีพจากทักษะความรู้ความเชี่ยวชาญแตะเป้าหมาย 15,000 THB', xp:200, stat:'STR'} ];
@@ -412,28 +412,35 @@ function loadCustomQuestDbs(){ ['daily','weekly','monthly'].forEach(type=>{ cons
 function jsonp(url,callback){ const callbackName='jsonp_cb_'+Math.round(100000*Math.random()); window[callbackName]=function(data){ delete window[callbackName]; document.body.removeChild(script); callback(null,data); }; const script=document.createElement('script'); script.src=url+(url.indexOf('?')>=0?'&':'?')+'callback='+callbackName; script.onerror=function(){ callback(new Error('เชื่อมต่อล้มเหลว')); }; document.body.appendChild(script); }
 function setSyncStatus(state,msg){ const el=document.getElementById('sync-status'); el.className='sync-status '+state; el.textContent=msg; }
 function manualSave(dataToSave) {
-  // ต้องเป็น URL ที่ได้จากการ Deploy แบบ New Deployment ล่าสุด (ต้องลงท้ายด้วย /exec เท่านั้น)
-  const url = 'https://script.google.com/macros/s/AKfycbwsi7OHIkAp5viAcZDll2jjDWVmQWfWxfDHQveMSO22dupDGpGuq7__znF3sH8Tcbw0ZQ/exec';
+  const url = 'URL_ของ_GOOGLE_APPS_SCRIPT_ตัวล่าสุดของคุณ';
 
   fetch(url, {
     method: 'POST',
-    // 💡 ข้อสำคัญ 1: ส่งแบบ text/plain เพื่อเลี่ยงการตรวจ Preflight (OPTIONS) ของเบราว์เซอร์
+    // 💡 ส่งแบบ Plain Text ชัด ๆ เพื่อตัดปัญหา CORS และช่วยให้ e.postData.contents ฝั่ง Google ไม่เป็น undefined
     headers: {
-      'Content-Type': 'text/plain' // อันนี้ดีอยู่แล้ว ห้ามเปลี่ยนกลับเป็น application/json นะครับ 
+      'Content-Type': 'text/plain'
     },
     body: JSON.stringify(dataToSave)
   })
-  .then(response => {
-    // 💡 เพิ่มบรรทัดนี้เพื่อแอบส่องดูว่า Google ตอบกลับด้วยเลขอะไรมา
-    console.log("รหัสตอบกลับจาก Google:", response.status, response.statusText);
+  .then(res => {
+    // 🔍 เช็ก HTTP Status ตรงนี้ก่อน (เช่น 200, 404, 500) ในขณะที่มันยังเป็น Response ดิบอยู่
+    console.log("รหัสตอบกลับจาก Google:", res.status, res.statusText);
     
-    if (!response.ok) {
-      throw new Error(`เซิร์ฟเวอร์ตอบกลับด้วยรหัส: ${response.status}`);
+    if (!res.ok) {
+      throw new Error(`เซิร์ฟเวอร์ตอบกลับด้วยรหัส: ${res.status}`);
     }
-    return response.json();
+    return res.json(); // แปลงเป็น JSON Object แค่ "ครั้งเดียว" ตรงนี้
   })
   .then(result => {
-    console.log('บันทึกสำเร็จ:', result);// ถ้าสำเร็จ มันจะวิ่งเข้าบรรทัดนี้เลย!
+    // 🎉 ข้อมูลที่แกะเสร็จแล้วจะวิ่งมาที่นี่อย่างปลอดภัย
+    console.log('บันทึกสำเร็จ:', result);
+    
+    // ดักส่องดูผลลัพธ์จาก Google Apps Script ในคอนโซล
+    if (result.status === 'success') {
+      console.log('Google บันทึกข้อมูลเรียบร้อย:', result.message);
+    } else {
+      console.error('Google ส่งเออร์เรอร์กลับมา:', result.error);
+    }
   })
   .catch(error => {
     console.error('เกิดข้อผิดพลาดในการ Fetch:', error);

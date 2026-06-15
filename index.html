@@ -424,8 +424,11 @@ function manualSave(dataToSave) {
     body: JSON.stringify(dataToSave)
   })
   .then(response => {
+    // 💡 เพิ่มบรรทัดนี้เพื่อแอบส่องดูว่า Google ตอบกลับด้วยเลขอะไรมา
+    console.log("รหัสตอบกลับจาก Google:", response.status, response.statusText);
+    
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(`เซิร์ฟเวอร์ตอบกลับด้วยรหัส: ${response.status}`);
     }
     return response.json();
   })

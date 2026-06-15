@@ -68,7 +68,7 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 .del-btn{background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;padding:0 3px;}
 .tabs{display:flex;gap:3px;margin-bottom:14px;background:var(--surface);padding:4px;border-radius:10px;overflow-x:auto;}
 .tab{flex-shrink:0;text-align:center;padding:7px 8px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);transition:all .2s;white-space:nowrap;}
-.tab.active{background:var(--accent2);color:white;}
+.tab.active{background:#392547;color:#c8a96e;}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
 .sec-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
@@ -232,7 +232,7 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
   </div>
 </div>
 <div class="decay-alert" id="decay-alert">⚠️ ตื่นเถิดผู้กล้า! พลังกล้ามเนื้อ (VIT/STR/AGI) ของคุณเริ่มลดถอยลงตามกาลเวลาแล้ว กรุณาออกกำลังกายเพื่อฟื้นฟูฟิตเนสสเตตัส!</div>
-<div class="sync-bar"><div class="sync-status ok" id="sync-status">☁ Ready</div><div class="sync-actions"><button class="btn-s btn-art" onclick="manualSave()">Save</button><button class="btn-s btn-fit" onclick="manualLoad()">Load</button></div></div>
+<div class="sync-bar"><div class="sync-status ok" id="sync-status">☁ Ready</div><div class="sync-actions"><button class="btn-s btn-art" onclick="quickSync(true)">Save</button><button class="btn-s btn-fit" onclick="quickSync(true)">Load</button></div></div>
 
 <div class="status-section">
   <div class="section-hdr"><div class="section-ttl">Character Status</div><div class="sp-badge" id="sp-badge" onclick="openStatModal()">0 SP AVAILABLE</div></div>

@@ -395,8 +395,27 @@ async function resetAllData() {
         localStorage.removeItem('qm_db_weekly');
         localStorage.removeItem('qm_db_monthly');
 
-        // 3. รีเซ็ตตัวแปร S กลับเป็นค่าเริ่มต้น
-        S = { xp:0, lvl:1, sp:0, STR:10, AGI:10, INT:10, VIT:10, CRE:10, artHours:0, fitHours:0, artDays:0, artLogs:[], fitLogs:[], incomeLogs:[], diaryLogs:[], history:{}, followers:{}, lastFitDate:null, goalIncome:15000, goalJobs:6, savingGoals:[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}], vaultItems:[], socialChannels:[{id:"tk", name:"TikTok (EATLAEWSHOP)", subs:0, vids:0},{id:"yt", name:"YouTube Artist Channel", subs:0, vids:0}] };
+        // 3. รีเซ็ตตัวแปร S กลับเป็นค่าเริ่มต้น (Patch v4)
+        S = { 
+            xp: 0, lvl: 1, sp: 0, 
+            STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10, 
+            artHours: 0, fitHours: 0, artDays: 0, 
+            artLogs: [], fitLogs: [], incomeLogs: [], diaryLogs: [], 
+            currency: { chaos: 0, exalted: 0, divine: 0 },
+            skillPoints: 0,
+            skillTree: {},
+            ascendancyPoints: 0,
+            streakDays: 0,
+            atlasProgress: {},
+            history: {}, followers: {}, lastFitDate: null, 
+            goalIncome: 15000, goalJobs: 6, 
+            savingGoals: [{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}], 
+            vaultItems: [], 
+            socialChannels: [
+                {id:"tk", name:"TikTok (EATLAEWSHOP)", subs:0, vids:0},
+                {id:"yt", name:"YouTube Artist Channel", subs:0, vids:0}
+            ] 
+        };
         lastSyncedDataStr = JSON.stringify(S);
         
         // 4. บันทึกค่าเริ่มต้นและรีโหลดหน้าเว็บ
@@ -422,7 +441,87 @@ const FIT_RANKS = [{min:0, name:'Untrained'},{min:50, name:'Athletic Novice'},{m
 
 const SKILL_TREE = [{id:'a1', lane:'art', name:'สีน้ำมันเบื้องต้น (Oil Texture Master)', desc:'เข้าใจเทคนิคการลงน้ำหนักและเนื้อสีหยาบเพื่อสร้างความลึกของมิติภาพ', reqType:'art', reqVal:10, reward:'ปลดล็อกการสร้างสรรค์ผลงานธีมทุ่งนาและพอร์ตเทรตอารมณ์', size:'small'},{id:'a2', lane:'art', name:'ผู้พิทักษ์บุปผชาติ (Floral Composition)', desc:'เชี่ยวชาญการจัดองค์ประกอบภาพวาดตระกูลดอกไม้เพื่อสร้างรายได้หลัก', reqType:'art', reqVal:35, reward:'เพิ่มความน่าดึงดูดของงานคอมมิชชัน +15%', size:'medium'},{id:'a3', lane:'art', name:'มหาศิลปินดิจิทัลอาร์ต (Concept Illustrator)', desc:'หลอมรวมแปรงสีน้ำมันเข้ากับ Clip Studio Paint PRO อย่างไร้รอยต่อ', reqType:'art', reqVal:100, reward:'ปลดล็อกคลังภาพซีรีส์ใหญ่ "The Weight of Unfinished Colours"', size:'large'},{id:'f1', lane:'fit', name:'ปอดเหล็กคอนโทรล (Vocal Core)', desc:'ฝึกการคุมลมหายใจจากกะบังลมเพื่อให้ร้องเพลงเสียงสูงพุ่งทะยานได้ไม่ตก', reqType:'fit', reqVal:10, reward:'VIT +3, ร้องเพลงต่อเนื่องได้ยาวนานโดยไม่เหนื่อยล้า', size:'small'},{id:'f2', lane:'fit', name:'แกนกลางเหล็กไหล (Fullbody Endurance)', desc:'ความแข็งแกร่งของแกนกลางลำตัวเพื่อซัพพอร์ตการยืนร้องเพลงและการคุมพู่กันยาว', reqType:'fit', reqVal:40, reward:'STR +5, ลดโอกาสการเกิดอาการออฟฟิศซินโดรม', size:'medium'},{id:'f3', lane:'fit', name:'นักแต่งเพลงผู้สร้างคลื่นเสียง (Melody Songwriter)', desc:'ความสามารถในการแต่งเนื้อร้องทำนองให้มีจิตวิญญาณดุดันแบบขบถและกินใจผู้ฟัง', reqType:'fit', reqVal:120, reward:'INT +6, CRE +6, สามารถผลิตมิวสิกวิดีโอสมบูรณ์แบบชิ้นแรก', size:'large'}];
 
-let S = { xp:0, lvl:1, sp:0, STR:10, AGI:10, INT:10, VIT:10, CRE:10, artHours:0, fitHours:0, artDays:0, artLogs:[], fitLogs:[], incomeLogs:[], diaryLogs:[], history:{}, followers:{}, lastFitDate:null, goalIncome:15000, goalJobs:6, savingGoals:[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}], vaultItems:[{id:"v1", name:"The Weight of Unfinished Colours (First Glance)", progress:40, detail:"ตัวละคร: Don กำลังลงรายละเอียดแสงเงาสีน้ำมันดิบโทนดาร์ก"}], socialChannels:[{id:"tk", name:"TikTok (EATLAEWSHOP)", subs:0, vids:0},{id:"yt", name:"YouTube Artist Channel", subs:0, vids:0}] };
+// ==========================================
+// PATCH v4: Data Structure & Migration
+// ==========================================
+
+// 1. อัปเดต Object S หลัก
+let S = { 
+    // === Character Core ===
+    xp: 0, lvl: 1, sp: 0, 
+    STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10, 
+    
+    // === Dimensions ===
+    artHours: 0, fitHours: 0, artDays: 0, 
+    artLogs: [], fitLogs: [], incomeLogs: [], diaryLogs: [], 
+    
+    // === NEW: PoE Economy (Patch v4) ===
+    currency: { chaos: 0, exalted: 0, divine: 0 },
+    skillPoints: 0,
+    skillTree: {},  // { nodeId: true } — O(1) lookup
+    ascendancyPoints: 0,
+    streakDays: 0,
+    atlasProgress: {},  // { goalId: { currentXP: 0, requiredXP: 1000 } }
+    
+    // === Legacy Fields ===
+    history: {}, followers: {}, lastFitDate: null, 
+    goalIncome: 15000, goalJobs: 6, 
+    savingGoals: [{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}], 
+    vaultItems: [], 
+    socialChannels: [
+        {id:"tk", name:"TikTok (EATLAEWSHOP)", subs:0, vids:0},
+        {id:"yt", name:"YouTube Artist Channel", subs:0, vids:0}
+    ] 
+};
+
+// 2. ฟังก์ชัน Migration (ป้องกันข้อมูลเก่าหาย)
+function migrateData(oldS) {
+    return {
+        // Core
+        xp: oldS?.xp ?? 0,
+        lvl: oldS?.lvl ?? 1,
+        sp: oldS?.sp ?? 0,
+        STR: oldS?.STR ?? 10,
+        AGI: oldS?.AGI ?? 10,
+        INT: oldS?.INT ?? 10,
+        VIT: oldS?.VIT ?? 10,
+        CRE: oldS?.CRE ?? 10,
+        
+        // Dimensions
+        artHours: oldS?.artHours ?? 0,
+        fitHours: oldS?.fitHours ?? 0,
+        artDays: oldS?.artDays ?? 0,
+        artLogs: oldS?.artLogs ?? [],
+        fitLogs: oldS?.fitLogs ?? [],
+        incomeLogs: oldS?.incomeLogs ?? [],
+        diaryLogs: oldS?.diaryLogs ?? [],
+        
+        // NEW: PoE Economy (รองรับทั้งชื่อเก่า 'orbs' และใหม่ 'currency')
+        currency: {
+            chaos: oldS?.currency?.chaos ?? oldS?.orbs?.chaos ?? 0,
+            exalted: oldS?.currency?.exalted ?? oldS?.orbs?.exalted ?? 0,
+            divine: oldS?.currency?.divine ?? oldS?.orbs?.divine ?? 0
+        },
+        skillPoints: oldS?.skillPoints ?? 0,
+        skillTree: oldS?.skillTree ?? {},
+        ascendancyPoints: oldS?.ascendancyPoints ?? 0,
+        streakDays: oldS?.streakDays ?? 0,
+        atlasProgress: oldS?.atlasProgress ?? {},
+        
+        // Legacy
+        history: oldS?.history ?? {},
+        followers: oldS?.followers ?? {},
+        lastFitDate: oldS?.lastFitDate ?? null,
+        goalIncome: oldS?.goalIncome ?? 15000,
+        goalJobs: oldS?.goalJobs ?? 6,
+        savingGoals: oldS?.savingGoals ?? [{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}],
+        vaultItems: oldS?.vaultItems ?? [],
+        socialChannels: oldS?.socialChannels ?? [
+            {id:"tk", name:"TikTok (EATLAEWSHOP)", subs:0, vids:0},
+            {id:"yt", name:"YouTube Artist Channel", subs:0, vids:0}
+        ]
+    };
+}
 
 let selectedDateKey=null, currentYear=2026, currentMonth=5, activeManagerType='daily';
 let lastSyncedDataStr = ''; // สำหรับ Quicksync
@@ -1385,6 +1484,41 @@ async function manualLoad() {
         statusDiv.textContent = 'ดาวน์โหลดล้มเหลว';
         showToast('โหลดคลาวด์ล้มเหลว');
     }
+}
+// ==========================================
+// PATCH v4: Currency Helper Functions
+// ==========================================
+
+function addCurrency(type, amount) {
+    if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+    if (!['chaos', 'exalted', 'divine'].includes(type)) {
+        console.error('Invalid currency type:', type);
+        return;
+    }
+    S.currency[type] = (S.currency[type] ?? 0) + amount;
+    save(); // ✅ กฎข้อ 3: ใช้ save()
+    updateCurrencyDisplay();
+}
+
+function useCurrency(type, amount) {
+    if (!S.currency?.[type] || S.currency[type] < amount) {
+        showToast(`❌ มี ${type} orb ไม่พอ!`);
+        return false;
+    }
+    S.currency[type] -= amount;
+    save(); // ✅ กฎข้อ 3: ใช้ save()
+    updateCurrencyDisplay();
+    return true;
+}
+
+function updateCurrencyDisplay() {
+    const chaosEl = document.getElementById('currency-chaos');
+    const exaltedEl = document.getElementById('currency-exalted');
+    const divineEl = document.getElementById('currency-divine');
+    
+    if (chaosEl) chaosEl.textContent = S.currency?.chaos ?? 0;
+    if (exaltedEl) exaltedEl.textContent = S.currency?.exalted ?? 0;
+    if (divineEl) divineEl.textContent = S.currency?.divine ?? 0;
 }
 
 // ========== Initialization ==========

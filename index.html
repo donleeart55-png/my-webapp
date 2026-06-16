@@ -527,6 +527,83 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
     color: white;
     border-style: solid;
 }
+/* ==========================================
+   PATCH v3: Passive Skill Tree (Simple)
+   ========================================== */
+.skill-tree-container {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 10px;
+}
+.skill-tree-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+}
+.sp-display { display: flex; align-items: center; gap: 12px; }
+.sp-label { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--muted); }
+.sp-value { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; color: var(--gold); }
+.btn-reset-skills {
+    background: rgba(224, 92, 92, 0.15); border: 1px solid var(--red); color: var(--red);
+    padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: 'Space Mono', monospace;
+    font-size: 11px; transition: all 0.3s;
+}
+.btn-reset-skills:hover { background: var(--red); color: white; }
+.skill-tree-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+.skill-branch {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px;
+}
+.skill-branch.art { border-top: 3px solid var(--accent); }
+.skill-branch.body { border-top: 3px solid #e05c8a; }
+.skill-branch.mind { border-top: 3px solid var(--accent2); }
+.branch-header { text-align: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.branch-icon { font-size: 32px; margin-bottom: 6px; }
+.branch-name { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.branch-stats { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); }
+.skill-branch.art .branch-name { color: var(--accent); }
+.skill-branch.body .branch-name { color: #e05c8a; }
+.skill-branch.mind .branch-name { color: var(--accent2); }
+.branch-nodes { display: flex; flex-direction: column; gap: 12px; }
+.skill-node {
+    background: var(--surface); border: 2px solid var(--border); border-radius: 8px;
+    padding: 12px; cursor: pointer; transition: all 0.3s; position: relative;
+}
+.skill-node:hover:not(.locked) { transform: translateY(-2px); }
+.skill-node.locked { opacity: 0.4; cursor: not-allowed; }
+.skill-node.available {
+    border-color: var(--gold); box-shadow: 0 0 15px rgba(240, 192, 64, 0.3);
+    animation: nodePulse 2s infinite;
+}
+.skill-node.unlocked { border-color: var(--green); background: rgba(78, 203, 113, 0.1); }
+@keyframes nodePulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(240, 192, 64, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(240, 192, 64, 0.6); }
+}
+.node-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.node-name { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text); }
+.skill-node.unlocked .node-name { color: var(--green); }
+.skill-node.available .node-name { color: var(--gold); }
+.node-cost {
+    font-family: 'Space Mono', monospace; font-size: 9px; padding: 2px 6px;
+    border-radius: 4px; background: var(--surface2); color: var(--muted);
+}
+.skill-node.available .node-cost { background: var(--gold); color: #0a0a0a; }
+.node-desc { font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+.node-bonus {
+    font-family: 'Space Mono', monospace; font-size: 9px; color: var(--accent);
+    background: rgba(200, 169, 110, 0.1); padding: 3px 6px; border-radius: 4px; display: inline-block;
+}
+.node-connector { width: 2px; height: 12px; background: var(--border); margin: -6px auto 0; }
+.skill-branch.art .node-connector { background: var(--accent); }
+.skill-branch.body .node-connector { background: #e05c8a; }
+.skill-branch.mind .node-connector { background: var(--accent2); }
+
 </style>
 </head>
 <body>
@@ -603,10 +680,47 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
   <div class="cal-wrap"><div class="cal-nav"><button class="cal-nav-btn" onclick="changeMonth(-1)">◀</button><div class="cal-month-lbl" id="cal-month-lbl">JUNE 2026</div><button class="cal-nav-btn" onclick="changeMonth(1)">▶</button></div><div class="cal-weekdays"><div class="cal-wd">อา</div><div class="cal-wd">จ</div><div class="cal-wd">อ</div><div class="cal-wd">พ</div><div class="cal-wd">พฤ</div><div class="cal-wd">ศ</div><div class="cal-wd">ส</div></div><div class="cal-grid" id="cal-grid"></div></div>
 </div>
 
-<div class="tab-content" id="tab-skills">
-  <div class="tree-lane"><div class="tree-lane-hdr"><div class="tree-lane-ttl" style="color:var(--gold);">สายงานศิลป์และงานภาพ (Art Dimension)</div><div class="tree-lane-line"></div></div><div id="art-tree-nodes"></div></div>
-  <div class="tree-lane"><div class="tree-lane-hdr"><div class="tree-lane-ttl" style="color:#e05c8a;">สายพลังกายภาพและดนตรี (Fitness & Voice)</div><div class="tree-lane-line"></div></div><div id="fit-tree-nodes"></div></div>
-  <div class="tree-lane"><div class="tree-lane-hdr"><div class="tree-lane-ttl" style="color:#f0abfc;">ความรู้ผสานมิติ (Cross-Dimension Synthesis)</div><div class="tree-lane-line"></div></div><div class="cross-node" id="cross-node-1"><div class="cross-title">Multidisciplinary Director (ระดับตำนาน)</div><div class="cross-req">ต้องการ: ศิลปินน้ำมันผู้เชี่ยวชาญ (Art 50h) และ นักร้องนำผู้ทรงพลัง (Fit 50h)</div><div class="t-reward" style="margin-top:4px;">รางวัลยามปลดล็อก: เพิ่มค่าสร้างสรรค์ CRE +20, ได้รับสิทธิ์ในการทำวิดีโอแอนิเมชันประกอบเพลงของตนเองอย่างสมบูรณ์แบบ</div></div></div>
+<!-- Passive Skill Tree Container -->
+<div class="skill-tree-container">
+    <div class="skill-tree-header">
+        <div class="sp-display">
+            <span class="sp-label">Skill Points Available:</span>
+            <span class="sp-value" id="sp-value-display">0</span>
+        </div>
+        <button class="btn-reset-skills" onclick="resetSkillTree()">🔄 Reset All</button>
+    </div>
+    
+    <div class="skill-tree-grid">
+        <!-- Art Branch -->
+        <div class="skill-branch art">
+            <div class="branch-header">
+                <div class="branch-icon">🎨</div>
+                <div class="branch-name">Art Dimension</div>
+                <div class="branch-stats">CRE + INT</div>
+            </div>
+            <div class="branch-nodes" id="art-nodes"></div>
+        </div>
+        
+        <!-- Body Branch -->
+        <div class="skill-branch body">
+            <div class="branch-header">
+                <div class="branch-icon">💪</div>
+                <div class="branch-name">Body & Voice</div>
+                <div class="branch-stats">STR + VIT</div>
+            </div>
+            <div class="branch-nodes" id="body-nodes"></div>
+        </div>
+        
+        <!-- Mind Branch -->
+        <div class="skill-branch mind">
+            <div class="branch-header">
+                <div class="branch-icon">🧠</div>
+                <div class="branch-name">Mind & Knowledge</div>
+                <div class="branch-stats">INT + AGI</div>
+            </div>
+            <div class="branch-nodes" id="mind-nodes"></div>
+        </div>
+    </div>
 </div>
 
 <div class="tab-content" id="tab-career">
@@ -766,9 +880,32 @@ let S = {
     currency: { chaos: 0, exalted: 0, divine: 0 },
     skillPoints: 0,
     skillTree: {},  // { nodeId: true } — O(1) lookup
+    // เพิ่มใน Object S (ต่อจาก skillTree)
+skillTreeNodes: {
+    // Origin Node
+    'origin': { id: 'origin', name: "The Exile's Birth", desc: 'จุดเริ่มต้นการเดินทาง', unlocked: true, cost: 0, branch: 'origin' },
+    
+    // Art Branch (CRE-INT)
+    'art1': { id: 'art1', name: 'Creative Spark', desc: 'CRE +2', cost: 1, branch: 'art', req: ['origin'], bonus: { CRE: 2 } },
+    'art2': { id: 'art2', name: 'Artistic Vision', desc: 'INT +2', cost: 1, branch: 'art', req: ['art1'], bonus: { INT: 2 } },
+    'art3': { id: 'art3', name: 'Oil Painter Soul', desc: 'CRE +3, +10% Art XP', cost: 2, branch: 'art', req: ['art2'], bonus: { CRE: 3 }, special: 'art_xp_10' },
+    
+    // Body Branch (STR-VIT)
+    'body1': { id: 'body1', name: 'Physical Power', desc: 'STR +2', cost: 1, branch: 'body', req: ['origin'], bonus: { STR: 2 } },
+    'body2': { id: 'body2', name: 'Vitality Boost', desc: 'VIT +2', cost: 1, branch: 'body', req: ['body1'], bonus: { VIT: 2 } },
+    'body3': { id: 'body3', name: 'Iron Voice', desc: 'VIT +3, AGI +2', cost: 2, branch: 'body', req: ['body2'], bonus: { VIT: 3, AGI: 2 } },
+    
+    // Mind Branch (INT-AGI)
+    'mind1': { id: 'mind1', name: 'Mental Clarity', desc: 'INT +2', cost: 1, branch: 'mind', req: ['origin'], bonus: { INT: 2 } },
+    'mind2': { id: 'mind2', name: 'Agile Mind', desc: 'AGI +2', cost: 1, branch: 'mind', req: ['mind1'], bonus: { AGI: 2 } },
+    'mind3': { id: 'mind3', name: 'Cross-Dimensional', desc: 'INT +3, +5% All XP', cost: 2, branch: 'mind', req: ['mind2'], bonus: { INT: 3 }, special: 'all_xp_5' }
+},
+allocatedSkills: [],  // ['art1', 'body2', ...]
     ascendancyPoints: 0,
     streakDays: 0,
     atlasProgress: {},  // { goalId: { currentXP: 0, requiredXP: 1000 } }
+    // เพิ่มใน Object S
+allocatedSkills: [],  // เก็บ ID ของ Node ที่ปลดล็อกแล้ว เช่น ['art1', 'body2']
     dailyQuests: [
     {
         id: 'dq1',
@@ -996,6 +1133,7 @@ function renderStats(){
     ['STR','AGI','INT','VIT','CRE'].forEach(st=>{ 
         document.getElementById(`val-${st}`).textContent=S[st]; 
         document.getElementById(`bar-${st}`).style.width=Math.min((S[st]/100)*100,100)+'%'; 
+        renderSkillTree();  // อัปเดต SP display
     }); 
 }
 
@@ -1943,6 +2081,337 @@ function updateCurrencyDisplay() {
     if (chaosEl) chaosEl.textContent = S.currency?.chaos ?? 0;
     if (exaltedEl) exaltedEl.textContent = S.currency?.exalted ?? 0;
     if (divineEl) divineEl.textContent = S.currency?.divine ?? 0;
+}
+// ==========================================
+// PATCH v3: Passive Skill Tree Functions
+// ==========================================
+// ข้อมูล Node แบบ Hardcode (Simple Version)
+const SKILL_TREE_NODES = {
+    // Origin
+    'origin': { id: 'origin', name: "The Exile's Birth", desc: 'จุดเริ่มต้น', cost: 0, branch: 'origin', req: [], bonus: {} },
+    
+    // Art Branch
+    'art1': { id: 'art1', name: 'Creative Spark', desc: 'CRE +2', cost: 1, branch: 'art', req: ['origin'], bonus: { CRE: 2 } },
+    'art2': { id: 'art2', name: 'Artistic Vision', desc: 'INT +2', cost: 1, branch: 'art', req: ['art1'], bonus: { INT: 2 } },
+    'art3': { id: 'art3', name: 'Oil Painter Soul', desc: 'CRE +3', cost: 2, branch: 'art', req: ['art2'], bonus: { CRE: 3 } },
+    
+    // Body Branch
+    'body1': { id: 'body1', name: 'Physical Power', desc: 'STR +2', cost: 1, branch: 'body', req: ['origin'], bonus: { STR: 2 } },
+    'body2': { id: 'body2', name: 'Vitality Boost', desc: 'VIT +2', cost: 1, branch: 'body', req: ['body1'], bonus: { VIT: 2 } },
+    'body3': { id: 'body3', name: 'Iron Voice', desc: 'VIT +3, AGI +2', cost: 2, branch: 'body', req: ['body2'], bonus: { VIT: 3, AGI: 2 } },
+    
+    // Mind Branch
+    'mind1': { id: 'mind1', name: 'Mental Clarity', desc: 'INT +2', cost: 1, branch: 'mind', req: ['origin'], bonus: { INT: 2 } },
+    'mind2': { id: 'mind2', name: 'Agile Mind', desc: 'AGI +2', cost: 1, branch: 'mind', req: ['mind1'], bonus: { AGI: 2 } },
+    'mind3': { id: 'mind3', name: 'Cross-Dimensional', desc: 'INT +3', cost: 2, branch: 'mind', req: ['mind2'], bonus: { INT: 3 } }
+};
+function renderSkillTree() {
+    const spValue = document.getElementById('sp-value');
+    if (spValue) spValue.textContent = S.skillPoints || 0;
+    
+    // Render แต่ละ branch
+    renderBranch('art');
+    renderBranch('body');
+    renderBranch('mind');
+}
+
+function renderBranch(branchName) {
+    const container = document.getElementById(`${branchName}-nodes`);
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    // หา nodes ของ branch นี้
+    const branchNodes = Object.values(S.skillTreeNodes || {}).filter(n => n.branch === branchName);
+    
+    branchNodes.forEach((node, index) => {
+        const isUnlocked = S.allocatedSkills?.includes(node.id);
+        const isAvailable = isNodeAvailable(node);
+        const nodeEl = document.createElement('div');
+        
+        // Connector (ยกเว้น node แรก)
+        if (index > 0) {
+            const connector = document.createElement('div');
+            connector.className = 'node-connector';
+            container.appendChild(connector);
+        }
+        
+        nodeEl.className = `skill-node ${isUnlocked ? 'unlocked' : isAvailable ? 'available' : 'locked'}`;
+        nodeEl.innerHTML = `
+            <div class="node-header">
+                <div class="node-name">${node.name}</div>
+                <div class="node-cost">${node.cost} SP</div>
+            </div>
+            <div class="node-desc">${node.desc}</div>
+            ${node.bonus ? `<div class="node-bonus">${formatBonus(node.bonus)}</div>` : ''}
+        `;
+        
+        if (isAvailable && !isUnlocked) {
+            nodeEl.onclick = () => allocateSkill(node.id);
+        }
+        
+        // Hover tooltip
+        nodeEl.onmouseenter = (e) => showNodeTooltip(e, node);
+        nodeEl.onmouseleave = hideNodeTooltip;
+        
+        container.appendChild(nodeEl);
+    });
+}
+
+function isNodeAvailable(node) {
+    // เช็คว่ามี SP พอไหม
+    if ((S.skillPoints || 0) < node.cost) return false;
+    
+    // เช็คว่า unlock แล้วหรือยัง
+    if (S.allocatedSkills?.includes(node.id)) return false;
+    
+    // เช็คว่า prerequisite unlock แล้วหรือยัง
+    if (node.req && node.req.length > 0) {
+        return node.req.every(reqId => S.allocatedSkills?.includes(reqId));
+    }
+    
+    // Origin node หรือไม่มี requirement
+    return true;
+}
+
+function allocateSkill(nodeId) {
+    const node = S.skillTreeNodes?.[nodeId];
+    if (!node) return;
+    
+    // ตรวจสอบอีกครั้ง
+    if ((S.skillPoints || 0) < node.cost) {
+        showToast('❌ ไม่พอ Skill Points!');
+        return;
+    }
+    
+    // ลด SP
+    S.skillPoints -= node.cost;
+    
+    // เพิ่มใน allocatedSkills
+    if (!S.allocatedSkills) S.allocatedSkills = [];
+    S.allocatedSkills.push(nodeId);
+    
+    // เพิ่ม Stats bonus
+    if (node.bonus) {
+        Object.entries(node.bonus).forEach(([stat, value]) => {
+            S[stat] = (S[stat] || 10) + value;
+        });
+    }
+    
+    // Special effects
+    if (node.special === 'art_xp_10') {
+        showToast('🎨 ปลดล็อก: +10% Art XP!');
+    } else if (node.special === 'all_xp_5') {
+        showToast('🧠 ปลดล็อก: +5% All XP!');
+    }
+    
+    save();
+    renderSkillTree();
+    renderStats();
+    showToast(`✅ ปลดล็อก: ${node.name}!`);
+}
+
+function resetSkillTree() {
+    if (!confirm('⚠️ ต้องการรีเซ็ต Skill Tree ทั้งหมด?\nคุณจะได้ Skill Points กลับคืนมา')) {
+        return;
+    }
+    
+    // คำนวณ SP ที่จะได้รับคืน
+    let totalSP = 0;
+    (S.allocatedSkills || []).forEach(skillId => {
+        const node = S.skillTreeNodes?.[skillId];
+        if (node) totalSP += node.cost;
+    });
+    
+    // รีเซ็ต
+    S.allocatedSkills = [];
+    S.skillPoints = (S.skillPoints || 0) + totalSP;
+    
+    // รีเซ็ต Stats ที่เพิ่มจาก skill tree (แบบง่าย - รีเซ็ตทั้งหมดแล้วคำนวณใหม่)
+    S.STR = 10;
+    S.AGI = 10;
+    S.INT = 10;
+    S.VIT = 10;
+    S.CRE = 10;
+    
+    // คำนวณ Stats ใหม่จาก skills ที่ allocate (ตอนนี้ไม่มีแล้ว)
+    // ในอนาคตอาจต้องมี logic ที่ซับซ้อนกว่านี้
+    
+    save();
+    renderSkillTree();
+    renderStats();
+    showToast('🔄 รีเซ็ต Skill Tree เรียบร้อย');
+}
+
+function formatBonus(bonus) {
+    return Object.entries(bonus).map(([stat, value]) => {
+        const sign = value > 0 ? '+' : '';
+        return `${stat} ${sign}${value}`;
+    }).join(', ');
+}
+
+function showNodeTooltip(e, node) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'node-tooltip show';
+    tooltip.id = 'node-tooltip';
+    tooltip.innerHTML = `
+        <div class="tooltip-title">${node.name}</div>
+        <div class="tooltip-desc">${node.desc}</div>
+        ${node.req ? `<div class="tooltip-req">ต้องการ: ${node.req.join(', ')}</div>` : ''}
+    `;
+    
+    document.body.appendChild(tooltip);
+    
+    // ตำแหน่ง tooltip
+    const rect = e.target.getBoundingClientRect();
+    tooltip.style.left = `${rect.left + window.scrollX}px`;
+    tooltip.style.top = `${rect.bottom + window.scrollY + 10}px`;
+}
+
+function hideNodeTooltip() {
+    const tooltip = document.getElementById('node-tooltip');
+    if (tooltip) tooltip.remove();
+}
+
+// ==========================================
+// PATCH v4: Edit Mode & Quest Management
+// ==========================================
+
+function toggleEditMode() {
+    S.editMode = !S.editMode;
+    save();
+    renderDailyTab();
+}
+
+function toggleMainQuest(questId) {
+    const k = selectedDateKey || getTodayKey();
+    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false };
+    
+    const mainId = `main_${questId}`;
+    const idx = S.history[k].daily.indexOf(mainId);
+    
+    if (idx > -1) {
+        S.history[k].daily.splice(idx, 1); // เอาออก
+    } else {
+        S.history[k].daily.push(mainId); // เพิ่ม
+        calculateRewards(questId, 'main');
+    }
+    
+    save();
+    renderDailyTab();
+    updateCurrencyDisplay();
+}
+
+function toggleSubQuest(questId, subIndex) {
+    const k = selectedDateKey || getTodayKey();
+    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false };
+    
+    const subId = `sub_${questId}_${subIndex}`;
+    const idx = S.history[k].daily.indexOf(subId);
+    
+    if (idx > -1) {
+        S.history[k].daily.splice(idx, 1);
+    } else {
+        S.history[k].daily.push(subId);
+        calculateRewards(questId, 'sub');
+    }
+    
+    save();
+    renderDailyTab();
+    updateCurrencyDisplay();
+}
+
+function addMainQuest() {
+    if (!S.dailyQuests) S.dailyQuests = [];
+    
+    const newQuest = {
+        id: 'dq_' + Date.now(),
+        main: { text: 'Map Boss ใหม่', xp: 50 },
+        subQuests: [],
+        rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }
+    };
+    
+    S.dailyQuests.push(newQuest);
+    save();
+    renderDailyTab();
+}
+
+function addSubQuest(questId) {
+    const quest = S.dailyQuests?.find(q => q.id === questId);
+    if (!quest) return;
+    
+    if (!quest.subQuests) quest.subQuests = [];
+    quest.subQuests.push({ text: 'Juice Map ใหม่', xp: 10 });
+    
+    save();
+    renderDailyTab();
+}
+
+function updateMainQuest(questId, newText) {
+    const quest = S.dailyQuests?.find(q => q.id === questId);
+    if (quest && quest.main) {
+        quest.main.text = newText;
+        save();
+    }
+}
+
+function updateMainQuestXP(questId, newXp) {
+    const quest = S.dailyQuests?.find(q => q.id === questId);
+    if (quest && quest.main) {
+        quest.main.xp = newXp;
+        save();
+    }
+}
+
+function updateSubQuest(questId, subIndex, newText) {
+    const quest = S.dailyQuests?.find(q => q.id === questId);
+    if (quest && quest.subQuests && quest.subQuests[subIndex]) {
+        quest.subQuests[subIndex].text = newText;
+        save();
+    }
+}
+
+function removeSubQuest(questId, subIndex) {
+    const quest = S.dailyQuests?.find(q => q.id === questId);
+    if (quest && quest.subQuests) {
+        quest.subQuests.splice(subIndex, 1);
+        save();
+        renderDailyTab();
+    }
+}
+
+function calculateRewards(questId, type) {
+    const quest = S.dailyQuests?.find(q => q.id === questId);
+    if (!quest) return;
+    
+    const k = selectedDateKey || getTodayKey();
+    const h = S.history[k];
+    
+    // ตรวจสอบ Perfect Day
+    const isMainDone = h.daily?.includes(`main_${questId}`);
+    const completedSubs = h.daily?.filter(id => id.startsWith(`sub_${questId}_`)).length || 0;
+    const totalSubs = quest.subQuests?.length || 0;
+    
+    if (type === 'main' && isMainDone) {
+        // Main Quest Complete
+        const chaosDrop = Math.floor(Math.random() * (quest.rewards?.chaos?.[1] - quest.rewards?.chaos?.[0] + 1)) + quest.rewards?.chaos?.[0];
+        addCurrency('chaos', chaosDrop);
+        
+        if (Math.random() < quest.rewards?.exalted) {
+            addCurrency('exalted', Math.floor(Math.random() * 3) + 1);
+        }
+        
+        if (Math.random() < quest.rewards?.divine) {
+            addCurrency('divine', 1);
+        }
+        
+        showToast(`🎉 Map Boss สำเร็จ! ได้รับ 💛${chaosDrop} Chaos`);
+    }
+    
+    if (type === 'sub' && completedSubs === totalSubs && isMainDone) {
+        // Perfect Day Bonus
+        showToast('✨ Perfect Day! XP x2 + Rare Drop Bonus!');
+    }
 }
 
 // ========== Initialization ==========

@@ -220,6 +220,313 @@ body{background:var(--bg);color:var(--text);font-family:'Sarabun',sans-serif;fon
 .qm-num-in {width:45px; text-align:center; font-family:'Space Mono',monospace;}
 .qm-sel-in {background:var(--bg); color:var(--text); border:1px solid var(--border); padding:4px; border-radius:4px; font-size:11px; font-family:'Space Mono',monospace;}
 .btn-add-qm {background:rgba(78,203,113,.15); color:var(--green); border:1px solid var(--green); padding:6px; border-radius:6px; width:100%; font-size:12px; cursor:pointer; font-weight:600; margin-bottom:10px; text-align:center;}
+/* ==========================================
+   PATCH v4: PoE Socket System & Edit Mode
+   ========================================== */
+
+/* Edit Mode Button */
+.edit-header {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.btn-edit-mode {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    border: 2px solid #c8aa6e;
+    color: #c8aa6e;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.btn-edit-mode:hover {
+    background: linear-gradient(135deg, #c8aa6e, #8b6914);
+    color: #0a0a0a;
+}
+
+/* PoE Quest Card (ใช้เฉพาะ Daily Quest) */
+.poe-quest-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+}
+
+.poe-quest-card.main-done {
+    border-color: var(--green);
+    box-shadow: 0 0 20px rgba(78, 203, 113, 0.3);
+}
+
+.poe-quest-card.perfect-day {
+    border-color: var(--gold);
+    box-shadow: 0 0 30px rgba(240, 192, 64, 0.5);
+}
+
+/* Map Boss Section */
+.map-boss-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.map-boss-section:hover {
+    background: rgba(200, 169, 110, 0.1);
+}
+
+/* Socket System */
+.socket-container {
+    flex-shrink: 0;
+}
+
+.socket-container.small {
+    transform: scale(0.7);
+}
+
+.socket {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    background: radial-gradient(circle, var(--surface2), var(--bg));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: all 0.3s;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.red-socket {
+    border-color: var(--red);
+    background: radial-gradient(circle, rgba(224, 92, 92, 0.2), var(--bg));
+}
+
+.white-socket {
+    border-color: var(--muted);
+    background: radial-gradient(circle, var(--surface2), var(--bg));
+}
+
+.socket-filled {
+    animation: socketPulse 1s ease-in-out;
+    box-shadow: 0 0 20px currentColor;
+}
+
+.red-socket.socket-filled {
+    color: var(--red);
+}
+
+.white-socket.socket-filled {
+    color: var(--gold);
+}
+
+@keyframes socketPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+/* Quest Info */
+.quest-info {
+    flex: 1;
+}
+
+.quest-title {
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.quest-text {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.quest-rewards {
+    color: var(--accent2);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+}
+
+.completion-badge {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--green), #2a8a4a);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Juice Maps Section */
+.juice-maps-section {
+    margin-top: 12px;
+    padding-left: 64px;
+    border-left: 2px solid var(--border);
+    margin-left: 12px;
+}
+
+.juice-map-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    margin-bottom: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.juice-map-row:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.juice-map-row.sub-done {
+    opacity: 0.6;
+}
+
+.sub-quest-text {
+    flex: 1;
+    color: var(--text);
+    font-size: 13px;
+}
+
+.sub-quest-xp {
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+}
+
+/* Edit Accordion */
+.edit-accordion {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
+.edit-section {
+    margin-bottom: 12px;
+}
+
+.edit-section label {
+    display: block;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.edit-input.small {
+    width: 150px;
+}
+
+.edit-input:focus {
+    border-color: var(--accent);
+}
+
+.sub-quest-list {
+    margin-bottom: 8px;
+}
+
+.sub-edit-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+    align-items: center;
+}
+
+.btn-remove-sub {
+    background: rgba(224, 92, 92, 0.15);
+    border: 1px solid var(--red);
+    color: var(--red);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.btn-remove-sub:hover {
+    background: var(--red);
+    color: white;
+}
+
+.btn-add-sub {
+    background: rgba(78, 203, 113, 0.15);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.btn-add-sub:hover {
+    background: var(--green);
+    color: white;
+}
+
+.btn-add-main-quest {
+    width: 100%;
+    padding: 12px;
+    background: rgba(124, 110, 245, 0.15);
+    border: 2px dashed var(--accent2);
+    color: var(--accent2);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-top: 12px;
+    transition: all 0.3s;
+}
+
+.btn-add-main-quest:hover {
+    background: var(--accent2);
+    color: white;
+    border-style: solid;
+}
 </style>
 </head>
 <body>
@@ -462,7 +769,19 @@ let S = {
     ascendancyPoints: 0,
     streakDays: 0,
     atlasProgress: {},  // { goalId: { currentXP: 0, requiredXP: 1000 } }
-    
+    dailyQuests: [
+    {
+        id: 'dq1',
+        main: { text: 'ฝึกวาดอนาโตมี่สีน้ำมัน', xp: 50, done: false },
+        subQuests: [
+            { text: 'Sketch 15 นาที', xp: 15, done: false },
+            { text: 'ศึกษา Reference', xp: 10, done: false }
+        ],
+        rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }
+    }
+],
+editMode: false,  // สำหรับ Accordion
+
     // === Legacy Fields ===
     history: {}, followers: {}, lastFitDate: null, 
     goalIncome: 15000, goalJobs: 6, 
@@ -743,22 +1062,127 @@ function isFitnessQuest(text){
 }
 
 function renderDailyTab(){ 
-    const k=selectedDateKey||getTodayKey(); 
-    if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; 
-    const h=S.history[k]; 
-    const container=document.getElementById('daily-quests'); 
-    container.innerHTML=''; 
-    DAILY_QUESTS.forEach(q=>{ 
-        const isDone=h.daily.includes(q.id); 
-        const isRest=h.rest && h.rest.includes(q.id); 
-        const isFit=isFitnessQuest(q.text); 
-        const card=document.createElement('div'); 
-        card.className=`q-card ${isDone?'done':''} ${isRest?'rest-off':''}`; 
-        let restBtnHtml=isFit?`<button class="rest-inline ${isRest?'active':''}" onclick="event.stopPropagation(); toggleRest('${q.id}')">REST</button>`:''; 
-        card.innerHTML=`<div class="q-row" onclick="${isRest?'':'toggleQuest(\'daily\',\''+q.id+'\')'}"><div class="chk">${isDone?'✓':''}</div><div class="q-text">${q.text}</div><div class="q-meta">${restBtnHtml}<span class="q-xp">+${q.xp} XP</span><span class="q-stat ${q.stat}">${q.stat}</span></div></div>`; 
-        container.appendChild(card); 
-    }); 
-    checkDayComplete(k); 
+    const k = selectedDateKey || getTodayKey();
+    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false };
+    const h = S.history[k];
+    const container = document.getElementById('daily-quests');
+    container.innerHTML = '';
+
+    // แสดงปุ่ม Edit Mode
+    const editHeader = document.createElement('div');
+    editHeader.className = 'edit-header';
+    editHeader.innerHTML = `
+        <button class="btn-edit-mode" onclick="toggleEditMode()">
+            ${S.editMode ? '✕ ยกเลิกแก้ไข' : '✎ แก้ไข'}
+        </button>
+    `;
+    container.appendChild(editHeader);
+
+    // Render แต่ละ Main Quest (Map Boss)
+    (S.dailyQuests || []).forEach((quest, index) => {
+        const isMainDone = h.daily?.includes(`main_${quest.id}`);
+        const completedSubs = h.daily?.filter(id => id.startsWith(`sub_${quest.id}_`)).length || 0;
+        const totalSubs = quest.subQuests?.length || 0;
+        const isPerfectDay = isMainDone && completedSubs === totalSubs && totalSubs > 0;
+
+        const card = document.createElement('div');
+        card.className = `poe-quest-card ${isPerfectDay ? 'perfect-day' : ''} ${isMainDone ? 'main-done' : ''}`;
+        
+        // === Map Boss (Main Quest) ===
+        const mainHtml = `
+            <div class="map-boss-section" onclick="${S.editMode ? '' : `toggleMainQuest('${quest.id}')`}">
+                <div class="socket-container">
+                    <div class="socket red-socket ${isMainDone ? 'socket-filled' : ''}">
+                        ${isMainDone ? '💎' : ''}
+                    </div>
+                </div>
+                <div class="quest-info">
+                    <div class="quest-title">🗡️ MAP BOSS</div>
+                    <div class="quest-text">${quest.main?.text || 'เควสหลัก'}</div>
+                    <div class="quest-rewards">
+                        💛${quest.rewards?.chaos?.[0] || 5}-${quest.rewards?.chaos?.[1] || 15}C 
+                        | 20%💠 | 1%💎 
+                        | +${quest.main?.xp || 50} XP
+                    </div>
+                </div>
+                ${isMainDone ? '<div class="completion-badge">✓</div>' : ''}
+            </div>
+        `;
+
+        // === Juice Maps (Sub-quests) ===
+        let subHtml = '';
+        if (quest.subQuests && quest.subQuests.length > 0) {
+            subHtml = `<div class="juice-maps-section">`;
+            quest.subQuests.forEach((sub, subIndex) => {
+                const subId = `sub_${quest.id}_${subIndex}`;
+                const isSubDone = h.daily?.includes(subId);
+                subHtml += `
+                    <div class="juice-map-row ${isSubDone ? 'sub-done' : ''}" 
+                         onclick="${S.editMode ? '' : `toggleSubQuest('${quest.id}', ${subIndex})`}">
+                        <div class="socket-container small">
+                            <div class="socket white-socket ${isSubDone ? 'socket-filled' : ''}">
+                                ${isSubDone ? '✨' : ''}
+                            </div>
+                        </div>
+                        <div class="sub-quest-text">${sub.text}</div>
+                        <div class="sub-quest-xp">+${sub.xp || 10} XP</div>
+                    </div>
+                `;
+            });
+            subHtml += `</div>`;
+        }
+
+        // === Edit Mode Accordion ===
+        let editHtml = '';
+        if (S.editMode) {
+            editHtml = `
+                <div class="edit-accordion" style="display: block;">
+                    <div class="edit-section">
+                        <label>ชื่อ Map Boss:</label>
+                        <input type="text" class="edit-input" 
+                               value="${quest.main?.text || ''}" 
+                               onchange="updateMainQuest('${quest.id}', this.value)">
+                    </div>
+                    <div class="edit-section">
+                        <label>Juice Maps (Sub-quests):</label>
+                        <div class="sub-quest-list">
+                            ${(quest.subQuests || []).map((sub, idx) => `
+                                <div class="sub-edit-row">
+                                    <input type="text" class="edit-input small" 
+                                           value="${sub.text}" 
+                                           onchange="updateSubQuest('${quest.id}', ${idx}, this.value)">
+                                    <button class="btn-remove-sub" onclick="removeSubQuest('${quest.id}', ${idx})">✕</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn-add-sub" onclick="addSubQuest('${quest.id}')">
+                            + เพิ่ม Juice Map
+                        </button>
+                    </div>
+                    <div class="edit-section">
+                        <label>XP (Map Boss):</label>
+                        <input type="number" class="edit-input small" 
+                               value="${quest.main?.xp || 50}" 
+                               onchange="updateMainQuestXP('${quest.id}', parseInt(this.value))">
+                    </div>
+                </div>
+            `;
+        }
+
+        card.innerHTML = mainHtml + subHtml + editHtml;
+        container.appendChild(card);
+    });
+
+    // ปุ่มเพิ่ม Map Boss ใหม่ (แสดงเฉพาะ Edit Mode)
+    if (S.editMode) {
+        const addBtn = document.createElement('button');
+        addBtn.className = 'btn-add-main-quest';
+        addBtn.innerHTML = '+ เพิ่ม Map Boss ใหม่';
+        addBtn.onclick = addMainQuest;
+        container.appendChild(addBtn);
+    }
+
+    checkDayComplete(k);
 }
 
 function renderQuests(database,stateList,elementId){ 

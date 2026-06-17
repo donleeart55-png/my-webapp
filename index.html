@@ -35,7 +35,7 @@
             font-size: 15px;
             line-height: 1.6;
             min-height: 100vh;
-            padding: 16px 14px 80px;
+            padding: 8px 14px 80px;
             padding-bottom: 100px;
         }
 
@@ -62,30 +62,34 @@
 
         .xp-wrap {
             margin: 10px auto 0;
-            max-width: 300px;
+    max-width: 600px;
+    padding: 0 20px;
         }
 
         .xp-lbl {
             display: flex;
-            justify-content: space-between;
-            font-family: 'Space Mono', monospace;
-            font-size: 10px;
-            color: var(--muted);
-            margin-bottom: 4px;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 4px;
         }
 
         .xp-bar {
-            height: 6px;
-            background: var(--border);
-            border-radius: 3px;
-            overflow: hidden;
+            height: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
         }
 
         .xp-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            background: linear-gradient(90deg, #6b4c9a, #c8aa6e);
             border-radius: 3px;
-            transition: width .5s;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
         }
 
         .decay-alert {
@@ -434,7 +438,7 @@
         .tab {
             flex-shrink: 0;
             text-align: center;
-            padding: 6px 8px;
+            padding: 8px 16px;
             border-radius: 7px;
             cursor: pointer;
             font-size: 10px;
@@ -450,26 +454,28 @@
         }
 
         .tab.active {
-            background: #c8a96e !important;
-            color: #0a0a0a !important;
+            background: var(--gold);
+            color: #0a0a0a;
         }
 
         .tab-content {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-            overflow: hidden !important;
-        }
-        .tab-content {min-height: calc(100vh - 200px) !important;}
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
 
         .tab-content.active {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            height: auto !important;
-            overflow: visible !important;
-        }
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+}
 
         .sec-title {
             font-family: 'Space Mono', monospace;
@@ -1380,19 +1386,21 @@
         }
 
         .modal-overlay {
+            display: none;
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, .85);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 200;
+            z-index: 1000;
             opacity: 0;
             pointer-events: none;
             transition: opacity .3s;
         }
 
         .modal-overlay.show {
+            display: flex;
             opacity: 1;
             pointer-events: all;
         }
@@ -1687,30 +1695,38 @@
         }
 
         .btn-edit-mode {
-            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
-            border: 2px solid #c8aa6e;
-            color: #c8aa6e;
-            padding: 8px 16px;
+            background: rgba(200, 170, 110, 0.15);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 6px 12px;
             border-radius: 4px;
             cursor: pointer;
             font-family: 'Space Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 1px;
+            font-size: 10px;
+            font-weight: 700;
             transition: all 0.3s;
-        }
+}
+
 
         .btn-edit-mode:hover {
-            background: linear-gradient(135deg, #c8aa6e, #8b6914);
+            background: var(--gold);
             color: #0a0a0a;
         }
+        .btn-edit-mode.active {
+            background: var(--gold);
+            color: #0a0a0a;
+}
+        .q-section.compact {margin-bottom: 8px;}
+
+        .sec-title.compact {margin-bottom: 8px; padding-bottom: 4px;}
 
         /* PoE Quest Card (ใช้เฉพาะ Daily Quest) */
         .poe-quest-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 10px;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 8px;
             transition: all 0.3s;
         }
 
@@ -1728,8 +1744,8 @@
         .map-boss-section {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px;
+            gap: 8px;
+            padding: 6px;
             background: var(--surface2);
             border-radius: 6px;
             cursor: pointer;
@@ -1779,24 +1795,19 @@
         }
 
         .red-socket.socket-filled {
-            color: var(--red);
+        color: var(--red);
+        background: radial-gradient(circle, var(--red), rgba(224, 92, 92, 0.4));
         }
 
         .white-socket.socket-filled {
             color: var(--gold);
+            background: radial-gradient(circle, var(--gold), rgba(200, 170, 110, 0.4));
         }
 
         @keyframes socketPulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.2);
-            }
-        }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+}
 
         /* Quest Info */
         .quest-info {
@@ -1804,12 +1815,12 @@
         }
 
         .quest-title {
-            color: var(--accent);
-            font-family: 'Space Mono', monospace;
-            font-size: 8px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 2px;
+    color: var(--gold);
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
         }
 
         .quest-text {
@@ -1820,7 +1831,7 @@
         }
 
         .quest-rewards {
-            color: var(--accent2);
+            color: var(--muted);
             font-family: 'Space Mono', monospace;
             font-size: 8px;
         }
@@ -1841,7 +1852,7 @@
         /* Juice Maps Section */
         .juice-maps-section {
             margin-top: 8px;
-            padding-left: 46px;
+            padding-left: 8px;
             border-left: 2px solid var(--border);
             margin-left: 12px;
         }
@@ -1971,25 +1982,27 @@
         }
 
         .btn-add-main-quest {
-            width: 100%;
-            padding: 12px;
+            width: 30%;  /* ✅ ลดความกว้าง */
+            margin: 12px auto;  /* ✅ จัดกึ่งกลาง */
+            display: block;
+            padding: 10px 16px;
             background: rgba(124, 110, 245, 0.15);
             border: 2px dashed var(--accent2);
             color: var(--accent2);
             border-radius: 6px;
             cursor: pointer;
             font-family: 'Space Mono', monospace;
-            font-size: 12px;
-            letter-spacing: 1px;
-            margin-top: 12px;
+            font-size: 11px;
+            font-weight: 700;
             transition: all 0.3s;
-        }
+}
 
         .btn-add-main-quest:hover {
-            background: var(--accent2);
-            color: white;
-            border-style: solid;
-        }
+        background: var(--accent2);
+        color: white;
+        border-style: solid;
+        box-shadow: 0 0 15px rgba(124, 110, 245, 0.5);
+}
 
         .btn-remove-main-quest {
             transition: all 0.3s;
@@ -3163,7 +3176,7 @@
    ========================================== */
 
 .q-section {
-    margin-bottom: 16px;
+    margin-bottom: 8px;
 }
 
 .sec-title {
@@ -3569,6 +3582,1098 @@ body, html {
     margin: 0;
     padding: 0;
 }
+/* ==========================================
+   PATCH: Map Boss 2-Column Layout
+   ========================================== */
+.map-boss-card {
+    background: linear-gradient(135deg, #1a1a2e, #16161e);
+    border: 1px solid var(--red);
+    border-radius: 6px;
+    padding: 10px;  /* ✅ ลดจาก 12px */
+    transition: all 0.3s;
+}
+
+/* ฝั่งซ้าย: Main Quest + Sub-quests */
+.map-boss-left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ฝั่งขวา: Edit Mode (แสดงเฉพาะตอน Edit) */
+.map-boss-right {
+    display: none;  /* ซ่อนโดย default */
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.map-boss-right.edit-mode {
+    display: block;  /* แสดงตอน Edit Mode */
+}
+
+/* Map Boss Header (Main Quest) */
+.map-boss-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(224, 92, 92, 0.1);
+    border-radius: 6px;
+    border: 1px solid var(--red);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.map-boss-header:hover {
+    background: rgba(224, 92, 92, 0.2);
+    box-shadow: 0 0 15px rgba(224, 92, 92, 0.4);
+}
+
+/* Socket Container */
+.socket-container {
+    flex-shrink: 0;
+}
+
+.socket {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.red-socket {
+    border-color: var(--red);
+    background: rgba(224, 92, 92, 0.2);
+}
+
+.red-socket.socket-filled {
+    background: var(--red);
+    box-shadow: 0 0 10px rgba(224, 92, 92, 0.6);
+}
+
+/* Quest Info */
+.quest-info {
+    flex: 1;
+}
+
+.quest-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.quest-text {
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.quest-rewards {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+}
+
+/* Completion Badge */
+.completion-badge {
+    background: var(--green);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* ปุ่ม Collapse */
+.btn-collapse-quest {
+    background: rgba(200, 170, 110, 0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+
+.btn-collapse-quest:hover {
+    background: var(--gold);
+    color: #0a0a0a;
+}
+
+/* Juice Maps Section (Sub-quests) */
+.juice-maps-section {
+    padding-left: 16px;  /* ✅ เยื้องน้อยลง */
+    border-left: 2px solid rgba(200, 170, 110, 0.3);
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    max-height: 500px;
+    opacity: 1;
+}
+
+.juice-maps-section.collapsed {
+    max-height: 0;
+    padding-left: 0;
+    margin-left: 0;
+    opacity: 0;
+}
+
+/* Sub-quest Row */
+.juice-map-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 2px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.juice-map-row:hover {
+    background: rgba(200, 170, 110, 0.05);
+    border-left-color: var(--gold);
+}
+
+.juice-map-row.sub-done {
+    background: rgba(78, 203, 113, 0.1);
+    border-left-color: var(--green);
+}
+
+/* Socket ขาว (Sub-quest) */
+.socket-container.small .socket {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+}
+
+.white-socket {
+    border-color: var(--text);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.white-socket.socket-filled {
+    background: var(--green);
+    border-color: var(--green);
+    box-shadow: 0 0 8px rgba(78, 203, 113, 0.5);
+}
+
+.sub-quest-text {
+    flex: 1;
+    font-size: 11px;
+    color: var(--text);
+}
+
+.sub-quest-xp {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 700;
+}
+
+/* Edit Mode Section (ฝั่งขวา) */
+.edit-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.edit-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.edit-section label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.edit-input {
+    background: linear-gradient(135deg, #1e1e2a, #16161e);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    transition: all 0.3s;
+}
+
+.edit-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
+}
+
+.edit-input.small {
+    width: 80px;
+}
+
+/* ปุ่มลบ Map Boss */
+.btn-remove-main-quest {
+    width: 30%;
+    margin: 2px auto; 
+    background: rgba(224, 92, 92, 0.15);
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    transition: all 0.3s;
+}
+
+.btn-remove-main-quest:hover {
+    background: var(--red);
+    color: white;
+}
+
+/* Sub-quest List ใน Edit Mode */
+.sub-quest-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sub-edit-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.sub-edit-row .edit-input {
+    flex: 1;
+}
+
+.btn-remove-sub {
+    background: rgba(224, 92, 92, 0.15);
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.btn-remove-sub:hover {
+    background: var(--red);
+    color: white;
+}
+
+/* ปุ่มเพิ่ม Juice Map */
+.btn-add-sub {
+    width: 30%;
+    margin: 2px auto;
+    background: rgba(78, 203, 113, 0.15);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    transition: all 0.3s;
+}
+
+.btn-add-sub:hover {
+    background: var(--green);
+    color: white;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+    .map-boss-card {
+        grid-template-columns: 1fr;  /* กลับเป็นแถวเดียวในมือถือ */
+    }
+    
+    .map-boss-right.edit-mode {
+        margin-top: 12px;
+    }
+}
+/* ==========================================
+   PATCH: 2-Column Grid & Top Currency
+   ========================================== */
+
+/* ส่วน Header ของ Quests (วันที่ + Currency) */
+.quest-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+}
+
+.date-display {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+}
+.header-right-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+/* Currency Bar (Chaos, Exalted, Divine) */
+.currency-bar {
+    display: flex;
+    gap: 10px;
+}
+
+.currency-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.currency-icon {
+    font-size: 12px;
+}
+.icon-chaos { background: var(--gold); }
+.icon-exalted { background: var(--accent2); }
+.icon-divine { background: var(--red); }
+
+/* Grid Layout สำหรับ Card 2 ใบคู่กัน */
+.quest-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* แบ่ง 2 ฝั่งเท่ากัน */
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.currency-count {
+    color: var(--gold);
+    font-weight: 700;
+    min-width: 20px;
+    text-align: right;
+}
+
+.currency-label {
+    font-size: 9px;
+    color: var(--muted);
+}
+
+/* Card Styles */
+.map-boss-card {
+    background: linear-gradient(135deg, #1a1a2e, #16161e);
+    border: 1px solid var(--red);
+    border-radius: 8px;
+    padding: 12px;
+    position: relative;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.map-boss-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(200, 170, 110, 0.2);
+}
+
+.map-boss-card.main-done {
+    border-color: var(--green);
+    background: rgba(78, 203, 113, 0.05);
+}
+.map-boss-card.editing {
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
+}
+/* Header ใน Card */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+.card-header:hover {
+    background: rgba(200, 170, 110, 0.05);
+}
+
+.socket-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+.socket-badge.filled {
+    background: var(--green);
+    border-color: var(--green);
+}
+
+.card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.card-text {
+    font-size: 11px;
+    color: var(--text);
+    margin: 2px 0;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-rewards {
+    font-size: 8px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+}
+
+/* ปุ่ม Collapse & Check */
+.card-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.btn-action {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 22px;
+    height: 22px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    transition: all 0.2s;
+}
+.btn-action:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+.btn-action.collapse-btn {
+    font-size: 10px;
+}
+
+/* Juice Maps (Sub-quests) */
+.juice-maps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 10px;
+    border-left: 2px solid var(--border);
+    margin-top: 8px;
+    margin-left: 8px;
+}
+
+.juice-map-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 4px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.juice-map-item:hover {
+    background: rgba(200, 170, 110, 0.1);
+}
+
+.juice-map-item.sub-done {
+    opacity: 0.6;
+}
+.juice-map-item.sub-done .sub-text {
+    text-decoration: line-through;
+    color: var(--green);
+}
+
+.sub-socket {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+}
+.sub-socket.socket-filled {
+    border-color: var(--gold);
+    background: var(--gold);
+    animation: socketPulse 0.5s ease-in-out;
+}
+.sub-text {
+    flex: 1;
+    color: var(--text);
+}
+
+.sub-xp {
+    font-size: 9px;
+    color: var(--gold);
+    font-family: 'Space Mono', monospace;
+    flex-shrink: 0;
+}
+/* ✅ Edit Controls (แสดงเฉพาะเมื่อ quest ถูกกาง + edit mode) */
+.edit-controls {
+    display: none;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    flex-direction: column;
+    gap: 6px;
+}
+
+.map-boss-card.editing .edit-controls {
+    display: flex;
+}
+.edit-input-inline {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 4px 8px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.edit-input-inline:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 5px rgba(200, 170, 110, 0.3);
+}
+
+.edit-input-small {
+    width: 60px;
+}
+.btn-edit-action {
+    background: rgba(224, 92, 92, 0.15);
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    transition: all 0.2s;
+}
+
+.btn-edit-action:hover {
+    background: var(--red);
+    color: white;
+}
+
+.btn-edit-action.add {
+    background: rgba(78, 203, 113, 0.15);
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.btn-edit-action.add:hover {
+    background: var(--green);
+    color: white;
+}
+
+.btn-edit-action.remove-sub {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+}
+.juice-map-item.editing {
+    background: rgba(200, 170, 110, 0.05);
+    border: 1px solid var(--gold);
+}
+
+.juice-map-item.editing .sub-text-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    padding: 0;
+}
+
+.juice-map-item.editing .sub-text-input:focus {
+    outline: none;
+    border-bottom: 1px solid var(--gold);
+}
+.add-quest-card {
+    border: 2px dashed var(--accent2);
+    background: rgba(124, 110, 245, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.add-quest-card:hover {
+    background: rgba(124, 110, 245, 0.15);
+    border-color: var(--accent2);
+}
+
+.add-quest-card span {
+    color: var(--accent2);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+}
+@media (max-width: 768px) {
+    .quest-grid-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-right-group {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+    }
+    
+    .currency-bar {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+}
+
+
+/* Edit Mode inside Card */
+.card-edit-section {
+    display: none; /* ซ่อนไว้ก่อน */
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+    border: 1px dashed var(--border);
+}
+
+.map-boss-card.edit-mode .card-edit-section {
+    display: block; /* แสดงเมื่อ Card อยู่ใน Edit Mode */
+}
+
+/* Responsive: Mobile เป็น 1 คอลัมน์ */
+@media (max-width: 768px) {
+    .quest-grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+/* Inline Edit Input */
+.edit-input-inline {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 4px 8px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    transition: all 0.2s;
+}
+
+.edit-input-inline:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 5px rgba(200, 170, 110, 0.3);
+}
+
+.edit-input-small {
+    width: 60px;
+}
+
+/* Sub-text Input (ใน Edit Mode) */
+.sub-text-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    padding: 0;
+}
+
+.sub-text-input:focus {
+    outline: none;
+    border-bottom: 1px solid var(--gold);
+}
+
+/* Edit Controls (Map Boss) */
+.edit-controls {
+    display: none;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    flex-direction: column;
+    gap: 6px;
+}
+
+.map-boss-card.editing .edit-controls {
+    display: flex;
+}
+
+/* ปุ่ม Edit Action */
+.btn-edit-action {
+    background: rgba(224, 92, 92, 0.15);
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    transition: all 0.2s;
+}
+
+.btn-edit-action:hover {
+    background: var(--red);
+    color: white;
+}
+
+.btn-edit-action.add {
+    background: rgba(78, 203, 113, 0.15);
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.btn-edit-action.add:hover {
+    background: var(--green);
+    color: white;
+}
+
+.btn-edit-action.remove-sub {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+}
+
+/* Juice Map Item ใน Edit Mode */
+.juice-map-item.editing {
+    background: rgba(200, 170, 110, 0.05);
+    border: 1px solid var(--gold);
+}
+/* ==========================================
+   STASH REWARD SHOP
+   ========================================== */
+
+.orb-balance-display {
+    display: flex;
+    gap: 16px;
+    padding: 12px;
+    background: var(--surface2);
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.orb-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+}
+
+.orb-icon {
+    font-size: 16px;
+}
+
+.orb-count {
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.orb-label {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.reward-tier {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.tier-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.chaos-tier { color: var(--gold); }
+.exalted-tier { color: var(--accent2); }
+.divine-tier { color: var(--red); }
+
+.tier-icon { font-size: 20px; }
+.tier-name { flex: 1; }
+.tier-cost { font-size: 11px; color: var(--muted); }
+
+.tier-description {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+.reward-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.reward-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.reward-card.affordable {
+    border-color: var(--green);
+}
+
+.reward-card.affordable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(78, 203, 113, 0.3);
+}
+
+.reward-card.unaffordable {
+    opacity: 0.5;
+}
+
+.reward-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+.reward-name {
+    font-size: 11px;
+    color: var(--text);
+    margin-bottom: 8px;
+    min-height: 30px;
+}
+
+.reward-cost {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.btn-redeem {
+    width: 100%;
+    padding: 6px;
+    background: var(--green);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-redeem:hover:not(:disabled) {
+    background: #3aa85c;
+}
+
+.btn-redeem:disabled {
+    background: var(--muted);
+    cursor: not-allowed;
+}
+
+.btn-delete-reward {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(224, 92, 92, 0.15);
+    border: 1px solid var(--red);
+    color: var(--red);
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-delete-reward:hover {
+    background: var(--red);
+    color: white;
+}
+
+.btn-add-reward {
+    width: 100%;
+    padding: 8px;
+    background: rgba(124, 110, 245, 0.15);
+    border: 1px dashed var(--accent2);
+    color: var(--accent2);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    transition: all 0.3s;
+}
+
+.btn-add-reward:hover {
+    background: var(--accent2);
+    color: white;
+    border-style: solid;
+}
+
+.redemption-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: var(--surface2);
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.redemption-icon {
+    font-size: 20px;
+}
+
+.redemption-info {
+    flex: 1;
+}
+
+.redemption-name {
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.redemption-date {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+}
+
+.redemption-cost {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 700;
+}
+/* Level Up Animation */
+.level-up-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #c8aa6e, #8b6914);
+    border: 3px solid #c8aa6e;
+    border-radius: 16px;
+    padding: 32px 48px;
+    text-align: center;
+    z-index: 9999;
+    box-shadow: 0 0 50px rgba(200, 170, 110, 0.8);
+    animation: levelUpPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes levelUpPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.level-up-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    color: #0a0a0a;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.level-up-details {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    color: #1a1a00;
+    line-height: 1.6;
+}
+
+.level-up-details .reward {
+    display: block;
+    margin: 4px 0;
+    font-weight: 700;
+}
     </style>
 </head>
 
@@ -3667,8 +4772,7 @@ body, html {
                 <span>ชม.</span>
                 <input type="number" id="art-minutes" placeholder="0" min="0" max="59" style="width: 60px;">
                 <span>น.</span>
-                <input type="text" id="art-note" class="log-input" 
-                       placeholder="บันทึกกิจกรรม..." style="flex: 1;">
+                <input type="text" id="art-note" class="log-input" placeholder="บันทึกกิจกรรม..." style="flex: 1;">
                 <input type="date" id="art-date" class="log-input">
                 <button class="btn-log" onclick="logHours('art')">บันทึกชั่วโมง</button>
             </div>
@@ -3729,37 +4833,54 @@ body, html {
 </div>
 <!-- ✅ ปิด .dimensions-container -->
 
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab('quests')">📜 Piety's Missions</div>
-        <div class="tab" onclick="switchTab('skills')">🌳 Passive Skills</div>
-        <div class="tab" onclick="switchTab('career')">🌍 Atlas of Worlds</div>
-        <div class="tab" onclick="switchTab('vault')">📦 The Stash</div>
-        <div class="tab" onclick="switchTab('settings')">⚙️ Settings</div>
-    </div>
+<div class="tabs">
+    <div class="tab active" onclick="switchTab('quests')">📜 Piety's Missions</div>
+    <div class="tab" onclick="switchTab('skills')">🌳 Passive Skills</div>
+    <div class="tab" onclick="switchTab('career')">🌍 Atlas of Worlds</div>
+    <div class="tab" onclick="switchTab('stash')">📦 The Stash</div>
+    <div class="tab" onclick="switchTab('settings')">⚙️ Settings</div>
+</div>
 
     <!-- ==========================================
      TAB 1: PIETY'S MISSIONS (QUESTS)
      ========================================== -->
-    <div id="quests-tab" class="tab-content active">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <div class="today-display" id="today-display">กำลังโหลดวันที่...</div>
-        <button class="btn-s btn-art" id="btn-back-today"
-            style="display:none; background:var(--gold); color:#1a1a00;"
-            onclick="resetToTodayCalendar()">กลับวันนี้</button>
-    </div>
-
-        <!-- Daily Quests -->
-    <div class="q-section">
-        <div class="sec-title">
-            <span>Daily Quests</span>
+<div id="quests-tab" class="tab-content active">
+    <div class="quest-header-bar">
+        <div class="date-display" id="today-display">กำลังโหลดวันที่...</div>
+        <div class="header-right-group">
+            <div class="currency-bar">
+                <div class="currency-item">
+                    <span class="currency-icon">💛</span>
+                    <span class="currency-count" id="currency-chaos">0</span>
+                    <span class="currency-label">Chaos</span>
+                </div>
+                <div class="currency-item">
+                    <span class="currency-icon">💠</span>
+                    <span class="currency-count" id="currency-exalted">0</span>
+                    <span class="currency-label">Exalted</span>
+                </div>
+                <div class="currency-item">
+                    <span class="currency-icon">💎</span>
+                    <span class="currency-count" id="currency-divine">0</span>
+                    <span class="currency-label">Divine</span>
+                </div>
+            </div>        
+            <button class="btn-edit-mode" onclick="toggleEditMode()" id="btn-toggle-edit">✎ แก้ไข</button>
         </div>
-        <div id="daily-quests"></div>
     </div>
-
+    <!-- ปุ่มกลับวันนี้  -->
+    <div style="text-align: right; margin-bottom: 4px;">
+        <button class="btn-s" id="btn-back-today" style="display:none;" onclick="resetToTodayCalendar()">กลับวันนี้</button>
+    </div>
+        <!-- Daily Quests -->
+    <div class="q-section compact">
+        <div class="sec-title compact"><span>Piety's Quests</span></div>
+        <div id="daily-quests" class="quest-grid-container"></div>
+    </div>
         <!-- Weekly Quests -->
-    <div class="q-section">
-        <div class="sec-title">
-            <span> Expedition Logs</span>
+    <div class="q-section compact">
+        <div class="sec-title compact">
+            <span>Expedition Logs</span>
             <div style="display: flex; gap: 6px; align-items: center;">
                 <span id="weekly-medallion-count" style="font-family: 'Space Mono', monospace; font-size: 10px; color: var(--gold);">🏅 0</span>
                 <button class="btn-s" style="background:rgba(200,169,110,.2); color:var(--accent); padding:2px 7px; font-size:10px;" onclick="toggleWeeklyCollapse()">
@@ -3769,26 +4890,23 @@ body, html {
             </div>
         </div>
         <div id="weekly-quests" style="display: block;"></div>
-        <div id="weekly-completion-status" style="margin-top: 8px; padding: 8px; background: var(--surface2); border-radius: 6px; font-size: 11px; color: var(--muted); display: none;">
-        </div>
+        <div id="weekly-completion-status" style="margin-top: 8px; padding: 8px; background: var(--surface2); border-radius: 6px; font-size: 11px; color: var(--muted); display: none;"></div>
     </div>
 
         <!-- Monthly Quests -->
-    <div class="q-section">
-        <div class="sec-title">
+    <div class="q-section compact">
+        <div class="sec-title compact">
             <span>🏛️ Ascendancy Trials</span>
             <div style="display: flex; gap: 6px; align-items: center;">
                 <span id="monthly-trial-count" style="font-family: 'Space Mono', monospace; font-size: 10px; color: var(--gold);">⚔️ 0</span>
                 <button class="btn-s" style="background:rgba(200,169,110,.2); color:var(--accent); padding:2px 7px; font-size:10px;" onclick="toggleTrialsCollapse()">
-                <span id="trials-collapse-icon">▼</span>
-            </button>
+                    <span id="trials-collapse-icon">▼</span>
+                </button>
                 <button class="btn-s" style="background:rgba(200,169,110,.2); color:var(--accent); padding:2px 7px; font-size:10px;" onclick="openQuestManager('monthly')">[แก้ไข]</button>
             </div>
         </div>
-        <!-- ✅ เพิ่ม class และ id สำหรับ collapse -->
         <div id="monthly-quests" style="display: block;"></div>
-        <div id="trial-requirements" style="margin-top: 12px; padding: 12px; background: var(--surface2); border-radius: 6px; font-size: 11px; color: var(--muted);">
-        </div><!-- ✅ ปุ่ม Reset/Force ต้องอยู่ IN q-section นี้ -->
+        <div id="trial-requirements" style="margin-top: 12px; padding: 12px; background: var(--surface2); border-radius: 6px; font-size: 11px; color: var(--muted);"></div>        
         <div style="margin-top: 8px; text-align: right;">
             <button class="btn-s" style="background:rgba(224,92,92,.2); color:var(--red); border:1px solid var(--red); padding:4px 10px; font-size:10px;" onclick="resetMonthlyTrial()">
                 🔄 Reset Trial (ทดสอบ)
@@ -3800,8 +4918,9 @@ body, html {
     </div>  <!-- ✅ ปิด q-section ของ monthly -->
 
         <!-- ✅ Calendar ต้องอยู่ IN quests-tab -->
-    <div class="q-section">
-        <div class="sec-title">Adventure Calendar</div>
+    <div class="q-section compact">
+        <div class="sec-title compact"><span>Adventure Calendar</span>
+        </div>
         <div class="cal-wrap">
             <div class="cal-nav">
                 <button class="cal-nav-btn" onclick="changeMonth(-1)">◀</button>
@@ -3809,13 +4928,8 @@ body, html {
                 <button class="cal-nav-btn" onclick="changeMonth(1)">▶</button>
             </div>
             <div class="cal-weekdays">
-                <div class="cal-wd">อา</div>
-                <div class="cal-wd">จ</div>
-                <div class="cal-wd">อ</div>
-                <div class="cal-wd">พ</div>
-                <div class="cal-wd">พฤ</div>
-                <div class="cal-wd">ศ</div>
-                <div class="cal-wd">ส</div>
+                <div class="cal-wd">อา</div><div class="cal-wd">จ</div><div class="cal-wd">อ</div>
+                <div class="cal-wd">พ</div><div class="cal-wd">พฤ</div><div class="cal-wd">ศ</div><div class="cal-wd">ส</div>
             </div>
             <div class="cal-grid" id="cal-grid"></div>
             <div class="cal-legend">
@@ -3832,49 +4946,46 @@ body, html {
     <!-- ==========================================
      TAB 2: PASSIVE SKILLS
      ========================================== -->
-    <div id="skills-tab" class="tab-content">
-        <div class="skill-tree-container">
-            <div class="skill-tree-header">
-                <div class="sp-display">
-                    <span class="sp-label">Skill Points Available:</span>
-                    <span class="sp-value" id="sp-value-display">0</span>
-                </div>
-                <button class="btn-reset-skills" onclick="resetSkillTree()">🔄 Reset All</button>
+<div id="skills-tab" class="tab-content">
+    <div class="skill-tree-container">
+        <div class="skill-tree-header">
+            <div class="sp-display">
+                <span class="sp-label">Skill Points Available:</span>
+                <span class="sp-value" id="sp-value-display">0</span>
             </div>
-
-            <div class="skill-tree-grid">
-                <!-- Art Branch -->
-                <div class="skill-branch art">
-                    <div class="branch-header">
-                        <div class="branch-icon">🎨</div>
-                        <div class="branch-name">Art Dimension</div>
-                        <div class="branch-stats">CRE + INT</div>
-                    </div>
-                    <div class="branch-nodes" id="art-nodes"></div>
+                <button class="btn-reset-skills" onclick="resetSkillTree()">🔄 Reset All</button>
+        </div>
+        <div class="skill-tree-grid">
+            <!-- Art Branch -->
+            <div class="skill-branch art">
+                <div class="branch-header">
+                    <div class="branch-icon">🎨</div>
+                    <div class="branch-name">Art Dimension</div>
+                    <div class="branch-stats">CRE + INT</div>
                 </div>
-
-                <!-- Body Branch -->
-                <div class="skill-branch body">
-                    <div class="branch-header">
-                        <div class="branch-icon">💪</div>
-                        <div class="branch-name">Body & Voice</div>
-                        <div class="branch-stats">STR + VIT</div>
-                    </div>
-                    <div class="branch-nodes" id="body-nodes"></div>
+                <div class="branch-nodes" id="art-nodes"></div>
+            </div>
+            <!-- Body Branch -->
+            <div class="skill-branch body">
+                <div class="branch-header">
+                    <div class="branch-icon">💪</div>
+                    <div class="branch-name">Body & Voice</div>
+                    <div class="branch-stats">STR + VIT</div>
                 </div>
-
-                <!-- Mind Branch -->
-                <div class="skill-branch mind">
-                    <div class="branch-header">
-                        <div class="branch-icon"></div>
-                        <div class="branch-name">Mind & Knowledge</div>
-                        <div class="branch-stats">INT + AGI</div>
-                    </div>
-                    <div class="branch-nodes" id="mind-nodes"></div>
+                <div class="branch-nodes" id="body-nodes"></div>
+            </div>
+            <!-- Mind Branch -->
+            <div class="skill-branch mind">
+                <div class="branch-header">
+                    <div class="branch-icon">🧠</div>
+                    <div class="branch-name">Mind & Knowledge</div>
+                    <div class="branch-stats">INT + AGI</div>
                 </div>
+                <div class="branch-nodes" id="mind-nodes"></div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- ==========================================
      TAB 3: ATLAS OF WORLDS (CAREER)
@@ -3884,16 +4995,14 @@ body, html {
             <div class="atlas-header">
                 <div class="atlas-title">🌍 The Atlas of Worlds</div>
                 <div class="atlas-boss-status" id="atlas-boss-status">
-                    Boss Status: <span class="boss-locked"> Locked</span>
+                    Boss Status: <span class="boss-locked">🔒 Locked</span>
                 </div>
             </div>
-
             <div class="atlas-edit-header">
                 <button class="btn-atlas-edit" id="btn-atlas-edit" onclick="toggleAtlasEditMode()">
                     ✎ แก้ไข Atlas
                 </button>
             </div>
-
             <div class="atlas-progress-summary">
                 <div class="progress-item">
                     <span class="progress-label">Nodes Completed:</span>
@@ -3904,9 +5013,7 @@ body, html {
                     <span class="progress-value" id="atlas-total-progress">0%</span>
                 </div>
             </div>
-
             <div class="atlas-grid" id="atlas-grid"></div>
-
             <div class="atlas-boss-section" id="atlas-boss-section" style="display: none;">
                 <div class="boss-card">
                     <div class="boss-icon">👹</div>
@@ -3921,34 +5028,114 @@ body, html {
     <!-- ==========================================
      TAB 4: THE STASH (VAULT)
      ========================================== -->
-    <div id="vault-tab" class="tab-content">
+    <div id="stash-tab" class="tab-content">
         <div class="career-section">
             <div class="career-title">
-                Dream Vault & เควสส่วนขยาย
-                <button class="btn-s" style="background:rgba(200,169,110,.2); color:var(--accent);"
-                    onclick="openVaultManager()">✎ แก้ไข</button>
+                🏪 The Stash - ร้านแลกเปลี่ยนรางวัล
+                <span style="font-size: 10px; color: var(--muted); font-weight: normal;">
+                (แลก Orb เพื่อรับรางวัล)
+            </span>
+        </div>
+        <!-- Orb Balance Display -->
+        <div class="orb-balance-display" style="display: flex; gap: 16px; margin-bottom: 16px; padding: 12px; background: var(--surface2); border-radius: 8px;">
+            <div class="orb-item">
+                <span class="orb-icon">💛</span>
+                <span class="orb-count" id="stash-currency-chaos">0</span>
+                <span class="orb-label">Chaos</span>
+            </div>
+            <div class="orb-item">
+                <span class="orb-icon">💠</span>
+                <span class="orb-count" id="stash-currency-exalted">0</span>
+                <span class="orb-label">Exalted</span>
+            </div>
+            <div class="orb-item">
+                <span class="orb-icon">💎</span>
+                <span class="orb-count" id="stash-currency-divine">0</span>
+                <span class="orb-label">Divine</span>
+            </div>
+        </div>
+        <!-- Reward Categories -->
+        <div class="reward-categories">
+            
+            <!-- Chaos Tier -->
+            <div class="reward-tier">
+                <div class="tier-header chaos-tier">
+                    <span class="tier-icon">💛</span>
+                    <span class="tier-name">Chaos Orb Rewards</span>
+                    <span class="tier-cost">1-3 Chaos</span>
+                </div>
+                <div class="tier-description">รางวัลเล็กๆ น้อยๆ สำหรับพักผ่อน</div>
+                <div class="reward-grid" id="chaos-rewards-grid"></div>
+                <button class="btn-add-reward" onclick="openAddRewardModal('chaos')">
+                    + เพิ่มรางวัล Chaos
+                </button>
+            </div>
+            
+            <!-- Exalted Tier -->
+            <div class="reward-tier">
+                <div class="tier-header exalted-tier">
+                    <span class="tier-icon">💠</span>
+                    <span class="tier-name">Exalted Orb Rewards</span>
+                    <span class="tier-cost">1-3 Exalted</span>
+                </div>
+                <div class="tier-description">รางวัลระดับกลาง สำหรับรางวัลพิเศษ</div>
+                <div class="reward-grid" id="exalted-rewards-grid"></div>
+                <button class="btn-add-reward" onclick="openAddRewardModal('exalted')">
+                    + เพิ่มรางวัล Exalted
+                </button>
+            </div>
+            
+            <!-- Divine Tier -->
+            <div class="reward-tier">
+                <div class="tier-header divine-tier">
+                    <span class="tier-icon"></span>
+                    <span class="tier-name">Divine Orb Rewards</span>
+                    <span class="tier-cost">1-3 Divine</span>
+                </div>
+                <div class="tier-description">รางวัลระดับสูง สำหรับความสำเร็จยิ่งใหญ่</div>
+                <div class="reward-grid" id="divine-rewards-grid"></div>
+                <button class="btn-add-reward" onclick="openAddRewardModal('divine')">
+                    + เพิ่มรางวัล Divine
+                </button>
+            </div>
+            
+        </div>
+        <!-- Redemption History -->
+        <div class="redemption-history" style="margin-top: 24px;">
+            <div class="sec-title">
+                <span>📜 ประวัติการแลกรางวัล</span>
+                <button class="btn-s" style="background: rgba(224, 92, 92, 0.15); color: var(--red); border: 1px solid var(--red);" 
+                        onclick="clearRedemptionHistory()">
+                    🗑️ ล้างประวัติ
+                </button>
+            </div>
+            <div id="redemption-history-list"></div>
+        </div>
+    </div>
+    <div class="career-section" style="margin-top: 24px;">
+        <div class="career-title">
+            🏆 Dream Vault & เควสส่วนขยาย
+                <button class="btn-s" style="background:rgba(200,169,110,.2); color:var(--accent);" onclick="openVaultManager()">✎ แก้ไข</button>
             </div>
             <div class="vault-grid" id="vault-grid-container"></div>
         </div>
-
         <div class="career-section" style="margin-top:16px;">
             <div class="career-title">บันทึกความทรงจำการเดินทาง (Adventure Diary)</div>
-            <textarea class="diary-area" id="diary-in"
-                placeholder="บันทึกไอเดียเพลง รูปภาพ อารมณ์ หรืออุปสรรคที่ฝ่าฟันมาได้ในวันนี้..."></textarea>
-            <select id="diary-mood"
-                style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:5px;margin-bottom:8px;width:100%;">
+            <textarea class="diary-area" id="diary-in" placeholder="บันทึกไอเดียเพลง รูปภาพ อารมณ์ หรืออุปสรรคที่ฝ่าฟันมาได้ในวันนี้..."></textarea>
+            <select id="diary-mood" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:5px;margin-bottom:8px;width:100%;">
                 <option value="😊 สดใส">😊 สดใส</option>
                 <option value="😢 เศร้า">😢 เศร้า</option>
                 <option value="🎉 ตื่นเต้น">🎉 ตื่นเต้น</option>
                 <option value="😌 สงบ">😌 สงบ</option>
                 <option value="😤 มุ่งมั่น">😤 มุ่งมั่น</option>
             </select>
-            <button class="btn-s btn-art" style="width:100%;"
-                onclick="saveDiary()">สลักประวัติศาสตร์การเดินทางวันนี้ลงสมุดบันทึก</button>
+            <button class="btn-s btn-art" style="width:100%;"onclick="saveDiary()">สลักประวัติศาสตร์การเดินทางวันนี้ลงสมุดบันทึก</button>
             <div class="diary-logs" id="diary-logs"></div>
         </div>
     </div>
-    <!-- ========== TAB SETTING ========== -->
+    <!-- ==========================================
+     TAB 5: SETTINGS
+     ========================================== -->
     <div id="settings-tab" class="tab-content">
 
         <!-- ส่วนที่ 1: Cloud & Backup -->
@@ -4003,79 +5190,71 @@ body, html {
 
     </div>
 
-    <div class="modal-overlay" id="stat-modal">
-        <div class="modal">
-            <div class="modal-title">Status Distribution</div>
-            <div class="modal-sub" id="modal-sp-lbl">0 Status Points Available</div>
-            <div class="stat-btns"><button class="stat-btn" onclick="upgradeStat('STR')"><span class="n">STR</span><span
-                        class="v">+1</span></button><button class="stat-btn" onclick="upgradeStat('AGI')"><span
-                        class="n">AGI</span><span class="v">+1</span></button><button class="stat-btn"
-                    onclick="upgradeStat('INT')"><span class="n">INT</span><span class="v">+1</span></button><button
-                    class="stat-btn" onclick="upgradeStat('VIT')"><span class="n">VIT</span><span
-                        class="v">+1</span></button><button class="stat-btn" onclick="upgradeStat('CRE')"><span
-                        class="n">CRE</span><span class="v">+1</span></button></div><button class="btn-m"
-                onclick="closeStatModal()">ปิดหน้าต่างเลือกสถานะ</button>
+    <!-- Modals (คงเดิม) -->
+<div class="modal-overlay" id="stat-modal">
+    <div class="modal">
+        <div class="modal-title">Status Distribution</div>
+        <div class="modal-sub" id="modal-sp-lbl">0 Status Points Available</div>
+        <div class="stat-btns">
+            <button class="stat-btn" onclick="upgradeStat('STR')"><span class="n">STR</span><span class="v">+1</span></button>
+            <button class="stat-btn" onclick="upgradeStat('AGI')"><span class="n">AGI</span><span class="v">+1</span></button>
+            <button class="stat-btn" onclick="upgradeStat('INT')"><span class="n">INT</span><span class="v">+1</span></button>
+            <button class="stat-btn" onclick="upgradeStat('VIT')"><span class="n">VIT</span><span class="v">+1</span></button>
+            <button class="stat-btn" onclick="upgradeStat('CRE')"><span class="n">CRE</span><span class="v">+1</span></button>
+        </div>
+        <button class="btn-m" onclick="closeStatModal()">ปิดหน้าต่างเลือกสถานะ</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="qm-modal">
+    <div class="modal" style="max-width:420px; width:95%; text-align:left;">
+        <div class="modal-title" id="qm-modal-title" style="text-align:center; margin-bottom:10px;">Manage Quests</div>
+        <div class="btn-add-qm" onclick="addNewQuestRow()">+ เพิ่มรายการเควสใหม่</div>
+        <div class="qm-container" id="qm-container"></div>
+        <div style="display:flex; gap:6px;">
+            <button class="btn-m" style="background:var(--green); flex:1;" onclick="saveQuestManager()">บันทึกข้อมูลและอัปเดต</button>
+            <button class="btn-m" style="background:var(--muted); flex:1;" onclick="closeQuestManager()">ยกเลิก</button>
         </div>
     </div>
-    <div class="modal-overlay" id="qm-modal">
-        <div class="modal" style="max-width:420px; width:95%; text-align:left;">
-            <div class="modal-title" id="qm-modal-title" style="text-align:center; margin-bottom:10px;">Manage Quests
-            </div>
-            <div class="btn-add-qm" onclick="addNewQuestRow()">+ เพิ่มรายการเควสใหม่</div>
-            <div class="qm-container" id="qm-container"></div>
-            <div style="display:flex; gap:6px;"><button class="btn-m" style="background:var(--green); flex:1;"
-                    onclick="saveQuestManager()">บันทึกข้อมูลและอัปเดต</button><button class="btn-m"
-                    style="background:var(--muted); flex:1;" onclick="closeQuestManager()">ยกเลิก</button></div>
+</div>
+<!-- ✅ เพิ่ม Modal จัดการ Dream Vault -->
+<div class="modal-overlay" id="vault-manager-modal">
+    <div class="modal" style="max-width:450px;">
+        <div class="modal-title">จัดการ Dream Vault</div>
+        <div id="vault-list-container"></div>
+        <div style="display:flex; gap:6px; margin-top:12px;">
+            <input type="text" id="new-vault-name" placeholder="ชื่อผลงาน" class="c-input">
+            <input type="number" id="new-vault-progress" placeholder="ความคืบหน้า (%)" class="c-input" style="width:80px;">
+            <button class="btn-s btn-art" onclick="addVaultItem()">เพิ่ม</button>
+        </div>
+        <button class="btn-m" style="margin-top:12px;" onclick="closeVaultManager()">ปิด</button>
+    </div>
+</div>
+<!-- Add Reward Modal -->
+<div class="modal-overlay" id="add-reward-modal">
+    <div class="modal" style="max-width:400px;">
+        <div class="modal-title">เพิ่มรางวัลใหม่</div>
+        <input type="hidden" id="add-reward-tier">
+        <div style="margin-bottom:12px;">
+            <label style="font-size:11px; color:var(--muted); display:block; margin-bottom:4px;">ไอคอน</label>
+            <input type="text" id="add-reward-icon" class="c-input" style="width:100%;" placeholder="🎁">
+        </div>
+        <div style="margin-bottom:12px;">
+            <label style="font-size:11px; color:var(--muted); display:block; margin-bottom:4px;">ชื่อรางวัล</label>
+            <input type="text" id="add-reward-name" class="c-input" style="width:100%;" placeholder="เช่น กาแฟ 1 แก้ว">
+        </div>
+        <div style="margin-bottom:16px;">
+            <label style="font-size:11px; color:var(--muted); display:block; margin-bottom:4px;">ต้นทุน (Orb)</label>
+            <input type="number" id="add-reward-cost" class="c-input" style="width:100%;" min="1" placeholder="1">
+        </div>
+        <div style="display:flex; gap:6px;">
+            <button class="btn-m" style="background:var(--green); flex:1;" onclick="addNewReward()">เพิ่มรางวัล</button>
+            <button class="btn-m" style="background:var(--muted); flex:1;" onclick="closeAddRewardModal()">ยกเลิก</button>
         </div>
     </div>
-    <div class="modal-overlay" id="cm-modal">
-        <div class="modal" style="max-width:340px; text-align:left;">
-            <div class="modal-title" style="text-align:center; margin-bottom:12px;">แก้ไขเป้าหมายแผนงาน</div>
-            <div style="margin-bottom:12px;"><label
-                    style="font-size:11px; color:var(--muted); display:block; margin-bottom:4px;">เป้าหมายรายได้รวมรายเดือน
-                    (บาท)</label><input type="number" class="c-input" id="cm-goal-income-input" style="width:100%">
-            </div>
-            <div style="margin-bottom:16px;"><label
-                    style="font-size:11px; color:var(--muted); display:block; margin-bottom:4px;">เป้าหมายจำนวนภาพสำเร็จรายเดือน
-                    (รูป)</label><input type="number" class="c-input" id="cm-goal-jobs-input" style="width:100%"></div>
-            <div style="display:flex; gap:6px;"><button class="btn-m" style="background:var(--green); flex:1;"
-                    onclick="saveCareerManager()">บันทึกเป้าหมาย</button><button class="btn-m"
-                    style="background:var(--muted); flex:1;" onclick="closeCareerManager()">ยกเลิก</button></div>
-        </div>
-    </div>
-    <div class="modal-overlay" id="social-manager-modal">
-        <div class="modal" style="max-width:400px;">
-            <div class="modal-title">จัดการช่องทาง Social Media</div>
-            <div id="social-list-container"></div>
-            <div style="display:flex; gap:8px; margin-top:12px;"><input type="text" id="new-social-name"
-                    placeholder="ชื่อช่องทาง" class="c-input"><button class="btn-s btn-art"
-                    onclick="addSocialChannel()">เพิ่ม</button></div><button class="btn-m" style="margin-top:12px;"
-                onclick="closeSocialManager()">ปิด</button>
-        </div>
-    </div>
-    <div class="modal-overlay" id="saving-manager-modal">
-        <div class="modal" style="max-width:450px;">
-            <div class="modal-title">จัดการเป้าหมายการออม</div>
-            <div id="saving-list-container"></div>
-            <div style="display:flex; gap:6px; margin-top:12px;"><input type="text" id="new-saving-name"
-                    placeholder="ชื่อเป้าหมาย" class="c-input"><input type="number" id="new-saving-goal"
-                    placeholder="จำนวนเงิน (บาท)" class="c-input" style="width:100px;"><button class="btn-s btn-art"
-                    onclick="addSavingGoal()">เพิ่ม</button></div><button class="btn-m" style="margin-top:12px;"
-                onclick="closeSavingManager()">ปิด</button>
-        </div>
-    </div>
-    <div class="modal-overlay" id="vault-manager-modal">
-        <div class="modal" style="max-width:450px;">
-            <div class="modal-title">จัดการ Dream Vault</div>
-            <div id="vault-list-container"></div>
-            <div style="display:flex; gap:6px; margin-top:12px;"><input type="text" id="new-vault-name"
-                    placeholder="ชื่อผลงาน" class="c-input"><input type="number" id="new-vault-progress"
-                    placeholder="ความคืบหน้า (%)" class="c-input" style="width:80px;"><button class="btn-s btn-art"
-                    onclick="addVaultItem()">เพิ่ม</button></div><button class="btn-m" style="margin-top:12px;"
-                onclick="closeVaultManager()">ปิด</button>
-        </div>
-    </div>
-    <div class="toast" id="toast">บันทึกข้อมูลเรียบร้อย</div>
+</div>
+
+<div class="toast" id="toast">บันทึกข้อมูลเรียบร้อย</div>
 
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVIuWzKtUAyInYXavA9OpT5clRAKSNriuI5kVBbc6P4ofYXwBftZ_VQNfxNWJvx82rFw/exec';
@@ -4168,63 +5347,125 @@ body, html {
             ]
         };
 
-        // 2. ฟังก์ชัน Migration (ป้องกันข้อมูลเก่าหาย)
-        function migrateData(oldS) {
-            return {
-                // Core
-                xp: oldS?.xp ?? 0,
-                lvl: oldS?.lvl ?? 1,
-                sp: oldS?.sp ?? 0,
-                STR: oldS?.STR ?? 10,
-                AGI: oldS?.AGI ?? 10,
-                INT: oldS?.INT ?? 10,
-                VIT: oldS?.VIT ?? 10,
-                CRE: oldS?.CRE ?? 10,
+//// ==========================================
+// COMPACT: migrateData()
+// ==========================================
 
-                // Dimensions
-                artHours: oldS?.artHours ?? 0,
-                fitHours: oldS?.fitHours ?? 0,
-                artDays: oldS?.artDays ?? 0,
-                artLogs: oldS?.artLogs ?? [],
-                fitLogs: oldS?.fitLogs ?? [],
-                incomeLogs: oldS?.incomeLogs ?? [],
-                diaryLogs: oldS?.diaryLogs ?? [],
+function migrateData(oldS) {
+    const get = (key, fallback) => oldS?.[key] ?? fallback;
+    const getObj = (key, fallback) => ({ ...(oldS?.[key] ?? fallback) });
+    const getArr = (key, fallback) => [...(oldS?.[key] ?? fallback)];
 
-                // NEW: PoE Economy (รองรับทั้งชื่อเก่า 'orbs' และใหม่ 'currency')
-                currency: {
-                    chaos: oldS?.currency?.chaos ?? oldS?.orbs?.chaos ?? 0,
-                    exalted: oldS?.currency?.exalted ?? oldS?.orbs?.exalted ?? 0,
-                    divine: oldS?.currency?.divine ?? oldS?.orbs?.divine ?? 0
-                },
-                skillPoints: oldS?.skillPoints ?? 0,
-                skillTree: oldS?.skillTree ?? {},
-                ascendancyPoints: oldS?.ascendancyPoints ?? 0,
-                streakDays: oldS?.streakDays ?? 0,
-                atlasProgress: oldS?.atlasProgress ?? {},
-                atlasNodes: oldS?.atlasNodes ?? [
-                    { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false },
-                    { id: 'atlas2', name: 'ร้องเพลง Cover 10 เพลง', requiredXP: 500, branch: 'body', completed: false },
-                    { id: 'atlas3', name: 'เรียนทฤษฎีดนตรี', requiredXP: 300, branch: 'mind', completed: false },
-                    { id: 'atlas4', name: 'สร้าง Content 30 วัน', requiredXP: 1500, branch: 'art', completed: false }
-                ],
-                weeklyMedallions: oldS?.weeklyMedallions ?? 0,
-weeklyCompletion: oldS?.weeklyCompletion ?? {},
-                atlasBossDefeated: oldS?.atlasBossDefeated ?? false, atlasEditMode: oldS?.atlasEditMode ?? false,
+    return {
+        // === Core ===
+        totalXp: get('totalXp', 0),
+        xp: get('xp', 0),
+        lvl: get('lvl', 1),
+        sp: get('sp', 0),
+        STR: get('STR', 10),
+        AGI: get('AGI', 10),
+        INT: get('INT', 10),
+        VIT: get('VIT', 10),
+        CRE: get('CRE', 10),
 
-                // Legacy
-                history: oldS?.history ?? {},
-                followers: oldS?.followers ?? {},
-                lastFitDate: oldS?.lastFitDate ?? null,
-                goalIncome: oldS?.goalIncome ?? 15000,
-                goalJobs: oldS?.goalJobs ?? 6,
-                savingGoals: oldS?.savingGoals ?? [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }],
-                vaultItems: oldS?.vaultItems ?? [],
-                socialChannels: oldS?.socialChannels ?? [
-                    { id: "tk", name: "TikTok (EATLAEWSHOP)", subs: 0, vids: 0 },
-                    { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
-                ]
-            };
-        }
+        // === Dimensions ===
+        artHours: get('artHours', 0),
+        fitHours: get('fitHours', 0),
+        artDays: get('artDays', 0),
+        artLogs: getArr('artLogs', []),
+        fitLogs: getArr('fitLogs', []),
+        incomeLogs: getArr('incomeLogs', []),
+        diaryLogs: getArr('diaryLogs', []),
+
+        // === Quests ===
+        dailyQuests: (() => {
+            const quests = getArr('dailyQuests', []);
+            if (quests.length === 0) {
+                return [
+                    {
+                        id: 'map_boss_1',
+                        main: { text: 'ฝึกวาดอนาโตมี่สีน้ำมัน', xp: 50, rewards: { chaos: [5, 15], exalted: 0.20, divine: 0.01 } },
+                        subQuests: [
+                            { text: 'Sketch 15 นาที', xp: 15 },
+                            { text: 'ศึกษา Reference', xp: 10 }
+                        ]
+                    }
+                ];
+            }
+            return quests;
+        })(),
+        weeklyQuests: getArr('weeklyQuests', []),
+        monthlyQuests: getArr('monthlyQuests', []),
+
+        // === Stash & Rewards ===
+        stashRedemptions: getArr('stashRedemptions', []),
+        perfectDays: getArr('perfectDays', []),
+        customRewards: getObj('customRewards', { chaos: [], exalted: [], divine: [] }),
+
+        // === PoE Economy ===
+        currency: {
+            chaos: oldS?.currency?.chaos ?? oldS?.orbs?.chaos ?? 0,
+            exalted: oldS?.currency?.exalted ?? oldS?.orbs?.exalted ?? 0,
+            divine: oldS?.currency?.divine ?? oldS?.orbs?.divine ?? 0
+        },
+        skillPoints: get('skillPoints', 0),
+        skillTree: getObj('skillTree', {}),
+        ascendancyPoints: get('ascendancyPoints', 0),
+        streakDays: get('streakDays', 0),
+
+        // === Atlas ===
+        atlasProgress: getObj('atlasProgress', {}),
+        atlasBossDefeated: get('atlasBossDefeated', false),
+        atlasEditMode: get('atlasEditMode', false),
+        atlasNodes: getArr('atlasNodes', [
+            { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false },
+            { id: 'atlas2', name: 'ร้องเพลง Cover 10 เพลง', requiredXP: 500, branch: 'body', completed: false },
+            { id: 'atlas3', name: 'เรียนทฤษฎีดนตรี', requiredXP: 300, branch: 'mind', completed: false },
+            { id: 'atlas4', name: 'สร้าง Content 30 วัน', requiredXP: 1500, branch: 'art', completed: false }
+        ]),
+
+        // === Weekly & Monthly ===
+        weeklyMedallions: get('weeklyMedallions', 0),
+        weeklyCompletion: getObj('weeklyCompletion', {}),
+
+        // === UI State ===
+        selectedDateKey: get('selectedDateKey', null),
+        currentYear: get('currentYear', new Date().getFullYear()),
+        currentMonth: get('currentMonth', new Date().getMonth()),
+        editMode: get('editMode', false),
+
+        // === History (with perfectDayBonus) ===
+        history: Object.fromEntries(
+            Object.entries(oldS?.history ?? {}).map(([key, val]) => [
+                key,
+                {
+                    ...val,
+                    rewards: val?.rewards ?? {},
+                    perfectDayBonus: val?.perfectDayBonus ?? {}
+                }
+            ])
+        ),
+
+        // === Legacy ===
+        followers: getObj('followers', {}),
+        lastFitDate: get('lastFitDate', null),
+
+        // === Career ===
+        goalIncome: get('goalIncome', 15000),
+        goalJobs: get('goalJobs', 6),
+
+        // === Goals & Vault ===
+        savingGoals: getArr('savingGoals', [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }]),
+        vaultItems: getArr('vaultItems', []),
+
+        // === Social ===
+        socialChannels: getArr('socialChannels', [
+            { id: "tk", name: "TikTok (EATLAEWSHOP)", subs: 0, vids: 0 },
+            { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
+        ])
+    };
+}
+   
 
         let selectedDateKey = null, currentYear = 2026, currentMonth = 5, activeManagerType = 'daily';
         let lastSyncedDataStr = ''; // สำหรับ Quicksync
@@ -4314,79 +5555,95 @@ weeklyCompletion: oldS?.weeklyCompletion ?? {},
         }
 
         // ========== Core Functions ==========
-        function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => { t.classList.remove('show'); }, 2500); }
-        function getTodayKey() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+// ==========================================
+// COMPACT: XP & Level System
+// ==========================================
 
-        function updateTodayDisplay() {
-            const k = selectedDateKey || getTodayKey();
-            document.getElementById('today-display').textContent = selectedDateKey ? `📅 กำลังดูประวัติวันที่: ${k}` : `📅 วันนี้ปัจจุบัน: ${k}`;
-            document.getElementById('btn-back-today').style.display = (selectedDateKey && selectedDateKey !== getTodayKey()) ? 'inline-block' : 'none';
-        }
+// ===== Helper =====
+function getXpForLevel(level) {
+    return level * 100;  // ✅ ระบบใหม่
+}
 
-        function resetToTodayCalendar() {
-            selectedDateKey = null;
-            const d = new Date();
-            currentYear = d.getFullYear();
-            currentMonth = d.getMonth();
-            updateTodayDisplay();
-            renderDailyTab();
-            renderQuests(WEEKLY_QUESTS, S.history[getTodayKey()]?.weekly || [], 'weekly-quests');
-            renderQuests(MONTHLY_QUESTS, S.history[getTodayKey()]?.monthly || [], 'monthly-quests');
-            renderCalendar();
-            showToast('กลับสู่วันปัจจุบันเรียบร้อย');
-        }
+// ===== Core Functions =====
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timeout);
+    t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
+}
 
-        const LEVEL_THRESHOLDS = [
-            0, 100, 250, 500, 800, 1200, 1700, 2300, 3000, 3800,
-            4700, 5700, 6800, 8000, 9300, 10700, 12200, 13800, 15500, 17300
-        ];
+function getTodayKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 
-        function addXP(amount) {
-            if (!amount || amount <= 0) return;
+function updateTodayDisplay() {
+    const k = selectedDateKey || getTodayKey();
+    const el = document.getElementById('today-display');
+    if (el) el.textContent = selectedDateKey ? `📅 กำลังดูประวัติวันที่: ${k}` : `📅 วันนี้ปัจจุบัน: ${k}`;
+    const btn = document.getElementById('btn-back-today');
+    if (btn) btn.style.display = (selectedDateKey && selectedDateKey !== getTodayKey()) ? 'inline-block' : 'none';
+}
 
-            S.xp = (S.xp ?? 0) + amount;
+function resetToTodayCalendar() {
+    selectedDateKey = null;
+    const d = new Date();
+    currentYear = d.getFullYear();
+    currentMonth = d.getMonth();
+    updateTodayDisplay();
+    renderDailyTab();
+    renderQuests(WEEKLY_QUESTS, S.history?.[getTodayKey()]?.weekly ?? [], 'weekly-quests');
+    renderQuests(MONTHLY_QUESTS, S.history?.[getTodayKey()]?.monthly ?? [], 'monthly-quests');
+    renderCalendar();
+    showToast('กลับสู่วันปัจจุบันเรียบร้อย');
+}
 
-            // ตรวจสอบ Level Up
-            let leveledUp = false;
-            while (S.lvl < LEVEL_THRESHOLDS.length && S.xp >= LEVEL_THRESHOLDS[S.lvl]) {
-                S.lvl++;
-                leveledUp = true;
-            }
-            // ในฟังก์ชัน addXP() ตรงส่วน leveledUp = true
-            if (leveledUp) {
-                const rewards = calculateLevelUpRewards(S.lvl);
+function addXP(amount) {
+    if (!amount || amount <= 0) return;
 
-                if (rewards.sp > 0) {
-                    S.sp = (S.sp ?? 0) + rewards.sp;
-                }
+    S.totalXp = (S.totalXp ?? 0) + amount;
+    S.xp = (S.xp ?? 0) + amount;
 
-                if (rewards.skillPoints > 0) {
-                    S.skillPoints = (S.skillPoints ?? 0) + rewards.skillPoints;
-                }
+    // ✅ Check Level Up (ใช้ while loop)
+    let leveledUp = false;
+    while (S.lvl < 100 && S.xp >= getXpForLevel(S.lvl)) {
+        const rewards = calculateLevelUpRewards(S.lvl);
+        S.xp = S.xp - getXpForLevel(S.lvl);
+        S.lvl++;
+        S.sp = (S.sp ?? 0) + rewards.sp;
+        S.skillPoints = (S.skillPoints ?? 0) + rewards.skillPoints;
 
-                showToast(`🎉 Level Up! LV ${S.lvl} | +${rewards.sp} SP | +${rewards.skillPoints} Skill Points`);
-                showLevelUpAnimation(S.lvl, rewards);  // เพิ่มบรรทัดนี้
-            }
-            // ให้รางวัลเมื่อ Level Up
-            if (leveledUp) {
-                const rewards = calculateLevelUpRewards(S.lvl);
+        leveledUp = true;
+        // ✅ Show Level Up Animation
+        showLevelUpAnimation(S.lvl, rewards);
+        showToast(`🎉 Level Up! LV ${S.lvl} | +${rewards.sp} SP | +${rewards.skillPoints} Skill Points`);
+        
+        // ✅ ถ้า level เกิน threshold ให้ break (กัน loop อนันต์)
+        if (S.lvl >= 1000) break;
+    }
 
-                // เพิ่ม Status Points (เดิม)
-                if (rewards.sp > 0) {
-                    S.sp = (S.sp ?? 0) + rewards.sp;
-                }
+    // ✅ อัปเดต UI
+    updateXpBar();
+    updateNodes();
+    renderStats();
+    renderSkillTree();
+    save();
+}
 
-                // เพิ่ม Skill Points (ใหม่ - สำหรับ Skill Tree)
-                if (rewards.skillPoints > 0) {
-                    S.skillPoints = (S.skillPoints ?? 0) + rewards.skillPoints;
-                }
+function calculateLevelUpRewards(level) {
+    return {
+        sp: 1,  // ทุก Level ได้ 1 SP
+        skillPoints: (level % 2 === 0) ? 1 : 0  // ทุก 2 Level ได้ 1 Skill Point
+    };
+}
 
-                showToast(`🎉 Level Up! LV ${S.lvl} | +${rewards.sp} SP | +${rewards.skillPoints} Skill Points`);
-            }
-            function showLevelUpAnimation(newLevel, rewards) {
-                const notification = document.createElement('div');
-                notification.className = 'level-up-notification';
-                notification.innerHTML = `
+function showLevelUpAnimation(newLevel, rewards) {
+    // ✅ ใช้ template string แทน innerHTML ซ้อน
+    const notification = document.createElement('div');
+    notification.className = 'level-up-notification';
+    notification.innerHTML = `
         <div class="level-up-title">⚔️ LEVEL UP! ⚔️</div>
         <div class="level-up-details">
             <div class="reward">🎯 Level ${newLevel}</div>
@@ -4394,250 +5651,357 @@ weeklyCompletion: oldS?.weeklyCompletion ?? {},
             <div class="reward">+${rewards.skillPoints} Skill Points</div>
         </div>
     `;
+    document.body.appendChild(notification);
 
-                document.body.appendChild(notification);
-
-                // ลบหลังจาก 3 วินาที
-                setTimeout(() => {
-                    notification.style.animation = 'levelUpPop 0.3s ease-in reverse forwards';
-                    setTimeout(() => notification.remove(), 300);
-                }, 3000);
-            }
-
-            save();
-            updateXpBar();
-            updateNodes();
-            renderStats();
-            renderSkillTree();  // อัปเดต SP display ใน Skill Tree
-        }
-
-        function calculateLevelUpRewards(level) {
-            // กฎ: ทุก Level ได้ 1 SP (เดิม)
-            // ทุก 2 Level ได้ 1 Skill Point (ใหม่)
-            return {
-                sp: 1,  // Status Points สำหรับเพิ่ม Stats โดยตรง
-                skillPoints: (level % 2 === 0) ? 1 : 0  // Skill Points สำหรับ Skill Tree
-            };
-        }
-
-        function allocateStatPoint(stat) {
-            // ฟังก์ชันเดิมสำหรับเพิ่ม Stats โดยตรง (ใช้ SP)
-            if ((S.sp ?? 0) <= 0) {
-                showToast('❌ ไม่มี Status Points!');
-                return;
-            }
-
-            S.sp--;
-            S[stat] = (S[stat] ?? 10) + 1;
-
-            save();
-            renderStats();
-            showToast(`✅ ${stat} +1`);
-        }
-        updateXpBar();
-
-        function updateXpBar() {
-            document.getElementById('lvl-lbl').textContent = `LV ${S.lvl}`;
-            document.getElementById('xp-lbl').textContent = `${Math.floor(S.xp)} / ${S.lvl * 100} XP`;
-            document.getElementById('xp-fill').style.width = Math.min((S.xp / (S.lvl * 100)) * 100, 100) + '%';
-            document.getElementById('sp-badge').textContent = `${S.sp} SP AVAILABLE`;
-            if (S.sp > 0) document.getElementById('sp-badge').style.animation = 'pgold 1s infinite';
-            else document.getElementById('sp-badge').style.animation = 'none';
-        }
-
-        function checkDecay() {
-            if (!S.lastFitDate) return;
-            const last = new Date(S.lastFitDate), now = new Date();
-            const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
-            if (diffDays >= 4) {
-                const intervals = Math.floor((diffDays - 1) / 3);
-                if (intervals > 0) {
-                    const loss = intervals * 1;
-                    S.STR = Math.max(10, S.STR - loss);
-                    S.AGI = Math.max(10, S.AGI - loss);
-                    S.VIT = Math.max(10, S.VIT - loss);
-                    document.getElementById('decay-alert').classList.add('show');
-                    renderStats();
-                    save();
-                }
-            } else {
-                document.getElementById('decay-alert').classList.remove('show');
-            }
-        }
-
-        function renderStats() {
-            ['STR', 'AGI', 'INT', 'VIT', 'CRE'].forEach(st => {
-                document.getElementById(`val-${st}`).textContent = S[st];
-                document.getElementById(`bar-${st}`).style.width = Math.min((S[st] / 100) * 100, 100) + '%';
-                renderSkillTree();  // อัปเดต SP display
-            });
-        }
-
-        function getRank(hrs, arr) { let r = arr[0]; for (let i = 0; i < arr.length; i++) if (hrs >= arr[i].min) r = arr[i]; return r; }
-        function getNextRank(hrs, arr) { for (let i = 0; i < arr.length; i++) if (arr[i].min > hrs) return arr[i]; return null; }
-
-        function updateNodes() {
-            const ah = parseFloat((S.artHours ?? 0).toFixed(1));
-            const fh = parseFloat((S.fitHours ?? 0).toFixed(1));
-
-            // ✅ เพิ่ม null check ทุกจุด
-            const artHoursEl = document.getElementById('art-hours');
-            const fitHoursEl = document.getElementById('fit-hours');
-            const artBarEl = document.getElementById('art-bar');
-            const fitBarEl = document.getElementById('fit-bar');
-            const artRankEl = document.getElementById('art-rank');
-            const fitRankEl = document.getElementById('fit-rank');
-            const artRankProgressEl = document.getElementById('art-rank-progress');
-            const fitRankProgressEl = document.getElementById('fit-rank-progress');
-            const sArtHEl = document.getElementById('s-art-h');
-            const sFitHEl = document.getElementById('s-fit-h');
-            const sDaysEl = document.getElementById('s-days');
-
-            if (artHoursEl) artHoursEl.textContent = ah;
-            if (fitHoursEl) fitHoursEl.textContent = fh;
-
-            if (artBarEl) artBarEl.style.width = Math.min(ah / 10000 * 100, 100) + '%';
-            if (fitBarEl) fitBarEl.style.width = Math.min(fh / 10000 * 100, 100) + '%';
-
-            const ar = getRank(ah, ART_RANKS);
-            const anr = getNextRank(ah, ART_RANKS);
-            const fr = getRank(fh, FIT_RANKS);
-            const fnr = getNextRank(fh, FIT_RANKS);
-
-            if (artRankEl) artRankEl.textContent = ar?.name ?? 'Novice';
-            if (fitRankEl) fitRankEl.textContent = fr?.name ?? 'Untrained';
-
-            if (artRankProgressEl) {
-                artRankProgressEl.textContent = anr
-                    ? `Next: ${anr.name} @ ${anr.min}h (${(anr.min - ah).toFixed(1)} to go)`
-                    : 'MAX RANK';
-            }
-
-            if (fitRankProgressEl) {
-                fitRankProgressEl.textContent = fnr
-                    ? `Next: ${fnr.name} @ ${fnr.min}h (${(fnr.min - fh).toFixed(1)} to go)`
-                    : 'MAX RANK';
-            }
-
-            if (sArtHEl) sArtHEl.textContent = ah;
-            if (sFitHEl) sFitHEl.textContent = fh;
-            if (sDaysEl) sDaysEl.textContent = S.artDays ?? 0;
-        }
-
-        function deleteLog(type, id) {
-            if (!confirm('คุณต้องการลบบันทึกนี้? XP จะถูกหักคืน')) return;
-            let arr = type === 'art' ? S.artLogs : S.fitLogs;
-            const idx = arr.findIndex(x => x.id === id);
-            if (idx > -1) {
-                const item = arr[idx];
-                if (type === 'art') S.artHours = Math.max(0, S.artHours - item.val);
-                else S.fitHours = Math.max(0, S.fitHours - item.val);
-                if (item.xpEarned) {
-                    S.xp -= item.xpEarned;
-                    while (S.xp < 0 && S.lvl > 1) {
-                        S.lvl--;
-                        S.xp += S.lvl * 100;
-                        S.sp = Math.max(0, S.sp - 5);
-                    }
-                    if (S.xp < 0) S.xp = 0;
-                }
-                arr.splice(idx, 1);
-                updateXpBar();
-                updateNodes();
-                renderHourLog(type);
-                save();
-                showToast('ลบเรียบร้อย');
-            }
-        }
-
-        function renderHourLog(type) {
-    const container = document.getElementById(`${type}-logs`);
-    if (!container) return;
-    
-    const logs = type === 'art' ? (S.artLogs ?? []) : (S.fitLogs ?? []);
-    
-    if (logs.length === 0) {
-        container.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 20px;">ยังไม่มีบันทึก</div>';
-        return;
-    }
-    
-    container.innerHTML = logs.slice(0, 10).map(log => {
-        // ✅ แสดงเวลาแบบ PoE Format
-        const hours = Math.floor(log.hours ?? 0);
-        const minutes = Math.round((log.hours % 1) * 60) || (log.minutes ? log.minutes % 60 : 0);
-        const timeStr = hours > 0 
-            ? `${hours}h ${minutes}m`
-            : `${minutes}m`;
-        
-        return `
-            <div class="log-entry">
-                <div class="log-header">
-                    <span class="log-date">${log.date}</span>
-                    <span class="log-time">${timeStr}</span>
-                    <button class="btn-x" onclick="deleteHourLog('${type}', ${log.id})">✕</button>
-                </div>
-                <div class="log-note">${log.note}</div>
-                <div class="log-xp">+${log.xpEarned} XP</div>
-            </div>
-        `;
-    }).join('');
+    // ✅ ใช้ requestAnimationFrame แทน setTimeout สำหรับ animation
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            notification.style.animation = 'levelUpPop 0.3s ease-in reverse forwards';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    });
 }
-function deleteHourLog(type, logId) {
-    // ✅ ถามยืนยันก่อนลบ
-    if (!confirm('⚠️ ลบบันทึกนี้?\n\nXP และชั่วโมงจะถูกลบคืน')) {
+
+// ===== XP Bar =====
+function updateXpBar() {
+    const xpFill = document.querySelector('.xp-fill');
+    const xpText = document.querySelector('.xp-lbl span:last-child');
+    const lvlText = document.querySelector('.xp-lbl span:first-child');
+    
+    if (!xpFill) {
+        console.warn('XP bar not found');
         return;
     }
     
-    const logs = type === 'art' ? (S.artLogs ?? []) : (S.fitLogs ?? []);
-    const logIndex = logs.findIndex(l => l.id === logId);
+    const currentLevel = S.lvl ?? 1;
+    const currentXp = S.xp ?? 0;
+    const maxXp = getXpForLevel(currentLevel);
+    const percentage = Math.min((currentXp / maxXp) * 100, 100);
     
-    if (logIndex === -1) {
+    // ✅ อัปเดต UI (ใช้ class selector ใหม่)
+    xpFill.style.width = `${percentage}%`;
+    if (xpText) xpText.textContent = `${currentXp} / ${maxXp} XP`;
+    if (lvlText) lvlText.textContent = `LV ${currentLevel}`;
+    
+    // ✅ อัปเดต SP Badge
+    const spBadge = document.getElementById('sp-badge');
+    if (spBadge) {
+        spBadge.textContent = `${S.sp ?? 0} SP AVAILABLE`;
+        spBadge.style.animation = (S.sp ?? 0) > 0 ? 'pgold 1s infinite' : 'none';
+    }
+}
+
+// ===== Stat Functions =====
+function allocateStatPoint(stat) {
+    if ((S.sp ?? 0) <= 0) {
+        showToast('❌ ไม่มี Status Points!');
+        return;
+    }
+    S.sp--;
+    S[stat] = (S[stat] ?? 10) + 1;
+    save();
+    renderStats();
+    updateXpBar();
+    showToast(`✅ ${stat} +1`);
+}
+
+function renderStats() {
+    ['STR', 'AGI', 'INT', 'VIT', 'CRE'].forEach(st => {
+        const valEl = document.getElementById(`val-${st}`);
+        const barEl = document.getElementById(`bar-${st}`);
+        if (valEl) valEl.textContent = S[st] ?? 10;
+        if (barEl) barEl.style.width = Math.min(((S[st] ?? 10) / 100) * 100, 100) + '%';
+    });
+    renderSkillTree();
+}
+
+// ===== Decay System =====
+function checkDecay() {
+    if (!S.lastFitDate) {
+        document.getElementById('decay-alert')?.classList.remove('show');
+        return;
+    }
+    const last = new Date(S.lastFitDate);
+    const now = new Date();
+    const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays >= 4) {
+        const intervals = Math.floor((diffDays - 1) / 3);
+        if (intervals > 0) {
+            const loss = intervals * 1;
+            S.STR = Math.max(10, (S.STR ?? 10) - loss);
+            S.AGI = Math.max(10, (S.AGI ?? 10) - loss);
+            S.VIT = Math.max(10, (S.VIT ?? 10) - loss);
+            document.getElementById('decay-alert')?.classList.add('show');
+            renderStats();
+            save();
+        }
+    } else {
+        document.getElementById('decay-alert')?.classList.remove('show');
+    }
+}
+
+// ===== Rank Functions =====
+function getRank(hrs, arr) {
+    let r = arr[0];
+    for (let i = 0; i < arr.length; i++) {
+        if (hrs >= arr[i].min) r = arr[i];
+    }
+    return r;
+}
+
+function getNextRank(hrs, arr) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].min > hrs) return arr[i];
+    }
+    return null;
+}
+
+function updateNodes() {
+    const ah = parseFloat((S.artHours ?? 0).toFixed(1));
+    const fh = parseFloat((S.fitHours ?? 0).toFixed(1));
+
+    // ✅ ใช้ object mapping แทนการเขียนซ้ำ
+    const elements = {
+        'art-hours': ah,
+        'fit-hours': fh,
+        'art-bar': Math.min(ah / 10000 * 100, 100) + '%',
+        'fit-bar': Math.min(fh / 10000 * 100, 100) + '%',
+        's-art-h': ah,
+        's-fit-h': fh,
+        's-days': S.artDays ?? 0
+    };
+
+    Object.entries(elements).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    });
+
+    const ar = getRank(ah, ART_RANKS);
+    const anr = getNextRank(ah, ART_RANKS);
+    const fr = getRank(fh, FIT_RANKS);
+    const fnr = getNextRank(fh, FIT_RANKS);
+
+    const rankEls = {
+        'art-rank': ar?.name ?? 'Novice',
+        'fit-rank': fr?.name ?? 'Untrained',
+        'art-rank-progress': anr ? `Next: ${anr.name} @ ${anr.min}h (${(anr.min - ah).toFixed(1)} to go)` : 'MAX RANK',
+        'fit-rank-progress': fnr ? `Next: ${fnr.name} @ ${fnr.min}h (${(fnr.min - fh).toFixed(1)} to go)` : 'MAX RANK'
+    };
+
+    Object.entries(rankEls).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    });
+}
+
+// ===== Log Functions =====
+function deleteLog(type, id) {
+    if (!confirm('⚠️ คุณต้องการลบบันทึกนี้?\n\nXP, ชั่วโมง และ Currency จะถูกลบคืน')) {
+        return;
+    }
+    
+    // ✅ หา logs
+    const logs = type === 'art' ? (S.artLogs ?? []) : (S.fitLogs ?? []);
+    const idx = logs.findIndex(x => x.id === id);
+    
+    if (idx === -1) {
         showToast('❌ ไม่พบบันทึก');
         return;
     }
     
-    const log = logs[logIndex];
+    const item = logs[idx];
     
-    // ✅ ลบชั่วโมงคืน
+    // ✅ 1. ลบชั่วโมง (รองรับทั้ง val และ hours)
+    const hoursToRemove = item.hours ?? item.val ?? 0;
     if (type === 'art') {
-        S.artHours = Math.max(0, (S.artHours ?? 0) - (log.hours ?? 0));
+        S.artHours = Math.max(0, (S.artHours ?? 0) - hoursToRemove);
     } else {
-        S.fitHours = Math.max(0, (S.fitHours ?? 0) - (log.hours ?? 0));
+        S.fitHours = Math.max(0, (S.fitHours ?? 0) - hoursToRemove);
     }
     
-    // ✅ ลบ XP คืน
-    S.xp = Math.max(0, (S.xp ?? 0) - (log.xpEarned ?? 0));
+    // ✅ 2. ลบ XP
+    const xpToRemove = item.xpEarned ?? 0;
+    if (xpToRemove > 0) {
+        S.xp = Math.max(0, (S.xp ?? 0) - xpToRemove);
+        
+        // ✅ ปรับ Level ถ้าจำเป็น (ใช้ getXpForLevel)
+        while (S.xp < getXpForLevel(S.lvl - 1) && S.lvl > 1) {
+            S.lvl--;
+            S.sp = Math.max(0, (S.sp ?? 0) - 5);
+        }
+        if (S.xp < 0) S.xp = 0;
+    }
     
-    // ✅ ลบออกจาก array
-    logs.splice(logIndex, 1);
+    // ✅ 3. ลบ Currency (ถ้ามี)
+    if (item.currency) {
+        if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+        S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (item.currency.chaos ?? 0));
+        S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (item.currency.exalted ?? 0));
+        S.currency.divine = Math.max(0, (S.currency.divine ?? 0) - (item.currency.divine ?? 0));
+    }
     
-    // ✅ ลบออกจาก history
-    const logDateKey = log.logDateKey;
+    // ✅ 4. ลบออกจาก history (ถ้ามี)
+    const logDateKey = item.logDateKey;
     if (logDateKey && S.history?.[logDateKey]) {
         if (type === 'art') {
-            S.history[logDateKey].artHours = Math.max(
-                0, (S.history[logDateKey].artHours ?? 0) - (log.hours ?? 0)
-            );
+            S.history[logDateKey].artHours = Math.max(0, (S.history[logDateKey].artHours ?? 0) - hoursToRemove);
         } else {
-            S.history[logDateKey].fitHours = Math.max(
-                0, (S.history[logDateKey].fitHours ?? 0) - (log.hours ?? 0)
-            );
+            S.history[logDateKey].fitHours = Math.max(0, (S.history[logDateKey].fitHours ?? 0) - hoursToRemove);
+        }
+        
+        // ✅ ลบ rewards ด้วย
+        if (S.history[logDateKey].rewards) {
+            const rewardKey = `hour_${type}_${id}`;
+            delete S.history[logDateKey].rewards[rewardKey];
         }
     }
     
-    save();
-    renderHourLog(type);
-    if (typeof updateHoursDisplay === 'function') updateHoursDisplay();
-    if (typeof updateXpBar === 'function') updateXpBar();
-    if (typeof renderCalendar === 'function') renderCalendar();
+    // ✅ 5. ลบออกจาก array
+    logs.splice(idx, 1);
     
-    showToast(`🗑️ ลบบันทึกสำเร็จ! -${log.xpEarned} XP`);
+    // ✅ 6. อัปเดต UI ทุกส่วน
+    updateXpBar();
+    updateNodes();           // ✅ อัปเดตตัวเลขชั่วโมง
+    updateHoursDisplay();    // ✅ อัปเดต display ชั่วโมง
+    updateCurrencyDisplay(); // ✅ อัปเดต Currency
+    renderHourLog(type);     // ✅ รีเฟรชประวัติ
+    renderCalendar();        // ✅ อัปเดตปฏิทิน
+    
+    save();
+    showToast(`🗑️ ลบบันทึกสำเร็จ! -${xpToRemove} XP, -${hoursToRemove.toFixed(1)} ชม.`);
+}
+// ==========================================
+// renderHourLog() - แก้ไขแล้ว
+// ==========================================
+
+function renderHourLog(type) {
+    const container = document.getElementById(`${type}-logs`);
+    
+    // ✅ แก้ไข: ใช้ {} ครอบเพื่อให้ return ทำงานเฉพาะเมื่อไม่มี container
+    if (!container) {
+        console.warn(`${type}-logs container not found`);
+        return;
+    }
+    
+    const logs = type === 'art' ? (S.artLogs ?? []) : (S.fitLogs ?? []);
+    
+    if (logs.length === 0) {
+        container.innerHTML = `
+            <div style="color:var(--muted); font-size:11px; padding:12px; text-align:center;font-style: italic;">
+                ยังไม่มีบันทึก ${type === 'art' ? 'Art' : 'Fitness'}
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = logs.slice().reverse().map(log => {
+        const currencyText = log.currency ? 
+            `💛${log.currency.chaos ?? 0} 💠${log.currency.exalted ?? 0} 💎${log.currency.divine ?? 0}` : 
+            '';
+        
+        return `
+            <div style="
+                background: var(--surface2);
+                border-radius: 6px;
+                padding: 12px;
+                margin-bottom: 8px;
+                border-left: 3px solid ${type === 'art' ? 'var(--gold)' : 'var(--red)'};
+                animation: fadeIn 0.3s ease;
+            ">
+                <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                ">
+                    <span style="font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted);">
+                        ${log.date || 'ไม่มีวันที่'}
+                    </span>
+                    <span style="font-family: 'Space Mono', monospace; font-size: 10px; color: var(--gold); font-weight: 700;">
+                        ${(log.val ?? log.hours ?? 0).toFixed(1)} ชม.
+                    </span>
+                    <span style="font-family: 'Space Mono', monospace; font-size: 9px; color: var(--accent);">
+                        +${log.xpEarned || 0} XP ${currencyText}
+                    </span>
+                    <button onclick="deleteLog('${type}', ${log.id})" 
+                            style="
+                                background: rgba(224, 92, 92, 0.15);
+                                border: 1px solid var(--red);
+                                color: var(--red);
+                                width: 24px;
+                                height: 24px;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                font-size: 12px;
+                                font-weight: 700;
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                transition: all 0.2s;
+                            "
+                            onmouseover="this.style.background='var(--red)'; this.style.color='white'"
+                            onmouseout="this.style.background='rgba(224, 92, 92, 0.15)'; this.style.color='var(--red)'">
+                        ✕
+                    </button>
+                </div>
+                ${log.note ? `
+                    <div style="
+                        font-size: 11px;
+                        color: var(--text);
+                        line-height: 1.5;
+                        padding: 8px;
+                        background: rgba(0, 0, 0, 0.3);
+                        border-radius: 4px;
+                    ">
+                        ${log.note}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
 }
 
 function isFitnessQuest(text) {
     const keywords = ['weight training', 'cardio', 'workout', 'run', 'fitness', 'ฟิตเนส', 'เวท', 'วิ่ง', 'ออกกำลัง', 'ซ้อมเสียง', 'ร้องเพลง', 'vocal'];
     return keywords.some(k => text.toLowerCase().includes(k));
     }
+const DEFAULT_DAILY_QUESTS = [
+    {
+        id: 'map_boss_1',
+        main: {
+            text: 'ฝึกวาดอนาโตมี่สีน้ำมัน',
+            xp: 50,
+            rewards: {
+                chaos: [5, 15],
+                exalted: 0.20,
+                divine: 0.01
+            }
+        },
+        subQuests: [
+            { text: 'Sketch 15 นาที', xp: 15 },
+            { text: 'ศึกษา Reference', xp: 10 }
+        ]
+    },
+    {
+        id: 'map_boss_2',
+        main: {
+            text: 'ฝึกร้องเพลง/วอร์มเสียง',
+            xp: 50,
+            rewards: {
+                chaos: [5, 15],
+                exalted: 0.20,
+                divine: 0.01
+            }
+        },
+        subQuests: [
+            { text: 'Vocal Warm-up 10 นาที', xp: 10 },
+            { text: 'ฝึกเทคนิคการร้อง', xp: 15 }
+        ]
+    }
+];    
 
 function renderDailyTab() {
     const k = selectedDateKey || getTodayKey();
@@ -4645,142 +6009,185 @@ function renderDailyTab() {
     const h = S.history[k];
     const container = document.getElementById('daily-quests');
     if (!container) return;
+    
     container.innerHTML = '';
 
-    // แสดงปุ่ม Edit Mode
-    const editHeader = document.createElement('div');
-    editHeader.className = 'edit-header';
-     editHeader.innerHTML = `
-        <button class="btn-edit-mode" onclick="toggleEditMode()">
-                ${S.editMode ? '✕ ยกเลิกแก้ไข' : '✎ แก้ไข'}
-        </button>
-    `;
-    container.appendChild(editHeader);
+    // อัปเดตวันที่
+    const todayDisplay = document.getElementById('today-display');
+    if (todayDisplay) {
+        const dateObj = new Date(k);
+        todayDisplay.textContent = dateObj.toLocaleDateString('th-TH', { 
+            weekday: 'short', 
+            day: 'numeric', 
+            month: 'short', 
+            year: 'numeric' 
+        });
+    }
 
-    // Render แต่ละ Main Quest (Map Boss)
-    (S.dailyQuests || []).forEach((quest, index) => {
+    // อัปเดต Currency Display
+    updateCurrencyDisplay();
+    updateXpBar();
+
+    // อัปเดตปุ่ม Edit Mode
+    const editBtn = document.getElementById('btn-toggle-edit');
+    if (editBtn) {
+        editBtn.textContent = S.editMode ? '✕ ยกเลิกแก้ไข' : '✎ แก้ไข';
+        editBtn.classList.toggle('active', S.editMode);
+    }
+     // Initialize daily quests if empty
+    if (!S.dailyQuests || S.dailyQuests.length === 0) {
+        S.dailyQuests = JSON.parse(JSON.stringify(DEFAULT_DAILY_QUESTS));
+        save();
+    }
+
+    // Render แต่ละ Main Quest
+    (S.dailyQuests || []).forEach((quest) => {
         const isMainDone = h.daily?.includes(`main_${quest.id}`);
-        const completedSubs = h.daily?.filter(id => id.startsWith(`sub_${quest.id}_`)).length || 0;
-        const totalSubs = quest.subQuests?.length || 0;
-        const isPerfectDay = isMainDone && completedSubs === totalSubs && totalSubs > 0;
-
-        const isCollapsed = h.collapsedQuests?.includes(quest.id) ?? false;
+        const isCollapsed = h.collapsedQuests?.includes(quest.id);
+        const isEditing = S.editMode && !isCollapsed;  // ✅ แสดง edit เฉพาะอันที่กาง
 
         const card = document.createElement('div');
-        card.className = `poe-quest-card ${isPerfectDay ? 'perfect-day' : ''} ${isMainDone ? 'main-done' : ''}`;
-
-        // === Map Boss (Main Quest) ===
-        const mainHtml = `
-            <div class="map-boss-section" onclick="${S.editMode ? '' : `toggleMainQuest('${quest.id}')`}">
+        card.className = `map-boss-card ${isMainDone ? 'main-done' : ''} ${isEditing ? 'editing' : ''}`;
+        
+        // === 1. ส่วน Header Quest (ซ้าย) ===
+        const headerHtml = `
+            <div class="card-header" onclick="${S.editMode ? '' : `toggleMainQuest('${quest.id}')`}">
                 <div class="socket-container">
                     <div class="socket red-socket ${isMainDone ? 'socket-filled' : ''}">
                         ${isMainDone ? '💎' : ''}
                     </div>
                 </div>
-                <div class="quest-info">
-                    <div class="quest-title">🗡️ MAP BOSS</div>
-                    <div class="quest-text">${quest.main?.text || 'เควสหลัก'}</div>
+                <div class="card-info">
+                    <div class="card-title">🗡️MAP BOSS</div>
+                    ${S.editMode ? `
+                        <input type="text" class="edit-input-inline" 
+                               value="${quest.main?.text || ''}" 
+                               onchange="updateMainQuest('${quest.id}', this.value)"
+                               onclick="event.stopPropagation()"
+                               style="font-size: 11px; padding: 4px 8px;">
+                    ` : `
+                        <div class="card-text" title="${quest.main?.text || 'เควสหลัก'}">${quest.main?.text || 'เควสหลัก'}</div>
+                    `}
                     <div class="quest-rewards">
-                        💛${quest.rewards?.chaos?.[0] || 5}-${quest.rewards?.chaos?.[1] || 15}C 
+                        💛${quest.main?.rewards?.chaos?.[0] || 5}-${quest.main?.rewards?.chaos?.[1] || 15}C 
                         | 20%💠 | 1%💎 
-                        | +${quest.main?.xp || 50} XP
+                        | +${quest.main?.xp || 50} XP ${isMainDone ? '(x2)' : ''}
                     </div>
                 </div>
-                ${isMainDone ? '<div class="completion-badge">✓</div>' : ''}
-                <button class="btn-collapse-quest" onclick="event.stopPropagation(); toggleQuestCollapse('${quest.id}', '${k}')">
-                    <span class="collapse-icon">${isCollapsed ? '▶' : '▼'}</span>
-                </button>
+                <div class="card-actions">
+                    <button class="btn-action collapse-btn" onclick="event.stopPropagation(); toggleQuestCollapse('${quest.id}', '${k}')" title="${isCollapsed ? 'กาง' : 'พับ'}">
+                        ${isCollapsed ? '▶' : '▼'}
+                    </button>
+                </div>
             </div>
-
-                <div class="juice-maps-section ${isCollapsed ? 'collapsed' : ''}">
         `;
 
-        // === Juice Maps (Sub-quests) ===
+        // === 2. ส่วน Juice Maps (ขวา/ล่าง) ===
         let subHtml = '';
-        if (quest.subQuests && quest.subQuests.length > 0) {
-            subHtml = `<div class="juice-maps-section">`;
-            quest.subQuests.forEach((sub, subIndex) => {
-                const subId = `sub_${quest.id}_${subIndex}`;
-                const isSubDone = h.daily?.includes(subId);
-                subHtml += `
-                    <div class="juice-map-row ${isSubDone ? 'sub-done' : ''}" 
-                        onclick="${S.editMode ? '' : `toggleSubQuest('${quest.id}', ${subIndex})`}">
-                        <div class="socket-container small">
-                            <div class="socket white-socket ${isSubDone ? 'socket-filled' : ''}">
-                                ${isSubDone ? '✨' : ''}
+        if (!isCollapsed) {
+            subHtml = '<div class="juice-maps-list">';
+            
+            if (quest.subQuests && quest.subQuests.length > 0) {
+                quest.subQuests.forEach((sub, idx) => {
+                    const subId = `sub_${quest.id}_${idx}`;
+                    const isSubDone = h.daily?.includes(subId);
+                    
+                    if (S.editMode) {
+                        // ✅ Edit Mode: ใช้ input ที่แก้ไขได้
+                        subHtml += `
+                            <div class="juice-map-item editing">
+                                <div class="sub-socket ${isSubDone ? 'filled' : ''}">
+                                    ${isSubDone ? '✨' : ''}
+                                </div>
+                                <input type="text" class="sub-text-input" 
+                                       value="${sub.text}" 
+                                       onchange="updateSubQuest('${quest.id}', ${idx}, this.value)"
+                                       onclick="event.stopPropagation()">
+                                <span class="sub-xp">+${sub.xp || 10} XP</span>
+                                <button class="btn-edit-action remove-sub" 
+                                        onclick="event.stopPropagation(); removeSubQuest('${quest.id}', ${idx})" 
+                                        title="ลบ">✕</button>
                             </div>
-                        </div>
-                        <div class="sub-quest-text">${sub.text}</div>
-                        <div class="sub-quest-xp">+${sub.xp || 10} XP</div>
-                    </div>
+                        `;
+                    } else {
+                        // Normal Mode: คลิกเพื่อติ๊ก
+                        subHtml += `
+                            <div class="juice-map-item ${isSubDone ? 'sub-done' : ''}" 
+                                 onclick="toggleSubQuest('${quest.id}', ${idx})">
+                                <div class="sub-socket ${isSubDone ? 'filled' : ''}">
+                                    ${isSubDone ? '✨' : ''}
+                                </div>
+                                <span class="sub-text">${sub.text}</span>
+                                <span class="sub-xp">+${sub.xp || 10} XP</span>
+                            </div>
+                        `;
+                    }
+                });
+            } else {
+                subHtml += '<div style="padding: 8px; color: var(--muted); font-size: 9px; font-style: italic;">ยังไม่มี Juice Maps</div>';
+            }
+            
+            if (S.editMode) {
+                subHtml += `
+                    <button class="btn-edit-action add" 
+                            onclick="addSubQuest('${quest.id}')" 
+                            style="width: 40%; margin-top: 4px;">
+                        + เพิ่ม Juice Map
+                    </button>
                 `;
-            });
+            }
+            
             subHtml += '</div>';
-        } else {
-            subHtml += '<div class="no-sub-quests">ไม่มี Juice Maps</div>';
         }
 
-    
-        // === Edit Mode Accordion ===
+        // === Edit Controls (เฉพาะ Map Boss) ===
         let editHtml = '';
-        if (S.editMode) {
+        if (isEditing) {
             editHtml = `
-                <div class="edit-accordion" style="display: block;">
-                    <div class="edit-section">
-                        <label>ชื่อ Map Boss:</label>
-                        <input type="text" class="edit-input" 
-                            value="${quest.main?.text || ''}" 
-                            onchange="updateMainQuest('${quest.id}', this.value)">
-                    </div>
-                    <div class="edit-section" style="margin-top: 8px;">
-                        <button class="btn-remove-main-quest" onclick="removeMainQuest('${quest.id}')" 
-                                style="width: 100%; background: rgba(224, 92, 92, 0.15); border: 1px solid var(--red); 
-                                        color: var(--red); padding: 8px; border-radius: 4px; cursor: pointer; 
-                                        font-family: 'Space Mono', monospace; font-size: 11px;">
-                            🗑️ ลบ Map Boss นี้
+                <div class="edit-controls">
+                    <div style="display: flex; gap: 6px; align-items: center;">
+                        <label style="font-size: 9px; color: var(--gold); flex-shrink: 0;">XP:</label>
+                        <input type="number" class="edit-input-inline edit-input-small" 
+                               value="${quest.main?.xp || 50}"
+                               onchange="updateMainQuestXP('${quest.id}', this.value)">
+                        <button class="btn-edit-action" 
+                                onclick="removeMainQuest('${quest.id}')" 
+                                style="margin-left: auto;">
+                            🗑️ ลบ Map Boss
                         </button>
                     </div>
-                    <div class="edit-section">
-                        <label>Juice Maps (Sub-quests):</label>
-                        <div class="sub-quest-list">
-                            ${(quest.subQuests || []).map((sub, idx) => `
-                                <div class="sub-edit-row">
-                                    <input type="text" class="edit-input small" 
-                                    value="${sub.text}" 
-                                    onchange="updateSubQuest('${quest.id}', ${idx}, this.value)">
-                            <button class="btn-remove-sub" onclick="removeSubQuest('${quest.id}', ${idx})">✕</button>
-                        </div>
-                    `).join('')}
                 </div>
-                <button class="btn-add-sub" onclick="addSubQuest('${quest.id}')">
-                    + เพิ่ม Juice Map
-                </button>
-            </div>
-            <div class="edit-section">
-                <label>XP (Map Boss):</label>
-                <input type="number" class="edit-input small"
-                       value="${quest.main?.xp || 50}"
-                       onblur="updateMainQuestXP('${quest.id}', this.value)">
-            </div>
-        </div>
-    `;
-}
-        // ✅ รวม HTML ทั้งหมด
-        card.innerHTML = mainHtml + subHtml + editHtml;
-        container.appendChild(card);
-    });  // ← ปิด forEach ตรงนี้
+            `;
+        }
 
-    // ปุ่มเพิ่ม Map Boss ใหม่ (แสดงเฉพาะ Edit Mode)
+        card.innerHTML = headerHtml + subHtml + editHtml;
+        container.appendChild(card);
+    });
+
+    // ✅ ปุ่มเพิ่ม Map Boss ใหม่ (แสดงเฉพาะ edit mode)
     if (S.editMode) {
-        const addBtn = document.createElement('button');
-        addBtn.className = 'btn-add-main-quest';
-        addBtn.innerHTML = '+ เพิ่ม Map Boss ใหม่';
-        addBtn.onclick = addMainQuest;
-        container.appendChild(addBtn);
+        const addCard = document.createElement('div');
+        addCard.className = 'map-boss-card add-quest-card';
+        addCard.innerHTML = `<span>+ เพิ่ม Map Boss ใหม่</span>`;
+        addCard.onclick = addMainQuest;
+        container.appendChild(addCard);
     }
 
     checkDayComplete(k);
 }
+
+// ✅ ฟังก์ชันอัปเดต Currency (แก้ ID ให้ตรง)
+function updateCurrencyDisplay() {
+    const currency = S.currency || S.orbs || { chaos: 0, exalted: 0, divine: 0 };
+    const chaosEl = document.getElementById('orb-chaos');
+    const exaltedEl = document.getElementById('orb-exalted');
+    const divineEl = document.getElementById('orb-divine');
+    
+    if (chaosEl) chaosEl.textContent = S.orbs?.chaos ?? 0;
+    if (exaltedEl) exaltedEl.textContent = S.orbs?.exalted ?? 0;
+    if (divineEl) divineEl.textContent = S.orbs?.divine ?? 0;
+}
+
 // ✅ เพิ่มฟังก์ชัน Toggle Collapse
 function toggleQuestCollapse(questId, dateKey) {
     if (!S.history[dateKey]) {
@@ -4802,80 +6209,229 @@ function toggleQuestCollapse(questId, dateKey) {
     save();
     renderDailyTab();
 }
-function renderQuests(database,stateList,elementId){ 
-    console.log(`Rendering ${elementId}:`, database);  // ✅ เพิ่มบรรทัดนี้
+function renderQuests(database, stateList, elementId) {
+    const k = selectedDateKey || getTodayKey();
+    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false };
+    const h = S.history[k];
+    let activeList = (elementId === 'weekly-quests') ? h.weekly : (elementId === 'monthly-quests') ? h.monthly : [];
+    const container = document.getElementById(elementId);
+    if (!container) return;
     
-    if (!database || database.length === 0) {
-        console.warn(`No data for ${elementId}`);
-        return;
-    }
-    const k=selectedDateKey||getTodayKey(); 
-    if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; 
-    const h=S.history[k]; 
-    let activeList=(elementId==='weekly-quests')?h.weekly:(elementId==='monthly-quests')?h.monthly:[]; 
-    const container=document.getElementById(elementId); 
-    if (!container) {
-        console.error(`Element not found: ${elementId}`);
-        return;  // ✅ เพิ่ม null check
-    }
-    container.innerHTML=''; 
-    database.forEach(q => {
+    container.innerHTML = '';
+
+    database.forEach((q, index) => {
         const isDone = activeList.includes(q.id);
         const card = document.createElement('div');
         card.className = `q-card ${isDone ? 'done' : ''}`;
         
         const questType = elementId === 'weekly-quests' ? 'weekly' : 'monthly';
         
-        card.innerHTML = `
-            <div class="q-row" onclick="toggleQuestType('${questType}','${q.id}')">
-                <div class="chk">${isDone ? '✓' : ''}</div>
-                <div class="q-text">${q.text}</div>
-                <div class="q-meta">
-                    <span class="q-xp">+${q.xp} XP</span>
-                    <span class="q-stat ${q.stat}">${q.stat}</span>
+        if (S.editMode) {
+            // ✅ Edit Mode: แสดง input แก้ไขได้
+            card.innerHTML = `
+                <div class="q-row">
+                    <div class="chk">${isDone ? '✓' : ''}</div>
+                    <input type="text" class="edit-input-inline" 
+                           value="${q.text}" 
+                           onchange="updateQuest('${questType}', ${index}, this.value)"
+                           style="flex: 1; font-size: 12px;">
+                    <div class="q-meta">
+                        <input type="number" class="edit-input-inline edit-input-small" 
+                               value="${q.xp}" 
+                               onchange="updateQuestXP('${questType}', ${index}, this.value)"
+                               style="width: 50px;">
+                        <span class="q-stat ${q.stat}">${q.stat}</span>
+                        <button class="btn-edit-action remove-sub" 
+                                onclick="removeQuest('${questType}', ${index})" 
+                                title="ลบ">✕</button>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        } else {
+            // Normal Mode
+            card.innerHTML = `
+                <div class="q-row" onclick="toggleQuestType('${questType}','${q.id}')">
+                    <div class="chk">${isDone ? '✓' : ''}</div>
+                    <div class="q-text">${q.text}</div>
+                    <div class="q-meta">
+                        <span class="q-xp">+${q.xp} XP</span>
+                        <span class="q-stat ${q.stat}">${q.stat}</span>
+                    </div>
+                </div>
+            `;
+        }
         
-        container.appendChild(card); 
-    }); 
+        container.appendChild(card);
+    });
+
+    // ปุ่มเพิ่ม Quest (แสดงเฉพาะ Edit Mode)
+    if (S.editMode) {
+        const addBtn = document.createElement('button');
+        addBtn.className = 'btn-edit-action add';
+        addBtn.textContent = `+ เพิ่ม ${questType === 'weekly' ? 'Expedition' : 'Ascendancy'} Quest`;
+        addBtn.style.width = '100%';
+        addBtn.style.marginTop = '8px';
+        addBtn.onclick = () => addQuest(questType);
+        container.appendChild(addBtn);
+    }
+
     if (elementId === 'weekly-quests') {
         checkWeeklyCompletion();
     }
     if (elementId === 'monthly-quests') {
-    updateTrialRequirementsDisplay();
-}
+        updateTrialRequirementsDisplay();
+    }
 }
 
-function toggleQuest(type,id){ 
-    const k=selectedDateKey||getTodayKey(); 
-    if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; 
-    let arr=S.history[k].daily; 
-    const q=DAILY_QUESTS.find(x=>x.id===id); 
-    if(!q) return; 
-    const idx=arr.indexOf(id); 
-    if(idx>-1){ 
-        arr.splice(idx,1); 
-        S.xp=Math.max(0,S.xp-q.xp); 
-        updateXpBar(); 
-    } else { 
-        arr.push(id); 
-        S[q.stat]+=1; 
-        addXp(q.xp); 
-        showToast(`Quest Complete! ได้รับ + ${ q.xp } XP และพลัง ${ q.stat } + 1`); 
-    } 
-     const quest = findQuest(type, questId);  // หา quest จาก database
-    if (quest && quest.xp) {
-        addXP(quest.xp);  // เพิ่ม XP
+// ✅ ฟังก์ชันแก้ไข Quest
+function updateQuest(type, index, value) {
+    if (type === 'weekly') {
+        if (S.weeklyQuests && S.weeklyQuests[index]) {
+            S.weeklyQuests[index].text = value;
+        }
+    } else if (type === 'monthly') {
+        if (S.monthlyQuests && S.monthlyQuests[index]) {
+            S.monthlyQuests[index].text = value;
+        }
     }
-    const relatedAtlasNode = findRelatedAtlasNode(questId);
-if (relatedAtlasNode) {
-    addAtlasProgress(relatedAtlasNode, questXP);
+    save();
 }
-    renderDailyTab(); 
-    renderStats(); 
-    renderCalendar(); 
-    save(); 
+
+function updateQuestXP(type, index, value) {
+    const xp = parseInt(value) || 0;
+    if (type === 'weekly') {
+        if (S.weeklyQuests && S.weeklyQuests[index]) {
+            S.weeklyQuests[index].xp = xp;
+        }
+    } else if (type === 'monthly') {
+        if (S.monthlyQuests && S.monthlyQuests[index]) {
+            S.monthlyQuests[index].xp = xp;
+        }
+    }
+    save();
+}
+
+function removeQuest(type, index) {
+    if (!confirm('⚠️ ลบ Quest นี้?')) return;
+    
+    if (type === 'weekly') {
+        if (S.weeklyQuests) {
+            S.weeklyQuests.splice(index, 1);
+        }
+    } else if (type === 'monthly') {
+        if (S.monthlyQuests) {
+            S.monthlyQuests.splice(index, 1);
+        }
+    }
+    save();
+    renderQuests(type === 'weekly' ? WEEKLY_QUESTS : MONTHLY_QUESTS, null, `${type}-quests`);
+    showToast('🗑️ ลบ Quest สำเร็จ');
+}
+
+function addQuest(type) {
+    const newQuest = {
+        id: `q_${Date.now()}`,
+        text: 'Quest ใหม่',
+        xp: 50,
+        stat: 'STR'
+    };
+    
+    if (type === 'weekly') {
+        S.weeklyQuests = S.weeklyQuests || [];
+        S.weeklyQuests.push(newQuest);
+    } else if (type === 'monthly') {
+        S.monthlyQuests = S.monthlyQuests || [];
+        S.monthlyQuests.push(newQuest);
+    }
+    save();
+    renderQuests(type === 'weekly' ? WEEKLY_QUESTS : MONTHLY_QUESTS, null, `${type}-quests`);
+    showToast('✅ เพิ่ม Quest ใหม่');
+}
+
+function toggleQuest(type, id) {
+    const k = selectedDateKey || getTodayKey();
+    if (!S.history[k]) S.history[k] = { 
+        daily: [], weekly: [], monthly: [], rest: [], done: false,
+        rewards: {}  // ✅ เพิ่ม rewards
+    };
+    
+    const h = S.history[k];
+    let arr = type === 'weekly' ? h.weekly : h.monthly;
+    const idx = arr.indexOf(id);
+    
+    const questList = type === 'weekly' ? WEEKLY_QUESTS : MONTHLY_QUESTS;
+    const quest = questList.find(q => q.id === id);
+    if (!quest) return;
+    
+    const questId = `${type}_${id}`;
+    
+    if (idx > -1) {
+        // ❌ ยกเลิก
+        arr.splice(idx, 1);
+        
+        // หักคืน XP และ Currency ที่บันทึกไว้
+        const reward = h.rewards?.[questId];
+        if (reward) {
+            S.xp = Math.max(0, (S.xp ?? 0) - reward.xp);
+            S.totalXp = Math.max(0, (S.totalXp ?? 0) - reward.xp);
+            
+            if (S.currency) {
+                S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (reward.chaos ?? 0));
+                S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (reward.exalted ?? 0));
+                S.currency.divine = Math.max(0, (S.currency.divine ?? 0) - (reward.divine ?? 0));
+            }
+            delete h.rewards[questId];
+        }
+        
+        // หัก Stat คืน
+        if (quest.stat) {
+            S[quest.stat] = Math.max(10, (S[quest.stat] ?? 10) - 1);
+        }
+        
+        // ✅ คำนวณ Level ใหม่
+        recalculateLevel();
+        showToast(` ยกเลิก ${type === 'weekly' ? 'Expedition' : 'Ascendancy'} Quest`);
+        
+    } else {
+        // ✅ ทำสำเร็จ
+        arr.push(id);
+        
+        const xpAmount = quest.xp || 50;
+        const currencyDrop = calculateCurrencyDrop(type === 'weekly' ? 'mapBoss' : 'perfectDay');
+        
+        // เพิ่ม XP และ Currency
+        S.xp = (S.xp ?? 0) + xpAmount;
+        S.totalXp = (S.totalXp ?? 0) + xpAmount;
+        
+        if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+        S.currency.chaos = (S.currency.chaos ?? 0) + currencyDrop.chaos;
+        S.currency.exalted = (S.currency.exalted ?? 0) + currencyDrop.exalted;
+        S.currency.divine = (S.currency.divine ?? 0) + currencyDrop.divine;
+        
+        // เพิ่ม Stat
+        if (quest.stat) {
+            S[quest.stat] = (S[quest.stat] ?? 10) + 1;
+        }
+        
+        // บันทึกลง rewards
+        if (!h.rewards) h.rewards = {};
+        h.rewards[questId] = {
+            xp: xpAmount,
+            chaos: currencyDrop.chaos,
+            exalted: currencyDrop.exalted,
+            divine: currencyDrop.divine
+        };
+        
+        // ✅ คำนวณ Level ใหม่
+        recalculateLevel();
+        showToast(`✅ ${type === 'weekly' ? 'Expedition' : 'Ascendancy'} Quest สำเร็จ! +${xpAmount} XP`);
+    }
+    
+    save();
+    renderDailyTab();
+    renderStats();
+    updateXpBar();
+    updateCurrencyDisplay();
 }
 
 function toggleQuestType(type,id){ 
@@ -4940,76 +6496,77 @@ function checkDayComplete(k){
 }
 
 function logHours(type) {
-    // ✅ ลองหาด้วย IDs หลายแบบ
-    const hInput = document.getElementById(`${type}-in`) || 
-                   document.getElementById(`${type}-hours`) ||
-                   document.getElementById(`${type}-hours-input`);
+    // ✅ รองรับ IDs: {type}-hours, {type}-minutes, {type}-note, {type}-date
+    const hoursInput = document.getElementById(`${type}-hours`);
+    const minutesInput = document.getElementById(`${type}-minutes`);
+    const noteInput = document.getElementById(`${type}-note`);
+    const dateInput = document.getElementById(`${type}-date`);
     
-    const nInput = document.getElementById(`${type}-note`) || 
-                   document.getElementById(`${type}-activity-note`);
-    
-    const dateInput = document.getElementById(`${type}-date`) || 
-                      document.getElementById(`${type}-log-date`);
-    
-    // ✅ เช็ค null อย่างละเอียด
-    if (!hInput) {
-        console.error(`Hour input not found for type: ${type}`);
-        console.log(`Tried IDs: ${type}-in, ${type}-hours, ${type}-hours-input`);
-        showToast(`❌ ไม่พบช่องกรอกชั่วโมง (${type})`);
+    // Defensive Programming
+    if (!hoursInput || !minutesInput || !noteInput || !dateInput) {
+        console.error(`Elements not found for type: ${type}`);
+        showToast('❌ ไม่พบช่องกรอกข้อมูล');
         return;
     }
     
-    if (!nInput) {
-        console.error(`Note input not found for type: ${type}`);
-        showToast(`❌ ไม่พบช่องบันทึก (${type})`);
+    const hours = parseInt(hoursInput.value) || 0;
+    const minutes = parseInt(minutesInput.value) || 0;
+    const totalMinutes = Math.max(0, (hours * 60) + minutes);
+    
+    if (totalMinutes === 0) {
+        showToast('⚠️ กรุณาระบุเวลาฝึกฝน');
         return;
     }
     
-    if (!dateInput) {
-        console.error(`Date input not found for type: ${type}`);
-        showToast(`❌ ไม่พบช่องวันที่ (${type})`);
-        return;
-    }
+    const totalHours = totalMinutes / 60;
+    const note = noteInput.value.trim() || 'ฝึกฝนขัดเกลาฝีมือประจำวัน';
     
-    const val = parseFloat(hInput.value);
-    const note = nInput.value.trim() || 'ฝึกฝนขัดเกลาฝีมือประจำวัน';
-    
-    if (isNaN(val) || val <= 0) {
-        showToast('⚠️ กรุณาใส่จำนวนชั่วโมงที่ถูกต้อง');
-        return;
-    }
-    
-    let logDate = dateInput.value;
-    if (!logDate) logDate = getTodayKey();
-    else {
+    // ✅ วันที่
+    let logDate = dateInput.value || getTodayKey();
+    if (dateInput.value) {
         const dateObj = new Date(logDate);
         logDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
     }
     
     const dateObj = new Date(logDate);
-    const thaiDate = dateObj.toLocaleDateString('th-TH');
+    const thaiDate = dateObj.toLocaleDateString('th-TH', { 
+        year: 'numeric', month: 'long', day: 'numeric' 
+    });
     
-    // เพิ่มชั่วโมง
+    // ✅ เพิ่มชั่วโมง
     if (type === 'art') {
-        S.artHours = (S.artHours ?? 0) + val;
-    } else if (type === 'fit') {
-        S.fitHours = (S.fitHours ?? 0) + val;
+        S.artHours = (S.artHours ?? 0) + totalHours;
+    } else {
+        S.fitHours = (S.fitHours ?? 0) + totalHours;
         S.lastFitDate = new Date().toISOString();
         checkDecay();
     }
     
-    // คำนวณ XP
-    const earnedXp = Math.round(val * 10);
+    // ✅ คำนวณ XP (10 XP ต่อชั่วโมง)
+    const earnedXp = Math.round(totalHours * 10);
+    
+    // ✅ คำนวณ Currency Drop
+    const currencyDrop = calculateCurrencyDrop('subQuest');
+    
+    // ✅ สร้าง log object
     const logObj = {
         id: Date.now(),
-        val,
+        type,
+        val: totalHours,          // ✅ ใช้ 'val' (ตรงกับ deleteLog)
+        hours: totalHours,        // ✅ เก็บไว้ 2 ชื่อเพื่อความเข้ากันได้
+        minutes: totalMinutes,
         note,
         date: thaiDate,
+        logDateKey: logDate,
         xpEarned: earnedXp,
-        logDateKey: logDate
+        currency: {
+            chaos: currencyDrop.chaos,
+            exalted: currencyDrop.exalted,
+            divine: currencyDrop.divine
+        }
     };
     
-    // เพิ่มเข้า logs
+    // ✅ เพิ่มเข้า logs
     if (type === 'art') {
         S.artLogs = S.artLogs || [];
         S.artLogs.unshift(logObj);
@@ -5018,55 +6575,94 @@ function logHours(type) {
         S.fitLogs.unshift(logObj);
     }
     
-    // อัปเดต history
+    // ✅ อัปเดต history
     if (!S.history) S.history = {};
     if (!S.history[logDate]) {
-        S.history[logDate] = { daily: [], weekly: [], monthly: [], rest: [], done: false };
+        S.history[logDate] = { 
+            daily: [], weekly: [], monthly: [], rest: [], done: false,
+            artHours: 0, fitHours: 0,
+            rewards: {},
+            perfectDayBonus: {}
+        };
     }
     
     if (type === 'art') {
-        S.history[logDate].artHours = (S.history[logDate].artHours ?? 0) + val;
+        S.history[logDate].artHours = (S.history[logDate].artHours ?? 0) + totalHours;
     } else {
-        S.history[logDate].fitHours = (S.history[logDate].fitHours ?? 0) + val;
+        S.history[logDate].fitHours = (S.history[logDate].fitHours ?? 0) + totalHours;
     }
     
-    // เพิ่ม streak
-    const todayKey = getTodayKey();
-    if (logDate === todayKey) {
-        if (!S.history[logDate].loggedHour) {
-            S.history[logDate].loggedHour = true;
-            S.artDays = (S.artDays ?? 0) + 1;
+    // ✅ เพิ่ม streak (ป้องกันการนับซ้ำ)
+    if (!S.history[logDate].loggedHour) {
+        S.history[logDate].loggedHour = true;
+        S.artDays = (S.artDays ?? 0) + 1;
+        
+        // ✅ ถ้าเป็นวันนี้ บวก streak
+        if (logDate === getTodayKey()) {
             S.streakDays = (S.streakDays ?? 0) + 1;
         }
     }
     
-    // เพิ่ม XP
+    // ✅ เพิ่ม XP
     if (typeof addXP === 'function') {
         addXP(earnedXp);
+    } else {
+        S.xp = (S.xp ?? 0) + earnedXp;
     }
     
-    // ล้าง input
-    hInput.value = '';
-    nInput.value = '';
+    // ✅ เพิ่ม Currency
+    if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+    S.currency.chaos = (S.currency.chaos ?? 0) + currencyDrop.chaos;
+    S.currency.exalted = (S.currency.exalted ?? 0) + currencyDrop.exalted;
+    S.currency.divine = (S.currency.divine ?? 0) + currencyDrop.divine;
+    
+    // ✅ บันทึกลง history.rewards (เพื่อให้ deleteLog หักคืนได้)
+    if (!S.history[logDate].rewards) S.history[logDate].rewards = {};
+    const rewardKey = `hour_${type}_${logObj.id}`;
+    S.history[logDate].rewards[rewardKey] = {
+        xp: earnedXp,
+        chaos: currencyDrop.chaos,
+        exalted: currencyDrop.exalted,
+        divine: currencyDrop.divine
+    };
+    
+    // ✅ ล้างค่า input
+    hoursInput.value = '';
+    minutesInput.value = '';
+    noteInput.value = '';
     dateInput.value = '';
     
-    // อัปเดต UI
+    // ✅ อัปเดต UI
     if (typeof updateNodes === 'function') updateNodes();
     if (typeof renderHourLog === 'function') renderHourLog(type);
     if (typeof renderCalendar === 'function') renderCalendar();
     if (typeof updateHoursDisplay === 'function') updateHoursDisplay();
+    if (typeof updateXpBar === 'function') updateXpBar();
+    if (typeof updateCurrencyDisplay === 'function') updateCurrencyDisplay();
     
     save();
-    showToast(`✅ บันทึกสำเร็จ! +${earnedXp} XP`);
+    
+    // ✅ แสดงข้อความ
+    const timeDisplay = totalHours >= 1 
+        ? `${Math.floor(totalHours)}h ${totalMinutes % 60}m`
+        : `${totalMinutes}m`;
+    
+    const currencyDisplay = `💛${currencyDrop.chaos} 💠${currencyDrop.exalted} 💎${currencyDrop.divine}`;
+    
+    showToast(`⚔️ บันทึกสำเร็จ! ${timeDisplay} | +${earnedXp} XP | ${currencyDisplay}`);
 }
 
 function toggleLogDisplay(type) {
     const container = document.getElementById(`${type}-logs`);
-    if (!container) return;
+    if (!container) {
+        console.error(`${type}-logs container not found`);
+        return;
+    }
     
-    if (container.style.display === 'none') {
+    // สลับการแสดงผล
+    if (container.style.display === 'none' || !container.style.display) {
         container.style.display = 'block';
-        renderHourLog(type);
+        renderHourLog(type);  // Render ทุกครั้งที่เปิด
     } else {
         container.style.display = 'none';
     }
@@ -5369,6 +6965,18 @@ function changeMonth(dir) {
                 }
 
 function renderSkillTree() {
+                    console.log('Rendering Skill Tree...');
+
+                    const artNodes = document.getElementById('art-nodes');
+                    const bodyNodes = document.getElementById('body-nodes');
+                    const mindNodes = document.getElementById('mind-nodes');
+    
+                    if (artNodes) artNodes.innerHTML = '<div style="color:var(--muted); font-size:11px; padding:20px; text-align:center;">Skill Tree กำลังพัฒนา</div>';
+                    if (bodyNodes) bodyNodes.innerHTML = '<div style="color:var(--muted); font-size:11px; padding:20px; text-align:center;">Skill Tree กำลังพัฒนา</div>';
+                    if (mindNodes) mindNodes.innerHTML = '<div style="color:var(--muted); font-size:11px; padding:20px; text-align:center;">Skill Tree กำลังพัฒนา</div>';
+    
+                    updateSPDisplay();
+                
                     const artContainer = document.getElementById('art-tree-nodes');
                     artContainer.innerHTML = '';
                     const fitContainer = document.getElementById('fit-tree-nodes');
@@ -5388,6 +6996,7 @@ function renderSkillTree() {
                     else if (S.artHours >= 20 || S.fitHours >= 20) cross.className = 'cross-node available';
                     else cross.className = 'cross-node';
                 }
+
 
 function updateCareerDisplay() {
                     let totalIncome = 0, totalJobs = 0;
@@ -5591,28 +7200,72 @@ function renderVaultItems() {
                     });
                 }
 
-function openVaultManager() { document.getElementById('vault-manager-modal').classList.add('show'); renderVaultManagerList(); }
-function closeVaultManager() { document.getElementById('vault-manager-modal').classList.remove('show'); }
+function openVaultManager() {
+    console.log('Opening Vault Manager...');
+    
+    // ✅ Defensive Programming: เช็ค null ก่อน
+    const modal = document.getElementById('vault-manager-modal');
+    if (!modal) {
+        console.error('vault-manager-modal not found in DOM');
+        showToast('❌ ไม่พบหน้าต่างจัดการ Vault');
+        return;
+    }
+    
+    const container = document.getElementById('vault-list-container');
+    if (!container) {
+        console.error('vault-list-container not found in DOM');
+        return;
+    }
+    
+    modal.classList.add('show');
+    renderVaultList();
+}
 
-function renderVaultManagerList() {
-                    const container = document.getElementById('vault-list-container');
-                    container.innerHTML = '';
-                    S.vaultItems.forEach((item, idx) => {
-                        const div = document.createElement('div');
-                        div.className = 'qm-row-item';
-                        div.innerHTML = `<input type="text" value="${item.name}" class="qm-input" style="flex:2" id="vault-name-${idx}"><input type="number" value="${item.progress}" class="qm-input" style="width:70px" id="vault-prog-${idx}"><input type="text" value="${item.detail || ''}" class="qm-input" style="flex:2" id="vault-detail-${idx}" placeholder="รายละเอียด"><button class="btn-s btn-art" onclick="updateVaultItem(${idx})">💾</button><button class="del-btn" onclick="deleteVaultItem(${idx})">✕</button>`;
-                        container.appendChild(div);
-                    });
-                }
+function closeVaultManager() {
+    const modal = document.getElementById('vault-manager-modal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
 
-function updateVaultItem(idx) {
-                    S.vaultItems[idx].name = document.getElementById(`vault-name-${idx}`).value;
-                    S.vaultItems[idx].progress = parseInt(document.getElementById(`vault-prog-${idx}`).value) || 0;
-                    S.vaultItems[idx].detail = document.getElementById(`vault-detail-${idx}`).value;
-                    renderVaultManagerList();
-                    renderVaultItems();
-                    save();
-                }
+function renderVaultList() {
+    const container = document.getElementById('vault-list-container');
+    if (!container) return;
+    
+    const vaultItems = S.vaultItems || [];
+    
+    if (vaultItems.length === 0) {
+        container.innerHTML = '<div style="color:var(--muted); font-size:11px; text-align:center; padding:12px;">ยังไม่มีผลงาน</div>';
+        return;
+    }
+    
+    container.innerHTML = vaultItems.map((item, idx) => `
+        <div class="qm-row-item">
+            <input type="text" class="qm-input qm-text-in" value="${item.name || ''}" 
+                   onchange="updateVaultItem(${idx}, 'name', this.value)">
+            <input type="number" class="qm-input qm-num-in" value="${item.progress || 0}" 
+                   min="0" max="100"
+                   onchange="updateVaultItem(${idx}, 'progress', this.value)">
+            <button class="btn-s btn-danger" onclick="removeVaultItem(${idx})" style="padding:4px 8px;">✕</button>
+        </div>
+    `).join('');
+}
+
+function updateVaultItem(index, field, value) {
+    if (!S.vaultItems) S.vaultItems = [];
+    if (S.vaultItems[index]) {
+        S.vaultItems[index][field] = field === 'progress' ? parseInt(value) || 0 : value;
+        save();
+        renderVaultGrid();
+    }
+}
+function removeVaultItem(index) {
+    if (!confirm('ลบผลงานนี้?')) return;
+    S.vaultItems.splice(index, 1);
+    save();
+    renderVaultList();
+    renderVaultGrid();
+}
 
 function deleteVaultItem(idx) {
                     S.vaultItems.splice(idx, 1);
@@ -5622,16 +7275,25 @@ function deleteVaultItem(idx) {
                 }
 
 function addVaultItem() {
-                    const name = document.getElementById('new-vault-name').value;
-                    const progress = parseInt(document.getElementById('new-vault-progress').value) || 0;
-                    if (!name) return;
-                    S.vaultItems.push({ id: 'v' + Date.now(), name, progress, detail: '' });
-                    renderVaultManagerList();
-                    renderVaultItems();
-                    document.getElementById('new-vault-name').value = '';
-                    document.getElementById('new-vault-progress').value = '';
-                    save();
-                }
+    const name = document.getElementById('new-vault-name')?.value?.trim();
+    const progress = parseInt(document.getElementById('new-vault-progress')?.value) || 0;
+    
+    if (!name) {
+        showToast('⚠️ กรุณาใส่ชื่อผลงาน');
+        return;
+    }
+    
+    if (!S.vaultItems) S.vaultItems = [];
+    S.vaultItems.push({ name, progress });
+    
+    document.getElementById('new-vault-name').value = '';
+    document.getElementById('new-vault-progress').value = '';
+    
+    save();
+    renderVaultList();
+    renderVaultGrid();
+    showToast('✅ เพิ่มผลงานใหม่');
+}
 
 function saveDiary() {
                     const text = document.getElementById('diary-in').value.trim();
@@ -5734,19 +7396,350 @@ function switchTab(tabName) {
                     }
 
                     // ✅ Render เฉพาะ tab ที่เปิด
-        if (tabName === 'quests') {
-            renderDailyTab();
-            renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
-            renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-            renderCalendar();  // ✅ Render calendar เฉพาะ tab quests
-        } else if (tabName === 'skills') {
-            renderSkillTree();
-        } else if (tabName === 'career') {
-            renderAtlas();
-        }
+                    if (tabName === 'quests') {
+                        renderDailyTab();
+                        renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+                        renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+                        renderCalendar();
+                        updateXpBar();
+                    } else if (tabName === 'skills') {
+                        renderSkillTree();
+                    } else if (tabName === 'career') {
+                        renderAtlas();
+                    } else if (tabName === 'stash') {
+                        renderStash();
+                    }        
+                
+    
+    // ใส่ active ให้ปุ่ม
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }        
+}
+window.switchTab = switchTab;
+// Default rewards สำหรับแต่ละ tier
+const DEFAULT_REWARDS = {
+    chaos: [
+        { id: 'c1', name: '☕ กาแฟ/ชา 1 แก้ว', cost: 1, icon: '☕' },
+        { id: 'c2', name: '🎵 ฟังเพลง 30 นาที', cost: 1, icon: '🎵' },
+        { id: 'c3', name: '📱 เล่นโซเชียล 15 นาที', cost: 2, icon: '📱' },
+        { id: 'c4', name: '🍪 ขนม/ของว่าง', cost: 2, icon: '🍪' },
+        { id: 'c5', name: '😴 กินเวย์โปรตีน', cost: 3, icon: '😴' },
+        { id: 'c6', name: '📺 ดู Anime 1 ตอน', cost: 3, icon: '📺' }
+    ],
+    exalted: [
+        { id: 'e1', name: '🎨 สี/อุปกรณ์วาดรูปใหม่', cost: 1, icon: '🎨' },
+        { id: 'e2', name: '🍕 Cheat Meal 1 มื้อ', cost: 2, icon: '🍕' },
+        { id: 'e3', name: '🎮 เล่นเกม 2 ชั่วโมง', cost: 2, icon: '🎮' },
+        { id: 'e4', name: '📚 ซื้อหนังสือ/คอร์สออนไลน์', cost: 3, icon: '📚' },
+        { id: 'e5', name: '🎬 ดูหนังที่โรงภาพยนตร์', cost: 3, icon: '🎬' }
+    ],
+    divine: [
+        { id: 'd1', name: '📱 Gadget/อุปกรณ์ใหม่', cost: 1, icon: '📱' },
+        { id: 'd2', name: '✈️ เที่ยว 3 วัน', cost: 2, icon: '✈️' },
+        { id: 'd3', name: '🎉 Full Guilt-free Day', cost: 2, icon: '🎉' },
+        { id: 'd4', name: '🎸 เครื่องดนตรี/อุปกรณ์ดนตรี', cost: 3, icon: '🎸' },
+        { id: 'd5', name: '🏆 รางวัลพิเศษสำหรับเป้าหมายใหญ่', cost: 3, icon: '🏆' }
+    ]
+};
+// ==========================================
+// RENDER STASH TAB
+// ==========================================
+function renderStash() {
+    console.log('Rendering Stash...');
+    if (typeof renderStashShop === 'function') {
+        renderStashShop();
     }
 
+    // Render Vault Grid
+    if (typeof renderVaultGrid === 'function') {
+        renderVaultGrid();
+    }
+    
+    // Render Diary Logs
+    if (typeof renderDiaryLogs === 'function') {
+        renderDiaryLogs();
+    }
+    
+}
+function renderStashShop() {
+    // Update orb balance
+    updateOrbBalanceDisplay();
+    
+    // Render each tier
+    renderRewardTier('chaos');
+    renderRewardTier('exalted');
+    renderRewardTier('divine');
+    
+    // Render history
+    renderRedemptionHistory();
+}
+function updateOrbBalanceDisplay() {
+    
+    // Quest header
+    const qChaos = document.getElementById('currency-chaos');
+    const qExalted = document.getElementById('currency-exalted');
+    const qDivine = document.getElementById('currency-divine');
+    
+    // Stash tab
+    const sChaos = document.getElementById('stash-currency-chaos');
+    const sExalted = document.getElementById('stash-currency-exalted');
+    const sDivine = document.getElementById('stash-currency-divine');
+    
+    const chaosVal = S.currency?.chaos ?? 0;
+    const exaltedVal = S.currency?.exalted ?? 0;
+    const divineVal = S.currency?.divine ?? 0;
+    
+    if (qChaos) qChaos.textContent = chaosVal;
+    if (qExalted) qExalted.textContent = exaltedVal;
+    if (qDivine) qDivine.textContent = divineVal;
+    
+    if (sChaos) sChaos.textContent = chaosVal;
+    if (sExalted) sExalted.textContent = exaltedVal;
+    if (sDivine) sDivine.textContent = divineVal;
+}
+function renderRewardTier(tier) {
+    const container = document.getElementById(`${tier}-rewards-grid`);
+    if (!container) return;
+    
+    const customRewards = S.customRewards?.[tier] ?? [];
+    const defaultRewards = DEFAULT_REWARDS[tier] ?? [];
+    const allRewards = [...defaultRewards, ...customRewards];
+    const orbBalance = S.currency?.[tier] ?? 0;
+    
+    if (allRewards.length === 0) {
+        container.innerHTML = '<div style="color:var(--muted); font-size:11px; padding:12px; text-align:center;">ยังไม่มีรางวัล</div>';
+        return;
+    }
+    
+    container.innerHTML = allRewards.map(reward => {
+        const canAfford = orbBalance >= reward.cost;
+        const isCustom = customRewards.find(r => r.id === reward.id);
+        
+        return `
+            <div class="reward-card ${canAfford ? 'affordable' : 'unaffordable'}">
+                <div class="reward-icon">${reward.icon || '🎁'}</div>
+                <div class="reward-name">${reward.name}</div>
+                <div class="reward-cost">
+                    ${tier === 'chaos' ? '💛' : tier === 'exalted' ? '💠' : '💎'} ${reward.cost}
+                </div>
+                <button class="btn-redeem" 
+                        onclick="redeemReward('${reward.id}', '${tier}')"
+                        ${!canAfford ? 'disabled' : ''}>
+                    ${canAfford ? 'แลก' : 'ไม่พอ'}
+                </button>
+                ${isCustom ? `
+                    <button class="btn-delete-reward" onclick="deleteCustomReward('${tier}', '${reward.id}')">
+                        ✕
+                    </button>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
+}
+function redeemReward(rewardId, tier) {
+    const customRewards = S.customRewards?.[tier] ?? [];
+    const defaultRewards = DEFAULT_REWARDS[tier] ?? [];
+    const allRewards = [...defaultRewards, ...customRewards];
+    
+    const reward = allRewards.find(r => r.id === rewardId);
+    if (!reward) {
+        showToast('❌ ไม่พบรางวัล');
+        return;
+    }
+    
+    const orbBalance = S.currency?.[tier] ?? 0;
+    if (orbBalance < reward.cost) {
+        showToast('️ Orb ไม่พอ');
+        return;
+    }
+    
+    if (!confirm(`แลก "${reward.name}" ด้วย ${reward.cost} ${tier} Orb?`)) {
+        return;
+    }
+    
+    // ตัด Orb
+    S.currency[tier] = orbBalance - reward.cost;
+    
+    // บันทึกประวัติ
+    if (!S.stashRedemptions) S.stashRedemptions = [];
+    S.stashRedemptions.unshift({
+        id: Date.now(),
+        rewardName: reward.name,
+        rewardIcon: reward.icon,
+        tier,
+        cost: reward.cost,
+        date: new Date().toLocaleDateString('th-TH')
+    });
+    
+    save();
+    renderStashShop();
+    showToast(`✅ แลกสำเร็จ! ${reward.name}`);
+}
+function openAddRewardModal(tier) {
+    const modal = document.getElementById('add-reward-modal');
+    if (!modal) {
+        console.error('add-reward-modal not found');
+        return;
+    }
+    
+    document.getElementById('add-reward-tier').value = tier;
+    document.getElementById('add-reward-name').value = '';
+    document.getElementById('add-reward-cost').value = '';
+    document.getElementById('add-reward-icon').value = '🎁';
+    
+    modal.classList.add('show');
+}
+function closeAddRewardModal() {
+    const modal = document.getElementById('add-reward-modal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+function addNewReward() {
+    const tier = document.getElementById('add-reward-tier').value;
+    const name = document.getElementById('add-reward-name').value.trim();
+    const cost = parseInt(document.getElementById('add-reward-cost').value);
+    const icon = document.getElementById('add-reward-icon').value.trim() || '🎁';
+    
+    if (!name) {
+        showToast('⚠️ กรุณาใส่ชื่อรางวัล');
+        return;
+    }
+    
+    if (!cost || cost <= 0) {
+        showToast('⚠️ กรุณาใส่ต้นทุนที่ถูกต้อง');
+        return;
+    }
+    
+    if (!S.customRewards) S.customRewards = { chaos: [], exalted: [], divine: [] };
+    if (!S.customRewards[tier]) S.customRewards[tier] = [];
+    
+    S.customRewards[tier].push({
+        id: `custom_${Date.now()}`,
+        name,
+        cost,
+        icon
+    });
+    
+    save();
+    closeAddRewardModal();
+    renderRewardTier(tier);
+    showToast('✅ เพิ่มรางวัลใหม่');
+}
+function deleteCustomReward(tier, rewardId) {
+    if (!confirm('ลบรางวัลนี้?')) return;
+    
+    if (S.customRewards?.[tier]) {
+        S.customRewards[tier] = S.customRewards[tier].filter(r => r.id !== rewardId);
+        save();
+        renderRewardTier(tier);
+        showToast('🗑️ ลบรางวัลแล้ว');
+    }
+}
+function renderRedemptionHistory() {
+    const container = document.getElementById('redemption-history-list');
+    if (!container) return;
+    
+    const history = S.stashRedemptions ?? [];
+    
+    if (history.length === 0) {
+        container.innerHTML = '<div style="color:var(--muted); font-size:11px; padding:12px; text-align:center;">ยังไม่มีประวัติการแลก</div>';
+        return;
+    }
+    
+    container.innerHTML = history.slice(0, 20).map(item => `
+        <div class="redemption-item">
+            <div class="redemption-icon">${item.rewardIcon || '🎁'}</div>
+            <div class="redemption-info">
+                <div class="redemption-name">${item.rewardName}</div>
+                <div class="redemption-date">${item.date}</div>
+            </div>
+            <div class="redemption-cost">
+                ${item.tier === 'chaos' ? '' : item.tier === 'exalted' ? '💠' : '💎'} ${item.cost}
+            </div>
+        </div>
+    `).join('');
+}
+function clearRedemptionHistory() {
+    if (!confirm('ล้างประวัติการแลกทั้งหมด?')) return;
+    
+    S.stashRedemptions = [];
+    save();
+    renderRedemptionHistory();
+    showToast('️ ล้างประวัติแล้ว');
+}
+// ==========================================
+// RENDER VAULT GRID
+// ==========================================
+function renderVaultGrid() {
+    const container = document.getElementById('vault-grid-container');
+    if (!container) {console.warn('vault-grid-container not found');return;}
+    
+    const vaultItems = S.vaultItems || [];
+    
+    if (vaultItems.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--muted); padding:20px; font-size:11px;">ยังไม่มีผลงานใน Dream Vault</div>';
+        return;
+    }
+    
+    container.innerHTML = vaultItems.map(item => {
+        const progress = item.progress || 0;
+        return `
+            <div class="vault-card">
+                <div class="vault-title">
+                    <span>${item.name || 'ผลงาน'}</span>
+                    <span style="font-size:10px; color:var(--muted);">${item.progress || 0}%</span>
+                </div>
+                <div class="vault-progress-bar">
+                    <div class="vault-progress-fill" style="width: ${item.progress || 0}%"></div>
+                </div>
+                <div class="vault-meta">
+                    <span>ความคืบหน้า</span>
+                    <span>${item.progress || 0}/100</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
 
+// ==========================================
+// RENDER DIARY LOGS
+// ==========================================
+function renderDiaryLogs() {
+    const container = document.getElementById('diary-logs');
+    if (!container) {
+        console.warn('diary-logs not found');
+        return;
+    }
+    
+    const diaryLogs = S.diaryLogs || [];
+    
+    if (diaryLogs.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color:var(--muted); padding:20px; font-size:11px;">ยังไม่มีบันทึกความทรงจำ</div>';
+        return;
+    }
+    
+    container.innerHTML = diaryLogs.slice(0, 10).map(log => `
+        <div class="diary-item">
+            <div class="diary-meta">
+                <span>${log.date || 'ไม่มีวันที่'}</span>
+                <span class="diary-mood">${log.mood || '😊'}</span>
+            </div>
+            <div style="font-size:11px; color:var(--text); line-height:1.5;">
+                ${log.text || ''}
+            </div>
+        </div>
+    `).join('');
+}
+function updateSPDisplay() {
+    const spDisplay = document.getElementById('sp-value-display');
+    if (spDisplay) {
+        spDisplay.textContent = S.sp || 0;
+    }
+}
+
+                            
 function openQuestManager(type) {
                     activeManagerType = type;
                     const modal = document.getElementById('qm-modal');
@@ -6184,44 +8177,350 @@ const SKILL_TREE_NODES = {
                 save();
                 renderDailyTab();
             }
+function calculateCurrencyDrop(type, rewards = null) {
+    let chaosMin, chaosMax, exaltedChance, divineChance;
+    
+    if (type === 'mapBoss' && rewards) {
+        chaosMin = rewards.chaos?.[0] ?? 5;
+        chaosMax = rewards.chaos?.[1] ?? 15;
+        exaltedChance = rewards.exalted ?? 0.20;
+        divineChance = rewards.divine ?? 0.01;
+    } else if (type === 'subQuest') {
+        chaosMin = 1;
+        chaosMax = 3;
+        exaltedChance = 0.10;
+        divineChance = 0.005;
+    } else if (type === 'perfectDay') {
+        chaosMin = 10;
+        chaosMax = 20;
+        exaltedChance = 0.30;
+        divineChance = 0.02;
+    } else {
+        return { chaos: 0, exalted: 0, divine: 0 };
+    }
+    
+    const chaos = Math.floor(Math.random() * (chaosMax - chaosMin + 1)) + chaosMin;
+    const exalted = Math.random() < exaltedChance ? 1 : 0;
+    const divine = Math.random() < divineChance ? 1 : 0;
+    
+    return { chaos, exalted, divine };
+}
 
-            function toggleMainQuest(questId) {
-                const k = selectedDateKey || getTodayKey();
-                if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false };
+// ==========================================
+// RECALCULATE LEVEL (จาก XP จริง)
+// ==========================================
+function recalculateLevel() {
+    const currentXp = S.xp ?? 0;
+    const oldLvl = S.lvl ?? 1;
+    let lvl = 1;
+    let xpUsed = 0;
+    
+    // หา Level ที่ถูกต้องจาก XP ปัจจุบัน
+    while (lvl < 100) {
+        const xpNeeded = getXpForLevel(lvl);
+        if (S.totalXp - xpUsed >= xpNeeded) {
+            xpUsed += xpNeeded;
+            lvl++;
+        } else {
+            break;
+        }
+    }
+    
+    const currentXpInLevel = S.totalXp - xpUsed;
+    // ถ้า Level ลด → หัก SP ที่ได้จาก Level ที่หาย
+    if (lvl < oldLvl) {
+        const levelsLost = oldLvl - lvl;
+        S.sp = Math.max(0, (S.sp ?? 0) - levelsLost);
+        showToast(`️ Level ลดลง! LV ${oldLvl} → ${lvl} | -${levelsLost} SP`);
+    }
+    
+    S.lvl = lvl;
+    S.xp = currentXpInLevel;
+    console.log(`Recalculate: totalXp=${S.totalXp}, lvl=${lvl}, xp=${currentXpInLevel}`);
+}
+function toggleMainQuest(questId) {
+    const k = selectedDateKey || getTodayKey();
+    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false,
+        rewards: {},  // ✅ บันทึก rewards
+        perfectDayBonus: {} };
+    
+    const h = S.history[k];
+    const mainId = `main_${questId}`;
+    const idx = h.daily.indexOf(mainId);
+    
+    const quest = S.dailyQuests.find(q => q.id === questId);
+    if (!quest) return;
 
-                const mainId = `main_${questId}`;
-                const idx = S.history[k].daily.indexOf(mainId);
+    const baseXp = quest.main?.xp || 50;
+    
+    if (idx > -1) {
+        // ยกเลิก
+        h.daily.splice(idx, 1);
 
-                if (idx > -1) {
-                    S.history[k].daily.splice(idx, 1); // เอาออก
-                } else {
-                    S.history[k].daily.push(mainId); // เพิ่ม
-                    calculateRewards(questId, 'main');
-                }
-
-                save();
-                renderDailyTab();
-                updateCurrencyDisplay();
+        // หักคืน XP และ Currency ที่บันทึกไว้
+        const reward = h.rewards?.[mainId];
+        if (reward) {
+            S.xp = Math.max(0, (S.xp ?? 0) - reward.xp);
+            S.totalXp = Math.max(0, (S.totalXp ?? 0) - reward.xp);
+            
+            if (S.currency) {
+                S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (reward.chaos ?? 0));
+                S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (reward.exalted ?? 0));
+                S.currency.divine = Math.max(0, (S.currency.divine ?? 0) - (reward.divine ?? 0));
             }
-
-            function toggleSubQuest(questId, subIndex) {
-                const k = selectedDateKey || getTodayKey();
-                if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false };
-
-                const subId = `sub_${questId}_${subIndex}`;
-                const idx = S.history[k].daily.indexOf(subId);
-
-                if (idx > -1) {
-                    S.history[k].daily.splice(idx, 1);
-                } else {
-                    S.history[k].daily.push(subId);
-                    calculateRewards(questId, 'sub');
+            delete h.rewards[mainId];
+        }
+        
+        // หักคืน Perfect Day bonus (ถ้ามี)
+        if (h.perfectDayBonus?.[questId]) {
+            const pdReward = h.rewards?.[`perfectDay_${questId}`];
+            if (pdReward) {
+                S.xp = Math.max(0, (S.xp ?? 0) - pdReward.xp);
+                S.totalXp = Math.max(0, (S.totalXp ?? 0) - pdReward.xp);
+                if (S.currency) {
+                    S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (pdReward.chaos ?? 0));
+                    S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (pdReward.exalted ?? 0));
+                    S.currency.divine = Math.max(0, (S.currency.divine ?? 0) - (pdReward.divine ?? 0));
                 }
-
-                save();
-                renderDailyTab();
-                updateCurrencyDisplay();
+                delete h.rewards[`perfectDay_${questId}`];
             }
+            delete h.perfectDayBonus[questId];
+        }
+        
+        // ✅ คำนวณ Level ใหม่
+        recalculateLevel();
+        showToast(`❌ ยกเลิก Map Boss`);
+        
+    } else {
+        // ✅ ทำสำเร็จ
+        h.daily.push(mainId);
+        
+        // คำนวณ rewards
+        const xpAmount = baseXp * 2;
+        const currencyDrop = calculateCurrencyDrop('mapBoss', quest.main?.rewards);
+        
+        // บันทึกลง S
+        S.xp = (S.xp ?? 0) + xpAmount;
+        S.totalXp = (S.totalXp ?? 0) + xpAmount;
+
+        if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+        S.currency.chaos = (S.currency.chaos ?? 0) + currencyDrop.chaos;
+        S.currency.exalted = (S.currency.exalted ?? 0) + currencyDrop.exalted;
+        S.currency.divine = (S.currency.divine ?? 0) + currencyDrop.divine;
+        
+        // ✅ บันทึกลง history.rewards
+        if (!h.rewards) h.rewards = {};
+        h.rewards[mainId] = {
+            xp: xpAmount,
+            chaos: currencyDrop.chaos,
+            exalted: currencyDrop.exalted,
+            divine: currencyDrop.divine
+        };
+        
+        // เช็ค Perfect Day
+        checkPerfectDay(questId, k);        
+        // ✅ คำนวณ Level ใหม่
+        recalculateLevel();        
+        showToast(`✅ Map Boss สำเร็จ! +${xpAmount} XP (x2)`);
+    }
+    
+    save();
+    renderDailyTab();
+    updateXpBar();
+    updateCurrencyDisplay();
+}
+
+function toggleSubQuest(questId, subIndex) {
+    const k = selectedDateKey || getTodayKey();
+    if (!S.history[k]) S.history[k] = { 
+        daily: [], 
+        weekly: [], 
+        monthly: [], 
+        rest: [], 
+        done: false,
+        rewards: {},
+        perfectDayBonus: {}
+    };
+    
+    const h = S.history[k];
+    const subId = `sub_${questId}_${subIndex}`;
+    const idx = h.daily.indexOf(subId);
+    
+    const quest = S.dailyQuests.find(q => q.id === questId);
+    if (!quest || !quest.subQuests || !quest.subQuests[subIndex]) return;
+    
+    const sub = quest.subQuests[subIndex];
+    const subXp = sub.xp || 10;
+    
+    if (idx > -1) {
+        // ❌ ยกเลิก
+        h.daily.splice(idx, 1);
+        
+        // หักคืน XP และ Currency
+        const reward = h.rewards?.[subId];
+        if (reward) {
+            S.xp = Math.max(0, (S.xp ?? 0) - reward.xp);
+            S.totalXp = Math.max(0, (S.totalXp ?? 0) - reward.xp);
+            if (S.currency) {
+                S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (reward.chaos ?? 0));
+                S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (reward.exalted ?? 0));
+                S.currency.divine = Math.max(0, (S.currency.divine ?? 0) - (reward.divine ?? 0));
+            }
+            delete h.rewards[subId];
+        }
+        
+        // หักคืน Perfect Day bonus (ถ้ามี)
+        if (h.perfectDayBonus?.[questId]) {
+            const pdReward = h.rewards?.[`perfectDay_${questId}`];
+            if (pdReward) {
+                S.xp = Math.max(0, (S.xp ?? 0) - pdReward.xp);
+                S.totalXp = Math.max(0, (S.totalXp ?? 0) - pdReward.xp);
+                if (S.currency) {
+                    S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (pdReward.chaos ?? 0));
+                    S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (pdReward.exalted ?? 0));
+                    S.currency.divine = Math.max(0, (S.currency.divine ?? 0) - (pdReward.divine ?? 0));
+                }
+                delete h.rewards[`perfectDay_${questId}`];
+            }
+            delete h.perfectDayBonus[questId];
+        }
+        
+        recalculateLevel();
+        showToast(`❌ ยกเลิก Juice Map`);
+        
+    } else {
+        // ✅ ทำสำเร็จ
+        h.daily.push(subId);
+        
+        const currencyDrop = calculateCurrencyDrop('subQuest');
+        
+        S.xp = (S.xp ?? 0) + subXp;
+        S.totalXp = (S.totalXp ?? 0) + subXp;
+
+        if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+        S.currency.chaos = (S.currency.chaos ?? 0) + currencyDrop.chaos;
+        S.currency.exalted = (S.currency.exalted ?? 0) + currencyDrop.exalted;
+        S.currency.divine = (S.currency.divine ?? 0) + currencyDrop.divine;
+        
+        if (!h.rewards) h.rewards = {};
+        h.rewards[subId] = {
+            xp: subXp,
+            chaos: currencyDrop.chaos,
+            exalted: currencyDrop.exalted,
+            divine: currencyDrop.divine
+        };
+        
+        checkPerfectDay(questId, k);        
+        recalculateLevel();
+        showToast(`✅ Juice Map สำเร็จ! +${subXp} XP`);
+    }
+    
+    save();
+    renderDailyTab();
+    updateXpBar();
+    updateCurrencyDisplay();
+}
+// ✅ ฟังก์ชันเช็ค Perfect Day
+function checkPerfectDay(questId, dateKey) {
+    const quest = S.dailyQuests.find(q => q.id === questId);
+    if (!quest) return;
+    
+    const h = S.history[dateKey];
+    const mainId = `main_${questId}`;
+    const isMainDone = h.daily?.includes(mainId);
+    const completedSubs = h.daily?.filter(id => id.startsWith(`sub_${questId}_`)).length || 0;
+    const totalSubs = quest.subQuests?.length || 0;
+    
+    if (isMainDone && completedSubs === totalSubs && totalSubs > 0) {
+        if (!h.perfectDayBonus) h.perfectDayBonus = {};
+        if (h.perfectDayBonus[questId]) return;
+        
+        const bonusXP = quest.main?.xp || 50;
+        const currencyDrop = calculateCurrencyDrop('perfectDay', quest.main?.rewards);
+        
+        S.xp = (S.xp ?? 0) + bonusXP;
+        S.totalXp = (S.totalXp ?? 0) + bonusXP;
+        if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+        S.currency.chaos = (S.currency.chaos ?? 0) + currencyDrop.chaos;
+        S.currency.exalted = (S.currency.exalted ?? 0) + currencyDrop.exalted;
+        S.currency.divine = (S.currency.divine ?? 0) + currencyDrop.divine;
+        
+        if (!h.rewards) h.rewards = {};
+        h.rewards[`perfectDay_${questId}`] = {
+            xp: bonusXP,
+            chaos: currencyDrop.chaos,
+            exalted: currencyDrop.exalted,
+            divine: currencyDrop.divine
+        };
+        
+        h.perfectDayBonus[questId] = true;
+        
+        if (!S.perfectDays) S.perfectDays = [];
+        if (!S.perfectDays.includes(dateKey)) {
+            S.perfectDays.push(dateKey);
+        }
+        
+        recalculateLevel();
+        showToast(`🌟 Perfect Day! +${bonusXP} XP Bonus + Rare Drop!`);
+    }
+}
+
+// ✅ ฟังก์ชัน Drop Orbs
+function dropOrbs(type, rewards = null) {
+    if (!S.orbs) S.orbs = { chaos: 0, exalted: 0, divine: 0 };
+    
+    let chaosMin, chaosMax, exaltedChance, divineChance;
+    
+    if (type === 'mapBoss' && rewards) {
+        // Map Boss = Drop ดี (ใช้ค่าจาก quest)
+        chaosMin = rewards.chaos?.[0] ?? 1;
+        chaosMax = rewards.chaos?.[1] ?? 3;
+        exaltedChance = rewards.exalted ?? 0.28;
+        divineChance = rewards.divine ?? 0.08;
+    } else if (type === 'subQuest') {
+        // Sub-quest = Drop ปกติ
+        chaosMin = 0;
+        chaosMax = 2;
+        exaltedChance = 0.10;
+        divineChance = 0.05;
+    } else if (type === 'perfectDay') {
+        // Perfect Day = Drop พิเศษ
+        chaosMin = 2;
+        chaosMax = 5;
+        exaltedChance = 0.50;
+        divineChance = 0.15;
+    } else {
+        return;
+    }
+    
+    // Drop Chaos
+    const chaosAmount = Math.floor(Math.random() * (chaosMax - chaosMin + 1)) + chaosMin;
+    S.currency.chaos = (S.currency.chaos ?? 0) + chaosAmount;
+    
+    // Drop Exalted
+    if (Math.random() < exaltedChance) {
+        S.currency.exalted = (S.currency.exalted ?? 0) + 1;
+        showToast(`💠 +1 Exalted Orb!`);
+    }
+    
+    // Drop Divine
+    if (Math.random() < divineChance) {
+        S.currency.divine = (S.currency.divine ?? 0) + 1;
+        showToast(`💎 +1 Divine Orb!`);
+    }
+    
+    save();
+    updateCurrencyDisplay();
+}
+function updateOrbDisplay() {
+    const chaosEl = document.getElementById('currency-chaos');
+    const exaltedEl = document.getElementById('currency-exalted');
+    const divineEl = document.getElementById('currency-divine');
+    
+    if (chaosEl) chaosEl.textContent = S.currency?.chaos ?? 0;
+    if (exaltedEl) exaltedEl.textContent = S.currency?.exalted ?? 0;
+    if (divineEl) divineEl.textContent = S.currency?.divine ?? 0;
+}
 
             function addMainQuest() {
                 if (!S.dailyQuests) S.dailyQuests = [];
@@ -6339,10 +8638,10 @@ const SKILL_TREE_NODES = {
             // ==========================================
 
             function renderAtlas() {
+                console.log('Rendering Atlas...');
                 const grid = document.getElementById('atlas-grid');
                 if (!grid) return;
-
-                grid.innerHTML = '';
+                    grid.innerHTML = '<div style="color:var(--muted); font-size:11px; padding:20px; text-align:center;">Atlas กำลังพัฒนา</div>';
 
                 // แสดงปุ่ม Edit Mode
                 const editBtn = document.getElementById('btn-atlas-edit');
@@ -7080,154 +9379,7 @@ function setQuickTime(type, minutes) {
  * อัปเดตการแสดงผลเวลา (ไม่ใช้แล้ว แต่เก็บไว้เพื่อความเข้ากันได้)
  */
 function updateTimeDisplay(type) {
-    // ฟังก์ชันนี้ไม่จำเป็นต้องทำอะไรแล้ว
-    // เพราะเราใช้ค่าจาก input โดยตรงใน logHours()
-}
-
-/**
- * บันทึกชั่วโมง (เวอร์ชันใหม่ - แยกชั่วโมงและนาที)
- * @param {string} type - 'art' หรือ 'fit'
- */
-function logHours(type) {
-    // ✅ รองรับ IDs ใหม่: art-hours, art-minutes, art-note, art-date
-    const hoursInput = document.getElementById(`${type}-hours`);
-    const minutesInput = document.getElementById(`${type}-minutes`);
-    const noteInput = document.getElementById(`${type}-note`);
-    const dateInput = document.getElementById(`${type}-date`);
     
-    // Defensive Programming
-    if (!hoursInput || !minutesInput || !noteInput || !dateInput) {
-        console.error(`Elements not found for type: ${type}`);
-        console.log('Tried IDs:', {
-            hours: `${type}-hours`,
-            minutes: `${type}-minutes`,
-            note: `${type}-note`,
-            date: `${type}-date`
-        });
-        showToast('❌ ไม่พบช่องกรอกข้อมูล');
-        return;
-    }
-    
-    // ✅ แปลงเป็นตัวเลข (ป้องกัน NaN)
-    const hours = parseInt(hoursInput.value) || 0;
-    const minutes = parseInt(minutesInput.value) || 0;
-    
-    // ✅ คำนวณนาทีรวม (ห้ามติดลบ)
-    const totalMinutes = Math.max(0, (hours * 60) + minutes);
-    
-    if (totalMinutes === 0) {
-        showToast('⚠️ กรุณาระบุเวลาฝึกฝน');
-        return;
-    }
-    
-    // ✅ แปลงเป็นชั่วโมง (ทศนิยม 2 ตำแหน่ง)
-    const totalHours = totalMinutes / 60;
-    
-    const note = noteInput.value.trim() || 'ฝึกฝนขัดเกลาฝีมือประจำวัน';
-    
-    // ✅ วันที่
-    let logDate = dateInput.value;
-    if (!logDate) {
-        logDate = getTodayKey();
-    } else {
-        const dateObj = new Date(logDate);
-        logDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
-    }
-    
-    const dateObj = new Date(logDate);
-    const thaiDate = dateObj.toLocaleDateString('th-TH', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    });
-    
-    // ✅ เพิ่มชั่วโมงรวม
-    if (type === 'art') {
-        S.artHours = (S.artHours ?? 0) + totalHours;
-    } else if (type === 'fit') {
-        S.fitHours = (S.fitHours ?? 0) + totalHours;
-        S.lastFitDate = new Date().toISOString();
-        checkDecay();
-    }
-    
-    // ✅ คำนวณ XP (10 XP ต่อชั่วโมง)
-    const earnedXp = Math.round(totalHours * 10);
-    
-    // ✅ สร้าง log object
-    const logObj = {
-        id: Date.now(),
-        hours: totalHours,
-        minutes: totalMinutes,
-        note,
-        date: thaiDate,
-        xpEarned: earnedXp,
-        logDateKey: logDate
-    };
-    
-    // ✅ เพิ่มเข้า logs
-    if (type === 'art') {
-        S.artLogs = S.artLogs || [];
-        S.artLogs.unshift(logObj);
-    } else {
-        S.fitLogs = S.fitLogs || [];
-        S.fitLogs.unshift(logObj);
-    }
-    
-    // ✅ อัปเดต history
-    if (!S.history) S.history = {};
-    if (!S.history[logDate]) {
-        S.history[logDate] = { 
-            daily: [], 
-            weekly: [], 
-            monthly: [], 
-            rest: [], 
-            done: false,
-            artHours: 0,
-            fitHours: 0
-        };
-    }
-    
-    if (type === 'art') {
-        S.history[logDate].artHours = (S.history[logDate].artHours ?? 0) + totalHours;
-    } else {
-        S.history[logDate].fitHours = (S.history[logDate].fitHours ?? 0) + totalHours;
-    }
-    
-    // ✅ เพิ่ม streak (ถ้าเป็นวันนี้)
-    const todayKey = getTodayKey();
-    if (logDate === todayKey) {
-        if (!S.history[logDate].loggedHour) {
-            S.history[logDate].loggedHour = true;
-            S.artDays = (S.artDays ?? 0) + 1;
-            S.streakDays = (S.streakDays ?? 0) + 1;
-        }
-    }
-    
-    // ✅ เพิ่ม XP (ใช้ addXP ตัวใหญ่ P)
-    if (typeof addXP === 'function') {
-        addXP(earnedXp);
-    }
-    
-    // ✅ ล้างค่า input
-    hoursInput.value = '';
-    minutesInput.value = '';
-    noteInput.value = '';
-    dateInput.value = '';
-    
-    // ✅ อัปเดต UI
-    if (typeof updateNodes === 'function') updateNodes();
-    if (typeof renderHourLog === 'function') renderHourLog(type);
-    if (typeof renderCalendar === 'function') renderCalendar();
-    if (typeof updateHoursDisplay === 'function') updateHoursDisplay();
-    
-    save();
-    
-    // ✅ แสดงเวลาแบบ PoE Format
-    const timeDisplay = totalHours >= 1 
-        ? `${Math.floor(totalHours)}h ${totalMinutes % 60}m`
-        : `${totalMinutes}m`;
-    
-    showToast(`⚔️ บันทึกสำเร็จ! ${timeDisplay} | +${earnedXp} XP`);
 }
 
 /**

@@ -861,8 +861,19 @@
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
 }
+.legend-dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid;
+}
+.legend-dot.art { background: #9b6dff; border-color: #d4b8ff; }
+.legend-dot.body { background: #ff4444; border-color: #ff9999; }
+.legend-dot.mind { background: #00bfff; border-color: #99e6ff; }
+.legend-dot.keystone { background: #ffd700; border-color: #fff8e1; }
 
 .legend-color {
     width: 12px;
@@ -2013,243 +2024,7 @@
             color: white !important;
         }
 
-        /* ==========================================
-   PATCH v3: Passive Skill Tree (Simple)
-   ========================================== */
-        .skill-tree-container {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 10px;
-        }
-
-        .skill-tree-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .sp-display {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .sp-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 10px;
-            color: var(--muted);
-        }
-
-        .sp-value {
-            font-family: 'Space Mono', monospace;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gold);
-        }
-
-        .btn-reset-skills {
-            background: rgba(224, 92, 92, 0.15);
-            border: 1px solid var(--red);
-            color: var(--red);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: 'Space Mono', monospace;
-            font-size: 11px;
-            transition: all 0.3s;
-        }
-
-        .btn-reset-skills:hover {
-            background: var(--red);
-            color: white;
-        }
-
-        .skill-tree-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-        }
-
-        .skill-branch {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        .skill-branch.art {
-            border-top: 3px solid var(--accent);
-        }
-
-        .skill-branch.body {
-            border-top: 3px solid #e05c8a;
-        }
-
-        .skill-branch.mind {
-            border-top: 3px solid var(--accent2);
-        }
-
-        .branch-header {
-            text-align: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .branch-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-
-        .branch-name {
-            font-family: 'Space Mono', monospace;
-            font-size: 9px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .branch-stats {
-            font-family: 'Space Mono', monospace;
-            font-size: 8px;
-            color: var(--muted);
-        }
-
-        .skill-branch.art .branch-name {
-            color: var(--accent);
-        }
-
-        .skill-branch.body .branch-name {
-            color: #e05c8a;
-        }
-
-        .skill-branch.mind .branch-name {
-            color: var(--accent2);
-        }
-
-        .branch-nodes {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .skill-node {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .skill-node:hover:not(.locked) {
-            transform: translateY(-2px);
-        }
-
-        .skill-node.locked {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .skill-node.available {
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(240, 192, 64, 0.3);
-            animation: nodePulse 2s infinite;
-        }
-
-        .skill-node.unlocked {
-            border-color: var(--green);
-            background: rgba(78, 203, 113, 0.1);
-        }
-
-        @keyframes nodePulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 15px rgba(240, 192, 64, 0.3);
-            }
-
-            50% {
-                box-shadow: 0 0 25px rgba(240, 192, 64, 0.6);
-            }
-        }
-
-        .node-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-
-        .node-name {
-            font-family: 'Space Mono', monospace;
-            font-size: 9px;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .skill-node.unlocked .node-name {
-            color: var(--green);
-        }
-
-        .skill-node.available .node-name {
-            color: var(--gold);
-        }
-
-        .node-cost {
-            font-family: 'Space Mono', monospace;
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: var(--surface2);
-            color: var(--muted);
-        }
-
-        .skill-node.available .node-cost {
-            background: var(--gold);
-            color: #0a0a0a;
-        }
-
-        .node-desc {
-            font-size: 8px;
-            color: var(--muted);
-            margin-bottom: px;
-        }
-
-        .node-bonus {
-            font-family: 'Space Mono', monospace;
-            font-size: 8px;
-            color: var(--accent);
-            background: rgba(200, 169, 110, 0.1);
-            padding: 2px 4px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-
-        .node-connector {
-            width: 2px;
-            height: 12px;
-            background: var(--border);
-            margin: -6px auto 0;
-        }
-
-        .skill-branch.art .node-connector {
-            background: var(--accent);
-        }
-
-        .skill-branch.body .node-connector {
-            background: #e05c8a;
-        }
-
-        .skill-branch.mind .node-connector {
-            background: var(--accent2);
-        }
+       
 
         /* ==========================================
    PATCH v4: Level Up Animation
@@ -3630,6 +3405,15 @@ body, html {
     background: rgba(224, 92, 92, 0.2);
     box-shadow: 0 0 15px rgba(224, 92, 92, 0.4);
 }
+.map-boss-card.perfect-day {
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, transparent 100%);
+}
+
+.map-boss-card.perfect-day .card-title {
+    color: #ffd700;
+}
 
 /* Socket Container */
 .socket-container {
@@ -4674,6 +4458,265 @@ body, html {
     margin: 4px 0;
     font-weight: 700;
 }
+/* ========================================================
+   🌳 PASSIVE SKILL TREE - FINAL CSS
+   ======================================================== */
+
+/* ========== MODAL LAYOUT ========== */
+#skill-tree-modal {
+    display: none !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 99999;
+    background: #0a0a0a;
+    flex-direction: column !important;
+}
+
+#skill-tree-modal.active {
+    display: flex !important;
+}
+
+/* Header */
+.st-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(180deg, #2a2015 0%, #1a1410 100%);
+    border-bottom: 2px solid #c8aa6e;
+    flex-shrink: 0;
+    height: 56px;
+}
+
+.st-title { color: #c8aa6e; margin: 0; font-family: 'Cinzel', serif; font-size: 22px; }
+.st-sp { color: #c8aa6e; font-size: 16px; }
+.st-sp-val { color: #fff8e1; font-size: 26px; font-weight: bold; margin-left: 8px; text-shadow: 0 0 10px rgba(255,248,225,0.5); }
+.st-close {
+    background: #3a3025; border: 2px solid #c8aa6e; color: #c8aa6e;
+    padding: 6px 14px; cursor: pointer; border-radius: 4px; font-size: 13px;
+}
+.st-close:hover { background: #4a4035; color: #fff8e1; }
+
+/* ========== CONTAINER ========== */
+.st-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+    background: radial-gradient(ellipse at center, #151010 0%, #080808 100%);min-height: 600px;
+}
+.st-container:active { cursor: grabbing; }
+
+/* SVG */
+#skill-tree-svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    transform-origin: 0 0 !important;
+}
+#skill-tree-modal .modal-footer {
+    flex-shrink: 0 !important;
+    padding: 12px 24px !important;
+    background: #1a1410 !important;
+    border-top: 2px solid #c8aa6e !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    min-height: 50px !important;
+    z-index: 10 !important;
+}
+
+/* Zoom */
+.st-zoom {
+    position: absolute; bottom: 20px; right: 20px;
+    display: flex; flex-direction: column; gap: 6px; z-index: 100;
+}
+.st-zoom-btn {
+    width: 36px; height: 36px; background: #2a2015; border: 2px solid #c8aa6e;
+    color: #c8aa6e; font-size: 18px; cursor: pointer; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+}
+.st-zoom-btn:hover { background: #3a3025; color: #fff8e1; }
+
+/* Locked */
+.node-circle {
+    cursor: pointer;
+    transition: filter 0.3s ease, stroke-width 0.3s ease, opacity 0.3s ease;
+}
+.node-circle.locked { fill: #2a2520; stroke: #5a5045; stroke-width: 2; opacity: 0.65; }
+.node-circle.locked:hover { opacity: 1; stroke: #9a9085; stroke-width: 3; }
+/* Available */
+.node-circle.available {
+    fill: #3a3025; stroke: #ffd700; stroke-width: 3;
+    animation: stPulse 2s infinite;
+}
+.node-circle.available:hover { stroke-width: 4; filter: drop-shadow(0 0 12px rgba(255,215,0,1)); }
+/* Allocated by branch */
+.node-circle.allocated.type-art { fill: #9b6dff; stroke: #d4b8ff; stroke-width: 3; filter: drop-shadow(0 0 8px #9b6dff); }
+.node-circle.allocated.type-body { fill: #ff4444; stroke: #ff9999; stroke-width: 3; filter: drop-shadow(0 0 8px #ff4444); }
+.node-circle.allocated.type-mind { fill: #00bfff; stroke: #99e6ff; stroke-width: 3; filter: drop-shadow(0 0 8px #00bfff); }
+.node-circle.allocated.type-origin { fill: #ffd700; stroke: #fff8e1; stroke-width: 4; filter: drop-shadow(0 0 16px rgba(255,215,0,0.9)); }
+.node-circle.keystone { stroke-width: 4; }
+/* Keystone */
+.node-circle.keystone { stroke-width: 4; }
+.node-circle.keystone.available { animation: stKsPulse 1.5s infinite; }
+@keyframes stPulse {
+    0%, 100% { filter: drop-shadow(0 0 4px rgba(255,215,0,0.5)); }
+    50% { filter: drop-shadow(0 0 12px rgba(255,215,0,1)); }
+}
+@keyframes stKsPulse {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(255,248,225,0.7)); }
+    50% { filter: drop-shadow(0 0 20px rgba(255,248,225,1)); }
+}
+/* Lines */
+.conn-line { stroke: #4a4035; stroke-width: 2; fill: none; opacity: 0.45; transition: all 0.3s ease; }
+.conn-line.active { stroke: #c8aa6e; stroke-width: 3; opacity: 1; filter: drop-shadow(0 0 4px rgba(200,170,110,0.6)); }
+
+/* ========== TOOLTIP ========== */
+#skill-tooltip {
+    position: fixed; background: linear-gradient(180deg, #1a1410, #0a0a0a);
+    border: 2px solid #c8aa6e; border-radius: 4px; padding: 10px 14px;
+    color: #e8d9a8; font-size: 13px; max-width: 300px;
+    pointer-events: none; z-index: 100000; display: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.9);
+}
+
+.tooltip-name {
+    color: #c8aa6e;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    text-shadow: 0 0 8px rgba(200, 170, 110, 0.4);
+}
+
+.tooltip-type {
+    color: #888;
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.tooltip-desc {
+    color: #aaa;
+    margin-bottom: 8px;
+    font-style: italic;
+    line-height: 1.4;
+    font-size: 12px;
+}
+
+.tooltip-effects {
+    margin: 8px 0;
+}
+
+.tooltip-effect {
+    color: #88ff88;
+    margin: 3px 0;
+    font-size: 13px;
+}
+
+.tooltip-cost {
+    color: #ffaa44;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.tooltip-status {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #4a4035;
+    font-size: 12px;
+}
+
+.tooltip-status.available { color: #ffaa44; }
+.tooltip-status.allocated { color: #88ff88; }
+.tooltip-status.locked {
+    color: #ff6666;
+    font-style: italic;
+}
+
+/* ========== FOOTER ========== */
+.st-footer {
+    padding: 10px 20px; background: #1a1410; border-top: 2px solid #c8aa6e;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; height: 48px;
+}
+
+.respec-btn {
+    background: #3a3025;
+    border: 2px solid #af6025;
+    color: #af6025;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'Fontin', serif;
+    transition: all 0.2s ease;
+}
+
+.respec-btn:hover {
+    background: linear-gradient(180deg, #4a4035 0%, #2a2015 100%);
+    color: #ff8844;
+    border-color: #ff8844;
+}
+
+.legend {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: #c8aa6e;
+}
+
+/* ========== RESPONSIVE (มือถือ) ========== */
+@media (max-width: 768px) {
+    .skill-tree-title {
+        font-size: 18px;
+    }
+    
+    .skill-points-value {
+        font-size: 22px;
+    }
+    
+    .skill-tree-header {
+        padding: 10px 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .skill-tree-footer {
+        padding: 10px 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .legend {
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        font-size: 11px;
+    }
+    
+    .zoom-controls {
+        bottom: 20px;
+        right: 15px;
+    }
+    
+    .zoom-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+    
+    #skill-tooltip {
+        max-width: 260px;
+        font-size: 12px;
+        padding: 10px 12px;
+    }
+}
     </style>
 </head>
 
@@ -4841,6 +4884,7 @@ body, html {
     <div class="tab" onclick="switchTab('settings')">⚙️ Settings</div>
 </div>
 
+
     <!-- ==========================================
      TAB 1: PIETY'S MISSIONS (QUESTS)
      ========================================== -->
@@ -4942,50 +4986,6 @@ body, html {
     </div>
 
 </div>  <!-- ✅ ปิด quests-tab ตรงนี้เท่านั้น -->
-
-    <!-- ==========================================
-     TAB 2: PASSIVE SKILLS
-     ========================================== -->
-<div id="skills-tab" class="tab-content">
-    <div class="skill-tree-container">
-        <div class="skill-tree-header">
-            <div class="sp-display">
-                <span class="sp-label">Skill Points Available:</span>
-                <span class="sp-value" id="sp-value-display">0</span>
-            </div>
-                <button class="btn-reset-skills" onclick="resetSkillTree()">🔄 Reset All</button>
-        </div>
-        <div class="skill-tree-grid">
-            <!-- Art Branch -->
-            <div class="skill-branch art">
-                <div class="branch-header">
-                    <div class="branch-icon">🎨</div>
-                    <div class="branch-name">Art Dimension</div>
-                    <div class="branch-stats">CRE + INT</div>
-                </div>
-                <div class="branch-nodes" id="art-nodes"></div>
-            </div>
-            <!-- Body Branch -->
-            <div class="skill-branch body">
-                <div class="branch-header">
-                    <div class="branch-icon">💪</div>
-                    <div class="branch-name">Body & Voice</div>
-                    <div class="branch-stats">STR + VIT</div>
-                </div>
-                <div class="branch-nodes" id="body-nodes"></div>
-            </div>
-            <!-- Mind Branch -->
-            <div class="skill-branch mind">
-                <div class="branch-header">
-                    <div class="branch-icon">🧠</div>
-                    <div class="branch-name">Mind & Knowledge</div>
-                    <div class="branch-stats">INT + AGI</div>
-                </div>
-                <div class="branch-nodes" id="mind-nodes"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
     <!-- ==========================================
      TAB 3: ATLAS OF WORLDS (CAREER)
@@ -5254,7 +5254,34 @@ body, html {
     </div>
 </div>
 
+
 <div class="toast" id="toast">บันทึกข้อมูลเรียบร้อย</div>
+<!-- 🌳 PASSIVE SKILL TREE MODAL -->
+<div id="skill-tree-modal" style="display:none;">
+    <div class="st-header">
+        <h2 class="st-title">🌳 Passive Skill Tree</h2>
+        <div class="st-sp"><span>Skill Points:</span><span id="sp-available" class="st-sp-val">0</span></div>
+        <button onclick="closeSkillTree()" class="st-close">✕ ปิด</button>
+    </div>
+    <div class="st-container" id="skill-tree-container">
+        <svg id="skill-tree-svg" viewBox="0 0 1000 1100" preserveAspectRatio="xMidYMid meet">
+        <div class="st-zoom">
+            <button class="st-zoom-btn" onclick="zoomIn()">+</button>
+            <button class="st-zoom-btn" onclick="zoomOut()">−</button>
+            <button class="st-zoom-btn" onclick="resetZoom()" style="font-size:14px;">⌂</button>
+        </div>
+    </div>
+    <div id="skill-tooltip"></div>
+    <div class="st-footer">
+        <button class="st-respec" onclick="respecTree()">🔄 Respec</button>
+        <div class="st-legend">
+            <span><span class="st-dot st-dot-art"></span>Art</span>
+            <span><span class="st-dot st-dot-body"></span>Body</span>
+            <span><span class="st-dot st-dot-mind"></span>Mind</span>
+            <span><span class="st-dot st-dot-ks"></span>Keystone</span>
+        </div>
+    </div>
+</div>
 
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVIuWzKtUAyInYXavA9OpT5clRAKSNriuI5kVBbc6P4ofYXwBftZ_VQNfxNWJvx82rFw/exec';
@@ -5265,88 +5292,241 @@ body, html {
 
         const ART_RANKS = [{ min: 0, name: 'Novice' }, { min: 50, name: 'Apprentice' }, { min: 200, name: 'Journeyman' }, { min: 500, name: 'Expert Artisan' }, { min: 1500, name: 'Master Painter' }, { min: 5000, name: 'Grand Creator' }, { min: 10000, name: 'Mythic Illustrator' }];
         const FIT_RANKS = [{ min: 0, name: 'Untrained' }, { min: 50, name: 'Athletic Novice' }, { min: 200, name: 'Vocal/Fit Journeyman' }, { min: 500, name: 'Elite Performer' }, { min: 1500, name: 'Stamina Master' }, { min: 5000, name: 'Vocal Overlord' }, { min: 10000, name: 'Grandmaster Elite' }];
+        // ==========================================
+// 🌍 GLOBAL REWARD CONFIG - ปรับที่เดียวจบ!
+// ==========================================
 
-        const SKILL_TREE = [{ id: 'a1', lane: 'art', name: 'สีน้ำมันเบื้องต้น (Oil Texture Master)', desc: 'เข้าใจเทคนิคการลงน้ำหนักและเนื้อสีหยาบเพื่อสร้างความลึกของมิติภาพ', reqType: 'art', reqVal: 10, reward: 'ปลดล็อกการสร้างสรรค์ผลงานธีมทุ่งนาและพอร์ตเทรตอารมณ์', size: 'small' }, { id: 'a2', lane: 'art', name: 'ผู้พิทักษ์บุปผชาติ (Floral Composition)', desc: 'เชี่ยวชาญการจัดองค์ประกอบภาพวาดตระกูลดอกไม้เพื่อสร้างรายได้หลัก', reqType: 'art', reqVal: 35, reward: 'เพิ่มความน่าดึงดูดของงานคอมมิชชัน +15%', size: 'medium' }, { id: 'a3', lane: 'art', name: 'มหาศิลปินดิจิทัลอาร์ต (Concept Illustrator)', desc: 'หลอมรวมแปรงสีน้ำมันเข้ากับ Clip Studio Paint PRO อย่างไร้รอยต่อ', reqType: 'art', reqVal: 100, reward: 'ปลดล็อกคลังภาพซีรีส์ใหญ่ "The Weight of Unfinished Colours"', size: 'large' }, { id: 'f1', lane: 'fit', name: 'ปอดเหล็กคอนโทรล (Vocal Core)', desc: 'ฝึกการคุมลมหายใจจากกะบังลมเพื่อให้ร้องเพลงเสียงสูงพุ่งทะยานได้ไม่ตก', reqType: 'fit', reqVal: 10, reward: 'VIT +3, ร้องเพลงต่อเนื่องได้ยาวนานโดยไม่เหนื่อยล้า', size: 'small' }, { id: 'f2', lane: 'fit', name: 'แกนกลางเหล็กไหล (Fullbody Endurance)', desc: 'ความแข็งแกร่งของแกนกลางลำตัวเพื่อซัพพอร์ตการยืนร้องเพลงและการคุมพู่กันยาว', reqType: 'fit', reqVal: 40, reward: 'STR +5, ลดโอกาสการเกิดอาการออฟฟิศซินโดรม', size: 'medium' }, { id: 'f3', lane: 'fit', name: 'นักแต่งเพลงผู้สร้างคลื่นเสียง (Melody Songwriter)', desc: 'ความสามารถในการแต่งเนื้อร้องทำนองให้มีจิตวิญญาณดุดันแบบขบถและกินใจผู้ฟัง', reqType: 'fit', reqVal: 120, reward: 'INT +6, CRE +6, สามารถผลิตมิวสิกวิดีโอสมบูรณ์แบบชิ้นแรก', size: 'large' }];
+const REWARD_CONFIG = {
+    // ===== Map Boss (Daily Main Quest) =====
+    mapBoss: {
+        chaos: [5, 15],        // [min, max] Chaos
+        exalted: 0.20,         // 20% โอกาสได้ Exalted
+        divine: 0.01,          // 1% โอกาสได้ Divine
+        xpMultiplier: 1        // XP คูณ (default 1x)
+    },
+    
+    // ===== Sub-quest (Juice Map) =====
+    subQuest: {
+        chaos: [1, 3],
+        exalted: 0.10,         // 10%
+        divine: 0.005,         // 0.5%
+        xpMultiplier: 1
+    },
+    
+    // ===== Perfect Day (ทำ Main + Sub ครบ) =====
+    perfectDay: {
+        chaos: [10, 20],
+        exalted: 0.30,         // 30%
+        divine: 0.02,          // 2%
+        xpMultiplier: 2        // XP x2
+    },
+    
+    // ===== Weekly Expedition =====
+    weekly: {
+        exalted: [1, 3],       // 1-3 Exalted
+        divineChance: 0.15,    // 15%
+        divineAmount: [1, 3],  // ถ้าได้ Divine ได้ 1-3
+        medallion: 1
+    },
+    
+    // ===== Monthly Ascendancy Trial =====
+    monthly: {
+        exalted: [5, 15],
+        divine: [2, 10],
+        ascendancyPoints: 3
+    },
+    
+    // ===== Atlas Boss =====
+    atlasBoss: {
+        xp: 500,
+        ascendancyPoints: 3,
+        divine: 2
+    }
+};
 
+// ========== 🌳 AUTO-LAYOUT SYSTEM - Spider Web Style ==========
+const SKILL_TREE_CONFIG = (() => {
+    const nodes = {};
+    
+    const N = (id, type, branch, cost, x, y, connections, effects, name, desc) => {
+        nodes[id] = { type, branch, cost, x, y, connections, effects, name, desc };
+    };
+    
+    // ===== ตำแหน่ง Origin =====
+    const ORIGIN_X = 600;
+    const ORIGIN_Y = 550;
+    
+    // ===== ค่าคงที่ =====
+    const TRUNK_SPACING = 70;      // ระยะระหว่าง nodes ในเส้นหลัก
+    const BRANCH_SPACING = 85;     // ระยะระหว่างกิ่งย่อย
+    const BRANCH_ANGLE_OFFSET = 25; // มุมเบี่ยงเบนของกิ่งย่อย
+    
+    // ===== 🎨 ART BRANCH (ซ้ายบน -150°) =====
+    const ART_ANGLE = -150;
+    const ART_RAD = ART_ANGLE * Math.PI / 180;
+    
+    // เส้นหลัก (1-10)
+    for (let i = 1; i <= 10; i++) {
+        const x = ORIGIN_X + (Math.cos(ART_RAD) * (TRUNK_SPACING * i));
+        const y = ORIGIN_Y + (Math.sin(ART_RAD) * (TRUNK_SPACING * i));
+        
+        // กิ่งย่อยซ้าย (เบี่ยง -25°)
+        const leftBranchAngle = (ART_ANGLE - BRANCH_ANGLE_OFFSET) * Math.PI / 180;
+        const leftX = x + (Math.cos(leftBranchAngle) * (BRANCH_SPACING * 1.5));
+        const leftY = y + (Math.sin(leftBranchAngle) * (BRANCH_SPACING * 1.5));
+        
+        // กิ่งย่อยขวา (เบี่ยง +25°)
+        const rightBranchAngle = (ART_ANGLE + BRANCH_ANGLE_OFFSET) * Math.PI / 180;
+        const rightX = x + (Math.cos(rightBranchAngle) * (BRANCH_SPACING * 1.5));
+        const rightY = y + (Math.sin(rightBranchAngle) * (BRANCH_SPACING * 1.5));
+        
+        N(`art_${i}`, "small", "art", 1, x, y, 
+          i === 1 ? ["origin", `art_${i+1}`, `art_${i}_left`] :
+          i === 10 ? [`art_${i-1}`, "art_ks"] :
+          [`art_${i-1}`, `art_${i+1}`, `art_${i}_left`],
+          {CRE: i%3===0?2:1}, `Art Node ${i}`, `+${i%3===0?2:1} CRE`);
+        
+        // เพิ่ม nodes กิ่งย่อย
+        if (i <= 8) {
+            N(`art_${i}_left`, "small", "art", 1, leftX, leftY,
+              [`art_${i}`], {INT:1}, `Art Branch ${i}`, "+1 INT");
+        }
+    }
+    
+    // Keystone Art
+    const artKsX = ORIGIN_X + (Math.cos(ART_RAD) * (TRUNK_SPACING * 11));
+    const artKsY = ORIGIN_Y + (Math.sin(ART_RAD) * (TRUNK_SPACING * 11));
+    N("art_ks", "keystone", "art", 10, artKsX, artKsY,
+      ["art_10", "art_8_left"], {CRE:1.5,INT:1.3,STR:0.8},
+      "🎨 Creative Ascendancy", "CRE+50% INT+30% STR-20%");
+    
+    // ===== 💪 BODY BRANCH (ขวาบน -30°) =====
+    const BODY_ANGLE = -30;
+    const BODY_RAD = BODY_ANGLE * Math.PI / 180;
+    
+    for (let i = 1; i <= 10; i++) {
+        const x = ORIGIN_X + (Math.cos(BODY_RAD) * (TRUNK_SPACING * i));
+        const y = ORIGIN_Y + (Math.sin(BODY_RAD) * (TRUNK_SPACING * i));
+        
+        const leftBranchAngle = (BODY_ANGLE - BRANCH_ANGLE_OFFSET) * Math.PI / 180;
+        const leftX = x + (Math.cos(leftBranchAngle) * (BRANCH_SPACING * 1.5));
+        const leftY = y + (Math.sin(leftBranchAngle) * (BRANCH_SPACING * 1.5));
+        
+        const rightBranchAngle = (BODY_ANGLE + BRANCH_ANGLE_OFFSET) * Math.PI / 180;
+        const rightX = x + (Math.cos(rightBranchAngle) * (BRANCH_SPACING * 1.5));
+        const rightY = y + (Math.sin(rightBranchAngle) * (BRANCH_SPACING * 1.5));
+        
+        N(`body_${i}`, "small", "body", 1, x, y,
+          i === 1 ? ["origin", `body_${i+1}`, `body_${i}_left`] :
+          i === 10 ? [`body_${i-1}`, "body_ks"] :
+          [`body_${i-1}`, `body_${i+1}`, `body_${i}_left`],
+          {STR: i%3===0?2:1}, `Body Node ${i}`, `+${i%3===0?2:1} STR`);
+        
+        if (i <= 8) {
+            N(`body_${i}_left`, "small", "body", 1, leftX, leftY,
+              [`body_${i}`], {VIT:1}, `Body Branch ${i}`, "+1 VIT");
+        }
+    }
+    
+    const bodyKsX = ORIGIN_X + (Math.cos(BODY_RAD) * (TRUNK_SPACING * 11));
+    const bodyKsY = ORIGIN_Y + (Math.sin(BODY_RAD) * (TRUNK_SPACING * 11));
+    N("body_ks", "keystone", "body", 10, bodyKsX, bodyKsY,
+      ["body_10", "body_8_left"], {STR:1.5,VIT:1.5,AGI:0.8},
+      "💪 Juggernaut Ascendancy", "STR+50% VIT+50% AGI-20%");
+    
+    // ===== 🧠 MIND BRANCH (ล่าง 90°) =====
+    const MIND_ANGLE = 90;
+    const MIND_RAD = MIND_ANGLE * Math.PI / 180;
+    
+    for (let i = 1; i <= 10; i++) {
+        const x = ORIGIN_X + (Math.cos(MIND_RAD) * (TRUNK_SPACING * i));
+        const y = ORIGIN_Y + (Math.sin(MIND_RAD) * (TRUNK_SPACING * i));
+        
+        const leftBranchAngle = (MIND_ANGLE - BRANCH_ANGLE_OFFSET) * Math.PI / 180;
+        const leftX = x + (Math.cos(leftBranchAngle) * (BRANCH_SPACING * 1.5));
+        const leftY = y + (Math.sin(leftBranchAngle) * (BRANCH_SPACING * 1.5));
+        
+        const rightBranchAngle = (MIND_ANGLE + BRANCH_ANGLE_OFFSET) * Math.PI / 180;
+        const rightX = x + (Math.cos(rightBranchAngle) * (BRANCH_SPACING * 1.5));
+        const rightY = y + (Math.sin(rightBranchAngle) * (BRANCH_SPACING * 1.5));
+        
+        N(`mind_${i}`, "small", "mind", 1, x, y,
+          i === 1 ? ["origin", `mind_${i+1}`, `mind_${i}_left`] :
+          i === 10 ? [`mind_${i-1}`, "mind_ks"] :
+          [`mind_${i-1}`, `mind_${i+1}`, `mind_${i}_left`],
+          {INT: i%3===0?2:1}, `Mind Node ${i}`, `+${i%3===0?2:1} INT`);
+        
+        if (i <= 8) {
+            N(`mind_${i}_left`, "small", "mind", 1, leftX, leftY,
+              [`mind_${i}`], {AGI:1}, `Mind Branch ${i}`, "+1 AGI");
+        }
+    }
+    
+    const mindKsX = ORIGIN_X + (Math.cos(MIND_RAD) * (TRUNK_SPACING * 11));
+    const mindKsY = ORIGIN_Y + (Math.sin(MIND_RAD) * (TRUNK_SPACING * 11)) + 50;
+    N("mind_ks", "keystone", "mind", 10, mindKsX, mindKsY,
+      ["mind_10", "mind_8_left"], {INT:1.5,AGI:1.5,VIT:0.8},
+      "🧠 Ascendant Scholar", "INT+50% AGI+50% VIT-20%");
+    
+    return { version: "5.2.0", nodes, removedNodes: {} };
+})();
         // ==========================================
         // PATCH v4: Data Structure & Migration
         // ==========================================
 
         // 1. อัปเดต Object S หลัก
-        let S = {
-            // === Character Core ===
-            xp: 0, lvl: 1, sp: 0,
-            STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10,
+let S = {
+    // === Character Core ===
+    xp: 0, lvl: 1, sp: 0,
+    STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10,
 
-            // === Dimensions ===
-            artHours: 0, fitHours: 0, artDays: 0,
-            artLogs: [], fitLogs: [], incomeLogs: [], diaryLogs: [],
+    // === Dimensions ===
+    artHours: 0, fitHours: 0, artDays: 0,
+    artLogs: [], fitLogs: [], incomeLogs: [], diaryLogs: [],
 
-            // === NEW: PoE Economy (Patch v4) ===
-            currency: { chaos: 0, exalted: 0, divine: 0 },
-            skillPoints: 0,
-            skillTree: {},  // { nodeId: true } — O(1) lookup
-            // เพิ่มใน Object S (ต่อจาก skillTree)
-            skillTreeNodes: {
-                // Origin Node
-                'origin': { id: 'origin', name: "The Exile's Birth", desc: 'จุดเริ่มต้นการเดินทาง', unlocked: true, cost: 0, branch: 'origin' },
+    // === PoE Economy (Patch v4) ===
+    currency: { chaos: 0, exalted: 0, divine: 0 },
+    skillPoints: 1,
+    skillTree: { 'origin': true },  // ✅ { nodeId: true } — O(1) lookup
 
-                // Art Branch (CRE-INT)
-                'art1': { id: 'art1', name: 'Creative Spark', desc: 'CRE +2', cost: 1, branch: 'art', req: ['origin'], bonus: { CRE: 2 } },
-                'art2': { id: 'art2', name: 'Artistic Vision', desc: 'INT +2', cost: 1, branch: 'art', req: ['art1'], bonus: { INT: 2 } },
-                'art3': { id: 'art3', name: 'Oil Painter Soul', desc: 'CRE +3, +10% Art XP', cost: 2, branch: 'art', req: ['art2'], bonus: { CRE: 3 }, special: 'art_xp_10' },
-
-                // Body Branch (STR-VIT)
-                'body1': { id: 'body1', name: 'Physical Power', desc: 'STR +2', cost: 1, branch: 'body', req: ['origin'], bonus: { STR: 2 } },
-                'body2': { id: 'body2', name: 'Vitality Boost', desc: 'VIT +2', cost: 1, branch: 'body', req: ['body1'], bonus: { VIT: 2 } },
-                'body3': { id: 'body3', name: 'Iron Voice', desc: 'VIT +3, AGI +2', cost: 2, branch: 'body', req: ['body2'], bonus: { VIT: 3, AGI: 2 } },
-
-                // Mind Branch (INT-AGI)
-                'mind1': { id: 'mind1', name: 'Mental Clarity', desc: 'INT +2', cost: 1, branch: 'mind', req: ['origin'], bonus: { INT: 2 } },
-                'mind2': { id: 'mind2', name: 'Agile Mind', desc: 'AGI +2', cost: 1, branch: 'mind', req: ['mind1'], bonus: { AGI: 2 } },
-                'mind3': { id: 'mind3', name: 'Cross-Dimensional', desc: 'INT +3, +5% All XP', cost: 2, branch: 'mind', req: ['mind2'], bonus: { INT: 3 }, special: 'all_xp_5' }
-            },
-            allocatedSkills: [],  // ['art1', 'body2', ...]
-            ascendancyPoints: 0,
-            streakDays: 0,
-            atlasProgress: {},  // { goalId: { currentXP: 0, requiredXP: 1000 } } atlasEditMode: false, 
-            atlasNodes: [
-                { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false },
-                { id: 'atlas2', name: 'ร้องเพลง Cover 10 เพลง', requiredXP: 500, branch: 'body', completed: false },
-                { id: 'atlas3', name: 'เรียนทฤษฎีดนตรี', requiredXP: 300, branch: 'mind', completed: false },
-                { id: 'atlas4', name: 'สร้าง Content 30 วัน', requiredXP: 1500, branch: 'art', completed: false }
+    ascendancyPoints: 0,
+    streakDays: 0,
+    atlasProgress: {},
+    atlasEditMode: false,
+    atlasNodes: [
+        { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false },
+        { id: 'atlas2', name: 'ร้องเพลง Cover 10 เพลง', requiredXP: 500, branch: 'body', completed: false },
+        { id: 'atlas3', name: 'เรียนทฤษฎีดนตรี', requiredXP: 300, branch: 'mind', completed: false },
+        { id: 'atlas4', name: 'สร้าง Content 30 วัน', requiredXP: 1500, branch: 'art', completed: false }
+    ],
+    weeklyMedallions: 0,
+    weeklyCompletion: {},
+    monthlyTrials: 0,
+    trialCompletion: {},
+    atlasBossDefeated: false,
+    dailyQuests: [
+        {
+            id: 'dq1',
+            main: { text: 'ฝึกวาดอนาโตมี่สีน้ำมัน', xp: 50, done: false },
+            subQuests: [
+                { text: 'Sketch 15 นาที', xp: 15, done: false },
+                { text: 'ศึกษา Reference', xp: 10, done: false }
             ],
-            weeklyMedallions: 0,  // จำนวน Medallion ที่ได้รับ
-            weeklyCompletion: {},  // { weekKey: { completed: true, date: '...' } }
-            monthlyTrials: 0,  // จำนวน Trials ที่ทำสำเร็จ
-            trialCompletion: {},  // { monthKey: { completed: true, date: '...', rewards: {...} } }
-            atlasBossDefeated: false,
-            // เพิ่มใน Object S
-            allocatedSkills: [],  // เก็บ ID ของ Node ที่ปลดล็อกแล้ว เช่น ['art1', 'body2']
-            dailyQuests: [
-                {
-                    id: 'dq1',
-                    main: { text: 'ฝึกวาดอนาโตมี่สีน้ำมัน', xp: 50, done: false },
-                    subQuests: [
-                        { text: 'Sketch 15 นาที', xp: 15, done: false },
-                        { text: 'ศึกษา Reference', xp: 10, done: false }
-                    ],
-                    rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }
-                }
-            ],
-            editMode: false,  // สำหรับ Accordion
+            rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }
+        }
+    ],
+    editMode: false,
 
-            // === Legacy Fields ===
-            history: {}, followers: {}, lastFitDate: null,
-            goalIncome: 15000, goalJobs: 6,
-            savingGoals: [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }],
-            vaultItems: [],
-            socialChannels: [
-                { id: "tk", name: "TikTok (EATLAEWSHOP)", subs: 0, vids: 0 },
-                { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
-            ]
-        };
-
+    // === Legacy Fields ===
+    history: {}, followers: {}, lastFitDate: null,
+    goalIncome: 15000, goalJobs: 6,
+    savingGoals: [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }],
+    vaultItems: [],
+    socialChannels: [
+        { id: "tk", name: "TikTok (EATLAEWSHOP)", subs: 0, vids: 0 },
+        { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
+    ]
+};
 //// ==========================================
 // COMPACT: migrateData()
 // ==========================================
@@ -5356,7 +5536,7 @@ function migrateData(oldS) {
     const getObj = (key, fallback) => ({ ...(oldS?.[key] ?? fallback) });
     const getArr = (key, fallback) => [...(oldS?.[key] ?? fallback)];
 
-    return {
+    const newData = {
         // === Core ===
         totalXp: get('totalXp', 0),
         xp: get('xp', 0),
@@ -5408,8 +5588,8 @@ function migrateData(oldS) {
             exalted: oldS?.currency?.exalted ?? oldS?.orbs?.exalted ?? 0,
             divine: oldS?.currency?.divine ?? oldS?.orbs?.divine ?? 0
         },
-        skillPoints: get('skillPoints', 0),
         skillTree: getObj('skillTree', {}),
+        skillPoints: get('skillPoints', 0),
         ascendancyPoints: get('ascendancyPoints', 0),
         streakDays: get('streakDays', 0),
 
@@ -5464,9 +5644,457 @@ function migrateData(oldS) {
             { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
         ])
     };
+     if (newData.skillTree && typeof newData.skillTree === 'object') {
+        // ✅ ถ้ามี SKILL_TREE_CONFIG ให้ใช้ มิฉะนั้นข้าม
+        if (typeof SKILL_TREE_CONFIG !== 'undefined' && SKILL_TREE_CONFIG.nodes) {
+            let refundedSP = 0;
+            Object.keys(newData.skillTree).forEach(nodeId => {
+                if (!SKILL_TREE_CONFIG.nodes[nodeId]) {
+                    refundedSP += 1; // default cost
+                    delete newData.skillTree[nodeId];
+                    console.warn(`[Migration] Removed unknown node: ${nodeId}`);
+                }
+            });
+            if (refundedSP > 0) {
+                newData.skillPoints = (newData.skillPoints ?? 0) + refundedSP;
+                console.warn(`[Migration] Refunded ${refundedSP} SP for removed nodes`);
+           }
+        }
+    }
+    if (!newData.skillTree || typeof newData.skillTree !== 'object') {
+        newData.skillTree = {};
+    }
+    
+    // Force unlock origin สำหรับทุกคน
+    if (!newData.skillTree['origin']) {
+        newData.skillTree['origin'] = true;
+        console.log('✅ Origin unlocked in migration');
+    }
+
+    return newData;
+}
+
+
+/** Apply/Remove effects ของ Node */
+function applyNodeEffects(effects, multiplier) {
+  if (!effects) return;
+  Object.entries(effects).forEach(([stat, value]) => {
+    if (["CRE","STR","INT","VIT","AGI"].includes(stat)) {
+      // Stat multiplier (keystone) หรือ flat bonus
+      if (value > 10) {
+        // น่าจะเป็น multiplier เช่น 1.5 = +50%
+        // เก็บเป็น % bonus แยกไว้
+        S[`_bonus_${stat}`] = (S[`_bonus_${stat}`] ?? 0) + (value - 1) * 100 * multiplier;
+      } else {
+        // Flat bonus
+        S[stat] = (S[stat] ?? 10) + value * multiplier;
+      }
+    }
+  });
+}
+
+/** คำนวณ Stat รวม (Base + Tree Bonus) */
+function calculateDerivedStats() {
+  const base = {
+    STR: S.STR ?? 10, AGI: S.AGI ?? 10, INT: S.INT ?? 10,
+    VIT: S.VIT ?? 10, CRE: S.CRE ?? 10
+  };
+  const result = { ...base };
+  
+  // Apply % bonus จาก Keystone
+  ["STR","AGI","INT","VIT","CRE"].forEach(stat => {
+    const bonus = S[`_bonus_${stat}`] ?? 0;
+    result[stat] = Math.floor(base[stat] * (1 + bonus / 100));
+  });
+  
+  return result;
+}
+
+// ========== 4. SVG Rendering (Data-Driven) ==========
+
+// ========== SKILL TREE FUNCTIONS ==========
+
+let panZoomState = { scale: 1.0, panX: 0, panY: 0, isPanning: false, startX: 0, startY: 0 };
+
+function renderSkillTree() {
+    console.log('🌳 Rendering Skill Tree...');
+
+    if (!S.skillTree) S.skillTree = {};
+    if (!S.skillTree['origin']) { S.skillTree['origin'] = true; save(); }
+    
+    const svg = document.getElementById('skill-tree-svg');
+    if (!svg) {
+        console.error('❌ SVG not found');
+        return;
+    }
+    
+     const spEl = document.getElementById('sp-available');
+    if (spEl) spEl.textContent = S.skillPoints || 0;
+    
+    svg.innerHTML = '';
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+
+    if (!SKILL_TREE_CONFIG || !SKILL_TREE_CONFIG.nodes) {
+        console.error('❌ SKILL_TREE_CONFIG not found');
+        return;
+    }
+    
+    // ✅ ประกาศแค่ครั้งเดียว
+    const skillNodes = SKILL_TREE_CONFIG.nodes;
+    
+    // คำนวณ bounding box
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    
+    Object.values(skillNodes).forEach(node => {
+        if (node.x < minX) minX = node.x;
+        if (node.y < minY) minY = node.y;
+        if (node.x > maxX) maxX = node.x;
+        if (node.y > maxY) maxY = node.y;
+    });
+
+    // เพิ่ม padding 50px รอบๆ
+    const padding = 50;
+    minX -= padding;
+    minY -= padding;
+    maxX += padding;
+    maxY += padding;
+
+    const viewBox = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
+    svg.setAttribute('viewBox', viewBox);
+
+// Background
+const bg = document.createElementNS(svgNS, 'rect');
+bg.setAttribute('x', minX);
+bg.setAttribute('y', minY);
+bg.setAttribute('width', maxX - minX);
+bg.setAttribute('height', maxY - minY);
+bg.setAttribute('fill', '#0a0a0a');
+svg.appendChild(bg);
+    
+    // Lines - ใช้ CSS class แทน inline attributes
+    const drawn = new Set();
+    Object.entries(skillNodes).forEach(([id, node]) => {
+        if (!Array.isArray(node.connections)) return;
+        node.connections.forEach(cid => {
+            const key = [id, cid].sort().join('-');
+            if (drawn.has(key)) return;
+            drawn.add(key);
+            const c = skillNodes[cid];
+            if (!c) return;
+            
+            const line = document.createElementNS(svgNS, 'line');
+            line.setAttribute('x1', node.x); line.setAttribute('y1', node.y);
+            line.setAttribute('x2', c.x);    line.setAttribute('y2', c.y);
+            
+            // ✅ ใช้ CSS class แทน inline style
+            const isActive = S.skillTree[id] && S.skillTree[cid];
+            line.setAttribute('class', 'conn-line' + (isActive ? ' active' : ''));
+            svg.appendChild(line);
+        });
+    });
+    
+    // Nodes - ใช้ CSS class แทน inline attributes
+    Object.entries(skillNodes).forEach(([id, node]) => {
+        const isAlloc = (id === 'origin') || (S.skillTree[id] === true);
+        const isAvail = canAllocateNode(id);
+        
+        const circle = document.createElementNS(svgNS, 'circle');
+        circle.setAttribute('cx', node.x);
+        circle.setAttribute('cy', node.y);
+        circle.setAttribute('r', node.type === 'keystone' ? 20 : node.type === 'origin' ? 28 : 12);
+        
+        // ✅ สร้าง class string (ไม่มี inline fill/stroke)
+        const cls = ['node-circle', `type-${node.branch || 'origin'}`];
+        if (node.type === 'keystone') cls.push('keystone');
+        cls.push(isAlloc ? 'allocated' : isAvail ? 'available' : 'locked');
+        circle.setAttribute('class', cls.join(' '));
+        
+        circle.addEventListener('click', e => { e.stopPropagation(); handleNodeClick(id); });
+        circle.addEventListener('mouseenter', e => showTooltip(e, id));
+        circle.addEventListener('mouseleave', hideTooltip);
+        circle.addEventListener('mousemove', moveTooltip);
+        svg.appendChild(circle);
+        
+        // Icon text
+        if (node.type === 'origin' || node.type === 'keystone') {
+            const t = document.createElementNS(svgNS, 'text');
+            t.setAttribute('x', node.x);
+            t.setAttribute('y', node.y + (node.type === 'origin' ? 8 : 6));
+            t.setAttribute('text-anchor', 'middle');
+            t.setAttribute('fill', '#fff8e1');
+            t.setAttribute('font-size', node.type === 'origin' ? '20' : '14');
+            t.setAttribute('pointer-events', 'none');
+            t.textContent = node.type === 'origin' ? '🌟' : (node.branch === 'art' ? '🎨' : node.branch === 'body' ? '💪' : '🧠');
+            svg.appendChild(t);
+        }
+    });
+    
+    console.log('✅ Rendered:', Object.keys(skillNodes).length, 'nodes');
+}
+
+function canAllocateNode(nodeId) {
+    if (nodeId === 'origin') return false;
+    if (S.skillTree[nodeId] === true) return false;
+    
+    const node = SKILL_TREE_CONFIG.nodes[nodeId];
+    if (!node) return false;
+    if (node.cost > (S.skillPoints || 0)) return false;
+    
+    return node.connections.some(connId => {
+        if (connId === 'origin') return true;
+        return S.skillTree[connId] === true;
+    });
+}
+
+function handleNodeClick(nodeId) {
+    if (S.skillTree[nodeId]) {
+        deallocateNode(nodeId);
+    } else {
+        allocateNode(nodeId);
+    }
+}
+
+function allocateNode(nodeId) {
+    if (nodeId === 'origin') return false;
+    if (!canAllocateNode(nodeId)) {
+        showToast("❌ ไม่สามารถเปิด Node นี้ได้");
+        return false;
+    }
+    
+    const node = SKILL_TREE_CONFIG.nodes[nodeId];
+    S.skillTree[nodeId] = true;
+    S.skillPoints -= node.cost;
+    save();
+    renderSkillTree();
+    showToast(`✨ เปิด "${node.name}" แล้ว!`);
+    return true;
+}
+
+function deallocateNode(nodeId) {
+    if (nodeId === 'origin') return false;
+    if (!S.skillTree[nodeId]) return false;
+    
+    const node = SKILL_TREE_CONFIG.nodes[nodeId];
+    const dependents = Object.entries(SKILL_TREE_CONFIG.nodes)
+        .filter(([id, n]) => id !== nodeId && S.skillTree[id])
+        .filter(([id, n]) => isOnlyPathToOrigin(id, nodeId));
+    
+    if (dependents.length > 0) {
+        showToast("⚠️ ต้องปิด Node ปลายทางก่อน");
+        return false;
+    }
+    
+    delete S.skillTree[nodeId];
+    S.skillPoints += node.cost;
+    save();
+    renderSkillTree();
+    showToast(`🔄 ปิด "${node.name}" แล้ว!`);
+    return true;
+}
+
+function isOnlyPathToOrigin(dependentId, removedId) {
+    const visited = new Set();
+    const queue = [dependentId];
+    while (queue.length > 0) {
+        const curr = queue.shift();
+        if (curr === 'origin') return false;
+        if (visited.has(curr)) continue;
+        visited.add(curr);
+        const node = SKILL_TREE_CONFIG.nodes[curr];
+        if (!node) continue;
+        node.connections.forEach(connId => {
+            if (connId !== removedId && !visited.has(connId)) {
+                queue.push(connId);
+            }
+        });
+    }
+    return true;
+}
+
+function respecTree() {
+    if (!confirm("⚠️ รีเซ็ต Skill Tree ทั้งหมด?")) return;
+    
+    let totalRefund = 0;
+    Object.keys(S.skillTree).forEach(nodeId => {
+        const node = SKILL_TREE_CONFIG.nodes[nodeId];
+        if (node && nodeId !== 'origin') {
+            totalRefund += node.cost;
+        }
+    });
+    
+    S.skillTree = { 'origin': true };
+    S.skillPoints = (S.skillPoints || 0) + totalRefund;
+    save();
+    renderSkillTree();
+    showToast(`🔄 Respec สำเร็จ! คืน ${totalRefund} SP`);
+}
+
+
+function showTooltip(e, nodeId) {
+    const node = SKILL_TREE_CONFIG.nodes[nodeId];
+    if (!node) return;
+    const tt = document.getElementById('skill-tooltip');
+    if (!tt) return;
+    
+    const isAllocated = (nodeId === 'origin') || (S.skillTree[nodeId] === true);
+    const isAvailable = canAllocateNode(nodeId);
+    
+    let effectsHtml = '';
+    Object.entries(node.effects || {}).forEach(([stat, val]) => {
+        let display = '';
+        if (['CRE','STR','INT','VIT','AGI'].includes(stat)) {
+            display = val > 10 ? `${stat} +${Math.round((val-1)*100)}%` : `${stat} +${val}`;
+        } else if (stat === 'xpBonus') {
+            display = `XP +${Math.round(val*100)}%`;
+        } else if (stat === 'orbDrop') {
+            display = `Orb +${Math.round(val*100)}%`;
+        } else if (stat === 'streakBonus') {
+            display = `Streak +${Math.round(val*100)}%`;
+        }
+        effectsHtml += `<div style="color:#88ff88; margin:2px 0;">✦ ${display}</div>`;
+    });
+    
+    let statusHtml = '';
+    if (isAllocated) statusHtml = '<div style="color:#88ff88;">✓ เปิดแล้ว</div>';
+    else if (isAvailable) statusHtml = `<div style="color:#ffaa44;">⚡ คลิกเพื่อเปิด (${node.cost} SP)</div>`;
+    else statusHtml = '<div style="color:#ff6666;">🔒 ต้องเปิด Node ที่เชื่อมก่อน</div>';
+    
+    tt.innerHTML = `
+        <div style="color:#c8aa6e; font-size:16px; font-weight:bold; margin-bottom:4px;">${node.name}</div>
+        <div style="color:#888; font-size:11px; margin-bottom:6px;">${node.type} ${node.branch ? '• ' + node.branch.toUpperCase() : ''}</div>
+        ${node.desc ? `<div style="color:#aaa; margin-bottom:6px;">${node.desc}</div>` : ''}
+        ${effectsHtml}
+        <div style="color:#ffaa44; margin-top:6px; font-size:12px;">Cost: ${node.cost} SP</div>
+        <div style="margin-top:8px; padding-top:8px; border-top:1px solid #4a4035;">${statusHtml}</div>
+    `;
+    
+    tt.style.display = 'block';
+    moveTooltip(e);
+}
+
+function moveTooltip(e) {
+    const tt = document.getElementById('skill-tooltip');
+    if (!tt) return;
+    tt.style.left = Math.min(e.clientX + 15, window.innerWidth - 320) + 'px';
+    tt.style.top = Math.min(e.clientY + 15, window.innerHeight - tt.offsetHeight - 10) + 'px';
+}
+
+function hideTooltip() {
+    const tt = document.getElementById('skill-tooltip');
+    if (tt) tt.style.display = 'none';
+}
+
+// Pan & Zoom
+function initPanZoom() {
+    const container = document.getElementById('skill-tree-container');
+    if (!container) {
+        console.warn('❌ Container not found');
+        return;
+    }
+    // ✅ อัปเดต Transform
+    updateTransform();
+    
+    // ✅ Event Listeners
+    container.addEventListener('mousedown', (e) => {
+        if (e.target.tagName === 'circle' || e.target.tagName === 'text') return;
+        panZoomState.isPanning = true;
+        panZoomState.startX = e.clientX - panZoomState.panX;
+        panZoomState.startY = e.clientY - panZoomState.panY;
+        container.style.cursor = 'grabbing';
+    });
+    
+    window.addEventListener('mousemove', (e) => {
+        if (!panZoomState.isPanning) return;
+        panZoomState.panX = e.clientX - panZoomState.startX;
+        panZoomState.panY = e.clientY - panZoomState.startY;
+        updateTransform();
+    });
+    
+    window.addEventListener('mouseup', () => {
+        panZoomState.isPanning = false;
+        container.style.cursor = 'grab';
+    });
+    
+    container.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 0.9 : 1.1;
+        panZoomState.scale = Math.max(0.5, Math.min(3, panZoomState.scale * delta));
+        updateTransform();
+    }, { passive: false });
+    
+    console.log('✅ Pan/Zoom initialized');
+}
+function updateTransform() {
+    const svg = document.getElementById('skill-tree-svg');
+    console.log('SVG found:', svg);
+console.log('SVG children count:', svg?.children?.length);
+console.log('SVG innerHTML length:', svg?.innerHTML?.length);
+    if (!svg) return;
+    svg.style.transform = `translate(${panZoomState.panX}px, ${panZoomState.panY}px) scale(${panZoomState.scale})`;
+    svg.style.transformOrigin = '0 0';
+}
+
+function zoomIn() {
+    panZoomState.scale = Math.min(3, panZoomState.scale * 1.2);
+    updateTransform();
+}
+
+function zoomOut() {
+    panZoomState.scale = Math.max(0.5, panZoomState.scale * 0.8);
+    updateTransform();
+}
+
+function resetZoom() {
+    panZoomState.scale = 1.0;
+    panZoomState.panX = 0;
+    panZoomState.panY = 0;
+    updateTransform();
+}
+function openSkillTree() {
+    const modal = document.getElementById('skill-tree-modal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    modal.style.flexDirection = 'column';
+    modal.classList.add('active');
+    
+    const svg = document.getElementById('skill-tree-svg');
+    if (svg) {
+        svg.setAttribute('viewBox', '0 0 1000 1000');
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    }
+    
+    renderSkillTree();
+    setTimeout(() => initPanZoom(), 100);
+}
+
+function closeSkillTree() {
+    const modal = document.getElementById('skill-tree-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+    }
+}
+const _originalSwitchTab = window.switchTab;
+window.switchTab = function(tabName) {
+    if (tabName === 'skills') {
+        openSkillTree();
+        return;
+    }
+    if (_originalSwitchTab) _originalSwitchTab(tabName);
+};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSkillTree();
+});
+
+// ========== 8. Helper: showToast ==========
+function showToast(msg) {
+  // ใช้ฟังก์ชันเดิมของคุณถ้ามี หรือสร้างใหม่
+  console.log(msg);
+  // alert(msg); // fallback
 }
    
-
         let selectedDateKey = null, currentYear = 2026, currentMonth = 5, activeManagerType = 'daily';
         let lastSyncedDataStr = ''; // สำหรับ Quicksync
         let syncTimeout = null;
@@ -5602,33 +6230,27 @@ function resetToTodayCalendar() {
 
 function addXP(amount) {
     if (!amount || amount <= 0) return;
-
+    
     S.totalXp = (S.totalXp ?? 0) + amount;
     S.xp = (S.xp ?? 0) + amount;
-
-    // ✅ Check Level Up (ใช้ while loop)
-    let leveledUp = false;
-    while (S.lvl < 100 && S.xp >= getXpForLevel(S.lvl)) {
-        const rewards = calculateLevelUpRewards(S.lvl);
-        S.xp = S.xp - getXpForLevel(S.lvl);
-        S.lvl++;
-        S.sp = (S.sp ?? 0) + rewards.sp;
-        S.skillPoints = (S.skillPoints ?? 0) + rewards.skillPoints;
-
-        leveledUp = true;
-        // ✅ Show Level Up Animation
-        showLevelUpAnimation(S.lvl, rewards);
-        showToast(`🎉 Level Up! LV ${S.lvl} | +${rewards.sp} SP | +${rewards.skillPoints} Skill Points`);
-        
-        // ✅ ถ้า level เกิน threshold ให้ break (กัน loop อนันต์)
-        if (S.lvl >= 1000) break;
-    }
-
+    
+    console.log(`➕ Add XP: +${amount} | totalXp=${S.totalXp}, xp=${S.xp}`);
+    
+    // ✅ คำนวณ Level ใหม่
+    recalculateLevel();
+    
     // ✅ อัปเดต UI
     updateXpBar();
     updateNodes();
     renderStats();
     renderSkillTree();
+    
+    // ✅ บันทึกลง history (ถ้ามี selected date)
+    const k = selectedDateKey || getTodayKey();
+    if (S.history[k]) {
+        S.history[k].xpEarned = (S.history[k].xpEarned ?? 0) + amount;
+    }
+    
     save();
 }
 
@@ -5974,11 +6596,7 @@ const DEFAULT_DAILY_QUESTS = [
         main: {
             text: 'ฝึกวาดอนาโตมี่สีน้ำมัน',
             xp: 50,
-            rewards: {
-                chaos: [5, 15],
-                exalted: 0.20,
-                divine: 0.01
-            }
+            rewards: { chaos: [5, 15], exalted: 0.20, divine: 0.01 }  // ✅ เพิ่มตรงนี้!
         },
         subQuests: [
             { text: 'Sketch 15 นาที', xp: 15 },
@@ -5990,22 +6608,18 @@ const DEFAULT_DAILY_QUESTS = [
         main: {
             text: 'ฝึกร้องเพลง/วอร์มเสียง',
             xp: 50,
-            rewards: {
-                chaos: [5, 15],
-                exalted: 0.20,
-                divine: 0.01
-            }
+            rewards: { chaos: [5, 15], exalted: 0.20, divine: 0.01 }  // ✅ เพิ่มตรงนี้!
         },
         subQuests: [
             { text: 'Vocal Warm-up 10 นาที', xp: 10 },
             { text: 'ฝึกเทคนิคการร้อง', xp: 15 }
         ]
     }
-];    
+];
 
 function renderDailyTab() {
     const k = selectedDateKey || getTodayKey();
-    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false };
+    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false, perfectDayBonus: {} };  // ✅ เพิ่ม perfectDayBonus
     const h = S.history[k];
     const container = document.getElementById('daily-quests');
     if (!container) return;
@@ -6034,7 +6648,8 @@ function renderDailyTab() {
         editBtn.textContent = S.editMode ? '✕ ยกเลิกแก้ไข' : '✎ แก้ไข';
         editBtn.classList.toggle('active', S.editMode);
     }
-     // Initialize daily quests if empty
+    
+    // Initialize daily quests if empty
     if (!S.dailyQuests || S.dailyQuests.length === 0) {
         S.dailyQuests = JSON.parse(JSON.stringify(DEFAULT_DAILY_QUESTS));
         save();
@@ -6043,12 +6658,15 @@ function renderDailyTab() {
     // Render แต่ละ Main Quest
     (S.dailyQuests || []).forEach((quest) => {
         const isMainDone = h.daily?.includes(`main_${quest.id}`);
+        const isPerfectDay = h.perfectDayBonus?.[quest.id] === true;  // ✅ เพิ่ม
         const isCollapsed = h.collapsedQuests?.includes(quest.id);
-        const isEditing = S.editMode && !isCollapsed;  // ✅ แสดง edit เฉพาะอันที่กาง
+        const isEditing = S.editMode && !isCollapsed;
 
         const card = document.createElement('div');
-        card.className = `map-boss-card ${isMainDone ? 'main-done' : ''} ${isEditing ? 'editing' : ''}`;
+        card.className = `map-boss-card ${isMainDone ? 'main-done' : ''} ${isPerfectDay ? 'perfect-day' : ''} ${isEditing ? 'editing' : ''}`;  // ✅ เพิ่ม perfect-day class
         
+        const config = REWARD_CONFIG.mapBoss;
+        const questRewards = quest.main?.rewards || config;
         // === 1. ส่วน Header Quest (ซ้าย) ===
         const headerHtml = `
             <div class="card-header" onclick="${S.editMode ? '' : `toggleMainQuest('${quest.id}')`}">
@@ -6058,7 +6676,7 @@ function renderDailyTab() {
                     </div>
                 </div>
                 <div class="card-info">
-                    <div class="card-title">🗡️MAP BOSS</div>
+                    <div class="card-title">🗡️MAP BOSS ${isPerfectDay ? '<span style="color:#ffd700;">✨ PERFECT DAY!</span>' : ''}</div>
                     ${S.editMode ? `
                         <input type="text" class="edit-input-inline" 
                                value="${quest.main?.text || ''}" 
@@ -6069,9 +6687,12 @@ function renderDailyTab() {
                         <div class="card-text" title="${quest.main?.text || 'เควสหลัก'}">${quest.main?.text || 'เควสหลัก'}</div>
                     `}
                     <div class="quest-rewards">
-                        💛${quest.main?.rewards?.chaos?.[0] || 5}-${quest.main?.rewards?.chaos?.[1] || 15}C 
-                        | 20%💠 | 1%💎 
-                        | +${quest.main?.xp || 50} XP ${isMainDone ? '(x2)' : ''}
+                        💛${questRewards.chaos?.[0] ?? 5}-${questRewards.chaos?.[1] ?? 15}C 
+                        | ${Math.round((questRewards.exalted ?? 0.20) * 100)}%💠 
+                        | ${Math.round((questRewards.divine ?? 0.01) * 100)}%💎 
+                        | +${questRewards.xp || 50} XP 
+                        ${isPerfectDay ? '<span style="color:#ffd700; font-weight:bold;">(x2) ✨ Perfect!</span>' : 
+                        isMainDone ? '<span style="color:#88ff88;">(รอ Subs)</span>' : ''}
                     </div>
                 </div>
                 <div class="card-actions">
@@ -6093,7 +6714,6 @@ function renderDailyTab() {
                     const isSubDone = h.daily?.includes(subId);
                     
                     if (S.editMode) {
-                        // ✅ Edit Mode: ใช้ input ที่แก้ไขได้
                         subHtml += `
                             <div class="juice-map-item editing">
                                 <div class="sub-socket ${isSubDone ? 'filled' : ''}">
@@ -6110,7 +6730,6 @@ function renderDailyTab() {
                             </div>
                         `;
                     } else {
-                        // Normal Mode: คลิกเพื่อติ๊ก
                         subHtml += `
                             <div class="juice-map-item ${isSubDone ? 'sub-done' : ''}" 
                                  onclick="toggleSubQuest('${quest.id}', ${idx})">
@@ -6964,39 +7583,6 @@ function changeMonth(dir) {
                     renderCalendar();
                 }
 
-function renderSkillTree() {
-                    console.log('Rendering Skill Tree...');
-
-                    const artNodes = document.getElementById('art-nodes');
-                    const bodyNodes = document.getElementById('body-nodes');
-                    const mindNodes = document.getElementById('mind-nodes');
-    
-                    if (artNodes) artNodes.innerHTML = '<div style="color:var(--muted); font-size:11px; padding:20px; text-align:center;">Skill Tree กำลังพัฒนา</div>';
-                    if (bodyNodes) bodyNodes.innerHTML = '<div style="color:var(--muted); font-size:11px; padding:20px; text-align:center;">Skill Tree กำลังพัฒนา</div>';
-                    if (mindNodes) mindNodes.innerHTML = '<div style="color:var(--muted); font-size:11px; padding:20px; text-align:center;">Skill Tree กำลังพัฒนา</div>';
-    
-                    updateSPDisplay();
-                
-                    const artContainer = document.getElementById('art-tree-nodes');
-                    artContainer.innerHTML = '';
-                    const fitContainer = document.getElementById('fit-tree-nodes');
-                    fitContainer.innerHTML = '';
-                    SKILL_TREE.forEach(node => {
-                        const currentHrs = node.reqType === 'art' ? S.artHours : S.fitHours;
-                        const isUnlocked = S.artLogs.some(l => l.note.includes(node.name)) || S.fitLogs.some(l => l.note.includes(node.name)) || currentHrs >= node.reqVal;
-                        const isAvailable = !isUnlocked && currentHrs >= node.reqVal;
-                        const item = document.createElement('div');
-                        item.className = 't-node';
-                        item.innerHTML = `<div class="t-conn"><div class="t-dot ${isUnlocked ? 'unlocked' : ''} ${isAvailable ? 'available' : ''}"></div><div class="t-line ${isUnlocked ? 'lit' : ''}"></div></div><div class="t-card ${isUnlocked ? 'unlocked' : ''} ${isAvailable ? 'available' : ''} ${(!isUnlocked && !isAvailable) ? 'locked' : ''}"><div class="t-top"><span class="t-name">${node.name}</span><span class="t-size sz-${node.size}">${node.size}</span></div><div class="t-desc">${node.desc}</div><div class="t-reward">Effect: ${node.reward}</div><div class="t-cond ${isUnlocked || isAvailable ? 'met' : ''}">เงื่อนไข: สะสมสาย ${node.reqType} ครบ ${node.reqVal} ชม. (ปัจจุบัน ${currentHrs.toFixed(1)}h)</div></div>`;
-                        if (node.lane === 'art') artContainer.appendChild(item);
-                        else fitContainer.appendChild(item);
-                    });
-                    const cross = document.getElementById('cross-node-1');
-                    if (S.artHours >= 50 && S.fitHours >= 50) cross.className = 'cross-node unlocked';
-                    else if (S.artHours >= 20 || S.fitHours >= 20) cross.className = 'cross-node available';
-                    else cross.className = 'cross-node';
-                }
-
 
 function updateCareerDisplay() {
                     let totalIncome = 0, totalJobs = 0;
@@ -7372,6 +7958,10 @@ function switchTab(tabName) {
                     document.querySelectorAll('.tab').forEach(btn => {
                         btn.classList.remove('active');
                     });
+                    if (tabName === 'skills') {
+                        openSkillTree();
+                        return;
+                    }
 
                     // 3. แสดง tab ที่เลือก
                     const selectedTab = document.getElementById(`${tabName}-tab`);
@@ -7977,81 +8567,8 @@ function updateCurrencyDisplay() {
                     if (exaltedEl) exaltedEl.textContent = S.currency?.exalted ?? 0;
                     if (divineEl) divineEl.textContent = S.currency?.divine ?? 0;
                 }
-// ==========================================
-// PATCH v3: Passive Skill Tree Functions
-// ==========================================
-// ข้อมูล Node แบบ Hardcode (Simple Version)
-const SKILL_TREE_NODES = {
-                // Origin
-                'origin': { id: 'origin', name: "The Exile's Birth", desc: 'จุดเริ่มต้น', cost: 0, branch: 'origin', req: [], bonus: {} },
 
-                // Art Branch
-                'art1': { id: 'art1', name: 'Creative Spark', desc: 'CRE +2', cost: 1, branch: 'art', req: ['origin'], bonus: { CRE: 2 } },
-                'art2': { id: 'art2', name: 'Artistic Vision', desc: 'INT +2', cost: 1, branch: 'art', req: ['art1'], bonus: { INT: 2 } },
-                'art3': { id: 'art3', name: 'Oil Painter Soul', desc: 'CRE +3', cost: 2, branch: 'art', req: ['art2'], bonus: { CRE: 3 } },
-
-                // Body Branch
-                'body1': { id: 'body1', name: 'Physical Power', desc: 'STR +2', cost: 1, branch: 'body', req: ['origin'], bonus: { STR: 2 } },
-                'body2': { id: 'body2', name: 'Vitality Boost', desc: 'VIT +2', cost: 1, branch: 'body', req: ['body1'], bonus: { VIT: 2 } },
-                'body3': { id: 'body3', name: 'Iron Voice', desc: 'VIT +3, AGI +2', cost: 2, branch: 'body', req: ['body2'], bonus: { VIT: 3, AGI: 2 } },
-
-                // Mind Branch
-                'mind1': { id: 'mind1', name: 'Mental Clarity', desc: 'INT +2', cost: 1, branch: 'mind', req: ['origin'], bonus: { INT: 2 } },
-                'mind2': { id: 'mind2', name: 'Agile Mind', desc: 'AGI +2', cost: 1, branch: 'mind', req: ['mind1'], bonus: { AGI: 2 } },
-                'mind3': { id: 'mind3', name: 'Cross-Dimensional', desc: 'INT +3', cost: 2, branch: 'mind', req: ['mind2'], bonus: { INT: 3 } }
-            };
-            function renderSkillTree() {
-                const spValue = document.getElementById('sp-value');
-                if (spValue) spValue.textContent = S.skillPoints || 0;
-
-                // Render แต่ละ branch
-                renderBranch('art');
-                renderBranch('body');
-                renderBranch('mind');
-            }
-
-            function renderBranch(branchName) {
-                const container = document.getElementById(`${branchName}-nodes`);
-                if (!container) return;
-
-                container.innerHTML = '';
-
-                // หา nodes ของ branch นี้
-                const branchNodes = Object.values(S.skillTreeNodes || {}).filter(n => n.branch === branchName);
-
-                branchNodes.forEach((node, index) => {
-                    const isUnlocked = S.allocatedSkills?.includes(node.id);
-                    const isAvailable = isNodeAvailable(node);
-                    const nodeEl = document.createElement('div');
-
-                    // Connector (ยกเว้น node แรก)
-                    if (index > 0) {
-                        const connector = document.createElement('div');
-                        connector.className = 'node-connector';
-                        container.appendChild(connector);
-                    }
-
-                    nodeEl.className = `skill-node ${isUnlocked ? 'unlocked' : isAvailable ? 'available' : 'locked'}`;
-                    nodeEl.innerHTML = `
-            <div class="node-header">
-                <div class="node-name">${node.name}</div>
-                <div class="node-cost">${node.cost} SP</div>
-            </div>
-            <div class="node-desc">${node.desc}</div>
-            ${node.bonus ? `<div class="node-bonus">${formatBonus(node.bonus)}</div>` : ''}
-        `;
-
-                    if (isAvailable && !isUnlocked) {
-                        nodeEl.onclick = () => allocateSkill(node.id);
-                    }
-
-                    // Hover tooltip
-                    nodeEl.onmouseenter = (e) => showNodeTooltip(e, node);
-                    nodeEl.onmouseleave = hideNodeTooltip;
-
-                    container.appendChild(nodeEl);
-                });
-            }
+            
 
             function isNodeAvailable(node) {
                 // เช็คว่ามี SP พอไหม
@@ -8177,31 +8694,46 @@ const SKILL_TREE_NODES = {
                 save();
                 renderDailyTab();
             }
+// ==========================================
+// 💰 CALCULATE CURRENCY DROP (ใช้ Global Config)
+// ==========================================
+
 function calculateCurrencyDrop(type, rewards = null) {
-    let chaosMin, chaosMax, exaltedChance, divineChance;
+    // ✅ ถ้ามี rewards ส่งมา (จาก quest) ให้ใช้ค่าจากนั้นก่อน
+    // แต่ถ้าไม่มี ให้ใช้ค่า default จาก REWARD_CONFIG
+    let config;
     
     if (type === 'mapBoss' && rewards) {
-        chaosMin = rewards.chaos?.[0] ?? 5;
-        chaosMax = rewards.chaos?.[1] ?? 15;
-        exaltedChance = rewards.exalted ?? 0.20;
-        divineChance = rewards.divine ?? 0.01;
-    } else if (type === 'subQuest') {
-        chaosMin = 1;
-        chaosMax = 3;
-        exaltedChance = 0.10;
-        divineChance = 0.005;
-    } else if (type === 'perfectDay') {
-        chaosMin = 10;
-        chaosMax = 20;
-        exaltedChance = 0.30;
-        divineChance = 0.02;
+        // ใช้ค่าจาก quest (ถ้ามี)
+        config = {
+            chaos: rewards.chaos || REWARD_CONFIG.mapBoss.chaos,
+            exalted: rewards.exalted ?? REWARD_CONFIG.mapBoss.exalted,
+            divine: rewards.divine ?? REWARD_CONFIG.mapBoss.divine
+        };
     } else {
+        // ใช้จาก Global Config
+        config = REWARD_CONFIG[type];
+    }
+    
+    if (!config) {
+        console.warn(`⚠️ No config for type: ${type}`);
         return { chaos: 0, exalted: 0, divine: 0 };
     }
     
+    // ✅ คำนวณ Chaos
+    const chaosMin = config.chaos?.[0] ?? 0;
+    const chaosMax = config.chaos?.[1] ?? 0;
     const chaos = Math.floor(Math.random() * (chaosMax - chaosMin + 1)) + chaosMin;
+    
+    // ✅ คำนวณ Exalted (ตามโอกาส)
+    const exaltedChance = config.exalted ?? 0;
     const exalted = Math.random() < exaltedChance ? 1 : 0;
+    
+    // ✅ คำนวณ Divine (ตามโอกาส)
+    const divineChance = config.divine ?? 0;
     const divine = Math.random() < divineChance ? 1 : 0;
+    
+    console.log(`🎲 Drop ${type}:`, { chaos, exalted, divine, config });
     
     return { chaos, exalted, divine };
 }
@@ -8210,15 +8742,15 @@ function calculateCurrencyDrop(type, rewards = null) {
 // RECALCULATE LEVEL (จาก XP จริง)
 // ==========================================
 function recalculateLevel() {
-    const currentXp = S.xp ?? 0;
+    const currentTotalXp = S.totalXp ?? 0;
     const oldLvl = S.lvl ?? 1;
+    
     let lvl = 1;
     let xpUsed = 0;
     
-    // หา Level ที่ถูกต้องจาก XP ปัจจุบัน
     while (lvl < 100) {
         const xpNeeded = getXpForLevel(lvl);
-        if (S.totalXp - xpUsed >= xpNeeded) {
+        if (currentTotalXp >= xpUsed + xpNeeded) {
             xpUsed += xpNeeded;
             lvl++;
         } else {
@@ -8226,37 +8758,92 @@ function recalculateLevel() {
         }
     }
     
-    const currentXpInLevel = S.totalXp - xpUsed;
-    // ถ้า Level ลด → หัก SP ที่ได้จาก Level ที่หาย
-    if (lvl < oldLvl) {
-        const levelsLost = oldLvl - lvl;
-        S.sp = Math.max(0, (S.sp ?? 0) - levelsLost);
-        showToast(`️ Level ลดลง! LV ${oldLvl} → ${lvl} | -${levelsLost} SP`);
-    }
+    const currentXpInLevel = currentTotalXp - xpUsed;
+    const oldSkillPoints = calculateTotalSkillPointsForLevel(oldLvl);
+    const newSkillPoints = calculateTotalSkillPointsForLevel(lvl);
+    const skillPointsGained = newSkillPoints - oldSkillPoints;
+    
+    const oldStatusPoints = calculateTotalStatusPointsForLevel(oldLvl);
+    const newStatusPoints = calculateTotalStatusPointsForLevel(lvl);
+    const statusPointsGained = newStatusPoints - oldStatusPoints;
     
     S.lvl = lvl;
     S.xp = currentXpInLevel;
-    console.log(`Recalculate: totalXp=${S.totalXp}, lvl=${lvl}, xp=${currentXpInLevel}`);
+    
+    if (skillPointsGained > 0) {
+        S.skillPoints = (S.skillPoints ?? 0) + skillPointsGained;
+        console.log(`🎯 Level ${oldLvl} → ${lvl} | +${skillPointsGained} Skill Points`);
+    }
+    
+    if (statusPointsGained > 0) {
+        S.sp = (S.sp ?? 0) + statusPointsGained;
+        console.log(`💪 Level ${oldLvl} → ${lvl} | +${statusPointsGained} Status Points`);
+    }
+    
+    if (lvl < oldLvl) {
+        const levelsLost = oldLvl - lvl;
+        S.sp = Math.max(0, (S.sp ?? 0) - levelsLost);
+        S.skillPoints = Math.max(0, (S.skillPoints ?? 0) - levelsLost);
+        showToast(`⚠️ Level ลดลง! LV ${oldLvl} → ${lvl}`);
+    }
+    
+    console.log(`📊 Recalculate: totalXp=${currentTotalXp}, lvl=${lvl}, xp=${currentXpInLevel}, skillPoints=${S.skillPoints}`);
+}
+
+// ✅ Helper: คำนวณ Total Skill Points ที่ควรได้จาก Level 1 ถึง level ที่กำหนด
+function calculateTotalSkillPointsForLevel(level) {
+    let total = 0;
+    for (let i = 1; i < level; i++) {
+        const rewards = calculateLevelUpRewards(i);
+        total += rewards.skillPoints || 0;
+    }
+    return total;
+}
+
+// ✅ Helper: คำนวณ Total Status Points ที่ควรได้จาก Level 1 ถึง level ที่กำหนด
+function calculateTotalStatusPointsForLevel(level) {
+    let total = 0;
+    for (let i = 1; i < level; i++) {
+        const rewards = calculateLevelUpRewards(i);
+        total += rewards.sp || 0;
+    }
+    return total;
+}
+
+// ✅ คำนวณ Level Up Rewards
+function calculateLevelUpRewards(level) {
+    return {
+        sp: 1,  // ทุก Level ได้ 1 Status Point
+        skillPoints: (level % 2 === 0) ? 1 : 0  // ทุก 2 Level ได้ 1 Skill Point
+    };
 }
 function toggleMainQuest(questId) {
     const k = selectedDateKey || getTodayKey();
-    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false,
-        rewards: {},  // ✅ บันทึก rewards
-        perfectDayBonus: {} };
+    if (!S.history[k]) S.history[k] = { 
+        daily: [], 
+        weekly: [], 
+        monthly: [], 
+        rest: [], 
+        done: false,
+        rewards: {},
+        perfectDayBonus: {} 
+    };
     
     const h = S.history[k];
     const mainId = `main_${questId}`;
     const idx = h.daily.indexOf(mainId);
-    
     const quest = S.dailyQuests.find(q => q.id === questId);
+    
     if (!quest) return;
-
+    
+    // ✅ ใช้ rewards จาก quest หรือ default
+    const questRewards = quest.main?.rewards || { chaos: [5, 15], exalted: 0.20, divine: 0.01 };
     const baseXp = quest.main?.xp || 50;
     
     if (idx > -1) {
-        // ยกเลิก
+        // ❌ ยกเลิก
         h.daily.splice(idx, 1);
-
+        
         // หักคืน XP และ Currency ที่บันทึกไว้
         const reward = h.rewards?.[mainId];
         if (reward) {
@@ -8277,6 +8864,7 @@ function toggleMainQuest(questId) {
             if (pdReward) {
                 S.xp = Math.max(0, (S.xp ?? 0) - pdReward.xp);
                 S.totalXp = Math.max(0, (S.totalXp ?? 0) - pdReward.xp);
+                
                 if (S.currency) {
                     S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (pdReward.chaos ?? 0));
                     S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (pdReward.exalted ?? 0));
@@ -8287,22 +8875,27 @@ function toggleMainQuest(questId) {
             delete h.perfectDayBonus[questId];
         }
         
-        // ✅ คำนวณ Level ใหม่
         recalculateLevel();
         showToast(`❌ ยกเลิก Map Boss`);
-        
     } else {
         // ✅ ทำสำเร็จ
         h.daily.push(mainId);
         
-        // คำนวณ rewards
-        const xpAmount = baseXp * 2;
-        const currencyDrop = calculateCurrencyDrop('mapBoss', quest.main?.rewards);
+        // ✅ คำนวณ rewards จาก questRewards (มีค่าแน่นอน)
+        const xpAmount = baseXp;
+        const currencyDrop = calculateCurrencyDrop('mapBoss', questRewards);
         
-        // บันทึกลง S
+        console.log('📊 Map Boss Reward:', {
+            questId,
+            xpAmount,
+            currencyDrop,
+            questRewards
+        });
+        
+        // ✅ บันทึกลง S
         S.xp = (S.xp ?? 0) + xpAmount;
         S.totalXp = (S.totalXp ?? 0) + xpAmount;
-
+        
         if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
         S.currency.chaos = (S.currency.chaos ?? 0) + currencyDrop.chaos;
         S.currency.exalted = (S.currency.exalted ?? 0) + currencyDrop.exalted;
@@ -8317,11 +8910,13 @@ function toggleMainQuest(questId) {
             divine: currencyDrop.divine
         };
         
-        // เช็ค Perfect Day
-        checkPerfectDay(questId, k);        
-        // ✅ คำนวณ Level ใหม่
-        recalculateLevel();        
-        showToast(`✅ Map Boss สำเร็จ! +${xpAmount} XP (x2)`);
+        // ✅ เช็ค Perfect Day
+        checkPerfectDay(questId, k);
+        
+        recalculateLevel();
+        
+        // ✅ แสดง Toast พร้อม Currency
+        showToast(`✅ Map Boss สำเร็จ! +${xpAmount} XP | 💛${currencyDrop.chaos} 💠${currencyDrop.exalted} 💎${currencyDrop.divine}`);
     }
     
     save();
@@ -8332,11 +8927,11 @@ function toggleMainQuest(questId) {
 
 function toggleSubQuest(questId, subIndex) {
     const k = selectedDateKey || getTodayKey();
-    if (!S.history[k]) S.history[k] = { 
-        daily: [], 
-        weekly: [], 
-        monthly: [], 
-        rest: [], 
+    if (!S.history[k]) S.history[k] = {
+        daily: [],
+        weekly: [],
+        monthly: [],
+        rest: [],
         done: false,
         rewards: {},
         perfectDayBonus: {}
@@ -8345,8 +8940,8 @@ function toggleSubQuest(questId, subIndex) {
     const h = S.history[k];
     const subId = `sub_${questId}_${subIndex}`;
     const idx = h.daily.indexOf(subId);
-    
     const quest = S.dailyQuests.find(q => q.id === questId);
+    
     if (!quest || !quest.subQuests || !quest.subQuests[subIndex]) return;
     
     const sub = quest.subQuests[subIndex];
@@ -8361,6 +8956,7 @@ function toggleSubQuest(questId, subIndex) {
         if (reward) {
             S.xp = Math.max(0, (S.xp ?? 0) - reward.xp);
             S.totalXp = Math.max(0, (S.totalXp ?? 0) - reward.xp);
+            
             if (S.currency) {
                 S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (reward.chaos ?? 0));
                 S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (reward.exalted ?? 0));
@@ -8375,6 +8971,7 @@ function toggleSubQuest(questId, subIndex) {
             if (pdReward) {
                 S.xp = Math.max(0, (S.xp ?? 0) - pdReward.xp);
                 S.totalXp = Math.max(0, (S.totalXp ?? 0) - pdReward.xp);
+                
                 if (S.currency) {
                     S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (pdReward.chaos ?? 0));
                     S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (pdReward.exalted ?? 0));
@@ -8387,7 +8984,6 @@ function toggleSubQuest(questId, subIndex) {
         
         recalculateLevel();
         showToast(`❌ ยกเลิก Juice Map`);
-        
     } else {
         // ✅ ทำสำเร็จ
         h.daily.push(subId);
@@ -8396,7 +8992,7 @@ function toggleSubQuest(questId, subIndex) {
         
         S.xp = (S.xp ?? 0) + subXp;
         S.totalXp = (S.totalXp ?? 0) + subXp;
-
+        
         if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
         S.currency.chaos = (S.currency.chaos ?? 0) + currencyDrop.chaos;
         S.currency.exalted = (S.currency.exalted ?? 0) + currencyDrop.exalted;
@@ -8410,7 +9006,9 @@ function toggleSubQuest(questId, subIndex) {
             divine: currencyDrop.divine
         };
         
-        checkPerfectDay(questId, k);        
+        // ✅ เช็ค Perfect Day (หลังจากทำ sub นี้)
+        checkPerfectDay(questId, k);
+        
         recalculateLevel();
         showToast(`✅ Juice Map สำเร็จ! +${subXp} XP`);
     }
@@ -8421,25 +9019,38 @@ function toggleSubQuest(questId, subIndex) {
     updateCurrencyDisplay();
 }
 // ✅ ฟังก์ชันเช็ค Perfect Day
+// ✅ ฟังก์ชันเช็ค Perfect Day
+// ✅ ฟังก์ชันเช็ค Perfect Day
 function checkPerfectDay(questId, dateKey) {
     const quest = S.dailyQuests.find(q => q.id === questId);
     if (!quest) return;
     
     const h = S.history[dateKey];
+    if (!h) return;
+    
     const mainId = `main_${questId}`;
     const isMainDone = h.daily?.includes(mainId);
-    const completedSubs = h.daily?.filter(id => id.startsWith(`sub_${questId}_`)).length || 0;
+    
+    const completedSubs = h.daily?.filter(id => 
+        id.startsWith(`sub_${questId}_`)
+    ).length || 0;
+    
     const totalSubs = quest.subQuests?.length || 0;
     
     if (isMainDone && completedSubs === totalSubs && totalSubs > 0) {
         if (!h.perfectDayBonus) h.perfectDayBonus = {};
         if (h.perfectDayBonus[questId]) return;
         
-        const bonusXP = quest.main?.xp || 50;
-        const currencyDrop = calculateCurrencyDrop('perfectDay', quest.main?.rewards);
+        // ✅ ใช้ rewards จาก quest หรือ default
+        const questRewards = quest.main?.rewards || { chaos: [5, 15], exalted: 0.20, divine: 0.01 };
+        const baseXp = quest.main?.xp || 50;
+        const bonusXP = baseXp;
+        
+        const currencyDrop = calculateCurrencyDrop('perfectDay', questRewards);
         
         S.xp = (S.xp ?? 0) + bonusXP;
         S.totalXp = (S.totalXp ?? 0) + bonusXP;
+        
         if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
         S.currency.chaos = (S.currency.chaos ?? 0) + currencyDrop.chaos;
         S.currency.exalted = (S.currency.exalted ?? 0) + currencyDrop.exalted;
@@ -8461,7 +9072,9 @@ function checkPerfectDay(questId, dateKey) {
         }
         
         recalculateLevel();
-        showToast(`🌟 Perfect Day! +${bonusXP} XP Bonus + Rare Drop!`);
+        renderDailyTab();
+        
+        showToast(`🌟 Perfect Day! +${bonusXP} XP Bonus | 💛${currencyDrop.chaos} 💠${currencyDrop.exalted} 💎${currencyDrop.divine}`);
     }
 }
 
@@ -8781,26 +9394,27 @@ function updateOrbDisplay() {
                 renderAtlas();
             }
 
-            function fightAtlasBoss() {
-                if (!confirm('⚠️ พร้อมต่อสู้ Atlas Boss?\nคุณจะได้รับ Ascendancy Points และ Divine Orbs')) {
-                    return;
-                }
+            // ==========================================
+// 👹 ATLAS BOSS (ใช้ Global Config)
+// ==========================================
 
-                // Boss Fight Logic (แบบง่าย)
-                const bossXP = 500;
-                const ascendancyReward = 3;
-                const divineReward = 2;
-
-                S.atlasBossDefeated = true;
-                S.ascendancyPoints = (S.ascendancyPoints ?? 0) + ascendancyReward;
-                addCurrency('divine', divineReward);
-
-                save();
-                renderAtlas();
-                renderSkillTree();
-
-                showToast(`⚔️ Atlas Boss พิชิตแล้ว! +${ascendancyReward} Ascendancy Points, +${divineReward} Divine Orbs`);
-            }
+function fightAtlasBoss() {
+    if (!confirm('⚠️ พร้อมต่อสู้ Atlas Boss?\nคุณจะได้รับ Ascendancy Points และ Divine Orbs')) {
+        return;
+    }
+    
+    const config = REWARD_CONFIG.atlasBoss;
+    
+    S.atlasBossDefeated = true;
+    S.ascendancyPoints = (S.ascendancyPoints ?? 0) + config.ascendancyPoints;
+    addCurrency('divine', config.divine);
+    
+    save();
+    renderAtlas();
+    renderSkillTree();
+    
+    showToast(`⚔️ Atlas Boss พิชิตแล้ว! +${config.ascendancyPoints} Ascendancy Points, +${config.divine} Divine Orbs`);
+}
 
             // เรียกใช้ตอนโหลดหน้าเว็บ
             // เพิ่มใน initApp() หรือฟังก์ชันที่ทำงานตอนโหลด
@@ -8941,34 +9555,43 @@ function checkWeeklyCompletion() {
     return isComplete;
 }
 
+// ==========================================
+// 📔 WEEKLY REWARD (ใช้ Global Config)
+// ==========================================
+
 function giveWeeklyReward(weekKey) {
-    // ✅ บันทึกว่าได้รับรางวัลแล้ว (สำคัญมาก!)
     if (!S.weeklyCompletion) S.weeklyCompletion = {};
     
     S.weeklyCompletion[weekKey] = {
-        completed: true,  // ← ต้องมีบรรทัดนี้!
+        completed: true,
         date: new Date().toLocaleString('th-TH')
     };
     
-    // คำนวณรางวัล
-    const exaltedAmount = Math.floor(Math.random() * 3) + 1; // 1-3 Exalted
-    const hasDivine = Math.random() < 0.15; // 15% chance
-    const divineAmount = hasDivine ? Math.floor(Math.random() * 3) + 1 : 0;
+    const config = REWARD_CONFIG.weekly;
     
-    // เพิ่ม Medallion
-    S.weeklyMedallions = (S.weeklyMedallions ?? 0) + 1;
+    // ✅ คำนวณ Exalted
+    const exaltedAmount = Math.floor(Math.random() * (config.exalted[1] - config.exalted[0] + 1)) + config.exalted[0];
     
-    // เพิ่ม Currency
+    // ✅ คำนวณ Divine (ถ้าได้)
+    let divineAmount = 0;
+    if (Math.random() < config.divineChance) {
+        divineAmount = Math.floor(Math.random() * (config.divineAmount[1] - config.divineAmount[0] + 1)) + config.divineAmount[0];
+    }
+    
+    // ✅ เพิ่ม Medallion
+    S.weeklyMedallions = (S.weeklyMedallions ?? 0) + config.medallion;
+    
+    // ✅ เพิ่ม Currency
     addCurrency('exalted', exaltedAmount);
-    if (hasDivine) {
+    if (divineAmount > 0) {
         addCurrency('divine', divineAmount);
     }
     
-    save();  // ✅ อย่าลืม save!
+    save();
     updateWeeklyMedallionDisplay();
     showWeeklyRewardNotification(exaltedAmount, divineAmount);
     
-    console.log(`✅ Weekly reward given for ${weekKey}`);
+    console.log(`✅ Weekly reward: +${exaltedAmount} Exalted, +${divineAmount} Divine`);
 }
 
 function showWeeklyRewardNotification(exalted, divine) {
@@ -9157,6 +9780,10 @@ function countWeeklyCompletedThisMonth() {
     return count;
 }
 
+// ==========================================
+// 🏛️ ASCENDANCY TRIAL (ใช้ Global Config)
+// ==========================================
+
 function enterAscendancyTrial() {
     const requirements = checkTrialRequirements();
     
@@ -9170,17 +9797,19 @@ function enterAscendancyTrial() {
         return;
     }
     
-    if (!confirm('️ เข้าสู่ Ascendancy Trial?\nคุณจะได้รับรางวัลใหญ่!')) {
+    if (!confirm('⚔️ เข้าสู่ Ascendancy Trial?\nคุณจะได้รับรางวัลใหญ่!')) {
         return;
     }
     
-    // คำนวณรางวัล
-    const exaltedAmount = Math.floor(Math.random() * 11) + 5; // 5-15 Exalted
-    const divineAmount = Math.floor(Math.random() * 9) + 2; // 2-10 Divine
-    const ascendancyPoints = 3;
-    
-    // บันทึกรางวัล
+    const config = REWARD_CONFIG.monthly;
     const monthKey = getMonthKey();
+    
+    // ✅ คำนวณรางวัล
+    const exaltedAmount = Math.floor(Math.random() * (config.exalted[1] - config.exalted[0] + 1)) + config.exalted[0];
+    const divineAmount = Math.floor(Math.random() * (config.divine[1] - config.divine[0] + 1)) + config.divine[0];
+    const ascendancyPoints = config.ascendancyPoints;
+    
+    // ✅ บันทึกรางวัล
     if (!S.trialCompletion) S.trialCompletion = {};
     S.trialCompletion[monthKey] = {
         completed: true,
@@ -9192,10 +9821,8 @@ function enterAscendancyTrial() {
         }
     };
     
-    // เพิ่มจำนวน Trials
     S.monthlyTrials = (S.monthlyTrials ?? 0) + 1;
     
-    // เพิ่ม Currency และ Points
     addCurrency('exalted', exaltedAmount);
     addCurrency('divine', divineAmount);
     S.ascendancyPoints = (S.ascendancyPoints ?? 0) + ascendancyPoints;
@@ -9203,6 +9830,8 @@ function enterAscendancyTrial() {
     save();
     updateMonthlyTrialDisplay();
     showAscendancyRewardNotification(exaltedAmount, divineAmount, ascendancyPoints);
+    
+    console.log(`✅ Ascendancy Trial: +${exaltedAmount} Exalted, +${divineAmount} Divine, +${ascendancyPoints} AP`);
 }
 
 function showAscendancyRewardNotification(exalted, divine, ascendancyPoints) {

@@ -5320,6 +5320,9 @@ img.loaded, .lazy-load.loaded {
                 onclick="resetAllData()">
                 🗑️ ล้างข้อมูลทั้งหมดและเริ่มใหม่ (Reset App)
             </button>
+            <button class="btn-s" style="width:100%; background:rgba(136, 153, 255, 0.2); color:#8899ff; border:1px solid #8899ff;" onclick="clearCloudCacheAndReload()">
+                🗑️ ล้าง Cloud Cache (แก้ปัญหา Sync)
+            </button>
         </div>
 
         <!-- ส่วนที่ 3: App Info -->
@@ -6456,6 +6459,10 @@ const STORE_NAME = 'appState';
 let dbConnection = null;
 let dbConnectionTimeout = null;
 
+// ========== Cloud Cache Configuration ==========
+const CLOUD_CACHE_KEY = 'cloudCache';
+const CLOUD_CACHE_MAX_AGE = 5 * 60 * 1000; // 5 นาที (300,000 ms)
+
 async function openDB() {
     // ✅ Reuse existing connection (เร็วขึ้น 30%)
     if (dbConnection) {
@@ -6610,6 +6617,76 @@ async function dbLoad() {
     } catch (err) {
         console.error('[IndexedDB] dbLoad failed:', err);
         return null;
+    }
+}
+// ========== Cloud Cache Management ==========
+async function saveCloudCache(data) {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        
+        store.put({
+            id: CLOUD_CACHE_KEY,
+            data: data,
+            timestamp: Date.now()
+        });
+        
+        return new Promise((resolve, reject) => {
+            tx.oncomplete = () => resolve();
+            tx.onerror = (e) => reject(e.target.error);
+        });
+    } catch (err) {
+        console.error('[CloudCache] Save failed:', err);
+    }
+}
+
+async function loadCloudCache() {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const request = tx.objectStore(STORE_NAME).get(CLOUD_CACHE_KEY);
+        
+        return new Promise((resolve, reject) => {
+            request.onsuccess = (e) => {
+                const result = e.target.result;
+                if (result) {
+                    resolve({
+                        data: result.data,
+                        timestamp: result.timestamp,
+                        age: Date.now() - result.timestamp
+                    });
+                } else {
+                    resolve(null);
+                }
+            };
+            request.onerror = (e) => reject(e.target.error);
+        });
+    } catch (err) {
+        console.error('[CloudCache] Load failed:', err);
+        return null;
+    }
+}
+
+async function clearCloudCache() {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).delete(CLOUD_CACHE_KEY);
+        
+        return new Promise((resolve) => {
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => resolve();
+        });
+    } catch (err) {
+        console.error('[CloudCache] Clear failed:', err);
+    }
+}
+async function clearCloudCacheAndReload() {
+    if (confirm('⚠️ การล้าง Cache จะบังคับให้ดึงข้อมูลใหม่จาก Cloud\nคุณแน่ใจหรือไม่?')) {
+        await clearCloudCache();
+        showToast('🗑️ ล้าง Cache สำเร็จ');
+        setTimeout(() => location.reload(), 1000);
     }
 }
 // ✅ ฟังก์ชันเสริม: เช็กสถานะ IndexedDB
@@ -9093,6 +9170,10 @@ function save() {
     
     localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
     quickSync(false);
+
+    // ✅ เพิ่มบรรทัดนี้! (อัปเดต Cloud Cache)
+    saveCloudCache(S).catch(err => console.warn('[CloudCache] Update failed:', err));
+    
 }
 
 async function load() {
@@ -11153,57 +11234,104 @@ let lastSaveTime = 0;
 
 async function autoLoadFromCloud() {
     // ✅ ป้องกัน: ไม่ดึงข้อมูลระหว่างกำลัง save
-    if (isSaving) {
+    if (typeof isSaving !== 'undefined' && isSaving) {
         console.log('⏸️ Skipping autoLoad - save in progress');
         return;
     }
     
-    // ✅ ป้องกัน: ไม่ดึงข้อมูลทันทีหลัง save (รอ 5 วินาที)
-    if (Date.now() - lastSaveTime < 5000) {
+    // ✅ ป้องกัน: ไม่ดึงข้อมูลทันทีหลัง save
+    if (typeof lastSaveTime !== 'undefined' && Date.now() - lastSaveTime < 5000) {
         console.log('⏸️ Skipping autoLoad - too soon after save');
         return;
     }
     
     try {
+        // ✅ ขั้นที่ 1: เช็ก Cloud Cache ก่อน (เร็วมาก!)
+        const cache = await loadCloudCache();
+        
+        if (cache && cache.age < CLOUD_CACHE_MAX_AGE) {
+            console.log(`✅ Using Cloud Cache (age: ${Math.round(cache.age / 1000)}s)`);
+            
+            const cloudData = cache.data;
+            const cloudTime = cloudData._lastModified ?? 0;
+            const localTime = S._lastModified ?? 0;
+            
+            if (cloudTime > localTime) {
+                console.log('☁️ Cache is newer, updating from cache...');
+                
+                const currentVersion = S._version ?? 0;
+                const currentLastModified = S._lastModified ?? 0;
+                
+                Object.keys(cloudData).forEach(k => { 
+                    if (cloudData[k] !== undefined) {
+                        S[k] = cloudData[k]; 
+                    }
+                });
+                
+                S._version = currentVersion;
+                S._lastModified = Math.max(currentLastModified, cloudTime);
+                S = migrateData(S);
+                S._version = currentVersion + 1;
+                
+                await dbSave(S);
+                localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
+                
+                if (typeof forceRenderAllTabs === 'function') {
+                    try {
+                        forceRenderAllTabs();
+                    } catch (err) {
+                        console.error('[ForceRender] Error:', err);
+                    }
+                }
+                
+                if (typeof updateDimensionDisplay === 'function') {
+                    updateDimensionDisplay();
+                }
+                
+                showToast('☁️ ซิงค์จาก Cache สำเร็จ (เร็ว!)');
+            } else {
+                console.log('✅ Local data is newer than cache');
+            }
+            
+            // ✅ ขั้นที่ 2: Background refresh (ดึงข้อมูลใหม่จาก Cloud แบบไม่บล็อก UI)
+            backgroundCloudRefresh();
+            return;
+        }
+        
+        // ✅ ขั้นที่ 3: ไม่มี cache หรือ cache เก่า → fetch จาก Cloud
+        console.log('🌐 No valid cache, fetching from Cloud...');
         const response = await fetch(SCRIPT_URL);
         if (!response.ok) return;
         
         const cloudData = await response.json();
         if (!cloudData || Object.keys(cloudData).length === 0) return;
         
-        // ✅ เปรียบเทียบ timestamp
+        // ✅ บันทึกลง cache ทันที
+        await saveCloudCache(cloudData);
+        
         const cloudTime = cloudData._lastModified ?? 0;
         const localTime = S._lastModified ?? 0;
         
         if (cloudTime > localTime) {
-            console.log('☁ Cloud data is newer, updating...');
+            console.log('☁️ Cloud data is newer, updating...');
             
-            // ✅ สำคัญ: เก็บ _version และ _lastModified เดิมไว้
             const currentVersion = S._version ?? 0;
             const currentLastModified = S._lastModified ?? 0;
             
-            // Merge ข้อมูลจาก Cloud
             Object.keys(cloudData).forEach(k => { 
                 if (cloudData[k] !== undefined) {
                     S[k] = cloudData[k]; 
                 }
             });
             
-            // ✅ สำคัญ: กู้ _version และ _lastModified กลับมา
             S._version = currentVersion;
             S._lastModified = Math.max(currentLastModified, cloudTime);
-            
-            // Migration
             S = migrateData(S);
-            
-            // ✅ สำคัญ: อัปเดต _version ให้มากกว่า DB ปัจจุบัน
             S._version = currentVersion + 1;
             
-            // Save to local (ไม่ต้อง sync ขึ้น Cloud เพราะข้อมูลมาจาก Cloud แล้ว)
             await dbSave(S);
             localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
             
-            // ✅ แก้ไข: เช็กว่า forceRenderAllTabs มีอยู่ไหม
             if (typeof forceRenderAllTabs === 'function') {
                 try {
                     forceRenderAllTabs();
@@ -11212,18 +11340,74 @@ async function autoLoadFromCloud() {
                 }
             }
             
-            // ✅ เรียก render dimension hours
             if (typeof updateDimensionDisplay === 'function') {
                 updateDimensionDisplay();
             }
             
-            showToast('☁️ ซิงค์ข้อมูลจาก Cloud อัตโนมัติ');
+            showToast('☁️ ซิงค์จาก Cloud สำเร็จ');
         } else {
             console.log('✅ Local data is newer or equal');
         }
     } catch (err) {
         console.warn('[AutoLoad] Failed:', err);
     }
+}
+
+// ✅ ฟังก์ชัน Background Refresh (ดึงข้อมูลใหม่แบบไม่บล็อก UI)
+function backgroundCloudRefresh() {
+    console.log('🔄 Background refresh started...');
+    
+    fetch(SCRIPT_URL)
+        .then(response => response.json())
+        .then(async cloudData => {
+            if (!cloudData || Object.keys(cloudData).length === 0) return;
+            
+            // ✅ อัปเดต cache
+            await saveCloudCache(cloudData);
+            
+            const cloudTime = cloudData._lastModified ?? 0;
+            const localTime = S._lastModified ?? 0;
+            
+            if (cloudTime > localTime) {
+                console.log('☁️ Background: Cloud data is newer, updating...');
+                
+                const currentVersion = S._version ?? 0;
+                const currentLastModified = S._lastModified ?? 0;
+                
+                Object.keys(cloudData).forEach(k => { 
+                    if (cloudData[k] !== undefined) {
+                        S[k] = cloudData[k]; 
+                    }
+                });
+                
+                S._version = currentVersion;
+                S._lastModified = Math.max(currentLastModified, cloudTime);
+                S = migrateData(S);
+                S._version = currentVersion + 1;
+                
+                await dbSave(S);
+                localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
+                
+                if (typeof forceRenderAllTabs === 'function') {
+                    try {
+                        forceRenderAllTabs();
+                    } catch (err) {
+                        console.error('[ForceRender] Error:', err);
+                    }
+                }
+                
+                if (typeof updateDimensionDisplay === 'function') {
+                    updateDimensionDisplay();
+                }
+                
+                showToast('☁️ อัปเดตข้อมูลล่าสุดจาก Cloud');
+            } else {
+                console.log('✅ Background: Local data is up to date');
+            }
+        })
+        .catch(err => {
+            console.warn('[BackgroundRefresh] Failed:', err);
+        });
 }
 
             initApp();

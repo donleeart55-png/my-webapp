@@ -7817,6 +7817,8 @@ function logHours(type) {
     if (typeof updateCurrencyDisplay === 'function') updateCurrencyDisplay();
     
     save();
+
+    updateDimensionDisplay();
     
     // ✅ แสดงข้อความ
     const timeDisplay = totalHours >= 1 
@@ -10798,32 +10800,6 @@ function toggleLogDisplay(type) {
     }
 }
 
-/**
- * อัปเดตการแสดงผลชั่วโมงทั้งหมด
- */
-function updateHoursDisplay() {
-    const artHoursEl = document.getElementById('art-hours-display');
-    const fitHoursEl = document.getElementById('fit-hours-display');
-    
-    if (artHoursEl) {
-        artHoursEl.textContent = (S.artHours ?? 0).toFixed(1);
-    }
-    
-    if (fitHoursEl) {
-        fitHoursEl.textContent = (S.fitHours ?? 0).toFixed(1);
-    }
-    
-    // อัปเดต progress bar (เป้าหมาย 10,000 ชม.)
-    const artProgress = Math.min(((S.artHours ?? 0) / 10000) * 100, 100);
-    const fitProgress = Math.min(((S.fitHours ?? 0) / 10000) * 100, 100);
-    
-    const artBar = document.getElementById('art-progress-bar');
-    const fitBar = document.getElementById('fit-progress-bar');
-    
-    if (artBar) artBar.style.width = `${artProgress}%`;
-    if (fitBar) fitBar.style.width = `${fitProgress}%`;
-}
-
 // เรียกใช้ตอนโหลดหน้าเว็บ
 // เพิ่มใน initApp()
 updateHoursDisplay();
@@ -11037,14 +11013,20 @@ function closeModal(id) {
 }
 // ========== Dimension Display ==========
 function updateDimensionDisplay() {
+    console.log('[Dimension] Updating display...');
+    
     // Art Dimension
-    const artHoursEl = document.querySelector('#tab-quests .dimension-card:first-child .dimension-hours');
+    const artHoursEl = document.getElementById('art-hours-display');
+    const artRankEl = document.getElementById('art-rank');
+    const artProgressText = document.getElementById('art-progress-text');
+    const artProgressBar = document.getElementById('art-progress-bar');
+    
     if (artHoursEl) {
         const hours = S.artHours ?? 0;
-        artHoursEl.textContent = `${hours.toFixed(1)} hrs`;
+        artHoursEl.textContent = hours.toFixed(1);
+        console.log(`[Dimension] Art: ${hours.toFixed(1)} hrs`);
         
         // อัปเดต rank
-        const artRankEl = document.querySelector('#tab-quests .dimension-card:first-child .dimension-rank');
         if (artRankEl) {
             let rank = 'Novice';
             let nextRank = 'Apprentice';
@@ -11055,22 +11037,42 @@ function updateDimensionDisplay() {
             else if (hours >= 50) { rank = 'Apprentice'; nextRank = 'Expert'; nextHours = 200; }
             
             artRankEl.textContent = rank;
-            
-            const nextEl = document.querySelector('#tab-quests .dimension-card:first-child .dimension-next');
-            if (nextEl) {
-                nextEl.textContent = `Next: ${nextRank} @ ${nextHours}h`;
-            }
         }
+        
+        // อัปเดต progress text
+        if (artProgressText) {
+            const hours = S.artHours ?? 0;
+            let nextRank = 'Apprentice';
+            let nextHours = 50;
+            
+            if (hours >= 500) { nextRank = 'Grandmaster'; nextHours = 1000; }
+            else if (hours >= 200) { nextRank = 'Master'; nextHours = 500; }
+            else if (hours >= 50) { nextRank = 'Expert'; nextHours = 200; }
+            
+            artProgressText.textContent = `Next: ${nextRank} @ ${nextHours}h`;
+        }
+        
+        // อัปเดต progress bar
+        if (artProgressBar) {
+            const progress = Math.min(((S.artHours ?? 0) / 10000) * 100, 100);
+            artProgressBar.style.width = `${progress}%`;
+        }
+    } else {
+        console.warn('[Dimension] Art hours element not found');
     }
     
     // Fitness Dimension
-    const fitHoursEl = document.querySelector('#tab-quests .dimension-card:last-child .dimension-hours');
+    const fitHoursEl = document.getElementById('fit-hours-display');
+    const fitRankEl = document.getElementById('fit-rank');
+    const fitProgressText = document.getElementById('fit-progress-text');
+    const fitProgressBar = document.getElementById('fit-progress-bar');
+    
     if (fitHoursEl) {
         const hours = S.fitHours ?? 0;
-        fitHoursEl.textContent = `${hours.toFixed(1)} hrs`;
+        fitHoursEl.textContent = hours.toFixed(1);
+        console.log(`[Dimension] Fit: ${hours.toFixed(1)} hrs`);
         
         // อัปเดต rank
-        const fitRankEl = document.querySelector('#tab-quests .dimension-card:last-child .dimension-rank');
         if (fitRankEl) {
             let rank = 'Untrained';
             let nextRank = 'Athletic Novice';
@@ -11081,12 +11083,28 @@ function updateDimensionDisplay() {
             else if (hours >= 50) { rank = 'Athletic Novice'; nextRank = 'Athletic Expert'; nextHours = 200; }
             
             fitRankEl.textContent = rank;
-            
-            const nextEl = document.querySelector('#tab-quests .dimension-card:last-child .dimension-next');
-            if (nextEl) {
-                nextEl.textContent = `Next: ${nextRank} @ ${nextHours}h`;
-            }
         }
+        
+        // อัปเดต progress text
+        if (fitProgressText) {
+            const hours = S.fitHours ?? 0;
+            let nextRank = 'Athletic Novice';
+            let nextHours = 50;
+            
+            if (hours >= 500) { nextRank = 'Athletic Grandmaster'; nextHours = 1000; }
+            else if (hours >= 200) { nextRank = 'Athletic Master'; nextHours = 500; }
+            else if (hours >= 50) { nextRank = 'Athletic Expert'; nextHours = 200; }
+            
+            fitProgressText.textContent = `Next: ${nextRank} @ ${nextHours}h`;
+        }
+        
+        // อัปเดต progress bar
+        if (fitProgressBar) {
+            const progress = Math.min(((S.fitHours ?? 0) / 10000) * 100, 100);
+            fitProgressBar.style.width = `${progress}%`;
+        }
+    } else {
+        console.warn('[Dimension] Fit hours element not found');
     }
 }
 

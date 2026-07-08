@@ -4873,51 +4873,6 @@ img.loaded, .lazy-load.loaded {
         <div class="sync-actions"><button class="btn-s" onclick="manualSave()"> Save</button>
             <button class="btn-s" onclick="manualLoad()">☁️ Load</button></div>
     </div>
-
-    <div class="status-section">
-        <div class="section-hdr">
-            <div class="section-ttl">Character Status</div>
-            <div class="sp-badge" id="sp-badge" onclick="openStatModal()">0 SP AVAILABLE</div>
-        </div>
-        <div class="stats-grid">
-            <div class="stat-item" id="stat-STR">
-                <div class="stat-name">STR</div>
-                <div class="stat-val" id="val-STR">10</div>
-                <div class="stat-bar">
-                    <div class="stat-bar-fill" id="bar-STR" style="background:#f87171;width:10%"></div>
-                </div>
-            </div>
-            <div class="stat-item" id="stat-AGI">
-                <div class="stat-name">AGI</div>
-                <div class="stat-val" id="val-AGI">10</div>
-                <div class="stat-bar">
-                    <div class="stat-bar-fill" id="bar-AGI" style="background:#34d399;width:10%"></div>
-                </div>
-            </div>
-            <div class="stat-item" id="stat-INT">
-                <div class="stat-name">INT</div>
-                <div class="stat-val" id="val-INT">10</div>
-                <div class="stat-bar">
-                    <div class="stat-bar-fill" id="bar-INT" style="background:#818cf8;width:10%"></div>
-                </div>
-            </div>
-            <div class="stat-item" id="stat-VIT">
-                <div class="stat-name">VIT</div>
-                <div class="stat-val" id="val-VIT">10</div>
-                <div class="stat-bar">
-                    <div class="stat-bar-fill" id="bar-VIT" style="background:#fbbf24;width:10%"></div>
-                </div>
-            </div>
-            <div class="stat-item" id="stat-CRE">
-                <div class="stat-name">CRE</div>
-                <div class="stat-val" id="val-CRE">10</div>
-                <div class="stat-bar">
-                    <div class="stat-bar-fill" id="bar-CRE" style="background:#f0abfc;width:10%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 <div class="dimensions-container">
 
     <!-- ART DIMENSION -->
@@ -5335,21 +5290,6 @@ img.loaded, .lazy-load.loaded {
 
     </div>
 
-    <!-- Modals (คงเดิม) -->
-<div class="modal-overlay" id="stat-modal">
-    <div class="modal">
-        <div class="modal-title">Status Distribution</div>
-        <div class="modal-sub" id="modal-sp-lbl">0 Status Points Available</div>
-        <div class="stat-btns">
-            <button class="stat-btn" onclick="upgradeStat('STR')"><span class="n">STR</span><span class="v">+1</span></button>
-            <button class="stat-btn" onclick="upgradeStat('AGI')"><span class="n">AGI</span><span class="v">+1</span></button>
-            <button class="stat-btn" onclick="upgradeStat('INT')"><span class="n">INT</span><span class="v">+1</span></button>
-            <button class="stat-btn" onclick="upgradeStat('VIT')"><span class="n">VIT</span><span class="v">+1</span></button>
-            <button class="stat-btn" onclick="upgradeStat('CRE')"><span class="n">CRE</span><span class="v">+1</span></button>
-        </div>
-        <button class="btn-m" onclick="closeStatModal()">ปิดหน้าต่างเลือกสถานะ</button>
-    </div>
-</div>
 
 <div class="modal-overlay" id="qm-modal">
     <div class="modal" style="max-width:420px; width:95%; text-align:left;">
@@ -5404,19 +5344,60 @@ img.loaded, .lazy-load.loaded {
 <!-- 🌳 PASSIVE SKILL TREE MODAL -->
 <div id="skill-tree-modal" style="display:none;">
     <div class="st-header">
-        <h2 class="st-title">🌳 Passive Skill Tree</h2>
+        <h2 class="st-title"> Passive Skill Tree</h2>
         <div class="st-sp"><span>Skill Points:</span><span id="sp-available" class="st-sp-val">0</span></div>
         <button onclick="closeSkillTree()" class="st-close">✕ ปิด</button>
     </div>
+
+    <!-- ✅ ส่วนที่ 1: เพิ่ม Character Status Display -->
+    <div class="status-section" style="padding: 12px 20px; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--border);">
+        <div class="section-hdr" style="margin-bottom: 8px;">
+            <div class="section-ttl" style="font-size: 12px;">📊 Character Status (Base + Bonus)</div>
+        </div>
+        <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr); gap: 8px;">
+            <div class="stat-item">
+                <div class="stat-name">STR</div>
+                <div class="stat-val" id="st-val-STR">10</div>
+                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-STR" style="background:#f87171;width:10%"></div></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-name">AGI</div>
+                <div class="stat-val" id="st-val-AGI">10</div>
+                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-AGI" style="background:#34d399;width:10%"></div></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-name">INT</div>
+                <div class="stat-val" id="st-val-INT">10</div>
+                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-INT" style="background:#818cf8;width:10%"></div></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-name">VIT</div>
+                <div class="stat-val" id="st-val-VIT">10</div>
+                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-VIT" style="background:#fbbf24;width:10%"></div></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-name">CRE</div>
+                <div class="stat-val" id="st-val-CRE">10</div>
+                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-CRE" style="background:#f0abfc;width:10%"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ ส่วนที่ 2: Skill Tree Container (แก้โครงสร้าง SVG) -->
     <div class="st-container" id="skill-tree-container">
-        <svg id="skill-tree-svg" viewBox="0 0 1000 1100" preserveAspectRatio="xMidYMid meet">
+        <!-- SVG ว่างเปล่าให้ JS วาดรูปเติมทีหลัง -->
+        <svg id="skill-tree-svg" viewBox="0 0 1000 1100" preserveAspectRatio="xMidYMid meet"></svg>
+        
+        <!-- ปุ่ม Zoom ต้องอยู่นอก SVG -->
         <div class="st-zoom">
             <button class="st-zoom-btn" onclick="zoomIn()">+</button>
             <button class="st-zoom-btn" onclick="zoomOut()">−</button>
             <button class="st-zoom-btn" onclick="resetZoom()" style="font-size:14px;">⌂</button>
         </div>
     </div>
+
     <div id="skill-tooltip"></div>
+    
     <div class="st-footer">
         <button class="st-respec" onclick="respecTree()">🔄 Respec</button>
         <div class="st-legend">
@@ -5587,52 +5568,55 @@ const SKILL_TREE_CONFIG = (() => {
         nodes[id] = { type, branch, cost, x, y, connections, effects, name, desc };
     };
     
-    // ===== ตำแหน่ง Origin =====
-    const ORIGIN_X = 600;
-    const ORIGIN_Y = 550;
+    // ===== ปรับค่าคงที่ใหม่ให้พอดี ViewBox =====
+    const ORIGIN_X = 500;  // ✅ ปรับจาก 600 → 500 (อยู่กลาง)
+    const ORIGIN_Y = 500;  // ✅ ปรับจาก 550 → 500
+    const TRUNK_SPACING = 50;  // ✅ ลดจาก 70 → 50
+    const BRANCH_SPACING = 60;  // ✅ ลดจาก 85 → 60
+    const BRANCH_ANGLE_OFFSET = 25;
     
-    // ===== ค่าคงที่ =====
-    const TRUNK_SPACING = 70;      // ระยะระหว่าง nodes ในเส้นหลัก
-    const BRANCH_SPACING = 85;     // ระยะระหว่างกิ่งย่อย
-    const BRANCH_ANGLE_OFFSET = 25; // มุมเบี่ยงเบนของกิ่งย่อย
+    // ===== 🌟 ORIGIN NODE (ต้องสร้าง!) =====
+    N("origin", "keystone", "origin", 0, ORIGIN_X, ORIGIN_Y,
+      ["art_1", "body_1", "mind_1"],
+      {},  // ✅ Origin ไม่มี effect
+      "The Exile's Birth", "จุดเริ่มต้นของการเดินทาง");
     
     // ===== 🎨 ART BRANCH (ซ้ายบน -150°) =====
     const ART_ANGLE = -150;
     const ART_RAD = ART_ANGLE * Math.PI / 180;
     
-    // เส้นหลัก (1-10)
     for (let i = 1; i <= 10; i++) {
         const x = ORIGIN_X + (Math.cos(ART_RAD) * (TRUNK_SPACING * i));
         const y = ORIGIN_Y + (Math.sin(ART_RAD) * (TRUNK_SPACING * i));
         
-        // กิ่งย่อยซ้าย (เบี่ยง -25°)
         const leftBranchAngle = (ART_ANGLE - BRANCH_ANGLE_OFFSET) * Math.PI / 180;
         const leftX = x + (Math.cos(leftBranchAngle) * (BRANCH_SPACING * 1.5));
         const leftY = y + (Math.sin(leftBranchAngle) * (BRANCH_SPACING * 1.5));
         
-        // กิ่งย่อยขวา (เบี่ยง +25°)
-        const rightBranchAngle = (ART_ANGLE + BRANCH_ANGLE_OFFSET) * Math.PI / 180;
-        const rightX = x + (Math.cos(rightBranchAngle) * (BRANCH_SPACING * 1.5));
-        const rightY = y + (Math.sin(rightBranchAngle) * (BRANCH_SPACING * 1.5));
+        // ✅ แก้ connections: art_1 เชื่อม origin + art_2 + art_1_left
+        const connections = [];
+        if (i === 1) connections.push("origin");
+        if (i > 1) connections.push(`art_${i-1}`);
+        if (i < 10) connections.push(`art_${i+1}`);
+        if (i <= 8) connections.push(`art_${i}_left`);
+        if (i === 10) connections.push("art_ks");
         
-        N(`art_${i}`, "small", "art", 1, x, y, 
-          i === 1 ? ["origin", `art_${i+1}`, `art_${i}_left`] :
-          i === 10 ? [`art_${i-1}`, "art_ks"] :
-          [`art_${i-1}`, `art_${i+1}`, `art_${i}_left`],
-          {CRE: i%3===0?2:1}, `Art Node ${i}`, `+${i%3===0?2:1} CRE`);
+        N(`art_${i}`, "small", "art", 1, x, y, connections,
+          { CRE: i % 3 === 0 ? 2 : 1 },
+          `Art Node ${i}`, `+${i % 3 === 0 ? 2 : 1} CRE`);
         
-        // เพิ่ม nodes กิ่งย่อย
         if (i <= 8) {
             N(`art_${i}_left`, "small", "art", 1, leftX, leftY,
-              [`art_${i}`], {INT:1}, `Art Branch ${i}`, "+1 INT");
+              [`art_${i}`], { INT: 1 }, `Art Branch ${i}`, "+1 INT");
         }
     }
     
-    // Keystone Art
     const artKsX = ORIGIN_X + (Math.cos(ART_RAD) * (TRUNK_SPACING * 11));
     const artKsY = ORIGIN_Y + (Math.sin(ART_RAD) * (TRUNK_SPACING * 11));
+    // ✅ แยก effects เป็น additive/multiplicative
     N("art_ks", "keystone", "art", 10, artKsX, artKsY,
-      ["art_10", "art_8_left"], {CRE:1.5,INT:1.3,STR:0.8},
+      ["art_10", "art_8_left"],
+      { add: { CRE: 10, INT: 5 }, mult: { CRE: 1.5, INT: 1.3, STR: 0.8 } },
       "🎨 Creative Ascendancy", "CRE+50% INT+30% STR-20%");
     
     // ===== 💪 BODY BRANCH (ขวาบน -30°) =====
@@ -5647,26 +5631,28 @@ const SKILL_TREE_CONFIG = (() => {
         const leftX = x + (Math.cos(leftBranchAngle) * (BRANCH_SPACING * 1.5));
         const leftY = y + (Math.sin(leftBranchAngle) * (BRANCH_SPACING * 1.5));
         
-        const rightBranchAngle = (BODY_ANGLE + BRANCH_ANGLE_OFFSET) * Math.PI / 180;
-        const rightX = x + (Math.cos(rightBranchAngle) * (BRANCH_SPACING * 1.5));
-        const rightY = y + (Math.sin(rightBranchAngle) * (BRANCH_SPACING * 1.5));
+        const connections = [];
+        if (i === 1) connections.push("origin");
+        if (i > 1) connections.push(`body_${i-1}`);
+        if (i < 10) connections.push(`body_${i+1}`);
+        if (i <= 8) connections.push(`body_${i}_left`);
+        if (i === 10) connections.push("body_ks");
         
-        N(`body_${i}`, "small", "body", 1, x, y,
-          i === 1 ? ["origin", `body_${i+1}`, `body_${i}_left`] :
-          i === 10 ? [`body_${i-1}`, "body_ks"] :
-          [`body_${i-1}`, `body_${i+1}`, `body_${i}_left`],
-          {STR: i%3===0?2:1}, `Body Node ${i}`, `+${i%3===0?2:1} STR`);
+        N(`body_${i}`, "small", "body", 1, x, y, connections,
+          { STR: i % 3 === 0 ? 2 : 1 },
+          `Body Node ${i}`, `+${i % 3 === 0 ? 2 : 1} STR`);
         
         if (i <= 8) {
             N(`body_${i}_left`, "small", "body", 1, leftX, leftY,
-              [`body_${i}`], {VIT:1}, `Body Branch ${i}`, "+1 VIT");
+              [`body_${i}`], { VIT: 1 }, `Body Branch ${i}`, "+1 VIT");
         }
     }
     
     const bodyKsX = ORIGIN_X + (Math.cos(BODY_RAD) * (TRUNK_SPACING * 11));
     const bodyKsY = ORIGIN_Y + (Math.sin(BODY_RAD) * (TRUNK_SPACING * 11));
     N("body_ks", "keystone", "body", 10, bodyKsX, bodyKsY,
-      ["body_10", "body_8_left"], {STR:1.5,VIT:1.5,AGI:0.8},
+      ["body_10", "body_8_left"],
+      { add: { STR: 10, VIT: 10 }, mult: { STR: 1.5, VIT: 1.5, AGI: 0.8 } },
       "💪 Juggernaut Ascendancy", "STR+50% VIT+50% AGI-20%");
     
     // ===== 🧠 MIND BRANCH (ล่าง 90°) =====
@@ -5681,26 +5667,29 @@ const SKILL_TREE_CONFIG = (() => {
         const leftX = x + (Math.cos(leftBranchAngle) * (BRANCH_SPACING * 1.5));
         const leftY = y + (Math.sin(leftBranchAngle) * (BRANCH_SPACING * 1.5));
         
-        const rightBranchAngle = (MIND_ANGLE + BRANCH_ANGLE_OFFSET) * Math.PI / 180;
-        const rightX = x + (Math.cos(rightBranchAngle) * (BRANCH_SPACING * 1.5));
-        const rightY = y + (Math.sin(rightBranchAngle) * (BRANCH_SPACING * 1.5));
+        const connections = [];
+        if (i === 1) connections.push("origin");
+        if (i > 1) connections.push(`mind_${i-1}`);
+        if (i < 10) connections.push(`mind_${i+1}`);
+        if (i <= 8) connections.push(`mind_${i}_left`);
+        if (i === 10) connections.push("mind_ks");
         
-        N(`mind_${i}`, "small", "mind", 1, x, y,
-          i === 1 ? ["origin", `mind_${i+1}`, `mind_${i}_left`] :
-          i === 10 ? [`mind_${i-1}`, "mind_ks"] :
-          [`mind_${i-1}`, `mind_${i+1}`, `mind_${i}_left`],
-          {INT: i%3===0?2:1}, `Mind Node ${i}`, `+${i%3===0?2:1} INT`);
+        N(`mind_${i}`, "small", "mind", 1, x, y, connections,
+          { INT: i % 3 === 0 ? 2 : 1 },
+          `Mind Node ${i}`, `+${i % 3 === 0 ? 2 : 1} INT`);
         
         if (i <= 8) {
             N(`mind_${i}_left`, "small", "mind", 1, leftX, leftY,
-              [`mind_${i}`], {AGI:1}, `Mind Branch ${i}`, "+1 AGI");
+              [`mind_${i}`], { AGI: 1 }, `Mind Branch ${i}`, "+1 AGI");
         }
     }
     
     const mindKsX = ORIGIN_X + (Math.cos(MIND_RAD) * (TRUNK_SPACING * 11));
-    const mindKsY = ORIGIN_Y + (Math.sin(MIND_RAD) * (TRUNK_SPACING * 11)) + 50;
+    const mindKsY = ORIGIN_Y + (Math.sin(MIND_RAD) * (TRUNK_SPACING * 11));
+    // ✅ ลบ + 50 ออก (ทำให้ Y เกิน viewBox)
     N("mind_ks", "keystone", "mind", 10, mindKsX, mindKsY,
-      ["mind_10", "mind_8_left"], {INT:1.5,AGI:1.5,VIT:0.8},
+      ["mind_10", "mind_8_left"],
+      { add: { INT: 10, AGI: 10 }, mult: { INT: 1.5, AGI: 1.5, VIT: 0.8 } },
       "🧠 Ascendant Scholar", "INT+50% AGI+50% VIT-20%");
     
     return { version: "5.2.0", nodes, removedNodes: {} };
@@ -5713,7 +5702,7 @@ const SKILL_TREE_CONFIG = (() => {
 let S = {
     _lastModified: Date.now(),
     // === Character Core ===
-    xp: 0, lvl: 1, sp: 0,
+    xp: 0, lvl: 1,
     STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10,
 
     // === Dimensions ===
@@ -5779,7 +5768,6 @@ function migrateData(oldS) {
         totalXp: get('totalXp', 0),
         xp: get('xp', 0),
         lvl: get('lvl', 1),
-        sp: get('sp', 0),
         STR: get('STR', 10),
         AGI: get('AGI', 10),
         INT: get('INT', 10),
@@ -5831,7 +5819,7 @@ function migrateData(oldS) {
             divine: oldS?.currency?.divine ?? oldS?.orbs?.divine ?? 0
         },
         skillTree: getObj('skillTree', {}),
-        skillPoints: get('skillPoints', 0),
+        skillPoints: (get('skillPoints', 0) ?? 0) + (get('sp', 0) ?? 0),  // ✅ รวม sp เก่าเข้า skillPoints
         ascendancyPoints: get('ascendancyPoints', 0),
         streakDays: get('streakDays', 0),
 
@@ -6067,7 +6055,10 @@ svg.appendChild(bg);
         cls.push(isAlloc ? 'allocated' : isAvail ? 'available' : 'locked');
         circle.setAttribute('class', cls.join(' '));
         
-        circle.addEventListener('click', e => { e.stopPropagation(); handleNodeClick(id); });
+        circle.addEventListener('click', e => { 
+    e.stopPropagation(); 
+    toggleSkillNode(id);  // ✅ ใช้ toggleSkillNode แทน
+});
         circle.addEventListener('mouseenter', e => showTooltip(e, id));
         circle.addEventListener('mouseleave', hideTooltip);
         circle.addEventListener('mousemove', moveTooltip);
@@ -6105,11 +6096,50 @@ function canAllocateNode(nodeId) {
 }
 
 function handleNodeClick(nodeId) {
-    if (S.skillTree[nodeId]) {
-        deallocateNode(nodeId);
-    } else {
-        allocateNode(nodeId);
+    const node = SKILL_TREE_CONFIG?.nodes?.[nodeId];
+    if (!node) {
+        showToast('❌ Node ไม่ถูกต้อง');
+        return;
     }
+    
+    const isAllocated = S.skillTree?.[nodeId] === true;
+    const cost = node.cost ?? (node.type === 'keystone' ? 10 : 1);
+    
+    if (isAllocated) {
+        // Dealloc
+        if (cost > 0) {
+            S.skillPoints = (S.skillPoints ?? 0) + cost;
+        }
+        delete S.skillTree[nodeId];
+        showToast(`🔄 คืน Node: ${node.name} (+${cost} SP)`);
+    } else {
+        // Alloc
+        if (cost > 0 && (S.skillPoints ?? 0) < cost) {
+            showToast(`❌ ต้องการ ${cost} Skill Points`);
+            return;
+        }
+        
+        // เช็ก connections
+        if (nodeId !== 'origin') {
+            const hasConnection = node.connections?.some(connId => S.skillTree?.[connId] === true);
+            if (!hasConnection) {
+                showToast('❌ ต้อง alloc node ที่เชื่อมต่อก่อน');
+                return;
+            }
+        }
+        
+        if (cost > 0) {
+            S.skillPoints = (S.skillPoints ?? 0) - cost;
+        }
+        if (!S.skillTree) S.skillTree = {};
+        S.skillTree[nodeId] = true;
+        showToast(`✅ Alloc Node: ${node.name} (-${cost} SP)`);
+    }
+    
+    // ✅ สำคัญ: ต้องเรียก 3 ฟังก์ชันนี้!
+    save();
+    renderStats();      // ← อัปเดต status
+    renderSkillTree();  // ← อัปเดต UI tree
 }
 
 function allocateNode(nodeId) {
@@ -6860,7 +6890,6 @@ function showLevelUpAnimation(newLevel, rewards) {
         <div class="level-up-title">⚔️ LEVEL UP! ⚔️</div>
         <div class="level-up-details">
             <div class="reward">🎯 Level ${newLevel}</div>
-            <div class="reward">+${rewards.sp} Status Points</div>
             <div class="reward">+${rewards.skillPoints} Skill Points</div>
         </div>
     `;
@@ -6896,35 +6925,137 @@ function updateXpBar() {
     if (xpText) xpText.textContent = `${currentXp} / ${maxXp} XP`;
     if (lvlText) lvlText.textContent = `LV ${currentLevel}`;
     
-    // ✅ อัปเดต SP Badge
-    const spBadge = document.getElementById('sp-badge');
-    if (spBadge) {
-        spBadge.textContent = `${S.sp ?? 0} SP AVAILABLE`;
-        spBadge.style.animation = (S.sp ?? 0) > 0 ? 'pgold 1s infinite' : 'none';
     }
+// ==========================================
+// คำนวณ Stat Bonus จาก Skill Tree Nodes
+// ==========================================
+function calculateStatBonusFromSkillTree() {
+    const bonus = { STR: 0, AGI: 0, INT: 0, VIT: 0, CRE: 0 };
+    
+    if (!S.skillTree || typeof S.skillTree !== 'object') return bonus;
+    if (typeof SKILL_TREE_CONFIG === 'undefined' || !SKILL_TREE_CONFIG?.nodes) return bonus;
+    
+    // ✅ คำนวณ additive bonus ก่อน
+    const addBonus = { STR: 0, AGI: 0, INT: 0, VIT: 0, CRE: 0 };
+    // ✅ คำนวณ multiplicative bonus
+    const multBonus = { STR: 1, AGI: 1, INT: 1, VIT: 1, CRE: 1 };
+    
+    Object.keys(S.skillTree).forEach(nodeId => {
+        if (S.skillTree[nodeId] !== true) return;
+        
+        const node = SKILL_TREE_CONFIG.nodes[nodeId];
+        if (!node || !node.effects) return;
+        
+        // ✅ รองรับทั้ง 2 รูปแบบ
+        if (node.effects.add) {
+            // รูปแบบใหม่: { add: {...}, mult: {...} }
+            Object.keys(node.effects.add).forEach(stat => {
+                if (stat in addBonus) {
+                    addBonus[stat] += node.effects.add[stat];
+                }
+            });
+            if (node.effects.mult) {
+                Object.keys(node.effects.mult).forEach(stat => {
+                    if (stat in multBonus) {
+                        multBonus[stat] *= node.effects.mult[stat];
+                    }
+                });
+            }
+        } else {
+            // รูปแบบเก่า: { CRE: 1 } (additive ล้วน)
+            Object.keys(node.effects).forEach(stat => {
+                if (stat in addBonus) {
+                    addBonus[stat] += node.effects[stat];
+                }
+            });
+        }
+    });
+    
+    // ✅ คำนวณผลรวม: (base + add) * mult - base
+    Object.keys(bonus).forEach(stat => {
+        const base = S[stat] ?? 10;
+        const total = (base + addBonus[stat]) * multBonus[stat];
+        bonus[stat] = Math.round(total - base);
+    });
+    
+    return bonus;
 }
-
-// ===== Stat Functions =====
-function allocateStatPoint(stat) {
-    if ((S.sp ?? 0) <= 0) {
-        showToast('❌ ไม่มี Status Points!');
-        return;
-    }
-    S.sp--;
-    S[stat] = (S[stat] ?? 10) + 1;
-    save();
-    renderStats();
-    updateXpBar();
-    showToast(`✅ ${stat} +1`);
-}
-
+// ==========================================
+// Render Stats (Base + Bonus from Skill Tree)
+// ==========================================
 function renderStats() {
+    const bonus = calculateStatBonusFromSkillTree();
+    
     ['STR', 'AGI', 'INT', 'VIT', 'CRE'].forEach(st => {
+        const base = S[st] ?? 10;
+        const total = base + (bonus[st] ?? 0);
+        const barWidth = Math.min((total / 100) * 100, 100) + '%';
+        
+        // หน้าแรก (ถ้ามี element)
         const valEl = document.getElementById(`val-${st}`);
         const barEl = document.getElementById(`bar-${st}`);
-        if (valEl) valEl.textContent = S[st] ?? 10;
-        if (barEl) barEl.style.width = Math.min(((S[st] ?? 10) / 100) * 100, 100) + '%';
+        if (valEl) valEl.textContent = total;
+        if (barEl) barEl.style.width = barWidth;
+        
+        // Skill Tree Modal (ใช้ st- prefix)
+        const stValEl = document.getElementById(`st-val-${st}`);
+        const stBarEl = document.getElementById(`st-bar-${st}`);
+        if (stValEl) stValEl.textContent = total;
+        if (stBarEl) stBarEl.style.width = barWidth;
     });
+    
+    // อัปเดต Skill Points display
+    const spDisplay = document.getElementById('sp-available');
+    if (spDisplay) spDisplay.textContent = S.skillPoints ?? 0;
+}
+// ==========================================
+// Toggle Skill Node (Alloc/Dealloc)
+// ==========================================
+function toggleSkillNode(nodeId) {
+    const node = SKILL_TREE_CONFIG?.nodes?.[nodeId];
+    if (!node) {
+        showToast('❌ Node ไม่ถูกต้อง');
+        return;
+    }
+    
+    const isAllocated = S.skillTree?.[nodeId] === true;
+    
+    // ✅ ใช้ node.cost แทน hardcode
+    const cost = node.cost ?? (node.type === 'keystone' ? 10 : 1);
+    
+    if (isAllocated) {
+        // Dealloc
+        if (cost > 0) {
+            S.skillPoints = (S.skillPoints ?? 0) + cost;
+        }
+        delete S.skillTree[nodeId];
+        showToast(`🔄 คืน Node: ${node.name} (+${cost} SP)`);
+    } else {
+        // Alloc
+        if (cost > 0 && (S.skillPoints ?? 0) < cost) {
+            showToast(`❌ ต้องการ ${cost} Skill Points`);
+            return;
+        }
+        
+        // เช็ก connections
+        if (nodeId !== 'origin') {
+            const hasConnection = node.connections?.some(connId => S.skillTree?.[connId] === true);
+            if (!hasConnection) {
+                showToast('❌ ต้อง alloc node ที่เชื่อมต่อก่อน');
+                return;
+            }
+        }
+        
+        if (cost > 0) {
+            S.skillPoints = (S.skillPoints ?? 0) - cost;
+        }
+        if (!S.skillTree) S.skillTree = {};
+        S.skillTree[nodeId] = true;
+        showToast(`✅ Alloc Node: ${node.name} (-${cost} SP)`);
+    }
+    
+    save();
+    renderStats();
     renderSkillTree();
 }
 
@@ -7043,13 +7174,10 @@ function deleteLog(type, id) {
     const xpToRemove = item.xpEarned ?? 0;
     if (xpToRemove > 0) {
         S.xp = Math.max(0, (S.xp ?? 0) - xpToRemove);
+        S.totalXp = Math.max(0, (S.totalXp ?? 0) - xpToRemove);
         
-        // ✅ ปรับ Level ถ้าจำเป็น (ใช้ getXpForLevel)
-        while (S.xp < getXpForLevel(S.lvl - 1) && S.lvl > 1) {
-            S.lvl--;
-            S.sp = Math.max(0, (S.sp ?? 0) - 5);
-        }
-        if (S.xp < 0) S.xp = 0;
+        // ✅ ใช้ recalculateLevel() แทนการปรับ level manually
+        recalculateLevel();
     }
     
     // ✅ 3. ลบ Currency (ถ้ามี)
@@ -7081,11 +7209,12 @@ function deleteLog(type, id) {
     
     // ✅ 6. อัปเดต UI ทุกส่วน
     updateXpBar();
-    updateNodes();           // ✅ อัปเดตตัวเลขชั่วโมง
-    updateHoursDisplay();    // ✅ อัปเดต display ชั่วโมง
-    updateCurrencyDisplay(); // ✅ อัปเดต Currency
-    renderHourLog(type);     // ✅ รีเฟรชประวัติ
-    renderCalendar();        // ✅ อัปเดตปฏิทิน
+    updateNodes();
+    updateHoursDisplay();
+    updateCurrencyDisplay();
+    renderHourLog(type);
+    renderCalendar();
+    renderStats();  // ✅ เพิ่ม: อัปเดต stats หลังลบ
     
     save();
     showToast(`🗑️ ลบบันทึกสำเร็จ! -${xpToRemove} XP, -${hoursToRemove.toFixed(1)} ชม.`);
@@ -8582,19 +8711,6 @@ function saveCareerManager() {
 function closeCareerManager() {
                     document.getElementById('cm-modal').classList.remove('show');
                 }
-function openStatModal() { document.getElementById('stat-modal').classList.add('show'); document.getElementById('modal-sp-lbl').textContent = S.sp + ' สเตตัสพอยท์คงเหลือ'; }
-function closeStatModal() { document.getElementById('stat-modal').classList.remove('show'); }
-
-function upgradeStat(st) {
-                    if (S.sp <= 0) { alert('ไม่มีแต้มสเตตัส'); return; }
-                    S.sp--;
-                    S[st]++;
-                    renderStats();
-                    updateXpBar();
-                    save();
-                    document.getElementById('modal-sp-lbl').textContent = S.sp + ' สเตตัสพอยท์คงเหลือ';
-                    showToast('เพิ่ม ' + st + ' เป็น ' + S[st]);
-                }
 
 // ========== LAZY LOAD: Track ว่า render tab ไหนไปแล้วบ้าง ==========
 const tabRendered = {
@@ -9085,12 +9201,6 @@ function renderDiaryLogs() {
             </div>
         </div>
     `).join('');
-}
-function updateSPDisplay() {
-    const spDisplay = document.getElementById('sp-value-display');
-    if (spDisplay) {
-        spDisplay.textContent = S.sp || 0;
-    }
 }
 
                             
@@ -9635,30 +9745,30 @@ function recalculateLevel() {
     }
     
     const currentXpInLevel = currentTotalXp - xpUsed;
-    const oldSkillPoints = calculateTotalSkillPointsForLevel(oldLvl);
-    const newSkillPoints = calculateTotalSkillPointsForLevel(lvl);
-    const skillPointsGained = newSkillPoints - oldSkillPoints;
-    
-    const oldStatusPoints = calculateTotalStatusPointsForLevel(oldLvl);
-    const newStatusPoints = calculateTotalStatusPointsForLevel(lvl);
-    const statusPointsGained = newStatusPoints - oldStatusPoints;
+    const skillPointsGained = lvl - oldLvl; // ทุก Level ได้ 1 Skill Point
     
     S.lvl = lvl;
     S.xp = currentXpInLevel;
+
+    if (levelsGained > 0) {
+        S.skillPoints = (S.skillPoints ?? 0) + levelsGained;
+        console.log(`🎯 Level ${oldLvl} → ${lvl} | +${levelsGained} Skill Points`);
+    // ✅ แสดง Level Up Notification
+        showLevelUpNotification(lvl, levelsGained);
+    }
+    // ✅ ถ้า Level ลดลง (หายไป) ให้หัก SP ด้วย
+    if (levelsGained < 0) {
+        S.skillPoints = Math.max(0, (S.skillPoints ?? 0) + levelsGained);
+        showToast(`⚠️ Level ลดลง! LV ${oldLvl} → ${lvl}`);
+    }
     
     if (skillPointsGained > 0) {
         S.skillPoints = (S.skillPoints ?? 0) + skillPointsGained;
         console.log(`🎯 Level ${oldLvl} → ${lvl} | +${skillPointsGained} Skill Points`);
     }
     
-    if (statusPointsGained > 0) {
-        S.sp = (S.sp ?? 0) + statusPointsGained;
-        console.log(`💪 Level ${oldLvl} → ${lvl} | +${statusPointsGained} Status Points`);
-    }
-    
     if (lvl < oldLvl) {
         const levelsLost = oldLvl - lvl;
-        S.sp = Math.max(0, (S.sp ?? 0) - levelsLost);
         S.skillPoints = Math.max(0, (S.skillPoints ?? 0) - levelsLost);
         showToast(`⚠️ Level ลดลง! LV ${oldLvl} → ${lvl}`);
     }
@@ -9666,33 +9776,6 @@ function recalculateLevel() {
     console.log(`📊 Recalculate: totalXp=${currentTotalXp}, lvl=${lvl}, xp=${currentXpInLevel}, skillPoints=${S.skillPoints}`);
 }
 
-// ✅ Helper: คำนวณ Total Skill Points ที่ควรได้จาก Level 1 ถึง level ที่กำหนด
-function calculateTotalSkillPointsForLevel(level) {
-    let total = 0;
-    for (let i = 1; i < level; i++) {
-        const rewards = calculateLevelUpRewards(i);
-        total += rewards.skillPoints || 0;
-    }
-    return total;
-}
-
-// ✅ Helper: คำนวณ Total Status Points ที่ควรได้จาก Level 1 ถึง level ที่กำหนด
-function calculateTotalStatusPointsForLevel(level) {
-    let total = 0;
-    for (let i = 1; i < level; i++) {
-        const rewards = calculateLevelUpRewards(i);
-        total += rewards.sp || 0;
-    }
-    return total;
-}
-
-// ✅ คำนวณ Level Up Rewards
-function calculateLevelUpRewards(level) {
-    return {
-        sp: 1,  // ทุก Level ได้ 1 Status Point
-        skillPoints: (level % 2 === 0) ? 1 : 0  // ทุก 2 Level ได้ 1 Skill Point
-    };
-}
 function toggleMainQuest(questId) {
     const k = selectedDateKey || getTodayKey();
     if (!S.history[k]) S.history[k] = { 
@@ -10933,7 +11016,7 @@ updateHoursDisplay();
 
                     // 3. รีเซ็ตตัวแปร S กลับเป็นค่าเริ่มต้น (Patch v4)
                     S = {
-                        xp: 0, lvl: 1, sp: 0,
+                        xp: 0, lvl: 1,
                         STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10,
                         artHours: 0, fitHours: 0, artDays: 0,
                         artLogs: [], fitLogs: [], incomeLogs: [], diaryLogs: [],

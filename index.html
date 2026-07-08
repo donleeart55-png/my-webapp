@@ -5254,6 +5254,34 @@ img.loaded, .lazy-load.loaded {
                     <button class="btn-s" style="background:rgba(33, 150, 243, 0.2); color:#2196F3; border:1px solid #2196F3; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="importFromFile()">
                         <span>📤</span> Import (กู้คืนไฟล์)
                     </button>
+                    <button class="btn-s" style="width:100%; margin-bottom:8px; background:rgba(76,175,80,0.2); color:#4CAF50; border:1px solid #4CAF50;" 
+                        onclick="importWithMerge()">
+                        📥 Import แบบเลือกข้อมูล (Merge)
+                    </button>
+                    <button class="btn-s" style="width:100%; margin-bottom:8px; background:rgba(33,150,243,0.2); color:#2196F3; border:1px solid #2196F3;" 
+                        onclick="createCleanSave()">
+                        🧹 สร้าง Clean Save (เก็บเควส + Vault)
+                    </button>
+                    <button class="btn-s" style="width:100%; margin-bottom:8px; background:rgba(33,150,243,0.2); color:#2196F3; border:1px solid #2196F3;" 
+                        onclick="cleanImport()">
+                        🧹 Clean Import (กรองข้อมูลอัตโนมัติ)
+                    </button>
+                    <button class="btn-s" style="width:100%; margin-bottom:8px; background:rgba(255,152,0,0.2); color:#FF9800; border:1px solid #FF9800;" 
+                        onclick="repairSave()">
+                        🔧 ซ่อมแซมข้อมูล (Repair Save)
+                    </button>
+                    <button class="btn-s" style="width:100%; margin-bottom:8px; background:rgba(156,39,176,0.2); color:#9C27B0; border:1px solid #9C27B0;" 
+                        onclick="recalculateAllFromHistory()">
+                        🔄 คำนวณ XP/Level/Currency ใหม่จากประวัติ
+                    </button>
+                    <button class="btn-s" style="width:100%; margin-bottom:8px; background:rgba(33,150,243,0.2); color:#2196F3; border:1px solid #2196F3;" 
+                        onclick="importQuestsOnly()">
+                        📋 Import เฉพาะเควส (Quests Only)
+                    </button>
+                    <button class="btn-s" style="width:100%; margin-bottom:8px; background:rgba(156,39,176,0.2); color:#9C27B0; border:1px solid #9C27B0;" 
+                        onclick="importHistoryAndQuests()">
+                        📜 Import ประวัติ + เควส (คำนวณใหม่)
+                    </button>
                 </div>
             </div>
         </div>
@@ -5700,22 +5728,32 @@ const SKILL_TREE_CONFIG = (() => {
 
         // 1. อัปเดต Object S หลัก
 let S = {
+    schemaVersion: 4,
     _lastModified: Date.now(),
+    
     // === Character Core ===
-    xp: 0, lvl: 1,
+    totalXp: 0,        // ✅ เพิ่ม: Total XP (ใช้คำนวณ Level)
+    xp: 0, 
+    lvl: 1,
     STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10,
 
     // === Dimensions ===
     artHours: 0, fitHours: 0, artDays: 0,
     artLogs: [], fitLogs: [], incomeLogs: [], diaryLogs: [],
 
-    // === PoE Economy (Patch v4) ===
+    // === PoE Economy ===
     currency: { chaos: 0, exalted: 0, divine: 0 },
     skillPoints: 1,
-    skillTree: { 'origin': true },  // ✅ { nodeId: true } — O(1) lookup
-
+    skillTree: { 'origin': true },
     ascendancyPoints: 0,
     streakDays: 0,
+    
+    // === Stash & Rewards ===
+    stashRedemptions: [],           // ✅ เพิ่ม
+    customRewards: { chaos: [], exalted: [], divine: [] },  // ✅ เพิ่ม
+    perfectDays: [],                // ✅ เพิ่ม
+
+    // === Atlas ===
     atlasProgress: {},
     atlasEditMode: false,
     atlasNodes: [
@@ -5724,27 +5762,53 @@ let S = {
         { id: 'atlas3', name: 'เรียนทฤษฎีดนตรี', requiredXP: 300, branch: 'mind', completed: false },
         { id: 'atlas4', name: 'สร้าง Content 30 วัน', requiredXP: 1500, branch: 'art', completed: false }
     ],
-    weeklyMedallions: 0,
-    weeklyCompletion: {},
-    monthlyTrials: 0,
-    trialCompletion: {},
     atlasBossDefeated: false,
+
+    // === Quests ===
+    weeklyQuests: [],   // ✅ เพิ่ม (ใช้ร่วมกับ WEEKLY_QUESTS)
+    monthlyQuests: [],  // ✅ เพิ่ม (ใช้ร่วมกับ MONTHLY_QUESTS)
+    
     dailyQuests: [
         {
             id: 'dq1',
-            main: { text: 'ฝึกวาดอนาโตมี่สีน้ำมัน', xp: 50, done: false },
+            main: { 
+                text: 'ฝึกวาดอนาโตมี่สีน้ำมัน', 
+                xp: 50,
+                rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }  // ✅ ย้าย rewards เข้า main
+            },
             subQuests: [
-                { text: 'Sketch 15 นาที', xp: 15, done: false },
-                { text: 'ศึกษา Reference', xp: 10, done: false }
-            ],
-            rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }
+                { text: 'Sketch 15 นาที', xp: 15 },
+                { text: 'ศึกษา Reference', xp: 10 }
+            ]
+        },
+        // ✅ เพิ่ม Default Quest ที่ 2 (ให้มี 2 ตัวเหมือน DEFAULT_DAILY_QUESTS)
+        {
+            id: 'dq2',
+            main: {
+                text: 'ฝึกร้องเพลง/วอร์มเสียง',
+                xp: 50,
+                rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }
+            },
+            subQuests: [
+                { text: 'Vocal Warm-up 10 นาที', xp: 10 },
+                { text: 'ฝึกเทคนิคการร้อง', xp: 15 }
+            ]
         }
     ],
     editMode: false,
 
+    // === Weekly & Monthly Completion ===
+    weeklyMedallions: 0,
+    weeklyCompletion: {},
+    monthlyTrials: 0,
+    trialCompletion: {},
+
     // === Legacy Fields ===
-    history: {}, followers: {}, lastFitDate: null,
-    goalIncome: 15000, goalJobs: 6,
+    history: {}, 
+    followers: {}, 
+    lastFitDate: null,
+    goalIncome: 15000, 
+    goalJobs: 6,
     savingGoals: [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }],
     vaultItems: [],
     socialChannels: [
@@ -5798,7 +5862,20 @@ function migrateData(oldS) {
                     }
                 ];
             }
-            return quests;
+            // ✅ เพิ่ม: ตรวจสอบโครงสร้าง dailyQuests ให้ถูกต้อง
+            return quests.map(q => {
+                if (!q.main) {
+                    q.main = { text: 'Map Boss', xp: 50, rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 } };
+                }
+                if (!q.main.rewards) {
+                    q.main.rewards = { chaos: [5, 15], exalted: 0.2, divine: 0.01 };
+                }
+                if (!q.subQuests) q.subQuests = [];
+                if (!q.rewards) {
+                    q.rewards = { chaos: [5, 15], exalted: 0.2, divine: 0.01 };
+                }
+                return q;
+            });
         })(),
         weeklyQuests: getArr('weeklyQuests', []),
         monthlyQuests: getArr('monthlyQuests', []),
@@ -5806,10 +5883,9 @@ function migrateData(oldS) {
         // === Stash & Rewards ===
         stashRedemptions: getArr('stashRedemptions', []),
         perfectDays: (() => {
-    const days = getArr('perfectDays', []);
-    // ✅ ตรวจสอบว่าเป็น array ของ string dates
-    return days.filter(d => typeof d === 'string' && d.match(/^\d{4}-\d{2}-\d{2}$/));
-})(),
+            const days = getArr('perfectDays', []);
+            return days.filter(d => typeof d === 'string' && d.match(/^\d{4}-\d{2}-\d{2}$/));
+        })(),
         customRewards: getObj('customRewards', { chaos: [], exalted: [], divine: [] }),
 
         // === PoE Economy ===
@@ -5819,7 +5895,11 @@ function migrateData(oldS) {
             divine: oldS?.currency?.divine ?? oldS?.orbs?.divine ?? 0
         },
         skillTree: getObj('skillTree', {}),
-        skillPoints: (get('skillPoints', 0) ?? 0) + (get('sp', 0) ?? 0),  // ✅ รวม sp เก่าเข้า skillPoints
+        skillPoints: (() => {
+            // ✅ รวม sp เก่าเข้า skillPoints และป้องกันค่าติดลบ
+            const sp = (get('skillPoints', 0) ?? 0) + (get('sp', 0) ?? 0);
+            return Math.max(0, sp);
+        })(),
         ascendancyPoints: get('ascendancyPoints', 0),
         streakDays: get('streakDays', 0),
 
@@ -5828,21 +5908,31 @@ function migrateData(oldS) {
         atlasBossDefeated: get('atlasBossDefeated', false),
         atlasEditMode: get('atlasEditMode', false),
         atlasNodes: (() => {
-    const nodes = getArr('atlasNodes', []);
-    // ✅ ตรวจสอบว่าแต่ละ node มี field ครบ
-    return nodes.map(node => ({
-        id: node?.id ?? `atlas_${Date.now()}`,
-        name: node?.name ?? 'Unknown Goal',
-        requiredXP: node?.requiredXP ?? 100,
-        branch: node?.branch ?? 'art',
-        completed: node?.completed ?? false,
-        currentXP: node?.currentXP ?? 0
-    }));
-})(),
+            const nodes = getArr('atlasNodes', []);
+            if (nodes.length === 0) {
+                // ✅ ค่าเริ่มต้นถ้าไม่มี Atlas Nodes
+                return [
+                    { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false, currentXP: 0 },
+                    { id: 'atlas2', name: 'ร้องเพลง Cover 10 เพลง', requiredXP: 500, branch: 'body', completed: false, currentXP: 0 },
+                    { id: 'atlas3', name: 'เรียนทฤษฎีดนตรี', requiredXP: 300, branch: 'mind', completed: false, currentXP: 0 },
+                    { id: 'atlas4', name: 'สร้าง Content 30 วัน', requiredXP: 1500, branch: 'art', completed: false, currentXP: 0 }
+                ];
+            }
+            return nodes.map(node => ({
+                id: node?.id ?? `atlas_${Date.now()}`,
+                name: node?.name ?? 'Unknown Goal',
+                requiredXP: node?.requiredXP ?? 100,
+                branch: node?.branch ?? 'art',
+                completed: node?.completed ?? false,
+                currentXP: node?.currentXP ?? 0
+            }));
+        })(),
 
         // === Weekly & Monthly ===
         weeklyMedallions: get('weeklyMedallions', 0),
         weeklyCompletion: getObj('weeklyCompletion', {}),
+        monthlyTrials: get('monthlyTrials', 0),
+        trialCompletion: getObj('trialCompletion', {}),
 
         // === UI State ===
         selectedDateKey: get('selectedDateKey', null),
@@ -5850,17 +5940,29 @@ function migrateData(oldS) {
         currentMonth: get('currentMonth', new Date().getMonth()),
         editMode: get('editMode', false),
 
-        // === History (with perfectDayBonus) ===
-        history: Object.fromEntries(
-            Object.entries(oldS?.history ?? {}).map(([key, val]) => [
-                key,
-                {
-                    ...val,
+        // === History ===
+        history: (() => {
+            const oldHistory = oldS?.history ?? {};
+            const newHistory = {};
+            Object.keys(oldHistory).forEach(key => {
+                const val = oldHistory[key];
+                newHistory[key] = {
+                    daily: val?.daily ?? [],
+                    weekly: val?.weekly ?? [],
+                    monthly: val?.monthly ?? [],
+                    rest: val?.rest ?? [],
+                    done: val?.done ?? false,
+                    artHours: val?.artHours ?? 0,
+                    fitHours: val?.fitHours ?? 0,
                     rewards: val?.rewards ?? {},
-                    perfectDayBonus: val?.perfectDayBonus ?? {}
-                }
-            ])
-        ),
+                    perfectDayBonus: val?.perfectDayBonus ?? {},
+                    collapsedQuests: val?.collapsedQuests ?? [],
+                    xpEarned: val?.xpEarned ?? 0,
+                    loggedHour: val?.loggedHour ?? false
+                };
+            });
+            return newHistory;
+        })(),
 
         // === Legacy ===
         followers: getObj('followers', {}),
@@ -5880,37 +5982,102 @@ function migrateData(oldS) {
             { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
         ])
     };
-     if (newData.skillTree && typeof newData.skillTree === 'object') {
-        // ✅ ถ้ามี SKILL_TREE_CONFIG ให้ใช้ มิฉะนั้นข้าม
-        if (typeof SKILL_TREE_CONFIG !== 'undefined' && SKILL_TREE_CONFIG.nodes) {
-            let refundedSP = 0;
-            Object.keys(newData.skillTree).forEach(nodeId => {
-                if (!SKILL_TREE_CONFIG.nodes[nodeId]) {
-                    refundedSP += 1; // default cost
-                    delete newData.skillTree[nodeId];
-                    console.warn(`[Migration] Removed unknown node: ${nodeId}`);
-                }
-            });
-            if (refundedSP > 0) {
-                newData.skillPoints = (newData.skillPoints ?? 0) + refundedSP;
-                console.warn(`[Migration] Refunded ${refundedSP} SP for removed nodes`);
-           }
-        }
-    }
+
+    // ==========================================
+    // ✅ POST-PROCESSING: แก้ไขข้อมูลผิดปกติ
+    // ==========================================
+
+    // ✅ 1. แก้ไข XP/Level ที่ผิดปกติ
+    if (newData.lvl > 100) newData.lvl = 1;
+    if (newData.totalXp < 0) newData.totalXp = 0;
+    if (newData.xp < 0) newData.xp = 0;
+    if (newData.skillPoints < 0) newData.skillPoints = 0;
+
+    // ✅ 2. ตรวจสอบว่า skillTree มี origin เสมอ
     if (!newData.skillTree || typeof newData.skillTree !== 'object') {
         newData.skillTree = {};
     }
-    
-    // Force unlock origin สำหรับทุกคน
     if (!newData.skillTree['origin']) {
         newData.skillTree['origin'] = true;
         console.log('✅ Origin unlocked in migration');
     }
+
+    // ✅ 3. ลบ node ที่ไม่มีใน SKILL_TREE_CONFIG
+    if (typeof SKILL_TREE_CONFIG !== 'undefined' && SKILL_TREE_CONFIG.nodes) {
+        let refundedSP = 0;
+        Object.keys(newData.skillTree).forEach(nodeId => {
+            if (nodeId !== 'origin' && !SKILL_TREE_CONFIG.nodes[nodeId]) {
+                refundedSP += 1;
+                delete newData.skillTree[nodeId];
+                console.warn(`[Migration] Removed unknown node: ${nodeId}`);
+            }
+        });
+        if (refundedSP > 0) {
+            newData.skillPoints = (newData.skillPoints ?? 0) + refundedSP;
+            console.warn(`[Migration] Refunded ${refundedSP} SP for removed nodes`);
+        }
+    }
+
+    // ✅ 4. ตรวจสอบ currency
+    if (!newData.currency) {
+        newData.currency = { chaos: 0, exalted: 0, divine: 0 };
+    }
+    if (newData.currency.chaos < 0) newData.currency.chaos = 0;
+    if (newData.currency.exalted < 0) newData.currency.exalted = 0;
+    if (newData.currency.divine < 0) newData.currency.divine = 0;
+
+    // ✅ 5. ตรวจสอบ history
+    if (!newData.history || typeof newData.history !== 'object') {
+        newData.history = {};
+    }
+
+    // ✅ 6. ตรวจสอบ weeklyCompletion
+    if (!newData.weeklyCompletion || typeof newData.weeklyCompletion !== 'object') {
+        newData.weeklyCompletion = {};
+    }
+
+    // ✅ 7. ตรวจสอบ trialCompletion
+    if (!newData.trialCompletion || typeof newData.trialCompletion !== 'object') {
+        newData.trialCompletion = {};
+    }
+
+    // ✅ 8. ตรวจสอบ atlasProgress
+    if (!newData.atlasProgress || typeof newData.atlasProgress !== 'object') {
+        newData.atlasProgress = {};
+    }
+
+    // ✅ 9. ตรวจสอบ atlasNodes
+    if (!newData.atlasNodes || !Array.isArray(newData.atlasNodes)) {
+        newData.atlasNodes = [
+            { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false, currentXP: 0 },
+            { id: 'atlas2', name: 'ร้องเพลง Cover 10 เพลง', requiredXP: 500, branch: 'body', completed: false, currentXP: 0 },
+            { id: 'atlas3', name: 'เรียนทฤษฎีดนตรี', requiredXP: 300, branch: 'mind', completed: false, currentXP: 0 },
+            { id: 'atlas4', name: 'สร้าง Content 30 วัน', requiredXP: 1500, branch: 'art', completed: false, currentXP: 0 }
+        ];
+    }
+
+    // ✅ 10. ตรวจสอบ perfectDays
+    if (!newData.perfectDays || !Array.isArray(newData.perfectDays)) {
+        newData.perfectDays = [];
+    }
+
+    // ✅ 11. ตรวจสอบ stashRedemptions
+    if (!newData.stashRedemptions || !Array.isArray(newData.stashRedemptions)) {
+        newData.stashRedemptions = [];
+    }
+
+    // ✅ 12. ตรวจสอบ customRewards
+    if (!newData.customRewards || typeof newData.customRewards !== 'object') {
+        newData.customRewards = { chaos: [], exalted: [], divine: [] };
+    }
+
     newData.schemaVersion = 4;
 
     console.log(`[Migration] Completed - Schema v${schemaVersion} → v4`);
     console.log(`[Migration] Currency:`, newData.currency);
     console.log(`[Migration] Skill Points:`, newData.skillPoints);
+    console.log(`[Migration] Level:`, newData.lvl);
+    console.log(`[Migration] Total XP:`, newData.totalXp);
 
     newData._version = oldS?._version ?? 0;
     newData._lastModified = oldS?._lastModified ?? Date.now();
@@ -6860,12 +7027,6 @@ function addXP(amount) {
     // ✅ คำนวณ Level ใหม่
     recalculateLevel();
     
-    // ✅ อัปเดต UI
-    updateXpBar();
-    updateNodes();
-    renderStats();
-    renderSkillTree();
-    
     // ✅ บันทึกลง history (ถ้ามี selected date)
     const k = selectedDateKey || getTodayKey();
     if (S.history[k]) {
@@ -6880,28 +7041,6 @@ function calculateLevelUpRewards(level) {
         sp: 1,  // ทุก Level ได้ 1 SP
         skillPoints: (level % 2 === 0) ? 1 : 0  // ทุก 2 Level ได้ 1 Skill Point
     };
-}
-
-function showLevelUpAnimation(newLevel, rewards) {
-    // ✅ ใช้ template string แทน innerHTML ซ้อน
-    const notification = document.createElement('div');
-    notification.className = 'level-up-notification';
-    notification.innerHTML = `
-        <div class="level-up-title">⚔️ LEVEL UP! ⚔️</div>
-        <div class="level-up-details">
-            <div class="reward">🎯 Level ${newLevel}</div>
-            <div class="reward">+${rewards.skillPoints} Skill Points</div>
-        </div>
-    `;
-    document.body.appendChild(notification);
-
-    // ✅ ใช้ requestAnimationFrame แทน setTimeout สำหรับ animation
-    requestAnimationFrame(() => {
-        setTimeout(() => {
-            notification.style.animation = 'levelUpPop 0.3s ease-in reverse forwards';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    });
 }
 
 // ===== XP Bar =====
@@ -7818,36 +7957,91 @@ function toggleQuest(type, id) {
 
 function toggleQuestType(type,id){ 
     const k=selectedDateKey||getTodayKey(); 
-    if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false }; 
+    if(!S.history[k]) S.history[k]={ daily:[], weekly:[], monthly:[], rest:[], done:false, rewards: {} }; 
     if(!S.history[k].weekly) S.history[k].weekly=[]; 
     if(!S.history[k].monthly) S.history[k].monthly=[]; 
-    let arr=type==='weekly'?S.history[k].weekly:S.history[k].monthly; 
-    const db=type==='weekly'?WEEKLY_QUESTS:MONTHLY_QUESTS; 
-    const q=db.find(x=>x.id===id); 
-    if(!q) return; 
-    const idx=arr.indexOf(id); 
-    if(idx>-1){ 
-        arr.splice(idx,1); 
-        S.xp=Math.max(0,S.xp-q.xp); 
-        updateXpBar(); 
-    } else { 
-        arr.push(id); 
-        S[q.stat]+=2; 
-        addXP(q.xp ?? 10);
+    let arr = type === 'weekly' ? S.history[k].weekly : S.history[k].monthly;
+    const db = type === 'weekly' ? WEEKLY_QUESTS : MONTHLY_QUESTS;
+    const q = db.find(x => x.id === id);
+    if (!q) return;
+    const idx = arr.indexOf(id);
+    const questId = `${type}_${id}`;
+    
+    if (idx > -1) {
+        // ❌ ยกเลิกเควส - หัก XP และ Stat คืน
+        arr.splice(idx, 1);
+        // ✅ หัก XP คืน
+        const xpAmount = q.xp || 10;
+         S.totalXp = Math.max(0, (S.totalXp ?? 0) - xpAmount);
+        S.xp = Math.max(0, (S.xp ?? 0) - xpAmount);
+        // ✅ หัก Stat คืน
+        if (q.stat && S[q.stat] !== undefined) {
+            S[q.stat] = Math.max(10, (S[q.stat] ?? 10) - 2);
+        }
+        
+        // ✅ หัก Currency คืน
+        if (S.history[k].rewards && S.history[k].rewards[questId]) {
+            const reward = S.history[k].rewards[questId];
+            if (S.currency) {
+                S.currency.chaos = Math.max(0, (S.currency.chaos ?? 0) - (reward.chaos || 0));
+                S.currency.exalted = Math.max(0, (S.currency.exalted ?? 0) - (reward.exalted || 0));
+                S.currency.divine = Math.max(0, (S.currency.divine ?? 0) - (reward.divine || 0));
+            }
+            delete S.history[k].rewards[questId];
+        }
+        recalculateLevel();
+        showToast(`❌ ยกเลิก ${type === 'weekly' ? 'Expedition' : 'Ascendancy'} Quest (-${xpAmount} XP)`);
+        
+    } else {
+        // ✅ ทำเควสสำเร็จ
+        arr.push(id);
+        
+        const xpAmount = q.xp || 10;
+        const currencyDrop = calculateCurrencyDrop(type === 'weekly' ? 'weekly' : 'monthly');
+        
+        // ✅ เพิ่ม XP
+        S.totalXp = (S.totalXp ?? 0) + xpAmount;
+        S.xp = (S.xp ?? 0) + xpAmount;
+        
+        // ✅ เพิ่ม Stat
         if (q.stat && S[q.stat] !== undefined) {
             S[q.stat] = (S[q.stat] ?? 10) + 2;
         }
-        showToast(`Great Quest Complete! ได้รับ + ${ q.xp } XP และโบนัสสถานะ ${ q.stat } + 2`); 
-        } 
-    if (type === 'weekly') {
-        renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
-        checkWeeklyCompletion();  // ✅ เช็ค reward สัปดาห์
-    } else {
-        renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+        
+        // ✅ เพิ่ม Currency
+        if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+        S.currency.chaos = (S.currency.chaos ?? 0) + (currencyDrop.chaos || 0);
+        S.currency.exalted = (S.currency.exalted ?? 0) + (currencyDrop.exalted || 0);
+        S.currency.divine = (S.currency.divine ?? 0) + (currencyDrop.divine || 0);
+        
+        // ✅ บันทึกลง rewards
+        if (!S.history[k].rewards) S.history[k].rewards = {};
+        S.history[k].rewards[questId] = {
+            xp: xpAmount,
+            chaos: currencyDrop.chaos || 0,
+            exalted: currencyDrop.exalted || 0,
+            divine: currencyDrop.divine || 0
+        };
+        
+        // ✅ **สำคัญ**: เรียก recalculateLevel เพื่ออัปเดต Level
+        recalculateLevel();
+        
+        showToast(`✅ ${type === 'weekly' ? 'Expedition' : 'Ascendancy'} Quest สำเร็จ! +${xpAmount} XP`);
     }
     
-    renderStats();
+    // ✅ อัปเดต UI
     save();
+    renderStats();
+    updateXpBar();
+    updateCurrencyDisplay();
+    
+    if (type === 'weekly') {
+        renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+        checkWeeklyCompletion();
+    } else {
+        renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+        updateTrialRequirementsDisplay();
+    }
 }
 
 function toggleRest(id){ 
@@ -9315,12 +9509,15 @@ async function load() {
     try {
         const d = await dbLoad();
         if (d) {
-            Object.keys(d).forEach(k => { S[k] = d[k]; });
+            // ✅ ใช้ migrateData ก่อนนำเข้า
+            const migrated = migrateData(d);
+            Object.keys(migrated).forEach(k => { S[k] = migrated[k]; });
         } else {
             const localD = localStorage.getItem('dol_quest_log_v3');
             if (localD) {
                 const p = JSON.parse(localD);
-                Object.keys(p).forEach(k => { S[k] = p[k]; });
+                const migrated = migrateData(p);
+                Object.keys(migrated).forEach(k => { S[k] = migrated[k]; });
             }
         }
     } catch (e) {
@@ -9328,7 +9525,8 @@ async function load() {
         const localD = localStorage.getItem('dol_quest_log_v3');
         if (localD) {
             const p = JSON.parse(localD);
-            Object.keys(p).forEach(k => { S[k] = p[k]; });
+            const migrated = migrateData(p);
+            Object.keys(migrated).forEach(k => { S[k] = migrated[k]; });
         }
     }
     
@@ -9517,6 +9715,675 @@ async function manualLoad() {
         statusDiv.textContent = 'โหลดล้มเหลว';
         showToast('❌ โหลดจาก Cloud ล้มเหลว');
     }
+}
+// ==========================================
+// IMPORT WITH MERGE - เลือกข้อมูลที่ต้องการ
+// ==========================================
+
+// ==========================================
+// IMPORT WITH MERGE - โหลดทุกอย่างตามที่ควรจะเป็น
+// ==========================================
+
+function importWithMerge() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const importedData = JSON.parse(event.target.result);
+                
+                if (!confirm('📥 นำเข้าข้อมูลทั้งหมด?\n\n' +
+                             '✅ เควสทั้งหมด (Daily, Weekly, Monthly)\n' +
+                             '✅ History (ประวัติการทำเควส, XP, Currency)\n' +
+                             '✅ Logs (Art, Fit, Diary, Income)\n' +
+                             '✅ Vault Items, Saving Goals\n' +
+                             '✅ Atlas, Weekly/Monthly Completion\n' +
+                             '✅ Stats, Skill Points, Level\n' +
+                             '⚠️ ข้อมูลปัจจุบันจะถูกแทนที่ด้วยข้อมูลในไฟล์')) {
+                    return;
+                }
+                
+                // ✅ ฟิลด์ทั้งหมดที่ต้องการนำเข้า
+                const fieldsToImport = [
+                    // === Core ===
+                    'totalXp', 'xp', 'lvl',
+                    'STR', 'AGI', 'INT', 'VIT', 'CRE',
+                    'skillPoints', 'skillTree',
+                    'ascendancyPoints', 'streakDays',
+                    
+                    // === Currency ===
+                    'currency',
+                    
+                    // === Dimensions ===
+                    'artHours', 'fitHours', 'artDays',
+                    'artLogs', 'fitLogs',
+                    
+                    // === Quests ===
+                    'dailyQuests', 'weeklyQuests', 'monthlyQuests',
+                    
+                    // === History ===
+                    'history', 'perfectDays',
+                    
+                    // === Stash ===
+                    'stashRedemptions', 'customRewards',
+                    
+                    // === Atlas ===
+                    'atlasNodes', 'atlasProgress', 'atlasBossDefeated',
+                    'atlasEditMode',
+                    
+                    // === Weekly & Monthly ===
+                    'weeklyMedallions', 'weeklyCompletion',
+                    'monthlyTrials', 'trialCompletion',
+                    
+                    // === Vault & Goals ===
+                    'vaultItems', 'savingGoals',
+                    'socialChannels',
+                    'goalIncome', 'goalJobs',
+                    
+                    // === Logs ===
+                    'incomeLogs', 'diaryLogs',
+                    
+                    // === Legacy ===
+                    'lastFitDate',
+                    
+                    // === UI State ===
+                    'editMode', 'selectedDateKey',
+                    'currentYear', 'currentMonth'
+                ];
+                
+                // ✅ นำเข้าทุกฟิลด์
+                let importedCount = 0;
+                fieldsToImport.forEach(field => {
+                    if (importedData[field] !== undefined) {
+                        S[field] = importedData[field];
+                        importedCount++;
+                        console.log(`✅ Imported: ${field}`);
+                    }
+                });
+                
+                // ✅ ถ้ามี sp (ฟิลด์เก่า) ให้รวมเข้ากับ skillPoints
+                if (importedData.sp !== undefined && importedData.sp > 0) {
+                    S.skillPoints = (S.skillPoints || 0) + importedData.sp;
+                    console.log(`✅ Merged legacy sp: +${importedData.sp}`);
+                }
+                
+                // ✅ ตรวจสอบและลบฟิลด์เก่าที่ไม่ต้องการ (แต่ไม่ลบของใหม่)
+                const oldFieldsToRemove = [
+                    'sp', 'stats', 'daily', 'weekly', 'monthly',
+                    'dreams', 'dreamCategories', 'artLog', 'fitLog',
+                    'incomeLog', 'diaryLog', 'counts', 'streak',
+                    'restCardio', 'restWeight', 'pendingSP', 'un',
+                    'lastActive', 'status', 'message', 'dailyByDate'
+                ];
+                
+                oldFieldsToRemove.forEach(field => {
+                    if (S[field] !== undefined && !fieldsToImport.includes(field)) {
+                        delete S[field];
+                        console.log(`🗑️ Removed old field: ${field}`);
+                    }
+                });
+                
+                // ✅ อัปเดตเวอร์ชัน
+                S.schemaVersion = 4;
+                S.appVersion = APP_VERSION;
+                S._lastModified = Date.now();
+                
+                // ✅ บันทึกและรีโหลด
+                save();
+                showToast(`📥 นำเข้าสำเร็จ! ${importedCount} ฟิลด์`);
+                location.reload();
+                
+            } catch (err) {
+                alert('❌ ไฟล์ผิดพลาด หรือรูปแบบ JSON ไม่ถูกต้อง');
+                console.error(err);
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+// ==========================================
+// IMPORT HISTORY & QUESTS - โหลดเฉพาะประวัติและเควส
+// ==========================================
+
+function importHistoryAndQuests() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const importedData = JSON.parse(event.target.result);
+                
+                if (!confirm('📜 นำเข้าประวัติและเควส?\n\n' +
+                             '✅ History (ประวัติการทำเควส, XP, Currency)\n' +
+                             '✅ เควสทั้งหมด (Daily, Weekly, Monthly)\n' +
+                             '✅ Logs (Art, Fit, Diary, Income)\n' +
+                             '✅ Vault Items, Saving Goals\n' +
+                             '✅ Atlas, Weekly/Monthly Completion\n' +
+                             '⚠️ XP, Level, Skill Points จะถูกคำนวณใหม่จาก History\n' +
+                             '⚠️ Stats จะถูกคำนวณใหม่จาก History')) {
+                    return;
+                }
+                
+                // ✅ ฟิลด์ที่ต้องการนำเข้า
+                const fieldsToImport = [
+                    // Quests
+                    'dailyQuests', 'weeklyQuests', 'monthlyQuests',
+                    
+                    // History & Logs
+                    'history', 'perfectDays',
+                    'artLogs', 'fitLogs', 'incomeLogs', 'diaryLogs',
+                    
+                    // Stash
+                    'stashRedemptions', 'customRewards',
+                    
+                    // Atlas
+                    'atlasNodes', 'atlasProgress', 'atlasBossDefeated',
+                    
+                    // Weekly & Monthly
+                    'weeklyCompletion', 'trialCompletion',
+                    'weeklyMedallions', 'monthlyTrials',
+                    
+                    // Vault & Goals
+                    'vaultItems', 'savingGoals',
+                    'socialChannels',
+                    'goalIncome', 'goalJobs',
+                    
+                    // UI State
+                    'editMode', 'selectedDateKey',
+                    'currentYear', 'currentMonth'
+                ];
+                
+                // ✅ นำเข้าฟิลด์
+                let importedCount = 0;
+                fieldsToImport.forEach(field => {
+                    if (importedData[field] !== undefined) {
+                        S[field] = importedData[field];
+                        importedCount++;
+                        console.log(`✅ Imported: ${field}`);
+                    }
+                });
+                
+                // ✅ รีเซ็ตและคำนวณใหม่จาก History
+                S.totalXp = 0;
+                S.xp = 0;
+                S.lvl = 1;
+                S.skillPoints = 1;
+                S.skillTree = { 'origin': true };
+                S.currency = { chaos: 0, exalted: 0, divine: 0 };
+                S.ascendancyPoints = 0;
+                S.streakDays = 0;
+                S.artHours = 0;
+                S.fitHours = 0;
+                S.artDays = 0;
+                S.STR = 10;
+                S.AGI = 10;
+                S.INT = 10;
+                S.VIT = 10;
+                S.CRE = 10;
+                
+                // ✅ คำนวณจาก History
+                recalculateAllFromHistory();
+                
+                // ✅ ลบฟิลด์เก่า
+                const oldFields = [
+                    'sp', 'stats', 'daily', 'weekly', 'monthly',
+                    'dreams', 'dreamCategories', 'artLog', 'fitLog',
+                    'incomeLog', 'diaryLog', 'counts', 'streak',
+                    'restCardio', 'restWeight', 'pendingSP', 'un',
+                    'lastActive', 'status', 'message', 'dailyByDate'
+                ];
+                
+                oldFields.forEach(field => {
+                    if (S[field] !== undefined) {
+                        delete S[field];
+                    }
+                });
+                
+                S.schemaVersion = 4;
+                S.appVersion = APP_VERSION;
+                S._lastModified = Date.now();
+                
+                save();
+                showToast(`📜 นำเข้าประวัติและเควสสำเร็จ!`);
+                location.reload();
+                
+            } catch (err) {
+                alert('❌ ไฟล์ผิดพลาด หรือรูปแบบ JSON ไม่ถูกต้อง');
+                console.error(err);
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+// ==========================================
+// CLEAN IMPORT - กรองข้อมูลอัตโนมัติ
+// ==========================================
+
+// ==========================================
+// CLEAN IMPORT - คำนวณ XP/Currency จากประวัติ
+// ==========================================
+
+// ==========================================
+// CLEAN IMPORT - คำนวณ Stats จาก History
+// ==========================================
+
+// ==========================================
+// CLEAN IMPORT - IMPORT เฉพาะเควสเท่านั้น
+// ==========================================
+
+function cleanImport() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const rawData = JSON.parse(event.target.result);
+                
+                if (!confirm('🧹 นำเข้าเฉพาะเควสที่แก้ไขแล้ว?\n\n' +
+                             '✅ Daily Quests (ที่คุณแก้ไข)\n' +
+                             '✅ Weekly Quests (ที่คุณแก้ไข)\n' +
+                             '✅ Monthly Quests (ที่คุณแก้ไข)\n' +
+                             '❌ ไม่นำเข้า XP, Level, Currency, History\n' +
+                             '❌ ไม่นำเข้า Logs, Vault, Goals\n' +
+                             '❌ ไม่แตะโครงสร้างใหม่ของแอป')) {
+                    return;
+                }
+                
+                // ✅ Import เฉพาะ 3 อย่างนี้เท่านั้น!
+                if (rawData.dailyQuests && Array.isArray(rawData.dailyQuests)) {
+                    S.dailyQuests = rawData.dailyQuests;
+                    console.log('✅ Imported Daily Quests:', S.dailyQuests.length);
+                }
+                
+                if (rawData.weeklyQuests && Array.isArray(rawData.weeklyQuests)) {
+                    S.weeklyQuests = rawData.weeklyQuests;
+                    console.log('✅ Imported Weekly Quests:', S.weeklyQuests.length);
+                }
+                
+                if (rawData.monthlyQuests && Array.isArray(rawData.monthlyQuests)) {
+                    S.monthlyQuests = rawData.monthlyQuests;
+                    console.log('✅ Imported Monthly Quests:', S.monthlyQuests.length);
+                }
+                
+                // ✅ อัปเดตเวอร์ชัน
+                S._lastModified = Date.now();
+                
+                save();
+                showToast(`✅ นำเข้าเควสสำเร็จ!\nDaily: ${S.dailyQuests?.length || 0}, Weekly: ${S.weeklyQuests?.length || 0}, Monthly: ${S.monthlyQuests?.length || 0}`);
+                location.reload();
+                
+            } catch (err) {
+                alert('❌ ไฟล์ผิดพลาด หรือรูปแบบ JSON ไม่ถูกต้อง');
+                console.error(err);
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+// ==========================================
+// IMPORT QUESTS ONLY - นำเข้าเฉพาะเควส
+// ==========================================
+
+function importQuestsOnly() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const rawData = JSON.parse(event.target.result);
+                
+                if (!confirm('📋 นำเข้าเฉพาะรายการเควส?\n\n' +
+                             '✅ Daily Quests (ที่คุณแก้ไข)\n' +
+                             '✅ Weekly Quests (ที่คุณแก้ไข)\n' +
+                             '✅ Monthly Quests (ที่คุณแก้ไข)\n\n' +
+                             '⚠️ ข้อมูลอื่นๆ จะไม่ถูกแตะ\n' +
+                             '⚠️ XP, Level, Currency, History จะยังคงอยู่')) {
+                    return;
+                }
+                
+                let imported = 0;
+                
+                // ✅ Import Daily Quests
+                if (rawData.dailyQuests && Array.isArray(rawData.dailyQuests)) {
+                    S.dailyQuests = rawData.dailyQuests;
+                    imported++;
+                    console.log('✅ Daily Quests imported:', S.dailyQuests.length);
+                }
+                
+                // ✅ Import Weekly Quests
+                if (rawData.weeklyQuests && Array.isArray(rawData.weeklyQuests)) {
+                    S.weeklyQuests = rawData.weeklyQuests;
+                    imported++;
+                    console.log('✅ Weekly Quests imported:', S.weeklyQuests.length);
+                }
+                
+                // ✅ Import Monthly Quests
+                if (rawData.monthlyQuests && Array.isArray(rawData.monthlyQuests)) {
+                    S.monthlyQuests = rawData.monthlyQuests;
+                    imported++;
+                    console.log('✅ Monthly Quests imported:', S.monthlyQuests.length);
+                }
+                
+                if (imported === 0) {
+                    alert('❌ ไม่พบข้อมูลเควสในไฟล์นี้');
+                    return;
+                }
+                
+                S._lastModified = Date.now();
+                save();
+                
+                showToast(`📋 นำเข้าเควสสำเร็จ! (${imported} ประเภท)`);
+                location.reload();
+                
+            } catch (err) {
+                alert('❌ ไฟล์ผิดพลาด หรือรูปแบบ JSON ไม่ถูกต้อง');
+                console.error(err);
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+// ==========================================
+// RECALCULATE ALL FROM HISTORY
+// ==========================================
+
+function recalculateAllFromHistory() {
+    if (!confirm('🔄 คำนวณ XP, Level, Currency ใหม่จากประวัติทั้งหมด?\n\n' +
+                 '✅ จะอ่านข้อมูลจาก History และ Logs\n' +
+                 '✅ จะรีเซ็ต XP/Level/Currency แล้วคำนวณใหม่\n' +
+                 '✅ ข้อมูลเควสและ Vault จะยังคงอยู่')) {
+        return;
+    }
+    
+    // ✅ รีเซ็ตก่อน
+    S.totalXp = 0;
+    S.xp = 0;
+    S.lvl = 1;
+    S.skillPoints = 1;
+    S.skillTree = { 'origin': true };
+    S.currency = { chaos: 0, exalted: 0, divine: 0 };
+    S.ascendancyPoints = 0;
+    S.streakDays = 0;
+    S.artHours = 0;
+    S.fitHours = 0;
+    S.artDays = 0;
+    S.STR = 10;
+    S.AGI = 10;
+    S.INT = 10;
+    S.VIT = 10;
+    S.CRE = 10;
+    
+    // ✅ คำนวณจาก History
+    if (S.history && typeof S.history === 'object') {
+        Object.keys(S.history).forEach(dateKey => {
+            const dayData = S.history[dateKey];
+            if (!dayData) return;
+            
+            // คำนวณจาก rewards
+            if (dayData.rewards && typeof dayData.rewards === 'object') {
+                Object.keys(dayData.rewards).forEach(rewardKey => {
+                    const reward = dayData.rewards[rewardKey];
+                    if (!reward) return;
+                    
+                    if (reward.xp) {
+                        S.totalXp = (S.totalXp || 0) + reward.xp;
+                    }
+                    if (reward.chaos) {
+                        S.currency.chaos = (S.currency.chaos || 0) + reward.chaos;
+                    }
+                    if (reward.exalted) {
+                        S.currency.exalted = (S.currency.exalted || 0) + reward.exalted;
+                    }
+                    if (reward.divine) {
+                        S.currency.divine = (S.currency.divine || 0) + reward.divine;
+                    }
+                });
+            }
+            
+            // Art/Fit Hours
+            if (dayData.artHours) {
+                S.artHours = (S.artHours || 0) + dayData.artHours;
+            }
+            if (dayData.fitHours) {
+                S.fitHours = (S.fitHours || 0) + dayData.fitHours;
+            }
+        });
+    }
+    
+    // ✅ คำนวณจาก Logs
+    if (S.artLogs) {
+        S.artLogs.forEach(log => {
+            if (log.hours || log.val) {
+                S.artHours = (S.artHours || 0) + (log.hours || log.val || 0);
+            }
+            if (log.xpEarned) {
+                S.totalXp = (S.totalXp || 0) + log.xpEarned;
+            }
+            if (log.currency) {
+                S.currency.chaos = (S.currency.chaos || 0) + (log.currency.chaos || 0);
+                S.currency.exalted = (S.currency.exalted || 0) + (log.currency.exalted || 0);
+                S.currency.divine = (S.currency.divine || 0) + (log.currency.divine || 0);
+            }
+        });
+    }
+    
+    if (S.fitLogs) {
+        S.fitLogs.forEach(log => {
+            if (log.hours || log.val) {
+                S.fitHours = (S.fitHours || 0) + (log.hours || log.val || 0);
+            }
+            if (log.xpEarned) {
+                S.totalXp = (S.totalXp || 0) + log.xpEarned;
+            }
+            if (log.currency) {
+                S.currency.chaos = (S.currency.chaos || 0) + (log.currency.chaos || 0);
+                S.currency.exalted = (S.currency.exalted || 0) + (log.currency.exalted || 0);
+                S.currency.divine = (S.currency.divine || 0) + (log.currency.divine || 0);
+            }
+        });
+    }
+    
+    // ✅ คำนวณ Level
+    recalculateLevel();
+    
+    // ✅ Art Days
+    if (S.history) {
+        const artDaysSet = new Set();
+        Object.keys(S.history).forEach(dateKey => {
+            const dayData = S.history[dateKey];
+            if (dayData && dayData.artHours && dayData.artHours > 0) {
+                artDaysSet.add(dateKey);
+            }
+        });
+        S.artDays = artDaysSet.size;
+    }
+    
+    save();
+    showToast(`🔄 คำนวณใหม่สำเร็จ!\nXP: ${S.totalXp}, LV: ${S.lvl}, SP: ${S.skillPoints}`);
+    location.reload();
+}
+// ==========================================
+// CLEAN SAVE - สร้าง Save ใหม่ที่สะอาด
+// ==========================================
+
+function createCleanSave() {
+    // ✅ ดึงเฉพาะข้อมูลที่ต้องการ
+    const cleanData = {
+        // XP/Level - รีเซ็ต
+        totalXp: 0,
+        xp: 0,
+        lvl: 1,
+        skillPoints: 1,
+        skillTree: { 'origin': true },
+        
+        // Stats - ค่าเริ่มต้น
+        STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10,
+        
+        // Currency - รีเซ็ต
+        currency: { chaos: 0, exalted: 0, divine: 0 },
+        ascendancyPoints: 0,
+        streakDays: 0,
+        weeklyMedallions: 0,
+        monthlyTrials: 0,
+        
+        // ✅ ข้อมูลที่อยากเก็บ
+        dailyQuests: S.dailyQuests || [],
+        weeklyQuests: S.weeklyQuests || [],
+        monthlyQuests: S.monthlyQuests || [],
+        vaultItems: S.vaultItems || [],
+        savingGoals: S.savingGoals || [],
+        socialChannels: S.socialChannels || [],
+        artLogs: S.artLogs || [],
+        fitLogs: S.fitLogs || [],
+        diaryLogs: S.diaryLogs || [],
+        history: S.history || {},
+        stashRedemptions: S.stashRedemptions || [],
+        customRewards: S.customRewards || { chaos: [], exalted: [], divine: [] },
+        atlasNodes: S.atlasNodes || [],
+        atlasProgress: S.atlasProgress || {},
+        weeklyCompletion: S.weeklyCompletion || {},
+        trialCompletion: S.trialCompletion || {},
+        perfectDays: S.perfectDays || [],
+        
+        // Version
+        appVersion: APP_VERSION,
+        _version: 0,
+        _lastModified: Date.now()
+    };
+    
+    // ดาวน์โหลดไฟล์
+    const dataStr = JSON.stringify(cleanData, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `clean_save_${getTodayKey()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    showToast('🧹 สร้าง Clean Save เรียบร้อย!');
+}
+// ==========================================
+// REPAIR SAVE - แก้ไขข้อมูลผิดปกติ
+// ==========================================
+
+// ==========================================
+// REPAIR SAVE - แก้ไขข้อมูลผิดปกติ
+// ==========================================
+
+function repairSave() {
+    if (!confirm('⚠️ ต้องการซ่อมแซมข้อมูล?\n\n' +
+                 '✅ จะรีเซ็ต XP, Level, SP\n' +
+                 '✅ จะลบข้อมูลผิดปกติ\n' +
+                 '✅ จะเก็บเควสและ Vault ไว้\n' +
+                 '✅ Settings และ UI State จะถูกเก็บไว้')) {
+        return;
+    }
+    
+    // ✅ เก็บ Settings ก่อน
+    const settingsBackup = {
+        editMode: S.editMode || false,
+        selectedDateKey: S.selectedDateKey || null,
+        currentYear: S.currentYear || new Date().getFullYear(),
+        currentMonth: S.currentMonth || new Date().getMonth(),
+        goalIncome: S.goalIncome || 15000,
+        goalJobs: S.goalJobs || 6,
+        socialChannels: S.socialChannels || [],
+        savingGoals: S.savingGoals || [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }],
+        schemaVersion: S.schemaVersion || 4,
+        appVersion: S.appVersion || APP_VERSION
+    };
+    
+    // ✅ รีเซ็ต XP/Level
+    S.totalXp = 0;
+    S.xp = 0;
+    S.lvl = 1;
+    S.skillPoints = 1;
+    S.skillTree = { 'origin': true };
+    
+    // ✅ รีเซ็ต Stats
+    S.STR = 10;
+    S.AGI = 10;
+    S.INT = 10;
+    S.VIT = 10;
+    S.CRE = 10;
+    
+    // ✅ รีเซ็ต Currency
+    S.currency = { chaos: 0, exalted: 0, divine: 0 };
+    S.ascendancyPoints = 0;
+    S.streakDays = 0;
+    S.artHours = 0;
+    S.fitHours = 0;
+    S.artDays = 0;
+    
+    // ✅ คืน Settings
+    Object.keys(settingsBackup).forEach(key => {
+        S[key] = settingsBackup[key];
+    });
+    
+    // ✅ ลบข้อมูลผิดปกติใน history
+    if (S.history) {
+        Object.keys(S.history).forEach(dateKey => {
+            const h = S.history[dateKey];
+            if (h.perfectDayBonus && typeof h.perfectDayBonus !== 'object') {
+                delete h.perfectDayBonus;
+            }
+            if (!Array.isArray(h.daily)) h.daily = [];
+            if (!Array.isArray(h.weekly)) h.weekly = [];
+            if (!Array.isArray(h.monthly)) h.monthly = [];
+        });
+    }
+    
+    // ✅ ลบฟิลด์เก่า
+    const oldFields = [
+        'sp', 'stats', 'daily', 'weekly', 'monthly',
+        'dreams', 'dreamCategories', 'artLog', 'fitLog',
+        'incomeLog', 'diaryLog', 'counts', 'streak',
+        'restCardio', 'restWeight', 'pendingSP', 'un',
+        'lastActive', 'status', 'message', 'dailyByDate'
+    ];
+    
+    oldFields.forEach(field => {
+        if (S[field] !== undefined) {
+            delete S[field];
+        }
+    });
+    
+    S.schemaVersion = 4;
+    S.appVersion = APP_VERSION;
+    S._lastModified = Date.now();
+    
+    save();
+    location.reload();
+    showToast('🔧 ซ่อมแซมข้อมูลสำเร็จ (Settings ถูกเก็บไว้)!');
 }
 // ==========================================
 // PATCH v4: Currency Helper Functions
@@ -9745,35 +10612,57 @@ function recalculateLevel() {
     }
     
     const currentXpInLevel = currentTotalXp - xpUsed;
-    const skillPointsGained = lvl - oldLvl; // ทุก Level ได้ 1 Skill Point
+    const levelsGained = lvl - oldLvl;
     
     S.lvl = lvl;
     S.xp = currentXpInLevel;
-
+    
+    // ✅ ปรับ Skill Points ตาม Level ที่เปลี่ยน
     if (levelsGained > 0) {
         S.skillPoints = (S.skillPoints ?? 0) + levelsGained;
-        console.log(`🎯 Level ${oldLvl} → ${lvl} | +${levelsGained} Skill Points`);
-    // ✅ แสดง Level Up Notification
+        console.log(`🎯 Level Up! ${oldLvl} → ${lvl} | +${levelsGained} SP`);
+        showToast(`🎉 Level Up! LV ${oldLvl} → ${lvl} | +${levelsGained} SP`);
+        
+        // ✅ เรียก showLevelUpNotification
         showLevelUpNotification(lvl, levelsGained);
-    }
-    // ✅ ถ้า Level ลดลง (หายไป) ให้หัก SP ด้วย
-    if (levelsGained < 0) {
+    } else if (levelsGained < 0) {
         S.skillPoints = Math.max(0, (S.skillPoints ?? 0) + levelsGained);
         showToast(`⚠️ Level ลดลง! LV ${oldLvl} → ${lvl}`);
     }
     
-    if (skillPointsGained > 0) {
-        S.skillPoints = (S.skillPoints ?? 0) + skillPointsGained;
-        console.log(`🎯 Level ${oldLvl} → ${lvl} | +${skillPointsGained} Skill Points`);
-    }
+    // ✅ อัปเดต UI
+    updateXpBar();
+    updateNodes();
+    renderStats();
+    renderSkillTree();
+}
+// ==========================================
+// LEVEL UP NOTIFICATION
+// ==========================================
+
+function showLevelUpNotification(level, spGained) {
+    // ลบ notification เก่าถ้ามี
+    const oldNotif = document.querySelector('.level-up-notification');
+    if (oldNotif) oldNotif.remove();
     
-    if (lvl < oldLvl) {
-        const levelsLost = oldLvl - lvl;
-        S.skillPoints = Math.max(0, (S.skillPoints ?? 0) - levelsLost);
-        showToast(`⚠️ Level ลดลง! LV ${oldLvl} → ${lvl}`);
-    }
+    const notification = document.createElement('div');
+    notification.className = 'level-up-notification';
+    notification.innerHTML = `
+        <div class="level-up-title">⚔️ LEVEL UP! ⚔️</div>
+        <div class="level-up-details">
+            <div class="reward">🎯 Level ${level}</div>
+            <div class="reward">+${spGained} Skill Points</div>
+            <div class="reward">✨ ${S.skillPoints ?? 0} SP Available</div>
+        </div>
+    `;
+    document.body.appendChild(notification);
     
-    console.log(`📊 Recalculate: totalXp=${currentTotalXp}, lvl=${lvl}, xp=${currentXpInLevel}, skillPoints=${S.skillPoints}`);
+    setTimeout(() => {
+        notification.style.animation = 'levelUpPop 0.3s ease-in reverse forwards';
+        setTimeout(() => {
+            if (notification.parentNode) notification.remove();
+        }, 300);
+    }, 3000);
 }
 
 function toggleMainQuest(questId) {
@@ -10995,58 +11884,153 @@ updateHoursDisplay();
 
             // ========== ฟังก์ชันล้างข้อมูลทั้งหมด (Reset) ==========
             async function resetAllData() {
-                if (!confirm('⚠️ คุณแน่ใจหรือไม่? \nข้อมูลทั้งหมด (Quest, XP, Log, Diary) จะถูกลบถาวร!\nแนะนำให้อ Export ไฟล์สำรองก่อน')) {
-                    return;
+    if (!confirm('⚠️ คุณแน่ใจหรือไม่? \nข้อมูลทั้งหมด (Quest, XP, Log, Diary) จะถูกลบถาวร!\nแต่ Settings และ UI State จะถูกเก็บไว้')) {
+        return;
+    }
+    if (!confirm('ยืนยันครั้งสุดท้าย: ลบข้อมูลทั้งหมดจริงๆ ใช่ไหม?')) {
+        return;
+    }
+
+    try {
+        // ✅ เก็บ Settings ก่อนลบ
+        const settingsBackup = {
+            schemaVersion: 4,
+            appVersion: APP_VERSION,
+            editMode: false,
+            selectedDateKey: null,
+            currentYear: new Date().getFullYear(),
+            currentMonth: new Date().getMonth(),
+            goalIncome: S.goalIncome || 15000,
+            goalJobs: S.goalJobs || 6,
+            socialChannels: S.socialChannels || [
+                { id: "tk", name: "TikTok (EATLAEWSHOP)", subs: 0, vids: 0 },
+                { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
+            ],
+            savingGoals: S.savingGoals || [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }]
+        };
+        // 1. ล้าง IndexedDB
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).clear();
+
+        // 2. ล้าง localStorage (เฉพาะข้อมูล ไม่ใช่ settings)
+        localStorage.removeItem('dol_quest_log_v3');
+        localStorage.removeItem('qm_db_daily');
+        localStorage.removeItem('qm_db_weekly');
+        localStorage.removeItem('qm_db_monthly');
+
+        // 3. รีเซ็ตตัวแปร S กลับเป็นค่าเริ่มต้น
+        S = {
+            // === Settings (เก็บจาก backup) ===
+            schemaVersion: settingsBackup.schemaVersion,
+            appVersion: settingsBackup.appVersion,
+            editMode: settingsBackup.editMode,
+            selectedDateKey: settingsBackup.selectedDateKey,
+            currentYear: settingsBackup.currentYear,
+            currentMonth: settingsBackup.currentMonth,
+            goalIncome: settingsBackup.goalIncome,
+            goalJobs: settingsBackup.goalJobs,
+            socialChannels: settingsBackup.socialChannels,
+            savingGoals: settingsBackup.savingGoals,
+            _lastModified: Date.now(),
+            
+            // === Character Core (รีเซ็ต) ===
+            totalXp: 0,
+            xp: 0,
+            lvl: 1,
+            STR: 10,
+            AGI: 10,
+            INT: 10,
+            VIT: 10,
+            CRE: 10,
+
+            // === Dimensions (รีเซ็ต) ===
+            artHours: 0,
+            fitHours: 0,
+            artDays: 0,
+            artLogs: [],
+            fitLogs: [],
+            incomeLogs: [],
+            diaryLogs: [],
+
+            // === PoE Economy (รีเซ็ต) ===
+            currency: { chaos: 0, exalted: 0, divine: 0 },
+            skillPoints: 1,
+            skillTree: { 'origin': true },
+            ascendancyPoints: 0,
+            streakDays: 0,
+            
+            // === Stash (รีเซ็ต) ===
+            stashRedemptions: [],
+            customRewards: { chaos: [], exalted: [], divine: [] },
+            perfectDays: [],
+
+            // === Atlas (รีเซ็ต) ===
+            atlasProgress: {},
+            atlasEditMode: false,
+            atlasNodes: [
+                { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false },
+                { id: 'atlas2', name: 'ร้องเพลง Cover 10 เพลง', requiredXP: 500, branch: 'body', completed: false },
+                { id: 'atlas3', name: 'เรียนทฤษฎีดนตรี', requiredXP: 300, branch: 'mind', completed: false },
+                { id: 'atlas4', name: 'สร้าง Content 30 วัน', requiredXP: 1500, branch: 'art', completed: false }
+            ],
+            atlasBossDefeated: false,
+
+            // === Quests (ค่าเริ่มต้น) ===
+            weeklyQuests: [],
+            monthlyQuests: [],
+            dailyQuests: [
+                {
+                    id: 'dq1',
+                    main: { 
+                        text: 'ฝึกวาดอนาโตมี่สีน้ำมัน', 
+                        xp: 50,
+                        rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }
+                    },
+                    subQuests: [
+                        { text: 'Sketch 15 นาที', xp: 15 },
+                        { text: 'ศึกษา Reference', xp: 10 }
+                    ]
+                },
+                {
+                    id: 'dq2',
+                    main: {
+                        text: 'ฝึกร้องเพลง/วอร์มเสียง',
+                        xp: 50,
+                        rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }
+                    },
+                    subQuests: [
+                        { text: 'Vocal Warm-up 10 นาที', xp: 10 },
+                        { text: 'ฝึกเทคนิคการร้อง', xp: 15 }
+                    ]
                 }
-                if (!confirm('ยืนยันครั้งสุดท้าย: ลบข้อมูลทั้งหมดจริงๆ ใช่ไหม?')) {
-                    return;
-                }
+            ],
 
-                try {
-                    // 1. ล้าง IndexedDB
-                    const db = await openDB();
-                    const tx = db.transaction(STORE_NAME, 'readwrite');
-                    tx.objectStore(STORE_NAME).clear();
+            // === Weekly & Monthly (รีเซ็ต) ===
+            weeklyMedallions: 0,
+            weeklyCompletion: {},
+            monthlyTrials: 0,
+            trialCompletion: {},
 
-                    // 2. ล้าง localStorage
-                    localStorage.removeItem('dol_quest_log_v3');
-                    localStorage.removeItem('qm_db_daily');
-                    localStorage.removeItem('qm_db_weekly');
-                    localStorage.removeItem('qm_db_monthly');
+            // === Legacy (รีเซ็ต) ===
+            history: {},
+            followers: {},
+            lastFitDate: null,
+            vaultItems: []
+        };
 
-                    // 3. รีเซ็ตตัวแปร S กลับเป็นค่าเริ่มต้น (Patch v4)
-                    S = {
-                        xp: 0, lvl: 1,
-                        STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10,
-                        artHours: 0, fitHours: 0, artDays: 0,
-                        artLogs: [], fitLogs: [], incomeLogs: [], diaryLogs: [],
-                        currency: { chaos: 0, exalted: 0, divine: 0 },
-                        skillPoints: 0,
-                        skillTree: {},
-                        ascendancyPoints: 0,
-                        streakDays: 0,
-                        atlasProgress: {},
-                        history: {}, followers: {}, lastFitDate: null,
-                        goalIncome: 15000, goalJobs: 6,
-                        savingGoals: [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }],
-                        vaultItems: [],
-                        socialChannels: [
-                            { id: "tk", name: "TikTok (EATLAEWSHOP)", subs: 0, vids: 0 },
-                            { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
-                        ]
-                    };
-                    lastSyncedDataStr = JSON.stringify(S);
+        lastSyncedDataStr = JSON.stringify(S);
 
-                    // 4. บันทึกค่าเริ่มต้นและรีโหลดหน้าเว็บ
-                    save();
-                    showToast('🗑️ ล้างข้อมูลสำเร็จ กำลังรีโหลดหน้าเว็บ...');
-                    setTimeout(() => { location.reload(); }, 1500);
+        // 4. บันทึกค่าเริ่มต้น
+        save();
+        showToast('🗑️ ล้างข้อมูลสำเร็จ (Settings ถูกเก็บไว้) กำลังรีโหลด...');
+        setTimeout(() => { location.reload(); }, 1500);
 
-                } catch (err) {
-                    console.error("Reset failed:", err);
-                    alert("เกิดข้อผิดพลาดในการล้างข้อมูล");
-                }
-            }
+    } catch (err) {
+        console.error("Reset failed:", err);
+        alert("เกิดข้อผิดพลาดในการล้างข้อมูล");
+    }
+}
             // ========== Service Worker Registration ==========
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

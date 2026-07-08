@@ -8642,16 +8642,30 @@ function switchTab(tabName) {
     }
 
     // 4. ใส่ active ให้ปุ่ม tab ที่คลิก
-    if (event && event.target && event.target.classList.contains('tab')) {
-        event.target.classList.add('active');
+// ✅ ป้องกัน: เช็ก event อย่างปลอดภัย (เพราะอาจถูกเรียกจาก forceRenderTab โดยไม่มี event)
+try {
+    const clickedTab = event?.target;
+    if (clickedTab && clickedTab.classList && clickedTab.classList.contains('tab')) {
+        clickedTab.classList.add('active');
     } else {
+        // ถ้าไม่มี event หรือ target ไม่ใช่ tab → หาจากชื่อ tabName
         const tabs = document.querySelectorAll('.tab');
         tabs.forEach(tab => {
-            if (tab.textContent && tab.textContent.toLowerCase().includes(tabName)) {
+            if (tab?.textContent?.toLowerCase()?.includes(tabName)) {
                 tab.classList.add('active');
             }
         });
     }
+} catch (e) {
+    // ✅ Fallback: ถ้า event มีปัญหา → หาจากชื่อ tabName
+    console.warn('⚠️ Event handling failed, using fallback');
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        if (tab?.textContent?.toLowerCase()?.includes(tabName)) {
+            tab.classList.add('active');
+        }
+    });
+}
     // ✅ LAZY LOAD: Render เฉพาะ tab ที่ยังไม่เคย render
     const shouldRender = !tabRendered[tabName];
     
@@ -8686,6 +8700,12 @@ function switchTab(tabName) {
 // ✅ ฟังก์ชัน Force Re-render (สำหรับตอน Load จาก Cloud)
 function forceRenderTab(tabName) {
     console.log(`🔄 Force rendering ${tabName} tab...`);
+
+    // ✅ ป้องกัน: เช็กว่า tabRendered มีอยู่ไหม
+    if (typeof tabRendered === 'undefined' || !tabRendered) {
+        console.warn('⚠️ tabRendered not defined, skipping force render');
+        return;
+    }
      // ✅ ตรวจสอบว่า tabName ถูกต้องไหม
     if (!tabName || !(tabName in tabRendered)) {
         console.warn(`⚠️ Invalid tab name: ${tabName}`);
@@ -8693,10 +8713,15 @@ function forceRenderTab(tabName) {
     }
     tabRendered[tabName] = false; // Reset flag
     
-    // ถ้า tab นี้กำลังเปิดอยู่ → render ทันที
+    // ✅ ป้องกัน: เช็กว่า element มีอยู่จริงไหม
     const selectedTab = document.getElementById(`${tabName}-tab`);
     if (selectedTab && selectedTab.classList.contains('active')) {
-        switchTab(tabName);
+        // ✅ สำคัญ: เรียก switchTab โดยไม่พึ่ง event
+        try {
+            switchTab(tabName);
+        } catch (err) {
+            console.error(`[ForceRender] Error rendering ${tabName}:`, err);
+        }
     }
 }
 
@@ -11393,9 +11418,16 @@ function backgroundCloudRefresh() {
                         forceRenderAllTabs();
                     } catch (err) {
                         console.error('[ForceRender] Error:', err);
+                        // ✅ Fallback: อัปเดตเฉพาะส่วนที่จำเป็น
+                        try {
+                            if (typeof updateDimensionDisplay === 'function') updateDimensionDisplay();
+                            if (typeof renderDailyTab === 'function') renderDailyTab();
+                            if (typeof updateXpBar === 'function') updateXpBar();
+                        } catch (fallbackErr) {
+                            console.error('[BackgroundRefresh] Fallback render also failed:', fallbackErr);
+                        }
                     }
                 }
-                
                 if (typeof updateDimensionDisplay === 'function') {
                     updateDimensionDisplay();
                 }

@@ -8624,6 +8624,12 @@ function forceRenderTab(tabName) {
 // ✅ ฟังก์ชัน Force Re-render ทุก tab (ใช้หลัง manualLoad)
 function forceRenderAllTabs() {
     console.log('🔄 Force rendering all tabs...');
+    // ✅ ป้องกัน: เช็กว่า tabRendered มีอยู่ไหม
+    if (!tabRendered) {
+        console.warn('⚠️ tabRendered not defined, skipping force render');
+        return;
+    }
+
     // ✅ หา tab ที่ active อยู่จริงๆ
     const activeTabContent = document.querySelector('.tab-content.active');
     if (!activeTabContent) {
@@ -8643,9 +8649,6 @@ function forceRenderAllTabs() {
         console.warn(`⚠️ Tab '${tabName}' not in tabRendered object`);
         return;
     }
-    Object.keys(tabRendered).forEach(key => tabRendered[key] = false);
-    
-    
         forceRenderTab(tabName);
     }
 
@@ -11182,9 +11185,13 @@ async function autoLoadFromCloud() {
             await dbSave(S);
             localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
             
-            // Re-render UI
+            // ✅ แก้ไข: เช็กว่า forceRenderAllTabs มีอยู่ไหม
             if (typeof forceRenderAllTabs === 'function') {
-                forceRenderAllTabs();
+                try {
+                    forceRenderAllTabs();
+                } catch (err) {
+                    console.error('[ForceRender] Error:', err);
+                }
             }
             
             // ✅ เรียก render dimension hours

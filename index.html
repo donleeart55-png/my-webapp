@@ -6525,7 +6525,7 @@ async function dbSave(data) {
         const db = await openDB();
         const tx = db.transaction(STORE_NAME, 'readwrite');
         const store = tx.objectStore(STORE_NAME);
-
+        
         // 1. เช็กเวอร์ชันใน DB ก่อน
         const currentRecord = await new Promise((resolve, reject) => {
             const req = store.get('mainState');
@@ -6533,49 +6533,52 @@ async function dbSave(data) {
             req.onerror = (e) => reject(e.target.error);
         });
 
-        // 2. ถ้าข้อมูลใน DB ใหม่กว่า (มีแท็บอื่นบันทึกทับไปแล้ว) -> ยกเลิกการบันทึก
-        if (currentRecord && currentRecord.version > (data._version ?? 0)) {
-            console.warn('⚠️ Race Condition Detected! ข้อมูลใน DB ใหม่กว่า ยกเลิกการบันทึก');
-            if (typeof showToast === 'function') showToast('⚠️ ข้อมูลถูกแก้ไขจากที่อื่นแล้ว กรุณากด Load ใหม่');
-            return Promise.resolve(); // ออกแบบนุ่มนวล ไม่ให้แอป crash
-        }
-        // ✅ แก้ไข: ดึงข้อมูลใหม่จาก DB มาใช้แทน
-            if (typeof S !== 'undefined' && currentRecord.data) {
-                Object.keys(currentRecord.data).forEach(k => {
-                    S[k] = currentRecord.data[k];
-                });
-                S._version = currentRecord.version;
-                console.log('✅ Updated S with newer data from DB');
-                // แสดง Toast แจ้งเตือน
-                if (typeof showToast === 'function') {
-                    showToast('🔄 ข้อมูลถูกอัปเดตจากแหล่งอื่น');
-                }
-            }
+        // ✅ ปรับปรุง: ถ้า data._version === undefined ให้ใช้ค่าจาก DB
+        const dataVersion = data._version ?? (currentRecord?.version ?? 0);
         
+        // 2. ถ้าข้อมูลใน DB ใหม่กว่าจริงๆ (ไม่ใช่แค่ _version ไม่ตรง)
+        if (currentRecord && currentRecord.version > dataVersion) {
+            // ✅ เช็ก timestamp เพื่อยืนยันว่า DB ใหม่กว่าจริงๆ
+            const dbTime = currentRecord.timestamp ?? 0;
+            const dataTime = data._lastModified ?? 0;
+            
+            if (dbTime > dataTime) {
+                console.warn('⚠️ Race Condition Detected! DB is truly newer, updating memory...');
+                
+                // ดึงข้อมูลใหม่จาก DB มาใช้
+                if (typeof S !== 'undefined' && currentRecord.data) {
+                    Object.keys(currentRecord.data).forEach(k => {
+                        S[k] = currentRecord.data[k];
+                    });
+                    S._version = currentRecord.version;
+                    S._lastModified = dbTime;
+                    
+                    if (typeof showToast === 'function') {
+                        showToast('🔄 ข้อมูลถูกอัปเดตจากแหล่งอื่น');
+                    }
+                }
+                
+                return Promise.resolve();
+            } else {
+                console.log('✅ Data timestamp is newer, proceeding with save');
+            }
+        }
+
         // 3. บันทึกพร้อมอัปเดตเวอร์ชันและเวลา
-        const newVersion = (data._version ?? 0) + 1;
+        const newVersion = dataVersion + 1;
         store.put({ 
             id: 'mainState', 
             data: data,
-            timestamp: Date.now(),
-            version: newVersion
+            version: newVersion,
+            timestamp: Date.now()
         });
         
         // อัปเดตเวอร์ชันใน memory
         data._version = newVersion;
+
         return new Promise((resolve, reject) => {
-            tx.oncomplete = () => {
-                console.log('[IndexedDB] Save successful');
-                resolve();
-            };
-            tx.onerror = (e) => {
-                console.error('[IndexedDB] Save error:', e.target.error);
-                reject(e.target.error);
-            };
-            tx.onabort = () => {
-                console.error('[IndexedDB] Save aborted');
-                reject(new Error('Transaction aborted'));
-            };
+            tx.oncomplete = () => resolve();
+            tx.onerror = (e) => reject(e.target.error);
         });
     } catch (err) {
         console.error('[IndexedDB] dbSave failed:', err);
@@ -9067,8 +9070,22 @@ function trimLogs() {
 
 // ========== Save / Load (IndexedDB + localStorage) ==========
 function save() {
-     S._lastModified = Date.now(); // ✅ อัปเดต timestamp ทุกครั้งที่ save
-    dbSave(S).catch(err => console.error("IndexedDB save error:", err));
+    // ✅ ตั้ง flag ก่อน save
+    isSaving = true;
+    lastSaveTime = Date.now();
+    
+    // ✅ อัปเดต timestamp
+    S._lastModified = Date.now();
+    
+    dbSave(S)
+        .catch(err => console.error("IndexedDB save error:", err))
+        .finally(() => {
+            // ✅ ปลด flag หลัง save เสร็จ (รอ 2 วินาทีเพื่อให้ Cloud sync เสร็จ)
+            setTimeout(() => {
+                isSaving = false;
+            }, 2000);
+        });
+    
     localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
     quickSync(false);
 }
@@ -11015,6 +11032,60 @@ function closeModal(id) {
     const modal = document.getElementById(id);
     if (modal) modal.classList.remove('show');
 }
+// ========== Dimension Display ==========
+function updateDimensionDisplay() {
+    // Art Dimension
+    const artHoursEl = document.querySelector('#tab-quests .dimension-card:first-child .dimension-hours');
+    if (artHoursEl) {
+        const hours = S.artHours ?? 0;
+        artHoursEl.textContent = `${hours.toFixed(1)} hrs`;
+        
+        // อัปเดต rank
+        const artRankEl = document.querySelector('#tab-quests .dimension-card:first-child .dimension-rank');
+        if (artRankEl) {
+            let rank = 'Novice';
+            let nextRank = 'Apprentice';
+            let nextHours = 50;
+            
+            if (hours >= 500) { rank = 'Master'; nextRank = 'Grandmaster'; nextHours = 1000; }
+            else if (hours >= 200) { rank = 'Expert'; nextRank = 'Master'; nextHours = 500; }
+            else if (hours >= 50) { rank = 'Apprentice'; nextRank = 'Expert'; nextHours = 200; }
+            
+            artRankEl.textContent = rank;
+            
+            const nextEl = document.querySelector('#tab-quests .dimension-card:first-child .dimension-next');
+            if (nextEl) {
+                nextEl.textContent = `Next: ${nextRank} @ ${nextHours}h`;
+            }
+        }
+    }
+    
+    // Fitness Dimension
+    const fitHoursEl = document.querySelector('#tab-quests .dimension-card:last-child .dimension-hours');
+    if (fitHoursEl) {
+        const hours = S.fitHours ?? 0;
+        fitHoursEl.textContent = `${hours.toFixed(1)} hrs`;
+        
+        // อัปเดต rank
+        const fitRankEl = document.querySelector('#tab-quests .dimension-card:last-child .dimension-rank');
+        if (fitRankEl) {
+            let rank = 'Untrained';
+            let nextRank = 'Athletic Novice';
+            let nextHours = 50;
+            
+            if (hours >= 500) { rank = 'Athletic Master'; nextRank = 'Athletic Grandmaster'; nextHours = 1000; }
+            else if (hours >= 200) { rank = 'Athletic Expert'; nextRank = 'Athletic Master'; nextHours = 500; }
+            else if (hours >= 50) { rank = 'Athletic Novice'; nextRank = 'Athletic Expert'; nextHours = 200; }
+            
+            fitRankEl.textContent = rank;
+            
+            const nextEl = document.querySelector('#tab-quests .dimension-card:last-child .dimension-next');
+            if (nextEl) {
+                nextEl.textContent = `Next: ${nextRank} @ ${nextHours}h`;
+            }
+        }
+    }
+}
 
             // ========== Initialization ==========
             async function initApp() {
@@ -11041,7 +11112,9 @@ function closeModal(id) {
                 checkDecay(); updateTodayDisplay(); renderDailyTab();
                 renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
                 renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-                renderStats(); updateXpBar(); updateNodes();
+                renderStats();
+                updateDimensionDisplay();
+                updateXpBar(); updateNodes();
                 renderHourLog('art'); renderHourLog('fit'); renderCalendar();
                 renderSocialChannels(); renderVaultItems(); renderSavingGoals();
 
@@ -11053,19 +11126,59 @@ function closeModal(id) {
     }, 30000);
                 window.addEventListener('pagehide', () => quickSync(true));
             }
-            async function autoLoadFromCloud() {
-    const response = await fetch(SCRIPT_URL);
-    const cloudData = await response.json();
+            // ========== Global Flag สำหรับป้องกัน Race Condition ==========
+let isSaving = false;
+let lastSaveTime = 0;
+
+async function autoLoadFromCloud() {
+    // ✅ ป้องกัน: ไม่ดึงข้อมูลระหว่างกำลัง save
+    if (isSaving) {
+        console.log('⏸️ Skipping autoLoad - save in progress');
+        return;
+    }
     
-    if (cloudData && Object.keys(cloudData).length > 0) {
-        // ✅ เปรียบเทียบ timestamp (ต้องเพิ่ม _lastModified ใน S)
+    // ✅ ป้องกัน: ไม่ดึงข้อมูลทันทีหลัง save (รอ 5 วินาที)
+    if (Date.now() - lastSaveTime < 5000) {
+        console.log('⏸️ Skipping autoLoad - too soon after save');
+        return;
+    }
+    
+    try {
+        const response = await fetch(SCRIPT_URL);
+        if (!response.ok) return;
+        
+        const cloudData = await response.json();
+        if (!cloudData || Object.keys(cloudData).length === 0) return;
+        
+        // ✅ เปรียบเทียบ timestamp
         const cloudTime = cloudData._lastModified ?? 0;
         const localTime = S._lastModified ?? 0;
         
         if (cloudTime > localTime) {
             console.log('☁ Cloud data is newer, updating...');
-            Object.keys(cloudData).forEach(k => { S[k] = cloudData[k]; });
+            
+            // ✅ สำคัญ: เก็บ _version และ _lastModified เดิมไว้
+            const currentVersion = S._version ?? 0;
+            const currentLastModified = S._lastModified ?? 0;
+            
+            // Merge ข้อมูลจาก Cloud
+            Object.keys(cloudData).forEach(k => { 
+                if (cloudData[k] !== undefined) {
+                    S[k] = cloudData[k]; 
+                }
+            });
+            
+            // ✅ สำคัญ: กู้ _version และ _lastModified กลับมา
+            S._version = currentVersion;
+            S._lastModified = Math.max(currentLastModified, cloudTime);
+            
+            // Migration
             S = migrateData(S);
+            
+            // ✅ สำคัญ: อัปเดต _version ให้มากกว่า DB ปัจจุบัน
+            S._version = currentVersion + 1;
+            
+            // Save to local (ไม่ต้อง sync ขึ้น Cloud เพราะข้อมูลมาจาก Cloud แล้ว)
             await dbSave(S);
             localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
             
@@ -11074,10 +11187,17 @@ function closeModal(id) {
                 forceRenderAllTabs();
             }
             
-            showToast('☁ ซิงค์ข้อมูลจาก Cloud อัตโนมัติ');
+            // ✅ เรียก render dimension hours
+            if (typeof updateDimensionDisplay === 'function') {
+                updateDimensionDisplay();
+            }
+            
+            showToast('☁️ ซิงค์ข้อมูลจาก Cloud อัตโนมัติ');
         } else {
             console.log('✅ Local data is newer or equal');
         }
+    } catch (err) {
+        console.warn('[AutoLoad] Failed:', err);
     }
 }
 

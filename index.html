@@ -4736,8 +4736,8 @@ body, html {
         ของคุณเริ่มลดถอยลงตามกาลเวลาแล้ว กรุณาออกกำลังกายเพื่อฟื้นฟูฟิตเนสสเตตัส!</div>
     <div class="sync-bar">
         <div class="sync-status ok" id="sync-status">☁ Ready</div>
-        <div class="sync-actions"><button class="btn-s btn-art" onclick="quickSync(true)">Save</button><button
-                class="btn-s btn-fit" onclick="quickSync(true)">Load</button></div>
+        <div class="sync-actions"><button class="btn-s" onclick="manualSave()"> Save</button>
+            <button class="btn-s" onclick="manualLoad()">☁️ Load</button></div>
     </div>
 
     <div class="status-section">
@@ -5141,10 +5141,15 @@ body, html {
         <!-- ส่วนที่ 1: Cloud & Backup -->
         <div class="career-section">
             <div class="career-title">☁️ การซิงค์และสำรองข้อมูล (Cloud & Backup)</div>
-            <p style="color:var(--text-dim); font-size:0.9em; margin-bottom:12px;">จัดการข้อมูลระหว่างเครื่องนี้และ
-                Google Cloud Storage ของคุณ</p>
+            <p style="color:var(--text-dim); font-size:0.9em; margin-bottom:12px;">
+                จัดการข้อมูลระหว่างเครื่องนี้และ Google Drive ของคุณ
+            </p>
 
             <div style="display:grid; gap:10px;">
+                <!-- ปุ่ม Manual Save (เพิ่มใหม่) -->
+                <button class="btn-s btn-art" style="width:100%; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="manualSave()">
+                    <span></span> บันทึกข้อมูลขึ้น Cloud (Manual Save)
+                </button>
                 <!-- ปุ่ม Manual Load -->
                 <button class="btn-s btn-art"
                     style="width:100%; display:flex; align-items:center; justify-content:center; gap:8px;"
@@ -5152,20 +5157,23 @@ body, html {
                     <span>☁️</span> ดึงข้อมูลล่าสุดจาก Cloud (Manual Load)
                 </button>
 
-                <!-- ปุ่ม Export / Import วางคู่กัน -->
+                <!-- ปุ่ม Export / Import -->
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <button class="btn-s"
-                        style="background:rgba(76, 175, 80, 0.2); color:#4CAF50; border:1px solid #4CAF50; display:flex; align-items:center; justify-content:center; gap:8px;"
-                        onclick="exportToFile()">
+                    <button class="btn-s" style="background:rgba(76, 175, 80, 0.2); color:#4CAF50; border:1px solid #4CAF50; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="exportToFile()">
                         <span>📥</span> Export (ดาวน์โหลด)
                     </button>
-                    <button class="btn-s"
-                        style="background:rgba(33, 150, 243, 0.2); color:#2196F3; border:1px solid #2196F3; display:flex; align-items:center; justify-content:center; gap:8px;"
-                        onclick="importFromFile()">
+                    <button class="btn-s" style="background:rgba(33, 150, 243, 0.2); color:#2196F3; border:1px solid #2196F3; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="importFromFile()">
                         <span>📤</span> Import (กู้คืนไฟล์)
                     </button>
                 </div>
             </div>
+        </div>
+
+        <!-- สถานะการเชื่อมต่อ -->
+  <div id="drive-status" style="margin-top:12px; padding:8px; background:rgba(200,169,110,0.1); border-radius:6px; font-size:0.85em; color:var(--text-dim);">
+    สถานะ: พร้อมใช้งาน
+  </div>
+</div>
         </div>
 
         <!-- ส่วนที่ 2: Danger Zone (ล้างข้อมูล) -->
@@ -5284,7 +5292,7 @@ body, html {
 </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVIuWzKtUAyInYXavA9OpT5clRAKSNriuI5kVBbc6P4ofYXwBftZ_VQNfxNWJvx82rFw/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5zqX7G_HV3N76fGjw1ysfb9OCWpx4JCBWY-fW1zXTcAEGU6mkKzxL_cXjOVn87KG-/exec';
 
         let DAILY_QUESTS = [{ id: 'd1', text: 'ฝึกวาดรูปศึกษาอนาโตมี่และคู่สีตรงข้ามสไตล์สีน้ำมันดิบ', xp: 15, stat: 'CRE' }, { id: 'd2', text: 'ฝึกซ้อมพลังเสียงและไดนามิกการร้องเพลงสไตล์ดิบดุดันแบบ Ado', xp: 15, stat: 'AGI' }, { id: 'd3', text: 'Weight Training หรือเวทเทรนนิ่งเพื่อเพิ่มความแข็งแกร่งกล้ามเนื้อแกนกลาง', xp: 20, stat: 'STR' }, { id: 'd4', text: 'Cardio ขี่จักรยาน หรือวิ่งโซน 2 เพื่อเพิ่มความฟิตและปอดในการร้องเพลง', xp: 20, stat: 'VIT' }, { id: 'd5', text: 'อัปเดตไอเดียสตอรี่บอร์ดงานอาร์ตลงคลังสมุดบันทึกส่วนตัว', xp: 10, stat: 'INT' }];
         let WEEKLY_QUESTS = [{ id: 'w1', text: 'ตัดต่อและโพสต์วิดีโอ Speedpainting หรือคลิปร้องเพลงสั้นลง TikTok', xp: 40, stat: 'CRE' }, { id: 'w2', text: 'เขียนเนื้อร้อง/ทำนองเพลงเดโม่ หรือทบทวนทฤษฎีดนตรีเพื่อต่อยอดไอเดีย', xp: 50, stat: 'INT' }, { id: 'w3', text: 'ออกกำลังกายสะสมครบ 3 วันในรอบสัปดาห์เพื่อชะล้างสถานะค่าพลังลดถอย', xp: 40, stat: 'VIT' }];
@@ -5532,6 +5540,7 @@ let S = {
 // ==========================================
 
 function migrateData(oldS) {
+    const schemaVersion = oldS?.schemaVersion ?? 1;
     const get = (key, fallback) => oldS?.[key] ?? fallback;
     const getObj = (key, fallback) => ({ ...(oldS?.[key] ?? fallback) });
     const getArr = (key, fallback) => [...(oldS?.[key] ?? fallback)];
@@ -5579,7 +5588,11 @@ function migrateData(oldS) {
 
         // === Stash & Rewards ===
         stashRedemptions: getArr('stashRedemptions', []),
-        perfectDays: getArr('perfectDays', []),
+        perfectDays: (() => {
+    const days = getArr('perfectDays', []);
+    // ✅ ตรวจสอบว่าเป็น array ของ string dates
+    return days.filter(d => typeof d === 'string' && d.match(/^\d{4}-\d{2}-\d{2}$/));
+})(),
         customRewards: getObj('customRewards', { chaos: [], exalted: [], divine: [] }),
 
         // === PoE Economy ===
@@ -5597,12 +5610,18 @@ function migrateData(oldS) {
         atlasProgress: getObj('atlasProgress', {}),
         atlasBossDefeated: get('atlasBossDefeated', false),
         atlasEditMode: get('atlasEditMode', false),
-        atlasNodes: getArr('atlasNodes', [
-            { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false },
-            { id: 'atlas2', name: 'ร้องเพลง Cover 10 เพลง', requiredXP: 500, branch: 'body', completed: false },
-            { id: 'atlas3', name: 'เรียนทฤษฎีดนตรี', requiredXP: 300, branch: 'mind', completed: false },
-            { id: 'atlas4', name: 'สร้าง Content 30 วัน', requiredXP: 1500, branch: 'art', completed: false }
-        ]),
+        atlasNodes: (() => {
+    const nodes = getArr('atlasNodes', []);
+    // ✅ ตรวจสอบว่าแต่ละ node มี field ครบ
+    return nodes.map(node => ({
+        id: node?.id ?? `atlas_${Date.now()}`,
+        name: node?.name ?? 'Unknown Goal',
+        requiredXP: node?.requiredXP ?? 100,
+        branch: node?.branch ?? 'art',
+        completed: node?.completed ?? false,
+        currentXP: node?.currentXP ?? 0
+    }));
+})(),
 
         // === Weekly & Monthly ===
         weeklyMedallions: get('weeklyMedallions', 0),
@@ -5670,6 +5689,11 @@ function migrateData(oldS) {
         newData.skillTree['origin'] = true;
         console.log('✅ Origin unlocked in migration');
     }
+    newData.schemaVersion = 4;
+
+    console.log(`[Migration] Completed - Schema v${schemaVersion} → v4`);
+    console.log(`[Migration] Currency:`, newData.currency);
+    console.log(`[Migration] Skill Points:`, newData.skillPoints);
 
     return newData;
 }
@@ -7599,6 +7623,10 @@ function updateCareerDisplay() {
 
 function renderIncomeLogs() {
                     const container = document.getElementById('income-log');
+                    if (!container) {
+        console.warn('⚠️ income-log element not found, skipping render');
+        return; // ✅ ออกก่อนถ้าไม่มี element
+    }
                     container.innerHTML = '';
                     S.incomeLogs.slice(0, 10).forEach(x => {
                         const e = document.createElement('div');
@@ -7639,7 +7667,10 @@ function addIncome(isJobComplete) {
 
 function renderSocialChannels() {
                     const container = document.getElementById('follower-grid-container');
-                    if (!container) return;
+                    if (!container) {
+                        console.warn('⚠️ follower-grid-container element not found, skipping render');
+                        return;
+                    }
                     container.innerHTML = '';
                     S.socialChannels.forEach(ch => {
                         const div = document.createElement('div');
@@ -7777,6 +7808,10 @@ function addSavingGoal() {
 
 function renderVaultItems() {
                     const container = document.getElementById('vault-grid-container');
+                    if (!container) {
+        console.warn('⚠️ vault-grid-container element not found');
+        return;
+    }
                     container.innerHTML = '';
                     S.vaultItems.forEach(item => {
                         const div = document.createElement('div');
@@ -7895,6 +7930,10 @@ function saveDiary() {
 
 function renderDiaryLogs() {
                     const container = document.getElementById('diary-logs');
+                     if (!container) {
+        console.warn('⚠️ diary-logs element not found');
+        return;
+    }
                     container.innerHTML = '';
                     S.diaryLogs.forEach(x => {
                         const e = document.createElement('div');
@@ -8397,141 +8436,234 @@ function loadCustomQuestDbs() {
 
 // ========== Sync System ==========
 function setSyncStatus(state, msg) {
-                    const el = document.getElementById('sync-status');
-                    if (!el) return;
-                    el.className = 'sync-status ' + state;
-                    el.textContent = msg;
-                }
+    const el = document.getElementById('sync-status');
+    if (!el) return;
+    el.className = 'sync-status ' + state;
+    el.textContent = msg;
+}
 
 function trimLogs() {
-                    const MAX_LOGS = 200;
-                    if (S.artLogs && S.artLogs.length > MAX_LOGS) S.artLogs = S.artLogs.slice(0, MAX_LOGS);
-                    if (S.fitLogs && S.fitLogs.length > MAX_LOGS) S.fitLogs = S.fitLogs.slice(0, MAX_LOGS);
-                    if (S.diaryLogs && S.diaryLogs.length > MAX_LOGS) S.diaryLogs = S.diaryLogs.slice(0, MAX_LOGS);
-                    if (S.incomeLogs && S.incomeLogs.length > MAX_LOGS) S.incomeLogs = S.incomeLogs.slice(0, MAX_LOGS);
-                }
+    const MAX_LOGS = 200;
+    if (S.artLogs && S.artLogs.length > MAX_LOGS) S.artLogs = S.artLogs.slice(0, MAX_LOGS);
+    if (S.fitLogs && S.fitLogs.length > MAX_LOGS) S.fitLogs = S.fitLogs.slice(0, MAX_LOGS);
+    if (S.diaryLogs && S.diaryLogs.length > MAX_LOGS) S.diaryLogs = S.diaryLogs.slice(0, MAX_LOGS);
+    if (S.incomeLogs && S.incomeLogs.length > MAX_LOGS) S.incomeLogs = S.incomeLogs.slice(0, MAX_LOGS);
+}
 
 // ========== Save / Load (IndexedDB + localStorage) ==========
 function save() {
-                    dbSave(S).catch(err => console.error("IndexedDB save error:", err));
-                    localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
-                    quickSync(false);
-                }
+    dbSave(S).catch(err => console.error("IndexedDB save error:", err));
+    localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
+    quickSync(false);
+}
 
 async function load() {
-                    try {
-                        const d = await dbLoad();
-                        if (d) {
-                            Object.keys(d).forEach(k => { S[k] = d[k]; });
-                        } else {
-                            const localD = localStorage.getItem('dol_quest_log_v3');
-                            if (localD) {
-                                const p = JSON.parse(localD);
-                                Object.keys(p).forEach(k => { S[k] = p[k]; });
-                            }
-                        }
-                    } catch (e) {
-                        console.error("IndexedDB load failed, using localStorage", e);
-                        const localD = localStorage.getItem('dol_quest_log_v3');
-                        if (localD) {
-                            const p = JSON.parse(localD);
-                            Object.keys(p).forEach(k => { S[k] = p[k]; });
-                        }
-                    }
-                    if (!S.savingGoals) S.savingGoals = [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }];
-                    if (!S.vaultItems) S.vaultItems = [];
-                    if (!S.socialChannels) S.socialChannels = [];
-                }
+    try {
+        const d = await dbLoad();
+        if (d) {
+            Object.keys(d).forEach(k => { S[k] = d[k]; });
+        } else {
+            const localD = localStorage.getItem('dol_quest_log_v3');
+            if (localD) {
+                const p = JSON.parse(localD);
+                Object.keys(p).forEach(k => { S[k] = p[k]; });
+            }
+        }
+    } catch (e) {
+        console.error("IndexedDB load failed, using localStorage", e);
+        const localD = localStorage.getItem('dol_quest_log_v3');
+        if (localD) {
+            const p = JSON.parse(localD);
+            Object.keys(p).forEach(k => { S[k] = p[k]; });
+        }
+    }
+    
+    // Run Migration
+    S = migrateData(S);
+    
+    // Default values
+    if(!S.savingGoals) S.savingGoals=[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}];
+    if(!S.vaultItems) S.vaultItems=[];
+    if(!S.socialChannels) S.socialChannels=[];
+    if(!S.orbs) S.orbs = { chaos: 0, exalted: 0, divine: 0 };
+    if(!S.skillPoints) S.skillPoints = 0;
+    if(!S.skillTree) S.skillTree = {};
+    if(!S.ascendancyPoints) S.ascendancyPoints = 0;
+    if(!S.streakDays) S.streakDays = 0;
+    if(!S.atlasProgress) S.atlasProgress = {};
+}
 
-// ========== Quicksync (Optimized Cloud Sync) ==========
+// ========== Quicksync (Auto-sync with Google Drive) ==========
+
 function quickSync(isClosing = false) {
-                    clearTimeout(syncTimeout);
+    clearTimeout(syncTimeout);
 
-                    const doSync = () => {
-                        trimLogs();
-                        const currentDataStr = JSON.stringify(S);
+    const doSync = () => {
+        trimLogs();
+        const currentDataStr = JSON.stringify(S);
 
-                        if (currentDataStr === lastSyncedDataStr) return;
+        if (currentDataStr === lastSyncedDataStr) return;
 
-                        if (!isClosing) setSyncStatus('loading', '⚡ Quick Syncing...');
+        if (!isClosing) setSyncStatus('loading', '⚡ Quick Syncing...');
 
-                        if (isClosing && navigator.sendBeacon) {
-                            const blob = new Blob([currentDataStr], { type: 'text/plain' });
-                            const success = navigator.sendBeacon(SCRIPT_URL, blob);
-                            if (success) {
-                                lastSyncedDataStr = currentDataStr;
-                                console.log('✅ Beacon sent successfully on pagehide');
-                            }
-                            return;
-                        }
+        if (isClosing && navigator.sendBeacon) {
+            const blob = new Blob([currentDataStr], { type: 'text/plain' });
+            const success = navigator.sendBeacon(SCRIPT_URL, blob);
+            if (success) {
+                lastSyncedDataStr = currentDataStr;
+                console.log('✅ Beacon sent successfully on pagehide');
+            }
+            return;
+        }
 
-                        fetch(SCRIPT_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'text/plain' },
-                            body: currentDataStr
-                        })
-                            .then(res => {
-                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                                return res.json();
-                            })
-                            .then(result => {
-                                if (result.status === 'success') {
-                                    lastSyncedDataStr = currentDataStr;
-                                    if (!isClosing) setSyncStatus('ok', '☁ Synced ' + new Date().toLocaleTimeString('th-TH'));
-                                } else {
-                                    console.error('Sync Error:', result.error);
-                                    if (!isClosing) setSyncStatus('err', 'Sync Failed');
-                                }
-                            })
-                            .catch(err => {
-                                console.error('QuickSync Network Error:', err);
-                                if (!isClosing) setSyncStatus('err', 'Offline');
-                            });
-                    };
-
-                    if (isClosing) {
-                        doSync();
-                    } else {
-                        syncTimeout = setTimeout(doSync, 2000);
-                    }
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: currentDataStr
+        })
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
+            .then(result => {
+                if (result.status === 'success') {
+                    lastSyncedDataStr = currentDataStr;
+                    if (!isClosing) setSyncStatus('ok', ' Synced ' + new Date().toLocaleTimeString('th-TH'));
+                } else {
+                    console.error('Sync Error:', result.error);
+                    if (!isClosing) setSyncStatus('err', 'Sync Failed');
                 }
+            })
+            .catch(err => {
+                console.error('QuickSync Network Error:', err);
+                if (!isClosing) setSyncStatus('err', 'Offline');
+            });
+    };
 
+    if (isClosing) {
+        doSync();
+    } else {
+        syncTimeout = setTimeout(doSync, 2000);
+    }
+}
+
+// ========== Manual Save to Cloud (ปุ่ม Save ที่หน้าแรก) ==========
+async function manualSave() {
+    const statusDiv = document.getElementById('sync-status');
+    statusDiv.className = 'sync-status loading';
+    statusDiv.textContent = 'กำลังบันทึกขึ้น Cloud...';
+    
+    try {
+        trimLogs();
+        const currentDataStr = JSON.stringify(S);
+        
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: currentDataStr
+        });
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            lastSyncedDataStr = currentDataStr;
+            statusDiv.className = 'sync-status ok';
+            statusDiv.textContent = '☁ Saved ' + new Date().toLocaleTimeString('th-TH');
+            showToast('✅ บันทึกขึ้น Google Drive สำเร็จ');
+        } else {
+            throw new Error(result.error || 'Unknown error');
+        }
+    } catch (err) {
+        console.error('Manual Save Error:', err);
+        statusDiv.className = 'sync-status err';
+        statusDiv.textContent = 'บันทึกล้มเหลว';
+        showToast('❌ บันทึกขึ้น Cloud ล้มเหลว');
+    }
+}
+
+// ========== Manual Load from Cloud (ปุ่ม Load ที่หน้าแรก) ==========
 async function manualLoad() {
-                    const statusDiv = document.getElementById('sync-status');
-                    statusDiv.className = 'sync-status loading';
-                    statusDiv.textContent = 'กำลังโหลด...';
-                    try {
-                        const response = await fetch(SCRIPT_URL + '?action=load');
-                        const data = await response.json();
-                        if (data && typeof data === 'object' && Object.keys(data).length > 0) {
-                            Object.keys(data).forEach(k => { S[k] = data[k]; });
-                            if (!S.savingGoals) S.savingGoals = [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }];
-                            if (!S.vaultItems) S.vaultItems = [];
-                            if (!S.socialChannels) S.socialChannels = [];
-
-                            lastSyncedDataStr = JSON.stringify(S);
-                            save();
-
-                            checkDecay(); updateXpBar(); updateNodes(); renderStats();
-                            renderHourLog('art'); renderHourLog('fit'); renderDailyTab();
-                            renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
-                            renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-                            renderIncomeLogs(); renderDiaryLogs(); renderSocialChannels();
-                            renderVaultItems(); renderSavingGoals(); renderCalendar();
-
-                            statusDiv.className = 'sync-status ok';
-                            statusDiv.textContent = '☁ Loaded ' + new Date().toLocaleTimeString('th-TH');
-                            showToast('ดึงข้อมูลจากคลาวด์เสร็จสิ้น ✓');
-                        } else {
-                            throw new Error('ไม่พบข้อมูลบนคลาวด์');
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        statusDiv.className = 'sync-status err';
-                        statusDiv.textContent = 'ดาวน์โหลดล้มเหลว';
-                        showToast('โหลดคลาวด์ล้มเหลว');
-                    }
+    const statusDiv = document.getElementById('sync-status');
+    statusDiv.className = 'sync-status loading';
+    statusDiv.textContent = 'กำลังโหลดจาก Cloud...';
+    
+    try {
+        const response = await fetch(SCRIPT_URL);
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        
+        if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+            // Merge ข้อมูลจาก Cloud
+            Object.keys(data).forEach(k => { 
+                if (data[k] !== undefined) {
+                    S[k] = data[k]; 
                 }
+            });
+            
+            // Run Migration
+            S = migrateData(S);
+            
+            // Set default values
+            if(!S.savingGoals) S.savingGoals=[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}];
+            if(!S.vaultItems) S.vaultItems=[];
+            if(!S.socialChannels) S.socialChannels=[];
+            if(!S.orbs) S.orbs = { chaos: 0, exalted: 0, divine: 0 };
+            if(!S.skillPoints) S.skillPoints = 0;
+            if(!S.skillTree) S.skillTree = {};
+            if(!S.ascendancyPoints) S.ascendancyPoints = 0;
+            if(!S.streakDays) S.streakDays = 0;
+            if(!S.atlasProgress) S.atlasProgress = {};
+            
+            lastSyncedDataStr = JSON.stringify(S);
+            
+            // Save to local
+            await dbSave(S);
+            localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
+            
+            // Re-render UI
+             try {
+                checkDecay(); 
+                updateXpBar(); 
+                updateNodes(); 
+                renderStats();
+                renderHourLog('art'); 
+                renderHourLog('fit'); 
+                renderDailyTab();
+                renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+                renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+                renderIncomeLogs(); 
+                renderDiaryLogs(); 
+                renderSocialChannels(); 
+                renderVaultItems(); 
+                renderSavingGoals(); 
+                renderCalendar();
+                
+                // เช็กว่ามีฟังก์ชันเหล่านี้ไหมก่อนเรียก
+                if (typeof renderOrbsDisplay === 'function') renderOrbsDisplay();
+                if (typeof renderSkillTree === 'function') renderSkillTree();
+                if (typeof renderAtlas === 'function') renderAtlas();
+            } catch (renderErr) {
+                console.error('Render error:', renderErr);
+                // ไม่หยุดการทำงาน แค่ log ไว้
+            }
+            
+            statusDiv.className = 'sync-status ok';
+            statusDiv.textContent = ' Loaded ' + new Date().toLocaleTimeString('th-TH');
+            showToast('✅ ดึงข้อมูลจาก Google Drive สำเร็จ');
+        } else {
+            throw new Error('No data in Google Drive');
+        }
+    } catch (err) {
+        console.error('Load error:', err);
+        statusDiv.className = 'sync-status err';
+        statusDiv.textContent = 'โหลดล้มเหลว';
+        showToast('❌ โหลดจาก Cloud ล้มเหลว');
+    }
+}
 // ==========================================
 // PATCH v4: Currency Helper Functions
 // ==========================================

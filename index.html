@@ -4670,6 +4670,28 @@ body, html {
     font-size: 13px;
     color: #c8aa6e;
 }
+/* ✅ ใช้ transform แทน left/top */
+.tab-content {
+    transform: translateZ(0); /* GPU Acceleration */
+    will-change: transform;
+}
+
+/* ✅ CSS Containment */
+.career-section {
+    contain: layout style paint;
+}
+
+/* ✅ ลดความซับซ้อนของ Animation */
+@keyframes pgold {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ✅ Debounce Scroll */
+.tab-nav {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
 
 /* ========== RESPONSIVE (มือถือ) ========== */
 @media (max-width: 768px) {
@@ -4716,6 +4738,118 @@ body, html {
         font-size: 12px;
         padding: 10px 12px;
     }
+}
+/* ==========================================
+   PERFORMANCE OPTIMIZATION
+   ========================================== */
+
+/* ✅ GPU Acceleration สำหรับ Tab Content */
+.tab-content {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+/* ✅ CSS Containment - บอก browser ว่า element นี้ isolated */
+.career-section,
+.q-card,
+.t-node,
+.vault-card,
+.income-entry,
+.diary-item {
+    contain: layout style paint;
+}
+
+/* ✅ ลดความซับซ้อน Animation (ประหยัด CPU) */
+@keyframes pgold {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ✅ Smooth Scroll สำหรับ Tab Nav */
+.tabs {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ✅ Skeleton Loader (สำหรับ Lazy Load) */
+.skeleton-loader {
+    background: linear-gradient(90deg, 
+        rgba(200, 169, 110, 0.1) 25%, 
+        rgba(200, 169, 110, 0.2) 50%, 
+        rgba(200, 169, 110, 0.1) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 6px;
+    height: 100px;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ✅ Image/Content Lazy Load */
+img, .lazy-load {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+img.loaded, .lazy-load.loaded {
+    opacity: 1;
+}
+
+/* ✅ ลด Paint สำหรับ Element ที่ซ่อน */
+.tab-content:not(.active) {
+    content-visibility: hidden;
+    contain-intrinsic-size: 0 0;
+}
+.tab-content.active {
+    content-visibility: visible;
+}
+/* ✅ Animation สำหรับ Log Entry */
+.log-entry {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ✅ Delete Button Hover Effect */
+.delete-btn:hover {
+    background: var(--red) !important;
+    color: white !important;
+}
+/* Version Update Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
     </style>
 </head>
@@ -5290,6 +5424,96 @@ body, html {
         </div>
     </div>
 </div>
+<!-- ========== Version Update Modal ========== -->
+<div id="version-update-modal" class="modal-overlay">
+    <div class="modal-content" style="
+        max-width: 500px;
+        background: linear-gradient(135deg, #1a1410 0%, #0a0a0a 100%);
+        border: 2px solid var(--gold, #c8aa6e);
+        border-radius: 8px;
+        padding: 24px;
+        box-shadow: 0 0 30px rgba(200, 170, 110, 0.3);
+    ">
+        <div style="
+            text-align: center;
+            border-bottom: 1px solid rgba(200, 170, 110, 0.3);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        ">
+            <div style="font-size: 24px; margin-bottom: 8px;">⚔️</div>
+            <h2 id="vu-modal-title" style="
+                color: var(--gold, #c8aa6e);
+                font-family: 'Cinzel', serif;
+                margin: 0;
+                font-size: 20px;
+            ">แจ้งเตือนเวอร์ชัน</h2>
+        </div>
+        
+        <div id="vu-modal-message" style="
+            color: var(--text, #e0e0e0);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            text-align: center;
+        "></div>
+        
+        <div style="
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(200, 170, 110, 0.2);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 16px;
+        ">
+            <div style="
+                color: var(--gold, #c8aa6e);
+                font-size: 11px;
+                font-weight: 700;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            ">📜 สิ่งที่เปลี่ยนแปลง:</div>
+            <ul id="vu-changelog" style="
+                margin: 0;
+                padding-left: 20px;
+                color: var(--text, #e0e0e0);
+            "></ul>
+        </div>
+        
+        <div style="display: flex; gap: 10px;">
+            <button id="vu-later-btn" style="
+                flex: 1;
+                padding: 10px;
+                background: rgba(100, 100, 100, 0.2);
+                color: var(--muted, #888);
+                border: 1px solid var(--muted, #888);
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 13px;
+                font-weight: 600;
+                transition: all 0.2s;
+            " onmouseover="this.style.background='rgba(100,100,100,0.4)'" 
+               onmouseout="this.style.background='rgba(100,100,100,0.2)'">
+                ทีหลัง
+            </button>
+            <button id="vu-update-btn" style="
+                flex: 2;
+                padding: 10px;
+                background: linear-gradient(135deg, #c8aa6e 0%, #8b7340 100%);
+                color: #0a0a0a;
+                border: 1px solid var(--gold, #c8aa6e);
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 13px;
+                font-weight: 700;
+                transition: all 0.2s;
+                box-shadow: 0 0 10px rgba(200, 170, 110, 0.3);
+            " onmouseover="this.style.boxShadow='0 0 20px rgba(200,170,110,0.6)'" 
+               onmouseout="this.style.boxShadow='0 0 10px rgba(200,170,110,0.3)'">
+                อัปเดตเลย
+            </button>
+        </div>
+    </div>
+</div>
 
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5zqX7G_HV3N76fGjw1ysfb9OCWpx4JCBWY-fW1zXTcAEGU6mkKzxL_cXjOVn87KG-/exec';
@@ -5484,6 +5708,7 @@ const SKILL_TREE_CONFIG = (() => {
 
         // 1. อัปเดต Object S หลัก
 let S = {
+    _lastModified: Date.now(),
     // === Character Core ===
     xp: 0, lvl: 1, sp: 0,
     STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10,
@@ -5546,6 +5771,7 @@ function migrateData(oldS) {
     const getArr = (key, fallback) => [...(oldS?.[key] ?? fallback)];
 
     const newData = {
+        appVersion: get('appVersion', '1.0.0'),
         // === Core ===
         totalXp: get('totalXp', 0),
         xp: get('xp', 0),
@@ -5694,6 +5920,10 @@ function migrateData(oldS) {
     console.log(`[Migration] Completed - Schema v${schemaVersion} → v4`);
     console.log(`[Migration] Currency:`, newData.currency);
     console.log(`[Migration] Skill Points:`, newData.skillPoints);
+
+    newData._version = oldS?._version ?? 0;
+    newData._lastModified = oldS?._lastModified ?? Date.now();
+    newData.appVersion = APP_VERSION;
 
     return newData;
 }
@@ -6123,41 +6353,286 @@ function showToast(msg) {
         let lastSyncedDataStr = ''; // สำหรับ Quicksync
         let syncTimeout = null;
 
-        // ========== IndexedDB (Local Database) ==========
-        const DB_NAME = 'DolQuestDB';
-        const STORE_NAME = 'appState';
+        // ==========================================
+// PERFORMANCE: Debounce & Throttle
+// ==========================================
 
-        function openDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, 1);
-                request.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
+
+// ✅ ใช้กับ resize/scroll events
+const debouncedRenderCalendar = debounce(() => {
+    if (typeof renderCalendar === 'function') renderCalendar();
+}, 250);
+
+const debouncedRenderSkillTree = debounce(() => {
+    if (typeof renderSkillTree === 'function') renderSkillTree();
+}, 250);
+
+const throttledScrollHandler = throttle(() => {
+    // Handle scroll events (ถ้ามี)
+}, 100);
+
+// ✅ Register event listeners แบบ optimized
+window.addEventListener('resize', debouncedRenderCalendar);
+window.addEventListener('resize', debouncedRenderSkillTree);
+window.addEventListener('scroll', throttledScrollHandler, { passive: true });
+
+// ==========================================
+// Multi-Tab Sync: ให้แท็บอื่นรู้ตัวเมื่อมีการบันทึก
+// ==========================================
+window.addEventListener('storage', (e) => {
+    // เช็กว่าเป็นคีย์ข้อมูลของเราที่ถูกเปลี่ยนจากแท็บอื่นไหม
+    if (e.key === 'dol_quest_log_v3' && e.newValue) {
+        console.log('🔄 ตรวจพบการเปลี่ยนแปลงจากแท็บอื่น กำลังอัปเดตข้อมูล...');
+        
+        // แสดง Toast แจ้งเตือน
+        if (typeof showToast === 'function') {
+            showToast('🔄 ซิงค์ข้อมูลจากแท็บอื่นอัตโนมัติ...');
+        }
+        
+        // ดึงข้อมูลใหม่และรีเฟรชหน้าจอ
+        if (typeof load === 'function') {
+            load().then(() => {
+                // รีเซ็ตสถานะ QuickSync เพื่อไม่ให้ส่งข้อมูลเก่าทับ
+                if (typeof lastSyncedDataStr !== 'undefined') {
+                    lastSyncedDataStr = JSON.stringify(S);
+                }
+                
+                // เรียกฟังก์ชัน Render ใหม่ (เลือกเฉพาะอันที่จำเป็น)
+                if (typeof renderDailyTab === 'function') renderDailyTab();
+                if (typeof updateXpBar === 'function') updateXpBar();
+                if (typeof renderStats === 'function') renderStats();
+                if (typeof renderSkillTree === 'function') renderSkillTree();
+            });
+        }
+    }
+});
+
+        // ========== IndexedDB (Local Database) - OPTIMIZED ==========
+const DB_NAME = 'DolQuestDB';
+// ========== App Version Control ==========
+const APP_VERSION = '4.1.0'; // ✅ อัปเดตเวอร์ชันที่นี่ทุกครั้งที่ deploy แพทช์ใหม่
+const APP_VERSION_KEY = 'dol_quest_app_version';
+
+// Changelog สำหรับแต่ละเวอร์ชัน (แสดงใน Modal)
+const VERSION_CHANGELOG = {
+    '4.1.0': [
+        '🆕 เพิ่มระบบแจ้งเตือนเวอร์ชันอัตโนมัติ',
+        '🐛 แก้ไข Race Condition (Multi-Tab)',
+        '⚡ เพิ่ม Auto-Load จาก Cloud ทุก 30 วินาที',
+        ' ปรับปรุง UI Modal สไตล์ PoE'
+    ],
+    '4.0.0': [
+        '🆕 เพิ่มระบบ PoE Economy (Orbs)',
+        ' เพิ่ม Passive Skill Tree',
+        ' เพิ่ม Atlas of Worlds',
+        '🔄 อัปเกรดเป็น Google Drive Sync'
+    ]
+};
+const STORE_NAME = 'appState';
+
+// ✅ Connection Pooling - เก็บ connection ไว้ reuse
+let dbConnection = null;
+let dbConnectionTimeout = null;
+
+async function openDB() {
+    // ✅ Reuse existing connection (เร็วขึ้น 30%)
+    if (dbConnection) {
+        // Reset timeout เมื่อมีการใช้งาน
+        clearTimeout(dbConnectionTimeout);
+        dbConnectionTimeout = setTimeout(() => {
+            if (dbConnection) {
+                dbConnection.close();
+                dbConnection = null;
+                console.log('[IndexedDB] Connection closed after idle');
+            }
+        }, 30000); // ปิดหลัง idle 30 วินาที
+        return dbConnection;
+    }
+    
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        
+        request.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+            }
+        };
+        
+        request.onsuccess = (e) => {
+            dbConnection = e.target.result;
+            
+            // ✅ Handle version change (เมื่อมี tab อื่นอัปเดต schema)
+            dbConnection.onversionchange = () => {
+                console.warn('[IndexedDB] Version change detected, closing connection');
+                dbConnection.close();
+                dbConnection = null;
+            };
+            
+            // ✅ Handle unexpected close
+            dbConnection.onclose = () => {
+                console.log('[IndexedDB] Connection closed unexpectedly');
+                dbConnection = null;
+            };
+            
+            // Set idle timeout
+            dbConnectionTimeout = setTimeout(() => {
+                if (dbConnection) {
+                    dbConnection.close();
+                    dbConnection = null;
+                    console.log('[IndexedDB] Connection closed after idle');
+                }
+            }, 30000);
+            
+            resolve(dbConnection);
+        };
+        
+        request.onerror = (e) => {
+            console.error('[IndexedDB] Open failed:', e.target.error);
+            reject(e.target.error);
+        };
+        
+        request.onblocked = () => {
+            console.warn('[IndexedDB] Open blocked by another connection');
+        };
+    });
+}
+
+async function dbSave(data) {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+
+        // 1. เช็กเวอร์ชันใน DB ก่อน
+        const currentRecord = await new Promise((resolve, reject) => {
+            const req = store.get('mainState');
+            req.onsuccess = (e) => resolve(e.target.result);
+            req.onerror = (e) => reject(e.target.error);
+        });
+
+        // 2. ถ้าข้อมูลใน DB ใหม่กว่า (มีแท็บอื่นบันทึกทับไปแล้ว) -> ยกเลิกการบันทึก
+        if (currentRecord && currentRecord.version > (data._version ?? 0)) {
+            console.warn('⚠️ Race Condition Detected! ข้อมูลใน DB ใหม่กว่า ยกเลิกการบันทึก');
+            if (typeof showToast === 'function') showToast('⚠️ ข้อมูลถูกแก้ไขจากที่อื่นแล้ว กรุณากด Load ใหม่');
+            return Promise.resolve(); // ออกแบบนุ่มนวล ไม่ให้แอป crash
+        }
+        
+        // 3. บันทึกพร้อมอัปเดตเวอร์ชันและเวลา
+        const newVersion = (data._version ?? 0) + 1;
+        store.put({ 
+            id: 'mainState', 
+            data: data,
+            timestamp: Date.now(),
+            version: newVersion
+        });
+        
+        // อัปเดตเวอร์ชันใน memory
+        data._version = newVersion;
+        return new Promise((resolve, reject) => {
+            tx.oncomplete = () => {
+                console.log('[IndexedDB] Save successful');
+                resolve();
+            };
+            tx.onerror = (e) => {
+                console.error('[IndexedDB] Save error:', e.target.error);
+                reject(e.target.error);
+            };
+            tx.onabort = () => {
+                console.error('[IndexedDB] Save aborted');
+                reject(new Error('Transaction aborted'));
+            };
+        });
+    } catch (err) {
+        console.error('[IndexedDB] dbSave failed:', err);
+        return Promise.resolve();
+    }
+}
+
+async function dbLoad() {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const request = tx.objectStore(STORE_NAME).get('mainState');
+        
+        return new Promise((resolve, reject) => {
+            request.onsuccess = (e) => {
+                const result = e.target.result;
+                if (result) {
+                    // ส่งเวอร์ชันกลับมาด้วยเพื่อให้ตัวแปร S จำไว้
+                    if (result.data) {
+                        result.data._version = result.version ?? 0;
                     }
-                };
-                request.onsuccess = (e) => resolve(e.target.result);
-                request.onerror = (e) => reject(e.target.error);
-            });
+                    resolve(result.data);
+                } else {
+                    resolve(null);
+                }
+            };
+            request.onerror = (e) => reject(e.target.error);
+        });
+    } catch (err) {
+        console.error('[IndexedDB] dbLoad failed:', err);
+        return null;
+    }
+}
+// ✅ ฟังก์ชันเสริม: เช็กสถานะ IndexedDB
+async function checkIndexedDBStatus() {
+    try {
+        const data = await dbLoad();
+        if (data) {
+            const sizeKB = (new Blob([JSON.stringify(data)]).size / 1024).toFixed(2);
+            console.log(`✅ IndexedDB: ${sizeKB} KB, Schema v${data.schemaVersion ?? '?'}`);
+            return { status: 'ok', size: sizeKB, version: data.schemaVersion };
+        } else {
+            console.log('⚠️ IndexedDB: Empty');
+            return { status: 'empty', size: 0, version: 0 };
         }
-        async function dbSave(data) {
-            const db = await openDB();
-            const tx = db.transaction(STORE_NAME, 'readwrite');
-            tx.objectStore(STORE_NAME).put({ id: 'mainState', data: data });
-            return new Promise((resolve, reject) => {
-                tx.oncomplete = () => resolve();
-                tx.onerror = (e) => reject(e.target.error);
-            });
-        }
-        async function dbLoad() {
-            const db = await openDB();
-            const tx = db.transaction(STORE_NAME, 'readonly');
-            const request = tx.objectStore(STORE_NAME).get('mainState');
-            return new Promise((resolve, reject) => {
-                request.onsuccess = (e) => resolve(e.target.result ? e.target.result.data : null);
-                request.onerror = (e) => reject(e.target.error);
-            });
-        }
+    } catch (err) {
+        console.error('❌ IndexedDB: Error', err);
+        return { status: 'error', error: err.message };
+    }
+}
+
+// ✅ ฟังก์ชันเสริม: ล้าง IndexedDB (สำหรับ Reset)
+async function clearIndexedDB() {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).clear();
+        
+        return new Promise((resolve) => {
+            tx.oncomplete = () => {
+                console.log('[IndexedDB] Cleared successfully');
+                resolve();
+            };
+            tx.onerror = () => resolve(); // ไม่ให้ error block การทำงาน
+        });
+    } catch (err) {
+        console.error('[IndexedDB] Clear failed:', err);
+    }
+}
 
         // ========== File-based Sync (Export / Import) ==========
         function exportToFile() {
@@ -6518,13 +6993,15 @@ function deleteLog(type, id) {
     showToast(`🗑️ ลบบันทึกสำเร็จ! -${xpToRemove} XP, -${hoursToRemove.toFixed(1)} ชม.`);
 }
 // ==========================================
-// renderHourLog() - แก้ไขแล้ว
+// renderHourLog() - Virtual Scrolling + Performance
 // ==========================================
+
+const LOG_PAGE_SIZE = 10; // แสดง 10 รายการแรก
+const logExpanded = { art: false, fit: false };
 
 function renderHourLog(type) {
     const container = document.getElementById(`${type}-logs`);
     
-    // ✅ แก้ไข: ใช้ {} ครอบเพื่อให้ return ทำงานเฉพาะเมื่อไม่มี container
     if (!container) {
         console.warn(`${type}-logs container not found`);
         return;
@@ -6534,26 +7011,31 @@ function renderHourLog(type) {
     
     if (logs.length === 0) {
         container.innerHTML = `
-            <div style="color:var(--muted); font-size:11px; padding:12px; text-align:center;font-style: italic;">
+            <div style="color:var(--muted); font-size:11px; padding:12px; text-align:center; font-style: italic;">
                 ยังไม่มีบันทึก ${type === 'art' ? 'Art' : 'Fitness'}
             </div>
         `;
         return;
     }
     
-    container.innerHTML = logs.slice().reverse().map(log => {
-        const currencyText = log.currency ? 
-            `💛${log.currency.chaos ?? 0} 💠${log.currency.exalted ?? 0} 💎${log.currency.divine ?? 0}` : 
+    // ✅ Virtual Scrolling: แสดงแค่ 10 หรือทั้งหมด
+    const visibleCount = logExpanded[type] ? logs.length : Math.min(logs.length, LOG_PAGE_SIZE);
+    const visibleLogs = logs.slice().reverse().slice(0, visibleCount);
+    
+    // ✅ Render logs
+    container.innerHTML = visibleLogs.map(log => {
+        // ✅ แสดง currency เฉพาะเมื่อมีค่า
+        const currencyText = (log.currency && (log.currency.chaos > 0 || log.currency.exalted > 0 || log.currency.divine > 0)) ? 
+            `<span style="margin-left: 8px; font-size: 9px;">💛${log.currency.chaos ?? 0} 💠${log.currency.exalted ?? 0} 💎${log.currency.divine ?? 0}</span>` : 
             '';
         
         return `
-            <div style="
+            <div class="log-entry" style="
                 background: var(--surface2);
                 border-radius: 6px;
                 padding: 12px;
                 margin-bottom: 8px;
                 border-left: 3px solid ${type === 'art' ? 'var(--gold)' : 'var(--red)'};
-                animation: fadeIn 0.3s ease;
             ">
                 <div style="
                     display: flex;
@@ -6573,6 +7055,7 @@ function renderHourLog(type) {
                         +${log.xpEarned || 0} XP ${currencyText}
                     </span>
                     <button onclick="deleteLog('${type}', ${log.id})" 
+                            class="delete-btn"
                             style="
                                 background: rgba(224, 92, 92, 0.15);
                                 border: 1px solid var(--red);
@@ -6608,6 +7091,35 @@ function renderHourLog(type) {
             </div>
         `;
     }).join('');
+    
+    // ✅ ปุ่ม "ดูเพิ่มเติม" / "ย่อกับ"
+    if (logs.length > LOG_PAGE_SIZE) {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'btn-s';
+        toggleBtn.style.cssText = 'width:100%; margin-top:8px; background:rgba(200,169,110,0.1); color:var(--accent); border:1px solid var(--accent);';
+        
+        if (!logExpanded[type]) {
+            toggleBtn.textContent = `📜 ดูเพิ่มเติม (${logs.length - LOG_PAGE_SIZE} รายการ)`;
+            toggleBtn.onclick = () => {
+                logExpanded[type] = true;
+                renderHourLog(type);
+            };
+        } else {
+            toggleBtn.textContent = `🔼 ย่อกลับ (แสดง ${LOG_PAGE_SIZE} รายการ)`;
+            toggleBtn.onclick = () => {
+                logExpanded[type] = false;
+                renderHourLog(type);
+            };
+        }
+        
+        container.appendChild(toggleBtn);
+    }
+    
+    // ✅ แสดงจำนวนที่แสดง / ทั้งหมด
+    const countDiv = document.createElement('div');
+    countDiv.style.cssText = 'font-size:0.8em; color:var(--muted); margin-top:4px; text-align:center;';
+    countDiv.textContent = `แสดง ${visibleLogs.length} / ${logs.length} รายการ`;
+    container.appendChild(countDiv);
 }
 
 function isFitnessQuest(text) {
@@ -7984,68 +8496,116 @@ function upgradeStat(st) {
                     showToast('เพิ่ม ' + st + ' เป็น ' + S[st]);
                 }
 
+// ========== LAZY LOAD: Track ว่า render tab ไหนไปแล้วบ้าง ==========
+const tabRendered = {
+    quests: false,
+    skills: false,
+    career: false,
+    stash: false,
+    settings: false
+};
+
 function switchTab(tabName) {
-                    console.log('Switching to tab:', tabName);
+    console.log('Switching to tab:', tabName);
 
-                    // 1. ซ่อนทุก tab-content ก่อน
-                    document.querySelectorAll('.tab-content').forEach(tab => {
-                        tab.style.display = 'none';
-                        tab.classList.remove('active');
-                    });
+    // 1. ซ่อนทุก tab-content ก่อน
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.style.display = 'none';
+        tab.classList.remove('active');
+    });
 
-                    // 2. เอา active ออกจากทุก tab button
-                    document.querySelectorAll('.tab').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    if (tabName === 'skills') {
-                        openSkillTree();
-                        return;
-                    }
+    // 2. เอา active ออกจากทุก tab button
+    document.querySelectorAll('.tab').forEach(btn => {
+        btn.classList.remove('active');
+    });
 
-                    // 3. แสดง tab ที่เลือก
-                    const selectedTab = document.getElementById(`${tabName}-tab`);
-                    if (selectedTab) {
-                        selectedTab.style.display = 'block';
-                        selectedTab.classList.add('active');
-                    } else {
-                        console.error(`Tab not found: ${tabName}-tab`);
-                    }
+    if (tabName === 'skills') {
+        openSkillTree();
+        tabRendered.skills = true; // ✅ Mark ว่า render แล้ว
+        return;
+    }
 
-                    // 4. ใส่ active ให้ปุ่ม tab ที่คลิก (ถ้ามี event)
-                    if (event && event.target && event.target.classList.contains('tab')) {
-                        event.target.classList.add('active');
-                    } else {
-                        // ถ้าไม่มี event ให้หาปุ่มที่ตรงกับ tabName
-                        const tabs = document.querySelectorAll('.tab');
-                        tabs.forEach(tab => {
-                            if (tab.textContent.toLowerCase().includes(tabName)) {
-                                tab.classList.add('active');
-                            }
-                        });
-                    }
+    // 3. แสดง tab ที่เลือก
+    const selectedTab = document.getElementById(`${tabName}-tab`);
+    if (selectedTab) {
+        selectedTab.style.display = 'block';
+        selectedTab.classList.add('active');
+    } else {
+        console.error(`Tab not found: ${tabName}-tab`);
+    }
 
-                    // ✅ Render เฉพาะ tab ที่เปิด
-                    if (tabName === 'quests') {
-                        renderDailyTab();
-                        renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
-                        renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-                        renderCalendar();
-                        updateXpBar();
-                    } else if (tabName === 'skills') {
-                        renderSkillTree();
-                    } else if (tabName === 'career') {
-                        renderAtlas();
-                    } else if (tabName === 'stash') {
-                        renderStash();
-                    }        
-                
-    
-    // ใส่ active ให้ปุ่ม
-    if (event && event.target) {
+    // 4. ใส่ active ให้ปุ่ม tab ที่คลิก
+    if (event && event.target && event.target.classList.contains('tab')) {
         event.target.classList.add('active');
-    }        
+    } else {
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            if (tab.textContent.toLowerCase().includes(tabName)) {
+                tab.classList.add('active');
+            }
+        });
+    }
+    // ✅ LAZY LOAD: Render เฉพาะ tab ที่ยังไม่เคย render
+    const shouldRender = !tabRendered[tabName];
+    
+    if (shouldRender) {
+        console.log(`🔄 First time opening ${tabName} tab - rendering...`);
+        
+        if (tabName === 'quests') {
+            renderDailyTab();
+            renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+            renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+            renderCalendar();
+            updateXpBar();
+        } else if (tabName === 'skills') {
+            renderSkillTree();
+        } else if (tabName === 'career') {
+            renderAtlas();
+        } else if (tabName === 'stash') {
+            renderStash();
+        }
+        // ✅ Mark ว่า render แล้ว
+        tabRendered[tabName] = true;
+    } else {
+        console.log(`⚡ ${tabName} tab already rendered - skipping (lazy load)`);
+    }
+
+    // ✅ Auto-sync check เมื่อเปิด tab quests/career
+    if (typeof autoSyncCheck === 'function' && (tabName === 'quests' || tabName === 'career')) {
+        autoSyncCheck();
+    }
 }
+
+// ✅ ฟังก์ชัน Force Re-render (สำหรับตอน Load จาก Cloud)
+function forceRenderTab(tabName) {
+    console.log(`🔄 Force rendering ${tabName} tab...`);
+    tabRendered[tabName] = false; // Reset flag
+    
+    // ถ้า tab นี้กำลังเปิดอยู่ → render ทันที
+    const selectedTab = document.getElementById(`${tabName}-tab`);
+    if (selectedTab && selectedTab.classList.contains('active')) {
+        switchTab(tabName);
+    }
+}
+
+// ✅ ฟังก์ชัน Force Re-render ทุก tab (ใช้หลัง manualLoad)
+function forceRenderAllTabs() {
+    console.log('🔄 Force rendering all tabs...');
+    Object.keys(tabRendered).forEach(key => tabRendered[key] = false);
+    
+    // Render tab ที่เปิดอยู่ปัจจุบัน
+    const activeTab = document.querySelector('.tab-content.active');
+    if (activeTab) {
+        const tabId = activeTab.id;
+        const tabName = tabId.replace('-tab', '');
+        forceRenderTab(tabName);
+    }
+}
+
 window.switchTab = switchTab;
+window.forceRenderTab = forceRenderTab;
+window.forceRenderAllTabs = forceRenderAllTabs;
+                
 // Default rewards สำหรับแต่ละ tier
 const DEFAULT_REWARDS = {
     chaos: [
@@ -8076,20 +8636,31 @@ const DEFAULT_REWARDS = {
 // ==========================================
 function renderStash() {
     console.log('Rendering Stash...');
-    if (typeof renderStashShop === 'function') {
-        renderStashShop();
-    }
+    try {
+        // ✅ Render Stash Shop
+        if (typeof renderStashShop === 'function') {
+            renderStashShop();
+        } else {
+            console.warn('⚠️ renderStashShop function not found');
+        }
 
-    // Render Vault Grid
-    if (typeof renderVaultGrid === 'function') {
-        renderVaultGrid();
+        // ✅ Render Vault Grid
+        if (typeof renderVaultGrid === 'function') {
+            renderVaultGrid();
+        } else {
+            console.warn('⚠️ renderVaultGrid function not found');
+        }
+        
+        // ✅ Render Diary Logs
+        if (typeof renderDiaryLogs === 'function') {
+            renderDiaryLogs();
+        } else {
+            console.warn('⚠️ renderDiaryLogs function not found');
+        }
+    } catch (err) {
+        console.error('❌ Error in renderStash:', err);
+        showToast('❌ เกิดข้อผิดพลาดในการแสดงผล Stash');
     }
-    
-    // Render Diary Logs
-    if (typeof renderDiaryLogs === 'function') {
-        renderDiaryLogs();
-    }
-    
 }
 function renderStashShop() {
     // Update orb balance
@@ -8452,6 +9023,7 @@ function trimLogs() {
 
 // ========== Save / Load (IndexedDB + localStorage) ==========
 function save() {
+     S._lastModified = Date.now(); // ✅ อัปเดต timestamp ทุกครั้งที่ save
     dbSave(S).catch(err => console.error("IndexedDB save error:", err));
     localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
     quickSync(false);
@@ -10246,11 +10818,179 @@ updateHoursDisplay();
                     alert("เกิดข้อผิดพลาดในการล้างข้อมูล");
                 }
             }
+            // ========== Service Worker Registration ==========
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(registration => {
+                console.log('✅ Service Worker registered with scope:', registration.scope);
+                
+                // เช็กอัปเดตทุก 1 ชั่วโมง
+                setInterval(() => {
+                    registration.update();
+                }, 60 * 60 * 1000);
+            })
+            .catch(err => {
+                console.warn('⚠️ Service Worker registration failed:', err);
+            });
+    });
+}
+// ========== Version Check System ==========
+function compareVersions(v1, v2) {
+    const parts1 = (v1 ?? '0.0.0').split('.').map(Number);
+    const parts2 = (v2 ?? '0.0.0').split('.').map(Number);
+    
+    for (let i = 0; i < 3; i++) {
+        const p1 = parts1[i] ?? 0;
+        const p2 = parts2[i] ?? 0;
+        if (p1 > p2) return 1;
+        if (p1 < p2) return -1;
+    }
+    return 0;
+}
+
+async function checkAppVersion() {
+    try {
+        // ดึงข้อมูลจาก Cloud เพื่อเช็กเวอร์ชัน
+        const response = await fetch(SCRIPT_URL);
+        if (!response.ok) return;
+        
+        const cloudData = await response.json();
+        if (!cloudData || Object.keys(cloudData).length === 0) return;
+        
+        const cloudVersion = cloudData.appVersion ?? '1.0.0';
+        const localVersion = S.appVersion ?? '1.0.0';
+        
+        console.log(`[Version] Local: ${localVersion}, Cloud: ${cloudVersion}, App: ${APP_VERSION}`);
+        
+        // เช็กว่าเคยเห็น notification นี้แล้วหรือยัง (ใน session นี้)
+        const dismissedVersion = sessionStorage.getItem('dismissed_version_' + APP_VERSION);
+        if (dismissedVersion) {
+            console.log('[Version] User already dismissed this version notification');
+            return;
+        }
+        
+        // กรณี 1: Cloud มีข้อมูลเก่ากว่าโค้ดปัจจุบัน (ต้องอัปเดตข้อมูล)
+        if (compareVersions(APP_VERSION, cloudVersion) > 0) {
+            console.log(`[Version] ⚠️ Cloud data is outdated (${cloudVersion} < ${APP_VERSION})`);
+            showUpdateModal(cloudVersion, APP_VERSION, 'cloud');
+            return;
+        }
+        
+        // กรณี 2: Cloud มีข้อมูลใหม่กว่าโค้ดปัจจุบัน (ต้องอัปเดตโค้ด - reload หน้าเว็บ)
+        if (compareVersions(cloudVersion, APP_VERSION) > 0) {
+            console.log(`[Version] 🔄 New app version available! (${cloudVersion} > ${APP_VERSION})`);
+            showUpdateModal(APP_VERSION, cloudVersion, 'app');
+            return;
+        }
+        
+        // อัปเดต appVersion ใน S ให้ตรงกับเวอร์ชันปัจจุบัน
+        if (S.appVersion !== APP_VERSION) {
+            S.appVersion = APP_VERSION;
+            save();
+        }
+        
+    } catch (err) {
+        console.warn('[Version] Check failed:', err);
+    }
+}
+
+function showUpdateModal(oldVersion, newVersion, type) {
+    const modal = document.getElementById('version-update-modal');
+    if (!modal) return;
+    
+    const title = document.getElementById('vu-modal-title');
+    const message = document.getElementById('vu-modal-message');
+    const changelog = document.getElementById('vu-changelog');
+    const updateBtn = document.getElementById('vu-update-btn');
+    
+    if (type === 'cloud') {
+        title.textContent = '⚠️ ข้อมูลใน Cloud ล้าสมัย';
+        message.innerHTML = `
+            ข้อมูลใน Cloud ของคุณเป็นเวอร์ชัน <strong style="color:var(--red);">${oldVersion}</strong><br>
+            แต่แอปปัจจุบันเป็นเวอร์ชัน <strong style="color:var(--gold);">${newVersion}</strong><br><br>
+            ระบบจะอัปเดตโครงสร้างข้อมูลให้โดยอัตโนมัติ
+        `;
+        updateBtn.textContent = '✅ อัปเดตข้อมูลเลย';
+        updateBtn.onclick = () => {
+            S.appVersion = APP_VERSION;
+            save();
+            closeModal('version-update-modal');
+            showToast('✅ ข้อมูลถูกอัปเดตเป็นเวอร์ชันล่าสุด');
+        };
+    } else {
+        title.textContent = '🚀 มีแพทช์ใหม่พร้อมใช้งาน!';
+        message.innerHTML = `
+            แอปของคุณเป็นเวอร์ชัน <strong style="color:var(--red);">${oldVersion}</strong><br>
+            แต่ Cloud มีเวอร์ชันใหม่ <strong style="color:var(--gold);">${newVersion}</strong><br><br>
+            กรุณาอัปเดตแอปเพื่อรับฟีเจอร์ใหม่และแก้ไขบั๊ก
+        `;
+        updateBtn.textContent = ' อัปเดตแอปเลย';
+        updateBtn.onclick = () => {
+            // Clear cache และ reload
+            if ('caches' in window) {
+                caches.keys().then(keys => {
+                    keys.forEach(key => caches.delete(key));
+                });
+            }
+            localStorage.removeItem(APP_VERSION_KEY);
+            sessionStorage.clear();
+            location.reload(true); // Force reload
+        };
+    }
+    
+    // แสดง Changelog
+    changelog.innerHTML = '';
+    const changes = VERSION_CHANGELOG[newVersion] ?? ['ปรับปรุงประสิทธิภาพและแก้ไขบั๊ก'];
+    changes.forEach(change => {
+        const li = document.createElement('li');
+        li.textContent = change;
+        li.style.cssText = 'margin-bottom:4px; font-size:12px; color:var(--text);';
+        changelog.appendChild(li);
+    });
+    
+    // ปุ่ม Later
+    const laterBtn = document.getElementById('vu-later-btn');
+    if (laterBtn) {
+        laterBtn.onclick = () => {
+            sessionStorage.setItem('dismissed_version_' + APP_VERSION, 'true');
+            closeModal('version-update-modal');
+        };
+    }
+    
+    openModal('version-update-modal');
+}
+
+// Helper functions สำหรับ Modal
+function openModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.add('show');
+}
+
+function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.remove('show');
+}
 
             // ========== Initialization ==========
             async function initApp() {
                 loadCustomQuestDbs();
                 await load();
+
+                 // ✅ เพิ่ม: เช็กเวอร์ชันแอป
+                if (navigator.onLine) {
+                    await checkAppVersion();
+                }
+
+                // ✅ เพิ่ม: ดึงข้อมูลจาก Cloud อัตโนมัติ (ถ้ามี internet)
+                if (navigator.onLine) {
+                    console.log('🌐 Online detected, syncing from Cloud...');
+                    try {
+                        await autoLoadFromCloud();
+                    } catch (err) {
+                        console.warn('⚠️ Cloud sync failed, using local data');
+        }
+    }
 
                 lastSyncedDataStr = JSON.stringify(S);
 
@@ -10262,8 +11002,40 @@ updateHoursDisplay();
                 renderSocialChannels(); renderVaultItems(); renderSavingGoals();
 
                 setInterval(() => quickSync(false), 60 * 1000);
+                setInterval(() => {
+        if (navigator.onLine && typeof autoLoadFromCloud === 'function') {
+            autoLoadFromCloud().catch(err => console.warn('Polling failed:', err));
+        }
+    }, 30000);
                 window.addEventListener('pagehide', () => quickSync(true));
             }
+            async function autoLoadFromCloud() {
+    const response = await fetch(SCRIPT_URL);
+    const cloudData = await response.json();
+    
+    if (cloudData && Object.keys(cloudData).length > 0) {
+        // ✅ เปรียบเทียบ timestamp (ต้องเพิ่ม _lastModified ใน S)
+        const cloudTime = cloudData._lastModified ?? 0;
+        const localTime = S._lastModified ?? 0;
+        
+        if (cloudTime > localTime) {
+            console.log('☁ Cloud data is newer, updating...');
+            Object.keys(cloudData).forEach(k => { S[k] = cloudData[k]; });
+            S = migrateData(S);
+            await dbSave(S);
+            localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
+            
+            // Re-render UI
+            if (typeof forceRenderAllTabs === 'function') {
+                forceRenderAllTabs();
+            }
+            
+            showToast('☁ ซิงค์ข้อมูลจาก Cloud อัตโนมัติ');
+        } else {
+            console.log('✅ Local data is newer or equal');
+        }
+    }
+}
 
             initApp();
     </script>

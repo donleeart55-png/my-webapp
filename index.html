@@ -6539,6 +6539,18 @@ async function dbSave(data) {
             if (typeof showToast === 'function') showToast('⚠️ ข้อมูลถูกแก้ไขจากที่อื่นแล้ว กรุณากด Load ใหม่');
             return Promise.resolve(); // ออกแบบนุ่มนวล ไม่ให้แอป crash
         }
+        // ✅ แก้ไข: ดึงข้อมูลใหม่จาก DB มาใช้แทน
+            if (typeof S !== 'undefined' && currentRecord.data) {
+                Object.keys(currentRecord.data).forEach(k => {
+                    S[k] = currentRecord.data[k];
+                });
+                S._version = currentRecord.version;
+                console.log('✅ Updated S with newer data from DB');
+                // แสดง Toast แจ้งเตือน
+                if (typeof showToast === 'function') {
+                    showToast('🔄 ข้อมูลถูกอัปเดตจากแหล่งอื่น');
+                }
+            }
         
         // 3. บันทึกพร้อมอัปเดตเวอร์ชันและเวลา
         const newVersion = (data._version ?? 0) + 1;
@@ -6859,6 +6871,12 @@ function checkDecay() {
         }
     } else {
         document.getElementById('decay-alert')?.classList.remove('show');
+    }
+    const dataStr = JSON.stringify(S);
+    if (dataStr !== lastSyncedDataStr) {
+        save();
+    } else {
+        console.log('✅ No changes detected, skipping save');
     }
 }
 
@@ -8508,6 +8526,12 @@ const tabRendered = {
 function switchTab(tabName) {
     console.log('Switching to tab:', tabName);
 
+    // ✅ ตรวจสอบว่า tabName ถูกต้องไหม
+    if (!tabName) {
+        console.error(' switchTab called with no tabName');
+        return;
+    }
+
     // 1. ซ่อนทุก tab-content ก่อน
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.style.display = 'none';
@@ -8532,6 +8556,7 @@ function switchTab(tabName) {
         selectedTab.classList.add('active');
     } else {
         console.error(`Tab not found: ${tabName}-tab`);
+        return; // ✅ ออกก่อนถ้าไม่มี tab นี้
     }
 
     // 4. ใส่ active ให้ปุ่ม tab ที่คลิก
@@ -8540,7 +8565,7 @@ function switchTab(tabName) {
     } else {
         const tabs = document.querySelectorAll('.tab');
         tabs.forEach(tab => {
-            if (tab.textContent.toLowerCase().includes(tabName)) {
+            if (tab.textContent && tab.textContent.toLowerCase().includes(tabName)) {
                 tab.classList.add('active');
             }
         });
@@ -8579,6 +8604,11 @@ function switchTab(tabName) {
 // ✅ ฟังก์ชัน Force Re-render (สำหรับตอน Load จาก Cloud)
 function forceRenderTab(tabName) {
     console.log(`🔄 Force rendering ${tabName} tab...`);
+     // ✅ ตรวจสอบว่า tabName ถูกต้องไหม
+    if (!tabName || !(tabName in tabRendered)) {
+        console.warn(`⚠️ Invalid tab name: ${tabName}`);
+        return;
+    }
     tabRendered[tabName] = false; // Reset flag
     
     // ถ้า tab นี้กำลังเปิดอยู่ → render ทันที
@@ -8591,16 +8621,30 @@ function forceRenderTab(tabName) {
 // ✅ ฟังก์ชัน Force Re-render ทุก tab (ใช้หลัง manualLoad)
 function forceRenderAllTabs() {
     console.log('🔄 Force rendering all tabs...');
+    // ✅ หา tab ที่ active อยู่จริงๆ
+    const activeTabContent = document.querySelector('.tab-content.active');
+    if (!activeTabContent) {
+        console.warn('⚠️ No active tab content found');
+        return;
+    }
+    // ✅ ดึงชื่อ tab จาก id (เช่น 'quests-tab' → 'quests')
+    const tabId = activeTabContent.id;
+    if (!tabId || !tabId.includes('-tab')) {
+        console.warn('⚠️ Invalid tab id format:', tabId);
+        return;
+    }
+    
+    const tabName = tabId.replace('-tab', '');
+    // ✅ ตรวจสอบว่า tabName มีอยู่ใน tabRendered ไหม
+    if (!(tabName in tabRendered)) {
+        console.warn(`⚠️ Tab '${tabName}' not in tabRendered object`);
+        return;
+    }
     Object.keys(tabRendered).forEach(key => tabRendered[key] = false);
     
-    // Render tab ที่เปิดอยู่ปัจจุบัน
-    const activeTab = document.querySelector('.tab-content.active');
-    if (activeTab) {
-        const tabId = activeTab.id;
-        const tabName = tabId.replace('-tab', '');
+    
         forceRenderTab(tabName);
     }
-}
 
 window.switchTab = switchTab;
 window.forceRenderTab = forceRenderTab;

@@ -4561,6 +4561,627 @@ img.loaded, .lazy-load.loaded {
     --social-purple: #9775fa;
     --social-orange: #ffa94d;
 }
+/* ==========================================
+   PATCH: Save Preset & Collapse All
+   ========================================== */
+
+/* Collapse All Button */
+.btn-collapse-all {
+    background: rgba(200, 170, 110, 0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    transition: all 0.3s;
+    margin-left: 8px;
+}
+
+.btn-collapse-all:hover {
+    background: var(--gold);
+    color: #0a0a0a;
+}
+
+.btn-collapse-all.active {
+    background: var(--gold);
+    color: #0a0a0a;
+}
+
+/* Save Preset Button */
+.btn-save-preset {
+    background: rgba(78, 203, 113, 0.15);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    transition: all 0.3s;
+    margin-left: 8px;
+}
+
+.btn-save-preset:hover {
+    background: var(--green);
+    color: #0a0a0a;
+}
+
+/* ✅ แก้ไข: quest-pair-wrapper ให้เป็น 2 คอลัมน์เท่านั้น */
+.quest-pair-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;  /* ✅ 2 คอลัมน์เสมอ */
+    gap: 12px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    max-height: 500px;
+    opacity: 1;
+    grid-column: 1 / -1;  /* ✅ ใช้เต็มความกว้างของ container */
+}
+
+.quest-pair-wrapper.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.quest-pair-wrapper .map-boss-card {
+    margin-bottom: 0;
+}
+
+/* ✅ ถ้ามีแค่ 1 ตัวในคู่ ให้ใช้ 1 คอลัมน์ (แต่ยังอยู่ใน grid 2 คอลัมน์) */
+.quest-pair-wrapper.single-card {
+    grid-template-columns: 1fr;
+    max-width: 50%;
+}
+/* ✅ ปุ่มพับแถว อยู่เหนือ wrapper */
+.quest-pair-wrapper .pair-collapse-header {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 4px;
+}
+
+@media (max-width: 768px) {
+    .quest-pair-wrapper {
+        grid-template-columns: 1fr;
+    }
+    .quest-pair-wrapper.single-card {
+        max-width: 100%;
+    }
+}
+
+/* Collapse Toggle Button (หัวข้อ) */
+.btn-collapse-section {
+    background: rgba(200, 170, 110, 0.1);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-collapse-section:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.btn-collapse-section.active {
+    color: var(--gold);
+    transform: rotate(-90deg);
+}
+/* ==========================================
+   BOTTOM NAVIGATION TAB BAR
+   ========================================== */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-top: 2px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 6px 0 env(safe-area-inset-bottom);
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* ✅ ซ่อน bottom nav เมื่อเลื่อนลง */
+.bottom-nav.hidden {
+    transform: translateY(100%);
+}
+
+/* ✅ แสดง bottom nav เมื่อเลื่อนขึ้นหรืออยู่ด้านบน */
+.bottom-nav.visible {
+    transform: translateY(0);
+}
+
+.bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 10px;
+    transition: all 0.3s;
+    border-radius: 8px;
+    min-width: 60px;
+    gap: 2px;
+    position: relative;
+}
+
+.bottom-nav .nav-item .nav-icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.bottom-nav .nav-item .nav-label {
+    font-size: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bottom-nav .nav-item:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.bottom-nav .nav-item.active {
+    color: var(--gold);
+}
+
+.bottom-nav .nav-item.active::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(200, 170, 110, 0.5);
+}
+
+.bottom-nav .nav-item .nav-badge {
+    position: absolute;
+    top: -4px;
+    right: 4px;
+    background: var(--red);
+    color: white;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 10px;
+    font-family: 'Space Mono', monospace;
+    min-width: 16px;
+    text-align: center;
+}
+
+/* Mobile padding for bottom nav */
+body {
+    padding-bottom: 70px !important;
+}
+/* ==========================================
+   STASH TABS (Art Log & Fit Log)
+   ========================================== */
+
+.stash-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    background: var(--surface);
+    padding: 4px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+.stash-tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all 0.3s;
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.stash-tab:hover {
+    background: rgba(200, 169, 110, 0.1);
+    color: var(--text);
+}
+
+.stash-tab.active {
+    background: var(--gold);
+    color: #0a0a0a;
+}
+
+.stash-tab-content {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+
+.stash-tab-content.active {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 200px !important;
+    overflow: visible !important;
+}
+
+/* Log Entry with Rich Text */
+.log-entry-rich {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--gold);
+    transition: all 0.3s;
+}
+
+.log-entry-rich:hover {
+    border-color: var(--accent2);
+}
+
+.log-entry-rich .log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.log-entry-rich .log-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.log-entry-rich .log-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.log-entry-rich .log-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.log-entry-rich .log-xp {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+}
+
+.log-entry-rich .log-currency {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+}
+
+.log-entry-rich .log-note {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    margin: 6px 0 8px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.log-entry-rich .log-note img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 6px;
+    margin: 4px 0;
+    display: block;
+}
+
+.log-entry-rich .log-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.log-entry-rich .log-actions button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 10px;
+    transition: all 0.2s;
+    font-family: 'Sarabun', sans-serif;
+}
+
+.log-entry-rich .log-actions button:hover {
+    border-color: var(--accent);
+    color: var(--text);
+}
+
+.log-entry-rich .log-actions .btn-delete-log {
+    background: rgba(224, 92, 92, 0.15);
+    border-color: var(--red);
+    color: var(--red);
+}
+
+.log-entry-rich .log-actions .btn-delete-log:hover {
+    background: var(--red);
+    color: white;
+}
+
+.log-entry-rich .log-actions .btn-edit-log {
+    background: rgba(200, 170, 110, 0.15);
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.log-entry-rich .log-actions .btn-edit-log:hover {
+    background: var(--gold);
+    color: #0a0a0a;
+}
+
+.log-entry-rich .log-edit-form {
+    display: none;
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
+.log-entry-rich .log-edit-form.show {
+    display: block;
+}
+
+.log-entry-rich .log-edit-form textarea {
+    width: 100%;
+    min-height: 80px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    padding: 8px;
+    font-size: 12px;
+    font-family: 'Sarabun', sans-serif;
+    resize: vertical;
+    margin-bottom: 8px;
+}
+
+.log-entry-rich .log-edit-form textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.log-entry-rich .log-edit-form .edit-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* Add Content Button */
+.btn-add-content {
+    width: 100%;
+    padding: 12px;
+    background: rgba(200, 170, 110, 0.1);
+    border: 2px dashed var(--gold);
+    color: var(--gold);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s;
+    margin-bottom: 16px;
+}
+
+.btn-add-content:hover {
+    background: rgba(200, 170, 110, 0.2);
+    border-color: var(--accent);
+}
+
+/* Image upload preview */
+.image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.image-preview img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    object-fit: cover;
+}
+
+/* Stash tab header */
+.stash-tab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.stash-tab-header .stats {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.stash-tab-header .stats span {
+    color: var(--gold);
+    font-weight: 700;
+}
+/* ==========================================
+   LOG NOTE - ซ่อนเนื้อหาส่วนเกิน (3 บรรทัด)
+   ========================================== */
+
+.log-note {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    margin: 6px 0 8px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.log-note img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 6px;
+    margin: 4px 0;
+    display: block;
+}
+/* ✅ ข้อความที่ถูกตัด (แสดงแค่ 3 บรรทัด) */
+.log-note.truncated {
+    max-height: 4.8em;
+    overflow: hidden;
+    position: relative;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* ✅ Gradient fade สำหรับข้อความที่ถูกตัด */
+.log-note.truncated::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2em;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+    pointer-events: none;
+}
+/* ✅ ปุ่มอ่านเพิ่มเติม / ย่อกลับ */
+.log-show-more-btn {
+    color: var(--gold);
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-block;
+    margin-left: 4px;
+    position: relative;
+    z-index: 2;
+    background: rgba(0,0,0,0.3);
+    padding: 0 4px;
+    border-radius: 3px;
+}
+/* ✅ ปุ่มอ่านเพิ่มเติม / ย่อกลับ */
+.log-show-less-btn {
+    color: var(--gold);
+    cursor: pointer;
+    font-weight: 600;
+    display: block;
+    margin-top: 4px;
+    background: rgba(0,0,0,0.3);
+    padding: 0 4px;
+    border-radius: 3px;
+}
+
+.log-show-more-btn:hover,
+.log-show-less-btn:hover {
+    text-decoration: underline;
+    background: rgba(200, 170, 110, 0.2);
+}
+
+/* ✅ Wrapper สำหรับ note */
+.log-note-wrapper {
+    margin: 6px 0 8px;
+}
+.log-entry-rich {
+    overflow: visible;
+}
+/* ==========================================
+   PRESET PANEL - ซ่อน/แสดง
+   ========================================== */
+
+#preset-panel {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+#preset-panel.hidden {
+    display: none !important;
+}
+/* ==========================================
+   EDIT & PRESET PANEL
+   ========================================== */
+
+#edit-preset-panel {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+#edit-preset-panel.hidden {
+    display: none !important;
+}
+
+.btn-edit-mode {
+    background: rgba(200, 170, 110, 0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    transition: all 0.3s;
+}
+
+.btn-edit-mode:hover {
+    background: var(--gold);
+    color: #0a0a0a;
+}
+
+.btn-edit-mode.active {
+    background: var(--gold);
+    color: #0a0a0a;
+}
+
+/* Hide tab bar in settings tab? No, keep visible always */
 
     </style>
 </head>
@@ -4716,10 +5337,34 @@ img.loaded, .lazy-load.loaded {
     <div style="text-align: right; margin-bottom: 4px;">
         <button class="btn-s" id="btn-back-today" style="display:none;" onclick="resetToTodayCalendar()">กลับวันนี้</button>
     </div>
-        <!-- Daily Quests -->
+            <!-- Daily Quests -->
     <div class="q-section compact">
-        <div class="sec-title compact"><span>Piety's Quests</span></div>
-        <div id="daily-quests" class="quest-grid-container"></div>
+                        <div class="sec-title compact">
+            <span>Piety's Quests</span>
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <button class="btn-collapse-section" id="btn-collapse-all-quests" onclick="toggleAllQuestsCollapse()" title="พับ/กางทั้งหมด">▼</button>
+                <button class="btn-edit-mode" onclick="toggleEditModeWithPreset()" id="btn-toggle-edit-preset" style="background:rgba(200,169,110,.2); color:var(--accent); padding:4px 10px; font-size:10px; border:1px solid var(--accent); border-radius:4px; cursor:pointer; font-family:'Space Mono',monospace;">
+                    ✎ แก้ไข & Presets
+                </button>
+            </div>
+        </div>
+                                <div id="daily-quests-wrapper">
+            <!-- ✅ Edit & Preset Panel - แสดงเมื่อกดปุ่ม Edit -->
+            <div id="edit-preset-panel" style="display: none; margin-bottom: 8px; padding: 12px; background: rgba(0,0,0,0.4); border-radius: 8px; border: 1px solid var(--gold);">
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px;">
+                    <span style="font-size: 10px; color: var(--gold); font-weight: 700;">✎ โหมดแก้ไข</span>
+                    <span style="font-size: 8px; color: var(--muted);">(คลิกที่ข้อความเพื่อแก้ไข)</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 8px;">
+                    <span style="font-size: 9px; color: var(--muted);">📋 Preset:</span>
+                    <span id="preset-dropdown-container"></span>
+                    <button class="btn-save-preset" onclick="saveQuestPreset()" style="padding:2px 10px; font-size:9px;">💾 Save Preset</button>
+                    <button class="btn-s" style="background:rgba(224,92,92,.15); color:var(--red); padding:2px 10px; font-size:9px; border:1px solid var(--red);" onclick="deleteSelectedPreset()">🗑️ ลบ</button>
+                    <button class="btn-s" style="background:rgba(124,110,245,.15); color:var(--accent2); padding:2px 10px; font-size:9px; border:1px solid var(--accent2);" onclick="openQuestManager('daily')">✎ จัดการเควส</button>
+                </div>
+            </div>
+            <div id="daily-quests" class="quest-grid-container"></div>
+        </div>
     </div>
         <!-- Weekly Quests -->
     <div class="q-section compact">
@@ -4786,6 +5431,32 @@ img.loaded, .lazy-load.loaded {
     </div>
 
 </div>  <!-- ✅ ปิด quests-tab ตรงนี้เท่านั้น -->
+    
+<!-- ==========================================
+     BOTTOM NAVIGATION TAB BAR
+     ========================================== -->
+<div class="bottom-nav" id="bottom-nav">
+    <button class="nav-item active" data-tab="quests" onclick="switchTab('quests')">
+        <span class="nav-icon">📜</span>
+        <span class="nav-label">Quests</span>
+    </button>
+    <button class="nav-item" data-tab="career" onclick="switchTab('career')">
+        <span class="nav-icon">🌍</span>
+        <span class="nav-label">Atlas</span>
+    </button>
+    <button class="nav-item" data-tab="social" onclick="switchTab('social')">
+        <span class="nav-icon">📱</span>
+        <span class="nav-label">Social</span>
+    </button>
+    <button class="nav-item" data-tab="stash" onclick="switchTab('stash')">
+        <span class="nav-icon">📦</span>
+        <span class="nav-label">Stash</span>
+    </button>
+    <button class="nav-item" data-tab="settings" onclick="switchTab('settings')">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Settings</span>
+    </button>
+</div>
 
     <!-- ==========================================
      TAB: SOCIAL HUB (เพิ่มใหม่)
@@ -4928,115 +5599,60 @@ img.loaded, .lazy-load.loaded {
         </div>
     </div>
 
-    <!-- ==========================================
-     TAB 4: THE STASH (VAULT)
+        <!-- ==========================================
+     TAB 4: THE STASH (Art Log & Fit Log)
      ========================================== -->
     <div id="stash-tab" class="tab-content">
-        <div class="career-section">
-            <div class="career-title">
-                🏪 The Stash - ร้านแลกเปลี่ยนรางวัล
-                <span style="font-size: 10px; color: var(--muted); font-weight: normal;">
-                (แลก Orb เพื่อรับรางวัล)
-            </span>
+        <!-- Stash Tabs -->
+        <div class="stash-tabs">
+            <button class="stash-tab active" data-stash-tab="art" onclick="switchStashTab('art')">
+                🎨 Art Log
+            </button>
+            <button class="stash-tab" data-stash-tab="fit" onclick="switchStashTab('fit')">
+                💪 Fit Log
+            </button>
+            <button class="stash-tab" data-stash-tab="vault" onclick="switchStashTab('vault')">
+                🏆 Dream Vault
+            </button>
         </div>
-        <!-- Orb Balance Display -->
-        <div class="orb-balance-display" style="display: flex; gap: 16px; margin-bottom: 16px; padding: 12px; background: var(--surface2); border-radius: 8px;">
-            <div class="orb-item">
-                <span class="orb-icon">💛</span>
-                <span class="orb-count" id="stash-currency-chaos">0</span>
-                <span class="orb-label">Chaos</span>
+
+        <!-- Art Log Content -->
+        <div id="stash-art" class="stash-tab-content active">
+            <div class="stash-tab-header">
+                <div>
+                    <div style="font-size:13px; font-weight:600; color:var(--gold);">🎨 Art Log</div>
+                    <div class="stats">รวม <span id="stash-art-total">0</span> ชม. | <span id="stash-art-count">0</span> รายการ</div>
+                </div>
+                <button class="btn-add-content" onclick="openAddLogModal('art')" style="width:auto; padding:8px 16px;">+ เพิ่มบันทึก</button>
             </div>
-            <div class="orb-item">
-                <span class="orb-icon">💠</span>
-                <span class="orb-count" id="stash-currency-exalted">0</span>
-                <span class="orb-label">Exalted</span>
-            </div>
-            <div class="orb-item">
-                <span class="orb-icon">💎</span>
-                <span class="orb-count" id="stash-currency-divine">0</span>
-                <span class="orb-label">Divine</span>
-            </div>
+            <div id="stash-art-logs" style="max-height:600px; overflow-y:auto;"></div>
         </div>
-        <!-- Reward Categories -->
-        <div class="reward-categories">
-            
-            <!-- Chaos Tier -->
-            <div class="reward-tier">
-                <div class="tier-header chaos-tier">
-                    <span class="tier-icon">💛</span>
-                    <span class="tier-name">Chaos Orb Rewards</span>
-                    <span class="tier-cost">1-3 Chaos</span>
+
+        <!-- Fit Log Content -->
+        <div id="stash-fit" class="stash-tab-content">
+            <div class="stash-tab-header">
+                <div>
+                    <div style="font-size:13px; font-weight:600; color:var(--red);">💪 Fit Log</div>
+                    <div class="stats">รวม <span id="stash-fit-total">0</span> ชม. | <span id="stash-fit-count">0</span> รายการ</div>
                 </div>
-                <div class="tier-description">รางวัลเล็กๆ น้อยๆ สำหรับพักผ่อน</div>
-                <div class="reward-grid" id="chaos-rewards-grid"></div>
-                <button class="btn-add-reward" onclick="openAddRewardModal('chaos')">
-                    + เพิ่มรางวัล Chaos
-                </button>
+                <button class="btn-add-content" onclick="openAddLogModal('fit')" style="width:auto; padding:8px 16px;">+ เพิ่มบันทึก</button>
             </div>
-            
-            <!-- Exalted Tier -->
-            <div class="reward-tier">
-                <div class="tier-header exalted-tier">
-                    <span class="tier-icon">💠</span>
-                    <span class="tier-name">Exalted Orb Rewards</span>
-                    <span class="tier-cost">1-3 Exalted</span>
-                </div>
-                <div class="tier-description">รางวัลระดับกลาง สำหรับรางวัลพิเศษ</div>
-                <div class="reward-grid" id="exalted-rewards-grid"></div>
-                <button class="btn-add-reward" onclick="openAddRewardModal('exalted')">
-                    + เพิ่มรางวัล Exalted
-                </button>
-            </div>
-            
-            <!-- Divine Tier -->
-            <div class="reward-tier">
-                <div class="tier-header divine-tier">
-                    <span class="tier-icon"></span>
-                    <span class="tier-name">Divine Orb Rewards</span>
-                    <span class="tier-cost">1-3 Divine</span>
-                </div>
-                <div class="tier-description">รางวัลระดับสูง สำหรับความสำเร็จยิ่งใหญ่</div>
-                <div class="reward-grid" id="divine-rewards-grid"></div>
-                <button class="btn-add-reward" onclick="openAddRewardModal('divine')">
-                    + เพิ่มรางวัล Divine
-                </button>
-            </div>
-            
+            <div id="stash-fit-logs" style="max-height:600px; overflow-y:auto;"></div>
         </div>
-        <!-- Redemption History -->
-        <div class="redemption-history" style="margin-top: 24px;">
-            <div class="sec-title">
-                <span>📜 ประวัติการแลกรางวัล</span>
-                <button class="btn-s" style="background: rgba(224, 92, 92, 0.15); color: var(--red); border: 1px solid var(--red);" 
-                        onclick="clearRedemptionHistory()">
-                    🗑️ ล้างประวัติ
-                </button>
+
+        <!-- Vault Content -->
+        <div id="stash-vault" class="stash-tab-content">
+            <div class="stash-tab-header">
+                <div>
+                    <div style="font-size:13px; font-weight:600; color:var(--accent2);">🏆 Dream Vault</div>
+                    <div class="stats">ผลงาน <span id="stash-vault-count">0</span> ชิ้น</div>
+                </div>
+                <button class="btn-add-content" onclick="openVaultManager()" style="width:auto; padding:8px 16px;">+ เพิ่มผลงาน</button>
             </div>
-            <div id="redemption-history-list"></div>
+            <div id="stash-vault-grid" class="vault-grid"></div>
         </div>
     </div>
-    <div class="career-section" style="margin-top: 24px;">
-        <div class="career-title">
-            🏆 Dream Vault & เควสส่วนขยาย
-                <button class="btn-s" style="background:rgba(200,169,110,.2); color:var(--accent);" onclick="openVaultManager()">✎ แก้ไข</button>
-            </div>
-            <div class="vault-grid" id="vault-grid-container"></div>
-        </div>
-        <div class="career-section" style="margin-top:16px;">
-            <div class="career-title">บันทึกความทรงจำการเดินทาง (Adventure Diary)</div>
-            <textarea class="diary-area" id="diary-in" placeholder="บันทึกไอเดียเพลง รูปภาพ อารมณ์ หรืออุปสรรคที่ฝ่าฟันมาได้ในวันนี้..."></textarea>
-            <select id="diary-mood" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:5px;margin-bottom:8px;width:100%;">
-                <option value="😊 สดใส">😊 สดใส</option>
-                <option value="😢 เศร้า">😢 เศร้า</option>
-                <option value="🎉 ตื่นเต้น">🎉 ตื่นเต้น</option>
-                <option value="😌 สงบ">😌 สงบ</option>
-                <option value="😤 มุ่งมั่น">😤 มุ่งมั่น</option>
-            </select>
-            <button class="btn-s btn-art" style="width:100%;"onclick="saveDiary()">สลักประวัติศาสตร์การเดินทางวันนี้ลงสมุดบันทึก</button>
-            <div class="diary-logs" id="diary-logs"></div>
-        </div>
-    </div>
-    <!-- ==========================================
+        <!-- ==========================================
      TAB 5: SETTINGS
      ========================================== -->
     <div id="settings-tab" class="tab-content">
@@ -5049,9 +5665,9 @@ img.loaded, .lazy-load.loaded {
             </p>
 
             <div style="display:grid; gap:10px;">
-                <!-- ปุ่ม Manual Save (เพิ่มใหม่) -->
+                <!-- ปุ่ม Manual Save -->
                 <button class="btn-s btn-art" style="width:100%; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="manualSave()">
-                    <span></span> บันทึกข้อมูลขึ้น Cloud (Manual Save)
+                    <span>💾</span> บันทึกข้อมูลขึ้น Cloud (Manual Save)
                 </button>
                 <!-- ปุ่ม Manual Load -->
                 <button class="btn-s btn-art"
@@ -5104,13 +5720,11 @@ img.loaded, .lazy-load.loaded {
                     </button>
                 </div>
             </div>
-        </div>
 
-        <!-- สถานะการเชื่อมต่อ -->
-  <div id="drive-status" style="margin-top:12px; padding:8px; background:rgba(200,169,110,0.1); border-radius:6px; font-size:0.85em; color:var(--text-dim);">
-    สถานะ: พร้อมใช้งาน
-  </div>
-</div>
+            <!-- สถานะการเชื่อมต่อ -->
+            <div id="drive-status" style="margin-top:12px; padding:8px; background:rgba(200,169,110,0.1); border-radius:6px; font-size:0.85em; color:var(--text-dim);">
+                สถานะ: พร้อมใช้งาน
+            </div>
         </div>
 
         <!-- ส่วนที่ 2: Danger Zone (ล้างข้อมูล) -->
@@ -5136,8 +5750,7 @@ img.loaded, .lazy-load.loaded {
             <p style="color:var(--text-dim); font-size:0.85em;">สร้างด้วย ❤️ เพื่อการพัฒนาตนเองด้านศิลปะและดนตรี</p>
         </div>
 
-    </div>
-
+    </div>  <!-- ✅ ปิด settings-tab ตรงนี้ -->
 
 <div class="modal-overlay" id="qm-modal">
     <div class="modal" style="max-width:420px; width:95%; text-align:left;">
@@ -5565,6 +6178,7 @@ function migrateData(oldS) {
         totalXp: get('totalXp', 0),
         xp: get('xp', 0),
         lvl: get('lvl', 1),
+        skillPoints: get('skillPoints', 1),  // ✅ เพิ่มตรงนี้
         STR: get('STR', 10),
         AGI: get('AGI', 10),
         INT: get('INT', 10),
@@ -5595,7 +6209,6 @@ function migrateData(oldS) {
                     }
                 ];
             }
-            // ✅ เพิ่ม: ตรวจสอบโครงสร้าง dailyQuests ให้ถูกต้อง
             return quests.map(q => {
                 if (!q.main) {
                     q.main = { text: 'Map Boss', xp: 50, rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 } };
@@ -5613,7 +6226,7 @@ function migrateData(oldS) {
         weeklyQuests: getArr('weeklyQuests', []),
         monthlyQuests: getArr('monthlyQuests', []),
 
-                // === Social Hub ===
+        // === Social Hub ===
         socialPlatforms: getArr('socialPlatforms', DEFAULT_SOCIAL_DATA.socialPlatforms),
         contentItems: getArr('contentItems', []),
         pipelineStats: getObj('pipelineStats', { idea: 0, filming: 0, editing: 0, upload: 0, posted: 0 }),
@@ -5645,7 +6258,6 @@ function migrateData(oldS) {
         atlasNodes: (() => {
             const nodes = getArr('atlasNodes', []);
             if (nodes.length === 0) {
-                // ✅ ค่าเริ่มต้นถ้าไม่มี Atlas Nodes
                 return [
                     { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false, currentXP: 0 },
                     { id: 'atlas2', name: 'ร้องเพลง Cover 10 เพลง', requiredXP: 500, branch: 'body', completed: false, currentXP: 0 },
@@ -5674,6 +6286,8 @@ function migrateData(oldS) {
         currentYear: get('currentYear', new Date().getFullYear()),
         currentMonth: get('currentMonth', new Date().getMonth()),
         editMode: get('editMode', false),
+        allQuestsCollapsed: get('allQuestsCollapsed', false),  // ✅ เพิ่มตรงนี้
+        editPresetPanelVisible: get('editPresetPanelVisible', false),  // ✅ เพิ่มตรงนี้
 
         // === History ===
         history: (() => {
@@ -5703,12 +6317,17 @@ function migrateData(oldS) {
         followers: getObj('followers', {}),
         lastFitDate: get('lastFitDate', null),
 
-
         // === Social ===
         socialChannels: getArr('socialChannels', [
             { id: "tk", name: "TikTok (EATLAEWSHOP)", subs: 0, vids: 0 },
             { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
-        ])
+        ]),
+
+        // === Quest Presets ===
+        questPresets: getArr('questPresets', []),  // ✅ เพิ่มตรงนี้
+
+        // === Vault ===
+        vaultItems: getArr('vaultItems', []),  // ✅ เพิ่มตรงนี้
     };
 
     // ==========================================
@@ -5721,8 +6340,24 @@ function migrateData(oldS) {
     if (newData.xp < 0) newData.xp = 0;
     if (newData.skillPoints < 0) newData.skillPoints = 0;
 
+    // ✅ 2. ลบฟิลด์เก่า (Passive Skill Tree, etc.)
+    const oldFieldsToRemove = [
+        'sp', 'stats', 'daily', 'weekly', 'monthly',
+        'dreams', 'dreamCategories', 'artLog', 'fitLog',
+        'incomeLog', 'diaryLog', 'counts', 'streak',
+        'restCardio', 'restWeight', 'pendingSP', 'un',
+        'lastActive', 'status', 'message', 'dailyByDate',
+        'passiveSkillTree', 'skillTree', 'passiveSkills'
+    ];
+    
+    oldFieldsToRemove.forEach(field => {
+        if (newData[field] !== undefined) {
+            delete newData[field];
+            console.log(`[Migration] Removed old field: ${field}`);
+        }
+    });
 
-    // ✅ 4. ตรวจสอบ currency
+    // ✅ 3. ตรวจสอบ currency
     if (!newData.currency) {
         newData.currency = { chaos: 0, exalted: 0, divine: 0 };
     }
@@ -5730,27 +6365,27 @@ function migrateData(oldS) {
     if (newData.currency.exalted < 0) newData.currency.exalted = 0;
     if (newData.currency.divine < 0) newData.currency.divine = 0;
 
-    // ✅ 5. ตรวจสอบ history
+    // ✅ 4. ตรวจสอบ history
     if (!newData.history || typeof newData.history !== 'object') {
         newData.history = {};
     }
 
-    // ✅ 6. ตรวจสอบ weeklyCompletion
+    // ✅ 5. ตรวจสอบ weeklyCompletion
     if (!newData.weeklyCompletion || typeof newData.weeklyCompletion !== 'object') {
         newData.weeklyCompletion = {};
     }
 
-    // ✅ 7. ตรวจสอบ trialCompletion
+    // ✅ 6. ตรวจสอบ trialCompletion
     if (!newData.trialCompletion || typeof newData.trialCompletion !== 'object') {
         newData.trialCompletion = {};
     }
 
-    // ✅ 8. ตรวจสอบ atlasProgress
+    // ✅ 7. ตรวจสอบ atlasProgress
     if (!newData.atlasProgress || typeof newData.atlasProgress !== 'object') {
         newData.atlasProgress = {};
     }
 
-    // ✅ 9. ตรวจสอบ atlasNodes
+    // ✅ 8. ตรวจสอบ atlasNodes
     if (!newData.atlasNodes || !Array.isArray(newData.atlasNodes)) {
         newData.atlasNodes = [
             { id: 'atlas1', name: 'วาดรูปสีน้ำมัน 1 เล่ม', requiredXP: 1000, branch: 'art', completed: false, currentXP: 0 },
@@ -5760,19 +6395,29 @@ function migrateData(oldS) {
         ];
     }
 
-    // ✅ 10. ตรวจสอบ perfectDays
+    // ✅ 9. ตรวจสอบ perfectDays
     if (!newData.perfectDays || !Array.isArray(newData.perfectDays)) {
         newData.perfectDays = [];
     }
 
-    // ✅ 11. ตรวจสอบ stashRedemptions
+    // ✅ 10. ตรวจสอบ stashRedemptions
     if (!newData.stashRedemptions || !Array.isArray(newData.stashRedemptions)) {
         newData.stashRedemptions = [];
     }
 
-    // ✅ 12. ตรวจสอบ customRewards
+    // ✅ 11. ตรวจสอบ customRewards
     if (!newData.customRewards || typeof newData.customRewards !== 'object') {
         newData.customRewards = { chaos: [], exalted: [], divine: [] };
+    }
+
+    // ✅ 12. ตรวจสอบ questPresets
+    if (!newData.questPresets || !Array.isArray(newData.questPresets)) {
+        newData.questPresets = [];
+    }
+
+    // ✅ 13. ตรวจสอบ vaultItems
+    if (!newData.vaultItems || !Array.isArray(newData.vaultItems)) {
+        newData.vaultItems = [];
     }
 
     newData.schemaVersion = 4;
@@ -5835,15 +6480,9 @@ const debouncedRenderCalendar = debounce(() => {
     if (typeof renderCalendar === 'function') renderCalendar();
 }, 250);
 
-const throttledScrollHandler = throttle(() => {
-    // Handle scroll events (ถ้ามี)
-}, 100);
-
 // ✅ Register event listeners แบบ optimized
 window.addEventListener('resize', debouncedRenderCalendar);
-
-window.addEventListener('scroll', throttledScrollHandler, { passive: true });
-
+// ✅ scroll handler อยู่ในส่วน bottom-nav แล้ว ไม่ต้องเพิ่มซ้ำ
 // ==========================================
 // Multi-Tab Sync: ให้แท็บอื่นรู้ตัวเมื่อมีการบันทึก
 // ==========================================
@@ -6636,7 +7275,7 @@ const DEFAULT_DAILY_QUESTS = [
 
 function renderDailyTab() {
     const k = selectedDateKey || getTodayKey();
-    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false, perfectDayBonus: {} };  // ✅ เพิ่ม perfectDayBonus
+    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false, perfectDayBonus: {} };
     const h = S.history[k];
     const container = document.getElementById('daily-quests');
     if (!container) return;
@@ -6666,138 +7305,207 @@ function renderDailyTab() {
         editBtn.classList.toggle('active', S.editMode);
     }
     
+    // ✅ อัปเดตปุ่ม Edit & Presets
+    const presetBtn = document.getElementById('btn-toggle-edit-preset');
+    if (presetBtn) {
+        presetBtn.textContent = editPresetPanelVisible ? '✕ ปิดแก้ไข' : '✎ แก้ไข & Presets';
+        presetBtn.classList.toggle('active', editPresetPanelVisible);
+    }
+    
+    // ✅ แสดง/ซ่อน panel ตามสถานะ
+    const panel = document.getElementById('edit-preset-panel');
+    if (panel) {
+        panel.style.display = editPresetPanelVisible ? 'block' : 'none';
+    }
+    
     // Initialize daily quests if empty
     if (!S.dailyQuests || S.dailyQuests.length === 0) {
         S.dailyQuests = JSON.parse(JSON.stringify(DEFAULT_DAILY_QUESTS));
         save();
     }
 
-    // Render แต่ละ Main Quest
-    (S.dailyQuests || []).forEach((quest) => {
-        const isMainDone = h.daily?.includes(`main_${quest.id}`);
-        const isPerfectDay = h.perfectDayBonus?.[quest.id] === true;  // ✅ เพิ่ม
-        const isCollapsed = h.collapsedQuests?.includes(quest.id);
-        const isEditing = S.editMode && !isCollapsed;
+    // 🔥 Render Preset Dropdown
+    renderPresetDropdown();
 
-        const card = document.createElement('div');
-        card.className = `map-boss-card ${isMainDone ? 'main-done' : ''} ${isPerfectDay ? 'perfect-day' : ''} ${isEditing ? 'editing' : ''}`;  // ✅ เพิ่ม perfect-day class
+    // ✅ Render Main Quest แบบ 2 คอลัมน์ (เหมือนเดิม)
+    const quests = S.dailyQuests || [];
+    
+    // 🔥 จัดกลุ่มเป็นคู่ (2 ตัวต่อแถว) - ใช้ grid แบบ 2 คอลัมน์
+    const pairedQuests = [];
+    for (let i = 0; i < quests.length; i += 2) {
+        pairedQuests.push(quests.slice(i, i + 2));
+    }
+    
+    pairedQuests.forEach((pair, pairIndex) => {
+        const wrapperId = `quest-pair-${pairIndex}`;
         
-        const config = REWARD_CONFIG.mapBoss;
-        const questRewards = quest.main?.rewards || config;
-        // === 1. ส่วน Header Quest (ซ้าย) ===
-        const headerHtml = `
-            <div class="card-header" onclick="${S.editMode ? '' : `toggleMainQuest('${quest.id}')`}">
-                <div class="socket-container">
-                    <div class="socket red-socket ${isMainDone ? 'socket-filled' : ''}">
-                        ${isMainDone ? '💎' : ''}
-                    </div>
-                </div>
-                <div class="card-info">
-                    <div class="card-title">🗡️MAP BOSS ${isPerfectDay ? '<span style="color:#ffd700;">✨ PERFECT DAY!</span>' : ''}</div>
-                    ${S.editMode ? `
-                        <input type="text" class="edit-input-inline" 
-                               value="${quest.main?.text || ''}" 
-                               onchange="updateMainQuest('${quest.id}', this.value)"
-                               onclick="event.stopPropagation()"
-                               style="font-size: 11px; padding: 4px 8px;">
-                    ` : `
-                        <div class="card-text" title="${quest.main?.text || 'เควสหลัก'}">${quest.main?.text || 'เควสหลัก'}</div>
-                    `}
-                    <div class="quest-rewards">
-                        💛${questRewards.chaos?.[0] ?? 5}-${questRewards.chaos?.[1] ?? 15}C 
-                        | ${Math.round((questRewards.exalted ?? 0.20) * 100)}%💠 
-                        | ${Math.round((questRewards.divine ?? 0.01) * 100)}%💎 
-                        | +${questRewards.xp || 50} XP 
-                        ${isPerfectDay ? '<span style="color:#ffd700; font-weight:bold;">(x2) ✨ Perfect!</span>' : 
-                        isMainDone ? '<span style="color:#88ff88;">(รอ Subs)</span>' : ''}
-                    </div>
-                </div>
-                <div class="card-actions">
-                    <button class="btn-action collapse-btn" onclick="event.stopPropagation(); toggleQuestCollapse('${quest.id}', '${k}')" title="${isCollapsed ? 'กาง' : 'พับ'}">
-                        ${isCollapsed ? '▶' : '▼'}
-                    </button>
-                </div>
-            </div>
-        `;
-
-        // === 2. ส่วน Juice Maps (ขวา/ล่าง) ===
-        let subHtml = '';
-        if (!isCollapsed) {
-            subHtml = '<div class="juice-maps-list">';
-            
-            if (quest.subQuests && quest.subQuests.length > 0) {
-                quest.subQuests.forEach((sub, idx) => {
-                    const subId = `sub_${quest.id}_${idx}`;
-                    const isSubDone = h.daily?.includes(subId);
-                    
-                    if (S.editMode) {
-                        subHtml += `
-                            <div class="juice-map-item editing">
-                                <div class="sub-socket ${isSubDone ? 'filled' : ''}">
-                                    ${isSubDone ? '✨' : ''}
-                                </div>
-                                <input type="text" class="sub-text-input" 
-                                       value="${sub.text}" 
-                                       onchange="updateSubQuest('${quest.id}', ${idx}, this.value)"
-                                       onclick="event.stopPropagation()">
-                                <span class="sub-xp">+${sub.xp || 10} XP</span>
-                                <button class="btn-edit-action remove-sub" 
-                                        onclick="event.stopPropagation(); removeSubQuest('${quest.id}', ${idx})" 
-                                        title="ลบ">✕</button>
-                            </div>
-                        `;
-                    } else {
-                        subHtml += `
-                            <div class="juice-map-item ${isSubDone ? 'sub-done' : ''}" 
-                                 onclick="toggleSubQuest('${quest.id}', ${idx})">
-                                <div class="sub-socket ${isSubDone ? 'filled' : ''}">
-                                    ${isSubDone ? '✨' : ''}
-                                </div>
-                                <span class="sub-text">${sub.text}</span>
-                                <span class="sub-xp">+${sub.xp || 10} XP</span>
-                            </div>
-                        `;
-                    }
-                });
-            } else {
-                subHtml += '<div style="padding: 8px; color: var(--muted); font-size: 9px; font-style: italic;">ยังไม่มี Juice Maps</div>';
-            }
-            
-            if (S.editMode) {
-                subHtml += `
-                    <button class="btn-edit-action add" 
-                            onclick="addSubQuest('${quest.id}')" 
-                            style="width: 40%; margin-top: 4px;">
-                        + เพิ่ม Juice Map
-                    </button>
-                `;
-            }
-            
-            subHtml += '</div>';
+        // ✅ สร้าง wrapper ที่เป็น grid 2 คอลัมน์
+        const wrapper = document.createElement('div');
+        wrapper.className = 'quest-pair-wrapper';
+        wrapper.id = wrapperId;
+        
+        // ✅ ถ้ามีแค่ 1 ตัวในคู่ ให้ใช้ 1 คอลัมน์
+        if (pair.length === 1) {
+            wrapper.classList.add('single-card');
         }
+        
+// ✅ ตรวจสอบว่าแถวนี้ถูกพับหรือไม่ (ใช้สถานะจาก S ด้วย)
+// ถ้า allQuestsCollapsed หรือ S.allQuestsCollapsed เป็น true ให้พับ
+const shouldCollapse = allQuestsCollapsed || S.allQuestsCollapsed;
+if (shouldCollapse) {
+    wrapper.classList.add('collapsed');
+}
 
-        // === Edit Controls (เฉพาะ Map Boss) ===
-        let editHtml = '';
-        if (isEditing) {
-            editHtml = `
-                <div class="edit-controls">
-                    <div style="display: flex; gap: 6px; align-items: center;">
-                        <label style="font-size: 9px; color: var(--gold); flex-shrink: 0;">XP:</label>
-                        <input type="number" class="edit-input-inline edit-input-small" 
-                               value="${quest.main?.xp || 50}"
-                               onchange="updateMainQuestXP('${quest.id}', this.value)">
-                        <button class="btn-edit-action" 
-                                onclick="removeMainQuest('${quest.id}')" 
-                                style="margin-left: auto;">
-                            🗑️ ลบ Map Boss
+// ✅ อัปเดตปุ่มพับทั้งหมดให้ตรงกับสถานะ
+const btnAll = document.getElementById('btn-collapse-all-quests');
+if (btnAll) {
+    btnAll.textContent = shouldCollapse ? '▶' : '▼';
+    btnAll.classList.toggle('active', shouldCollapse);
+    btnAll.title = shouldCollapse ? 'กางทั้งหมด' : 'พับทั้งหมด';
+}
+        
+        // ✅ สร้างปุ่มพับแถว (อยู่ด้านบน เหนือ card ทั้ง 2)
+        const headerRow = document.createElement('div');
+        headerRow.className = 'pair-collapse-header';
+        headerRow.innerHTML = `
+            <button class="btn-collapse-section btn-collapse-pair" 
+                    onclick="toggleQuestPairCollapse('${wrapperId}')"
+                    style="font-size:10px; padding:2px 10px; width:auto; height:auto; border-radius:4px;">
+                ${allQuestsCollapsed ? '▶' : '▼'} แถวที่ ${pairIndex + 1}
+            </button>
+        `;
+        wrapper.appendChild(headerRow);
+        
+        // ✅ สร้างแต่ละ card ในคู่ (2 ตัวต่อแถว)
+        pair.forEach((quest) => {
+            const isMainDone = h.daily?.includes(`main_${quest.id}`);
+            const isPerfectDay = h.perfectDayBonus?.[quest.id] === true;
+            const isCollapsed = h.collapsedQuests?.includes(quest.id);
+            const isEditing = S.editMode && !isCollapsed;
+
+            const card = document.createElement('div');
+            card.className = `map-boss-card ${isMainDone ? 'main-done' : ''} ${isPerfectDay ? 'perfect-day' : ''} ${isEditing ? 'editing' : ''}`;
+            
+            const config = REWARD_CONFIG.mapBoss;
+            const questRewards = quest.main?.rewards || config;
+            
+            // === 1. ส่วน Header Quest ===
+            const headerHtml = `
+                <div class="card-header" onclick="${S.editMode ? '' : `toggleMainQuest('${quest.id}')`}">
+                    <div class="socket-container">
+                        <div class="socket red-socket ${isMainDone ? 'socket-filled' : ''}">
+                            ${isMainDone ? '💎' : ''}
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title">🗡️MAP BOSS ${isPerfectDay ? '<span style="color:#ffd700;">✨ PERFECT DAY!</span>' : ''}</div>
+                        ${S.editMode ? `
+                            <input type="text" class="edit-input-inline" 
+                                   value="${quest.main?.text || ''}" 
+                                   onchange="updateMainQuest('${quest.id}', this.value)"
+                                   onclick="event.stopPropagation()"
+                                   style="font-size: 11px; padding: 4px 8px;">
+                        ` : `
+                            <div class="card-text" title="${quest.main?.text || 'เควสหลัก'}">${quest.main?.text || 'เควสหลัก'}</div>
+                        `}
+                        <div class="quest-rewards">
+                            💛${questRewards.chaos?.[0] ?? 5}-${questRewards.chaos?.[1] ?? 15}C 
+                            | ${Math.round((questRewards.exalted ?? 0.20) * 100)}%💠 
+                            | ${Math.round((questRewards.divine ?? 0.01) * 100)}%💎 
+                            | +${questRewards.xp || 50} XP 
+                            ${isPerfectDay ? '<span style="color:#ffd700; font-weight:bold;">(x2) ✨ Perfect!</span>' : 
+                            isMainDone ? '<span style="color:#88ff88;">(รอ Subs)</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-action collapse-btn" onclick="event.stopPropagation(); toggleQuestCollapse('${quest.id}', '${k}')" title="${isCollapsed ? 'กาง' : 'พับ'}">
+                            ${isCollapsed ? '▶' : '▼'}
                         </button>
                     </div>
                 </div>
             `;
-        }
 
-        card.innerHTML = headerHtml + subHtml + editHtml;
-        container.appendChild(card);
+            // === 2. ส่วน Juice Maps ===
+            let subHtml = '';
+            if (!isCollapsed) {
+                subHtml = '<div class="juice-maps-list">';
+                
+                if (quest.subQuests && quest.subQuests.length > 0) {
+                    quest.subQuests.forEach((sub, idx) => {
+                        const subId = `sub_${quest.id}_${idx}`;
+                        const isSubDone = h.daily?.includes(subId);
+                        
+                        if (S.editMode) {
+                            subHtml += `
+                                <div class="juice-map-item editing">
+                                    <div class="sub-socket ${isSubDone ? 'filled' : ''}">
+                                        ${isSubDone ? '✨' : ''}
+                                    </div>
+                                    <input type="text" class="sub-text-input" 
+                                           value="${sub.text}" 
+                                           onchange="updateSubQuest('${quest.id}', ${idx}, this.value)"
+                                           onclick="event.stopPropagation()">
+                                    <span class="sub-xp">+${sub.xp || 10} XP</span>
+                                    <button class="btn-edit-action remove-sub" 
+                                            onclick="event.stopPropagation(); removeSubQuest('${quest.id}', ${idx})" 
+                                            title="ลบ">✕</button>
+                                </div>
+                            `;
+                        } else {
+                            subHtml += `
+                                <div class="juice-map-item ${isSubDone ? 'sub-done' : ''}" 
+                                     onclick="toggleSubQuest('${quest.id}', ${idx})">
+                                    <div class="sub-socket ${isSubDone ? 'filled' : ''}">
+                                        ${isSubDone ? '✨' : ''}
+                                    </div>
+                                    <span class="sub-text">${sub.text}</span>
+                                    <span class="sub-xp">+${sub.xp || 10} XP</span>
+                                </div>
+                            `;
+                        }
+                    });
+                } else {
+                    subHtml += '<div style="padding: 8px; color: var(--muted); font-size: 9px; font-style: italic;">ยังไม่มี Juice Maps</div>';
+                }
+                
+                if (S.editMode) {
+                    subHtml += `
+                        <button class="btn-edit-action add" 
+                                onclick="addSubQuest('${quest.id}')" 
+                                style="width: 40%; margin-top: 4px;">
+                            + เพิ่ม Juice Map
+                        </button>
+                    `;
+                }
+                
+                subHtml += '</div>';
+            }
+
+            // === Edit Controls ===
+            let editHtml = '';
+            if (isEditing) {
+                editHtml = `
+                    <div class="edit-controls">
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <label style="font-size: 9px; color: var(--gold); flex-shrink: 0;">XP:</label>
+                            <input type="number" class="edit-input-inline edit-input-small" 
+                                   value="${quest.main?.xp || 50}"
+                                   onchange="updateMainQuestXP('${quest.id}', this.value)">
+                            <button class="btn-edit-action" 
+                                    onclick="removeMainQuest('${quest.id}')" 
+                                    style="margin-left: auto;">
+                                🗑️ ลบ Map Boss
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = headerHtml + subHtml + editHtml;
+            wrapper.appendChild(card);
+        });
+
+        container.appendChild(wrapper);
     });
 
     // ✅ ปุ่มเพิ่ม Map Boss ใหม่ (แสดงเฉพาะ edit mode)
@@ -6855,12 +7563,13 @@ function renderQuests(database, stateList, elementId) {
     
     container.innerHTML = '';
 
+    // ✅ กำหนด questType ก่อนใช้งาน
+    const questType = elementId === 'weekly-quests' ? 'weekly' : 'monthly';
+
     database.forEach((q, index) => {
         const isDone = activeList.includes(q.id);
         const card = document.createElement('div');
         card.className = `q-card ${isDone ? 'done' : ''}`;
-        
-        const questType = elementId === 'weekly-quests' ? 'weekly' : 'monthly';
         
         if (S.editMode) {
             // ✅ Edit Mode: แสดง input แก้ไขได้
@@ -7895,13 +8604,13 @@ const tabRendered = {
 function switchTab(tabName) {
     console.log('Switching to tab:', tabName);
 
-    // ✅ ตรวจสอบว่า tabName ถูกต้องไหม
+    // ตรวจสอบว่า tabName ถูกต้อง
     if (!tabName) {
-        console.error(' switchTab called with no tabName');
+        console.error('switchTab called with no tabName');
         return;
     }
 
-    // 1. ซ่อนทุก tab-content ก่อน
+    // 1. ซ่อนทุก tab-content
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.style.display = 'none';
         tab.classList.remove('active');
@@ -7912,7 +8621,12 @@ function switchTab(tabName) {
         btn.classList.remove('active');
     });
 
-    // 3. แสดง tab ที่เลือก
+    // 3. เอา active ออกจาก bottom nav ด้วย
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // 4. แสดง tab ที่เลือก
     const selectedTab = document.getElementById(`${tabName}-tab`);
     if (selectedTab) {
         selectedTab.style.display = 'block';
@@ -7922,30 +8636,20 @@ function switchTab(tabName) {
         return;
     }
 
-    // 4. ใส่ active ให้ปุ่ม tab ที่คลิก
-    try {
-        const clickedTab = event?.target;
-        if (clickedTab && clickedTab.classList && clickedTab.classList.contains('tab')) {
-            clickedTab.classList.add('active');
-        } else {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => {
-                if (tab?.textContent?.toLowerCase()?.includes(tabName)) {
-                    tab.classList.add('active');
-                }
-            });
+    // 5. ใส่ active ให้ปุ่ม tab (ทั้ง top และ bottom)
+    document.querySelectorAll('.tab').forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(tabName)) {
+            btn.classList.add('active');
         }
-    } catch (e) {
-        console.warn('⚠️ Event handling failed, using fallback');
-        const tabs = document.querySelectorAll('.tab');
-        tabs.forEach(tab => {
-            if (tab?.textContent?.toLowerCase()?.includes(tabName)) {
-                tab.classList.add('active');
-            }
-        });
-    }
+    });
+    
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
+        if (btn.dataset.tab === tabName) {
+            btn.classList.add('active');
+        }
+    });
 
-    // ✅ LAZY LOAD: Render เฉพาะ tab ที่ยังไม่เคย render
+    // LAZY LOAD
     const shouldRender = !tabRendered[tabName];
     
     if (shouldRender) {
@@ -7965,13 +8669,12 @@ function switchTab(tabName) {
             renderSocialHub();
         }
         
-        // ✅ Mark ว่า render แล้ว
         tabRendered[tabName] = true;
     } else {
         console.log(`⚡ ${tabName} tab already rendered - skipping (lazy load)`);
     }
 
-    // ✅ Auto-sync check เมื่อเปิด tab quests/career
+    // Auto-sync check
     if (typeof autoSyncCheck === 'function' && (tabName === 'quests' || tabName === 'career')) {
         autoSyncCheck();
     }
@@ -8069,25 +8772,15 @@ const DEFAULT_REWARDS = {
 function renderStash() {
     console.log('Rendering Stash...');
     try {
-        // ✅ Render Stash Shop
-        if (typeof renderStashShop === 'function') {
-            renderStashShop();
-        } else {
-            console.warn('⚠️ renderStashShop function not found');
-        }
-
-        // ✅ Render Vault Grid
-        if (typeof renderVaultGrid === 'function') {
-            renderVaultGrid();
-        } else {
-            console.warn('⚠️ renderVaultGrid function not found');
-        }
+        // Render tabs
+        switchStashTab(currentStashTab || 'art');
         
-        // ✅ Render Diary Logs
+        // Render Vault
+        renderStashVault();
+        
+        // Render Diary (ถ้ามี)
         if (typeof renderDiaryLogs === 'function') {
             renderDiaryLogs();
-        } else {
-            console.warn('⚠️ renderDiaryLogs function not found');
         }
     } catch (err) {
         console.error('❌ Error in renderStash:', err);
@@ -8367,18 +9060,137 @@ function renderDiaryLogs() {
 
                             
 function openQuestManager(type) {
-                    activeManagerType = type;
-                    const modal = document.getElementById('qm-modal');
-                    const title = document.getElementById('qm-modal-title');
-                    const container = document.getElementById('qm-container');
-                    let label = 'Daily Quests', db = DAILY_QUESTS;
-                    if (type === 'weekly') { label = 'Weekly Quests'; db = WEEKLY_QUESTS; }
-                    if (type === 'monthly') { label = 'Monthly Quests'; db = MONTHLY_QUESTS; }
-                    title.textContent = `จัดการแผนข้อมูล ${label}`;
-                    container.innerHTML = '';
-                    db.forEach((q, idx) => { appendQuestRow(q.id, q.text, q.xp, q.stat); });
-                    modal.classList.add('show');
-                }
+    // ✅ ตรวจสอบว่า type ถูกส่งมาหรือไม่
+    if (!type) {
+        console.error('openQuestManager called without type');
+        showToast('❌ ไม่พบประเภทเควส');
+        return;
+    }
+    
+    activeManagerType = type;
+    const modal = document.getElementById('qm-modal');
+    const title = document.getElementById('qm-modal-title');
+    const container = document.getElementById('qm-container');
+    
+    if (!modal || !title || !container) {
+        console.error('Modal elements not found');
+        showToast('❌ ไม่พบหน้าต่างจัดการเควส');
+        return;
+    }
+    
+    let label = 'Daily Quests';
+    let db = S.dailyQuests || DAILY_QUESTS || [];
+    
+    if (type === 'weekly') {
+        label = 'Weekly Quests';
+        db = S.weeklyQuests || WEEKLY_QUESTS || [];
+    } else if (type === 'monthly') {
+        label = 'Monthly Quests';
+        db = S.monthlyQuests || MONTHLY_QUESTS || [];
+    }
+    
+    title.textContent = `จัดการแผนข้อมูล ${label}`;
+    container.innerHTML = '';
+    
+    // ✅ แสดงเควสใน Modal
+    db.forEach((q, idx) => {
+        // เช็คว่าเป็น daily หรือไม่ (มีโครงสร้าง main/sub)
+        if (q.main && q.subQuests) {
+            // ✅ daily quest structure
+            const row = document.createElement('div');
+            row.className = 'qm-row-item';
+            row.dataset.id = q.id;
+            row.dataset.type = 'daily';
+            row.innerHTML = `
+                <input type="text" class="qm-input qm-text-in" value="${q.main?.text || ''}" placeholder="Main Quest">
+                <input type="number" class="qm-input qm-num-in" value="${q.main?.xp || 50}" placeholder="XP">
+                <select class="qm-sel-in">
+                    <option value="CRE" ${q.main?.stat === 'CRE' ? 'selected' : ''}>CRE</option>
+                    <option value="STR" ${q.main?.stat === 'STR' ? 'selected' : ''}>STR</option>
+                    <option value="AGI" ${q.main?.stat === 'AGI' ? 'selected' : ''}>AGI</option>
+                    <option value="INT" ${q.main?.stat === 'INT' ? 'selected' : ''}>INT</option>
+                    <option value="VIT" ${q.main?.stat === 'VIT' ? 'selected' : ''}>VIT</option>
+                </select>
+                <button class="del-btn" onclick="this.parentElement.remove()">✕</button>
+            `;
+            // ✅ เพิ่มปุ่ม "เพิ่ม Sub-quest"
+    const addSubBtn = document.createElement('button');
+    addSubBtn.className = 'btn-s';
+    addSubBtn.style.cssText = 'margin-left:24px; background:rgba(78,203,113,.15); color:var(--green); border:1px solid var(--green); padding:2px 6px; font-size:9px; border-radius:3px; cursor:pointer;';
+    addSubBtn.textContent = '+ Sub';
+    addSubBtn.onclick = () => addSubQuestInModal(q.id);
+    row.appendChild(addSubBtn);
+            container.appendChild(row);
+            
+            // ✅ แสดง Sub-quests (ถ้ามี)
+            if (q.subQuests && q.subQuests.length > 0) {
+                q.subQuests.forEach((sub, subIdx) => {
+                    const subRow = document.createElement('div');
+                    subRow.className = 'qm-row-item';
+                    subRow.style.marginLeft = '24px';
+                    subRow.style.borderLeft = '2px solid var(--gold)';
+                    subRow.dataset.id = q.id;
+                    subRow.dataset.subIndex = subIdx;
+                    subRow.dataset.type = 'sub';
+                    subRow.innerHTML = `
+                        <span style="color:var(--muted); font-size:9px;">↳</span>
+                        <input type="text" class="qm-input qm-text-in" value="${sub.text || ''}" placeholder="Sub-quest">
+                        <input type="number" class="qm-input qm-num-in" value="${sub.xp || 10}" placeholder="XP">
+                        <button class="del-btn" onclick="this.parentElement.remove()">✕</button>
+                    `;
+                    container.appendChild(subRow);
+                });
+            }
+        } else {
+            // ✅ weekly/monthly quest structure
+            const row = document.createElement('div');
+            row.className = 'qm-row-item';
+            row.dataset.id = q.id;
+            row.dataset.type = 'standard';
+            row.innerHTML = `
+                <input type="text" class="qm-input qm-text-in" value="${q.text || ''}">
+                <input type="number" class="qm-input qm-num-in" value="${q.xp || 10}">
+                <select class="qm-sel-in">
+                    <option value="CRE" ${q.stat === 'CRE' ? 'selected' : ''}>CRE</option>
+                    <option value="STR" ${q.stat === 'STR' ? 'selected' : ''}>STR</option>
+                    <option value="AGI" ${q.stat === 'AGI' ? 'selected' : ''}>AGI</option>
+                    <option value="INT" ${q.stat === 'INT' ? 'selected' : ''}>INT</option>
+                    <option value="VIT" ${q.stat === 'VIT' ? 'selected' : ''}>VIT</option>
+                </select>
+                <button class="del-btn" onclick="this.parentElement.remove()">✕</button>
+            `;
+            container.appendChild(row);
+        }
+    });
+    
+    // ✅ ปุ่มเพิ่มเควสใหม่
+    const addBtn = document.createElement('button');
+    addBtn.className = 'btn-add-qm';
+    addBtn.textContent = '+ เพิ่มรายการเควสใหม่';
+    addBtn.onclick = () => {
+        const prefix = type.charAt(0);
+        const row = document.createElement('div');
+        row.className = 'qm-row-item';
+        row.dataset.id = prefix + '_' + Date.now();
+        row.dataset.type = 'standard';
+        row.innerHTML = `
+            <input type="text" class="qm-input qm-text-in" value="" placeholder="ชื่อเควส">
+            <input type="number" class="qm-input qm-num-in" value="10" placeholder="XP">
+            <select class="qm-sel-in">
+                <option value="CRE">CRE</option>
+                <option value="STR">STR</option>
+                <option value="AGI">AGI</option>
+                <option value="INT">INT</option>
+                <option value="VIT">VIT</option>
+            </select>
+            <button class="del-btn" onclick="this.parentElement.remove()">✕</button>
+        `;
+        container.appendChild(row);
+    };
+    container.appendChild(addBtn);
+    
+    modal.classList.add('show');
+}
 
 function appendQuestRow(id, text, xp, stat) {
                     const container = document.getElementById('qm-container');
@@ -8395,27 +9207,119 @@ function addNewQuestRow() {
                 }
 
 function saveQuestManager() {
-                    const container = document.getElementById('qm-container');
-                    const rows = container.querySelectorAll('.qm-row-item');
-                    let newDb = [];
-                    rows.forEach(r => {
-                        const id = r.dataset.id;
-                        const text = r.querySelector('.qm-text-in').value.trim();
-                        const xp = parseInt(r.querySelector('.qm-num-in').value) || 10;
-                        const stat = r.querySelector('.qm-sel-in').value;
-                        if (text) newDb.push({ id, text, xp, stat });
-                    });
-                    if (newDb.length === 0) { alert('กรุณาเหลือเควสไว้อย่างน้อย 1 รายการ'); return; }
-                    if (activeManagerType === 'daily') DAILY_QUESTS = newDb;
-                    else if (activeManagerType === 'weekly') WEEKLY_QUESTS = newDb;
-                    else MONTHLY_QUESTS = newDb;
-                    localStorage.setItem(`qm_db_${activeManagerType}`, JSON.stringify(newDb));
-                    closeQuestManager();
-                    renderDailyTab();
-                    renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
-                    renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-                    showToast('อัปเดตโครงสร้างรายการภารกิจสมบูรณ์');
-                }
+    const container = document.getElementById('qm-container');
+    if (!container) {
+        showToast('❌ ไม่พบข้อมูล');
+        return;
+    }
+    
+    const rows = container.querySelectorAll('.qm-row-item');
+    let newDb = [];
+    
+    rows.forEach(r => {
+        const id = r.dataset.id;
+        const type = r.dataset.type || 'standard';
+        const textInput = r.querySelector('.qm-text-in');
+        const numInput = r.querySelector('.qm-num-in');
+        const selectInput = r.querySelector('.qm-sel-in');
+        
+        if (!textInput) return;
+        
+        const text = textInput.value.trim();
+        const xp = parseInt(numInput?.value) || 10;
+        const stat = selectInput?.value || 'CRE';
+        
+        // ✅ ถ้าเป็น sub-quest (daily)
+        if (type === 'sub') {
+            // จะถูกจัดการโดย parent quest
+            return;
+        }
+        
+        if (text) {
+            if (type === 'daily') {
+                // ✅ daily quest structure
+                const subRows = container.querySelectorAll(`.qm-row-item[data-id="${id}"][data-type="sub"]`);
+                const subQuests = [];
+                subRows.forEach(subRow => {
+                    const subText = subRow.querySelector('.qm-text-in')?.value?.trim();
+                    const subXp = parseInt(subRow.querySelector('.qm-num-in')?.value) || 10;
+                    if (subText) {
+                        subQuests.push({ text: subText, xp: subXp });
+                    }
+                });
+                
+                newDb.push({
+                    id: id,
+                    main: {
+                        text: text,
+                        xp: xp,
+                        stat: stat,
+                        rewards: { chaos: [5, 15], exalted: 0.2, divine: 0.01 }
+                    },
+                    subQuests: subQuests
+                });
+            } else {
+                // ✅ weekly/monthly quest structure
+                newDb.push({ id, text, xp, stat });
+            }
+        }
+    });
+    
+    if (newDb.length === 0) {
+        showToast('⚠️ กรุณาเหลือเควสไว้อย่างน้อย 1 รายการ');
+        return;
+    }
+    
+    // ✅ บันทึกตามประเภท
+    if (activeManagerType === 'daily') {
+        S.dailyQuests = newDb;
+        // ✅ อัปเดต DAILY_QUESTS ด้วย
+        DAILY_QUESTS = newDb;
+    } else if (activeManagerType === 'weekly') {
+        S.weeklyQuests = newDb;
+        WEEKLY_QUESTS = newDb;
+    } else if (activeManagerType === 'monthly') {
+        S.monthlyQuests = newDb;
+        MONTHLY_QUESTS = newDb;
+    }
+    
+    save();
+    closeQuestManager();
+    
+    // ✅ อัปเดต UI ทันที
+    renderDailyTab();
+    renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+    renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+    
+    showToast('✅ อัปเดตโครงสร้างรายการภารกิจสมบูรณ์');
+}
+// ===== เพิ่ม Sub-quest ใน Modal (สำหรับ Daily Quests) =====
+function addSubQuestInModal(parentId) {
+    const container = document.getElementById('qm-container');
+    if (!container) return;
+    
+    // หา parent row
+    const parentRow = container.querySelector(`.qm-row-item[data-id="${parentId}"][data-type="daily"]`);
+    if (!parentRow) return;
+    
+    // สร้าง sub row
+    const subRow = document.createElement('div');
+    subRow.className = 'qm-row-item';
+    subRow.style.marginLeft = '24px';
+    subRow.style.borderLeft = '2px solid var(--gold)';
+    subRow.dataset.id = parentId;
+    subRow.dataset.subIndex = Date.now();
+    subRow.dataset.type = 'sub';
+    subRow.innerHTML = `
+        <span style="color:var(--muted); font-size:9px;">↳</span>
+        <input type="text" class="qm-input qm-text-in" value="" placeholder="Sub-quest">
+        <input type="number" class="qm-input qm-num-in" value="10" placeholder="XP">
+        <button class="del-btn" onclick="this.parentElement.remove()">✕</button>
+    `;
+    
+    // Insert after parent row
+    parentRow.parentNode.insertBefore(subRow, parentRow.nextSibling);
+}
 
 function closeQuestManager() { document.getElementById('qm-modal').classList.remove('show'); }
 
@@ -8893,7 +9797,8 @@ function importWithMerge() {
                     'dreams', 'dreamCategories', 'artLog', 'fitLog',
                     'incomeLog', 'diaryLog', 'counts', 'streak',
                     'restCardio', 'restWeight', 'pendingSP', 'un',
-                    'lastActive', 'status', 'message', 'dailyByDate'
+                    'lastActive', 'status', 'message', 'dailyByDate',
+                    'passiveSkillTree', 'skillTree', 'passiveSkills'
                 ];
                 
                 oldFieldsToRemove.forEach(field => {
@@ -10219,6 +11124,139 @@ function fightAtlasBoss() {
     
     showToast(`⚔️ Atlas Boss พิชิตแล้ว! +${config.ascendancyPoints} Ascendancy Points, +${config.divine} Divine Orbs`);
 }
+// ==========================================
+// PATCH: Save Preset & Collapse All
+// ==========================================
+
+// ===== Save Quest Preset =====
+function saveQuestPreset() {
+    if (!S.dailyQuests || S.dailyQuests.length === 0) {
+        showToast('⚠️ ไม่มี Quest ให้บันทึก');
+        return;
+    }
+    
+    const presetName = prompt('ชื่อ Preset:', 'My Quest Preset');
+    if (presetName === null) {
+        showToast('❌ ยกเลิก');
+        return;
+    }
+    
+    if (!presetName || presetName.trim() === '') {
+        showToast('⚠️ กรุณาใส่ชื่อ Preset');
+        return;
+    }
+    
+    const preset = {
+        name: presetName.trim(),
+        dailyQuests: JSON.parse(JSON.stringify(S.dailyQuests)),
+        date: new Date().toLocaleString('th-TH')
+    };
+    
+    if (!S.questPresets) S.questPresets = [];
+    S.questPresets.push(preset);
+    save();
+    
+    // ✅ อัปเดต UI ทันที
+    renderPresetDropdown();
+    renderDailyTab();
+    
+    showToast(`✅ บันทึก Preset "${presetName}" สำเร็จ`);
+}
+
+// ===== Load Quest Preset (เพิ่มใน UI ด้วยปุ่ม dropdown) =====
+function loadQuestPreset(index) {
+    if (!S.questPresets || !S.questPresets[index]) {
+        showToast('❌ ไม่พบ Preset');
+        return;
+    }
+    
+    const preset = S.questPresets[index];
+    if (!confirm(`📋 โหลด Preset "${preset.name}"?\n\nจะแทนที่ Daily Quests ปัจจุบัน`)) {
+        return;
+    }
+    
+    S.dailyQuests = JSON.parse(JSON.stringify(preset.dailyQuests));
+    save();
+    renderDailyTab();
+    showToast(`✅ โหลด Preset "${preset.name}" สำเร็จ`);
+}
+
+// ===== Delete Quest Preset =====
+function deleteQuestPreset(index) {
+    if (!S.questPresets || !S.questPresets[index]) return;
+    const name = S.questPresets[index].name;
+    if (!confirm(`🗑️ ลบ Preset "${name}"?`)) return;
+    
+    S.questPresets.splice(index, 1);
+    save();
+    showToast(`🗑️ ลบ Preset "${name}" แล้ว`);
+}
+
+// ===== Render Preset Dropdown =====
+function renderPresetDropdown() {
+    const container = document.getElementById('preset-dropdown-container');
+    if (!container) return;
+    
+    if (!S.questPresets || S.questPresets.length === 0) {
+        container.innerHTML = '<span style="font-size:9px; color:var(--muted);">ไม่มี Preset</span>';
+        return;
+    }
+    
+    let html = `<select id="preset-select" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:2px 6px;font-size:9px;font-family:'Space Mono',monospace;" onchange="if(this.value) loadQuestPreset(parseInt(this.value))">
+        <option value="">📋 เลือก Preset</option>`;
+    
+    S.questPresets.forEach((p, i) => {
+        html += `<option value="${i}">${p.name}</option>`;
+    });
+    
+    html += `</select>`;
+    container.innerHTML = html;
+}
+
+// ===== Toggle All Quests Collapse =====
+let allQuestsCollapsed = false;
+
+function toggleAllQuestsCollapse() {
+    // ✅ Toggle: ถ้ากำลังพับอยู่ → กาง, ถ้ากำลังกางอยู่ → พับ
+    allQuestsCollapsed = !allQuestsCollapsed;
+    
+    const wrappers = document.querySelectorAll('.quest-pair-wrapper');
+    const btn = document.getElementById('btn-collapse-all-quests');
+    
+    // ✅ ใช้ requestAnimationFrame เพื่อให้การแสดงผลลื่น
+    requestAnimationFrame(() => {
+        wrappers.forEach(w => {
+            if (allQuestsCollapsed) {
+                w.classList.add('collapsed');
+            } else {
+                w.classList.remove('collapsed');
+            }
+        });
+        
+        if (btn) {
+            btn.textContent = allQuestsCollapsed ? '▶' : '▼';
+            btn.classList.toggle('active', allQuestsCollapsed);
+            btn.title = allQuestsCollapsed ? 'กางทั้งหมด' : 'พับทั้งหมด';
+        }
+        
+        // ✅ บันทึกสถานะลง S
+        S.allQuestsCollapsed = allQuestsCollapsed;
+        save();
+    });
+}
+
+// ===== Toggle Single Quest Pair Collapse =====
+function toggleQuestPairCollapse(wrapperId) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    
+    wrapper.classList.toggle('collapsed');
+    
+    const btn = wrapper.querySelector('.btn-collapse-pair');
+    if (btn) {
+        btn.textContent = wrapper.classList.contains('collapsed') ? '▶' : '▼';
+    }
+}
 
             // เรียกใช้ตอนโหลดหน้าเว็บ
             // เพิ่มใน initApp() หรือฟังก์ชันที่ทำงานตอนโหลด
@@ -10839,7 +11877,7 @@ function toggleLogDisplay(type) {
 updateHoursDisplay();
 
             // ========== ฟังก์ชันล้างข้อมูลทั้งหมด (Reset) ==========
-            async function resetAllData() {
+async function resetAllData() {
     if (!confirm('⚠️ คุณแน่ใจหรือไม่? \nข้อมูลทั้งหมด (Quest, XP, Log, Diary) จะถูกลบถาวร!\nแต่ Settings และ UI State จะถูกเก็บไว้')) {
         return;
     }
@@ -10851,7 +11889,7 @@ updateHoursDisplay();
 
     try {
         // ✅ เก็บ Settings ก่อนลบ
-         const settingsBackup = {
+        const settingsBackup = {
             schemaVersion: 4,
             appVersion: APP_VERSION,
             editMode: false,
@@ -10863,18 +11901,26 @@ updateHoursDisplay();
             socialChannels: S.socialChannels || [],
             savingGoals: S.savingGoals || [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }]
         };
+        
         // 1. ล้าง IndexedDB
         const db = await openDB();
         const tx = db.transaction(STORE_NAME, 'readwrite');
         tx.objectStore(STORE_NAME).clear();
 
-        // 2. ล้าง localStorage (เฉพาะข้อมูล ไม่ใช่ settings)
+        // 2. ล้าง localStorage ทั้งหมดที่เกี่ยวข้อง
         localStorage.removeItem('dol_quest_log_v3');
         localStorage.removeItem('qm_db_daily');
         localStorage.removeItem('qm_db_weekly');
         localStorage.removeItem('qm_db_monthly');
+        localStorage.removeItem('dol_quest_app_version');
+        
+        // 3. ล้าง sessionStorage ทั้งหมด (เพื่อลบ cache และ version flags)
+        sessionStorage.clear();
 
-        // 3. รีเซ็ตตัวแปร S กลับเป็นค่าเริ่มต้น
+        // 4. ล้าง Cloud Cache
+        await clearCloudCache();
+
+        // 5. รีเซ็ตตัวแปร S กลับเป็นค่าเริ่มต้น (ไม่มี Passive Skill Tree)
         S = {
             // === Settings (เก็บจาก backup) ===
             schemaVersion: settingsBackup.schemaVersion,
@@ -10886,9 +11932,12 @@ updateHoursDisplay();
             goalIncome: settingsBackup.goalIncome,
             goalJobs: settingsBackup.goalJobs,
             socialChannels: settingsBackup.socialChannels,
-            savingGoals: settingsBackup.savingGoals,  // ✅ เพิ่มบรรทัดนี้
+            savingGoals: settingsBackup.savingGoals,
+            allQuestsCollapsed: false,
+            editPresetPanelVisible: false,
             
             _lastModified: Date.now(),
+            _version: 0,
             
             // === Character Core (รีเซ็ต) ===
             totalXp: 0,
@@ -10912,11 +11961,10 @@ updateHoursDisplay();
             // === PoE Economy (รีเซ็ต) ===
             currency: { chaos: 0, exalted: 0, divine: 0 },
             skillPoints: 1,
-            
             ascendancyPoints: 0,
             streakDays: 0,
             
-            // === Stash (รีเซ็ต) ===
+            // === Stash & Rewards (รีเซ็ต) ===
             stashRedemptions: [],
             customRewards: { chaos: [], exalted: [], divine: [] },
             perfectDays: [],
@@ -10972,15 +12020,32 @@ updateHoursDisplay();
             history: {},
             followers: {},
             lastFitDate: null,
-            vaultItems: []
+            vaultItems: [],
+            
+            // === Quest Presets (รีเซ็ต) ===
+            questPresets: [],
+            
+            // === Social Hub (รีเซ็ต) ===
+            socialPlatforms: DEFAULT_SOCIAL_DATA.socialPlatforms,
+            contentItems: [],
+            pipelineStats: { idea: 0, filming: 0, editing: 0, upload: 0, posted: 0 },
+            campaigns: [],
+            contentTemplates: DEFAULT_SOCIAL_DATA.contentTemplates,
+            contentCalendar: {}
         };
 
         lastSyncedDataStr = JSON.stringify(S);
 
-        // 4. บันทึกค่าเริ่มต้น
-        save();
+        // 6. บันทึกค่าเริ่มต้น
+        await dbSave(S);
+        localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
+        
         showToast('🗑️ ล้างข้อมูลสำเร็จ (Settings ถูกเก็บไว้) กำลังรีโหลด...');
-        setTimeout(() => { location.reload(); }, 1500);
+        
+        // 7. รีโหลดหน้าเว็บ (force reload)
+        setTimeout(() => { 
+            location.reload(true); 
+        }, 1500);
 
     } catch (err) {
         console.error("Reset failed:", err);
@@ -11020,38 +12085,47 @@ function compareVersions(v1, v2) {
 
 async function checkAppVersion() {
     try {
-        // ✅ ใช้ JSONP แทน fetch
+        // ✅ ใช้ Promise ที่จัดการ callback อย่างปลอดภัย
         const cloudData = await new Promise((resolve, reject) => {
             const callbackName = 'versionCheckCallback_' + Date.now();
-            const script = document.createElement('script');
             
+            // ✅ สร้าง callback function ที่ global
             window[callbackName] = function(data) {
                 cleanup();
                 resolve(data);
             };
             
-            const timeout = setTimeout(() => {
-                cleanup();
-                reject(new Error('JSONP timeout'));
-            }, 10000);
+            let isCleaned = false;
             
             function cleanup() {
+                if (isCleaned) return;
+                isCleaned = true;
                 clearTimeout(timeout);
                 delete window[callbackName];
                 if (script.parentNode) script.parentNode.removeChild(script);
             }
             
+            const timeout = setTimeout(() => {
+                cleanup();
+                reject(new Error('JSONP timeout'));
+            }, 8000);
+            
+            const script = document.createElement('script');
             const url = SCRIPT_URL + '?callback=' + callbackName + '&_=' + Date.now();
             script.src = url;
+            
             script.onerror = () => {
                 cleanup();
-                reject(new Error('JSONP failed'));
+                reject(new Error('JSONP load failed'));
             };
             
             document.head.appendChild(script);
         });
         
-        if (!cloudData || Object.keys(cloudData).length === 0) return;
+        if (!cloudData || Object.keys(cloudData).length === 0) {
+            console.log('[Version] No cloud data');
+            return;
+        }
         
         const cloudVersion = cloudData.appVersion ?? '1.0.0';
         const localVersion = S.appVersion ?? '1.0.0';
@@ -11086,8 +12160,48 @@ async function checkAppVersion() {
         }
         
     } catch (err) {
-        console.warn('[Version] Check failed:', err);
+        console.warn('[Version] Check failed:', err.message);
     }
+}
+// ==========================================
+// SAFE JSONP REQUEST - ใช้ทดแทน fetch
+// ==========================================
+
+function safeJsonpRequest(url, timeout = 10000) {
+    return new Promise((resolve, reject) => {
+        const callbackName = 'jsonp_cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        let isCleaned = false;
+        
+        // สร้าง callback
+        window[callbackName] = function(data) {
+            cleanup();
+            resolve(data);
+        };
+        
+        function cleanup() {
+            if (isCleaned) return;
+            isCleaned = true;
+            clearTimeout(timeoutId);
+            delete window[callbackName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+        }
+        
+        const timeoutId = setTimeout(() => {
+            cleanup();
+            reject(new Error(`JSONP timeout (${timeout}ms)`));
+        }, timeout);
+        
+        const script = document.createElement('script');
+        const separator = url.includes('?') ? '&' : '?';
+        script.src = url + separator + 'callback=' + callbackName + '&_=' + Date.now();
+        
+        script.onerror = () => {
+            cleanup();
+            reject(new Error('JSONP script load failed'));
+        };
+        
+        document.head.appendChild(script);
+    });
 }
 
 function showUpdateModal(oldVersion, newVersion, type) {
@@ -11770,70 +12884,515 @@ function renderSocialHub() {
     renderCampaigns();
     renderDiaryLogs();
 }
+// ==========================================
+// STASH TABS (Art Log & Fit Log)
+// ==========================================
 
-            // ========== Init App ==========
-let autoLoadInterval = null;
+let currentStashTab = 'art';
 
-async function initApp() {
-    console.log('🚀 Initializing Donlee Quest Log v' + APP_VERSION);
+function switchStashTab(tab) {
+    currentStashTab = tab;
     
-    // 1. Load data
-    await load();
+    // อัปเดตปุ่ม
+    document.querySelectorAll('.stash-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.stashTab === tab);
+    });
     
-    // 2. Run Migration
-    S = migrateData(S);
-    ensureDefaultValues();
+    // อัปเดตเนื้อหา
+    document.querySelectorAll('.stash-tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
     
-    // 3. Render UI
-    renderDailyTab();
-    renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
-    renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-    renderCalendar();
-    renderSocialChannels();
-    renderVaultItems();
-    renderDiaryLogs();
+    const target = document.getElementById(`stash-${tab}`);
+    if (target) target.classList.add('active');
+    
+    // Render ตาม tab
+    if (tab === 'art') renderStashArtLogs();
+    else if (tab === 'fit') renderStashFitLogs();
+    else if (tab === 'vault') renderStashVault();
+}
+
+function renderStashArtLogs() {
+    const container = document.getElementById('stash-art-logs');
+    if (!container) return;
+    
+    const logs = S.artLogs || [];
+    const totalHours = logs.reduce((sum, l) => sum + (l.hours || l.val || 0), 0);
+    
+    document.getElementById('stash-art-total').textContent = totalHours.toFixed(1);
+    document.getElementById('stash-art-count').textContent = logs.length;
+    
+    if (logs.length === 0) {
+        container.innerHTML = '<div style="color:var(--muted); text-align:center; padding:40px; font-size:12px;">ยังไม่มีบันทึกใน Art Log<br>เริ่มบันทึกกิจกรรมด้านศิลปะของคุณ!</div>';
+        return;
+    }
+    
+    // ✅ ใช้ renderLogEntry ใหม่ (มี show more)
+    container.innerHTML = logs.slice().reverse().map(log => renderLogEntry(log, 'art')).join('');
+}
+
+function renderStashFitLogs() {
+    const container = document.getElementById('stash-fit-logs');
+    if (!container) return;
+    
+    const logs = S.fitLogs || [];
+    const totalHours = logs.reduce((sum, l) => sum + (l.hours || l.val || 0), 0);
+    
+    document.getElementById('stash-fit-total').textContent = totalHours.toFixed(1);
+    document.getElementById('stash-fit-count').textContent = logs.length;
+    
+    if (logs.length === 0) {
+        container.innerHTML = '<div style="color:var(--muted); text-align:center; padding:40px; font-size:12px;">ยังไม่มีบันทึกใน Fit Log<br>เริ่มบันทึกกิจกรรมด้านฟิตเนสของคุณ!</div>';
+        return;
+    }
+    
+    // ✅ ใช้ renderLogEntry ใหม่ (มี show more)
+    container.innerHTML = logs.slice().reverse().map(log => renderLogEntry(log, 'fit')).join('');
+}
+
+function renderLogEntry(log, type) {
+    const isArt = type === 'art';
+    const borderColor = isArt ? 'var(--gold)' : 'var(--red)';
+    const hours = log.hours || log.val || 0;
+    const hoursDisplay = hours >= 1 ? `${Math.floor(hours)}h ${Math.round((hours % 1) * 60)}m` : `${Math.round(hours * 60)}m`;
+    const date = log.date || 'ไม่มีวันที่';
+    const note = log.note || '';
+    const xp = log.xpEarned || 0;
+    const currency = log.currency || {};
+    
+    // ✅ ตรวจสอบว่าข้อความยาวเกิน 3 บรรทัดหรือไม่
+    const plainText = note.replace(/img:https?:\/\/[^\s]+/g, '');
+    const lineCount = note.split('\n').length;
+    const charCount = plainText.length;
+    
+    // ✅ ใช้หลายเงื่อนไข: ตัวอักษร > 50, บรรทัด > 2, หรือมีรูปภาพ
+    const isLongNote = charCount > 50 || lineCount > 2 || note.includes('img:');
+    
+    // ✅ สร้าง ID สำหรับ toggle
+    const noteId = `log-note-${type}-${log.id}`;
+    const fullNoteId = `log-full-${type}-${log.id}`;
+    
+    // ✅ แปลงรูปใน note
+    let fullNoteHtml = note;
+    if (note.includes('img:')) {
+        const imgMatch = note.match(/img:(https?:\/\/[^\s]+)/g);
+        if (imgMatch) {
+            imgMatch.forEach(img => {
+                const url = img.replace('img:', '');
+                fullNoteHtml = fullNoteHtml.replace(img, `<img src="${url}" alt="Image" style="max-width:100%; max-height:200px; border-radius:6px; margin:4px 0;">`);
+            });
+        }
+    }
+    
+    // ✅ แปลงรูปใน preview
+    let previewNoteHtml = note;
+    if (note.includes('img:')) {
+        const imgMatch = note.match(/img:(https?:\/\/[^\s]+)/g);
+        if (imgMatch) {
+            const firstImg = imgMatch[0];
+            const url = firstImg.replace('img:', '');
+            previewNoteHtml = previewNoteHtml.replace(firstImg, `<img src="${url}" alt="Image" style="max-width:100%; max-height:80px; border-radius:4px; margin:2px 0;">`);
+            // ✅ ลบรูปอื่นๆ ใน preview
+            imgMatch.slice(1).forEach(img => {
+                previewNoteHtml = previewNoteHtml.replace(img, '');
+            });
+        }
+    }
+    
+    // ✅ ตัดข้อความใน preview
+    let previewText = previewNoteHtml;
+    if (isLongNote && charCount > 50) {
+        let cutIndex = 50;
+        while (cutIndex > 0 && previewNoteHtml[cutIndex] !== ' ' && previewNoteHtml[cutIndex] !== '\n') {
+            cutIndex--;
+        }
+        if (cutIndex === 0) cutIndex = 50;
+        previewText = previewNoteHtml.substring(0, cutIndex) + '...';
+    }
+    
+    // ✅ สร้าง HTML สำหรับ note
+    let noteHtml = '';
+    if (note) {
+        if (isLongNote) {
+            // ✅ มีปุ่ม "อ่านเพิ่มเติม" และ "ย่อกลับ"
+            noteHtml = `
+                <div class="log-note-wrapper">
+                    <div class="log-note truncated" id="${noteId}" style="max-height: 4.8em; overflow: hidden; position: relative; white-space: pre-wrap; word-break: break-word;">
+                        ${previewText}
+                        <span class="log-show-more-btn" onclick="toggleLogNote('${noteId}', '${fullNoteId}')">... [อ่านเพิ่มเติม]</span>
+                    </div>
+                    <div class="log-note full" id="${fullNoteId}" style="display:none; white-space: pre-wrap; word-break: break-word;">
+                        ${fullNoteHtml}
+                        <span class="log-show-less-btn" onclick="toggleLogNote('${noteId}', '${fullNoteId}')">[ย่อกลับ]</span>
+                    </div>
+                </div>
+            `;
+        } else {
+            // ✅ ข้อความสั้น ไม่มีปุ่ม
+            noteHtml = `
+                <div class="log-note" style="white-space: pre-wrap; word-break: break-word;">
+                    ${fullNoteHtml}
+                </div>
+            `;
+        }
+    }
+    
+    return `
+        <div class="log-entry-rich" style="border-left-color:${borderColor};">
+            <div class="log-header">
+                <div class="log-date">${date}</div>
+                <div class="log-meta">
+                    <span class="log-time">⏱️ ${hoursDisplay}</span>
+                    ${xp > 0 ? `<span class="log-xp">+${xp} XP</span>` : ''}
+                    ${currency.chaos > 0 || currency.exalted > 0 || currency.divine > 0 ? 
+                        `<span class="log-currency">💛${currency.chaos || 0} 💠${currency.exalted || 0} 💎${currency.divine || 0}</span>` : ''}
+                </div>
+            </div>
+            ${noteHtml}
+            <div class="log-actions">
+                <button class="btn-edit-log" onclick="editLogEntry('${type}', ${log.id})">✎ แก้ไข</button>
+                <button class="btn-delete-log" onclick="deleteLogEntry('${type}', ${log.id})">🗑️ ลบ</button>
+            </div>
+            <div class="log-edit-form" id="edit-form-${type}-${log.id}">
+                <textarea id="edit-note-${type}-${log.id}">${note}</textarea>
+                <div class="edit-actions">
+                    <button class="btn-s btn-art" onclick="saveLogEdit('${type}', ${log.id})">💾 บันทึก</button>
+                    <button class="btn-s" onclick="cancelLogEdit('${type}', ${log.id})">ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+// ===== Toggle Log Note (แสดง/ซ่อนเนื้อหาเพิ่มเติม) =====
+function toggleLogNote(previewId, fullId) {
+    const preview = document.getElementById(previewId);
+    const full = document.getElementById(fullId);
+    
+    if (!preview || !full) return;
+    
+    if (preview.style.display === 'none') {
+        // กำลังแสดง full → กลับไป preview
+        preview.style.display = 'block';
+        full.style.display = 'none';
+        // ✅ เรียกปรับ scroll เพื่อให้เห็นปุ่ม
+        preview.parentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+        // กำลังแสดง preview → ไป full
+        preview.style.display = 'none';
+        full.style.display = 'block';
+        // ✅ เรียกปรับ scroll เพื่อให้เห็นเนื้อหาเต็ม
+        setTimeout(() => {
+            full.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+}
+
+// ===== Add Log Modal =====
+function openAddLogModal(type) {
+    const note = prompt(`📝 บันทึก${type === 'art' ? ' Art' : ' Fit'}:\n\n(ใส่ลิงก์รูปภาพ: img:https://... เพื่อแนบรูป)`, '');
+    if (note === null) return;
+    
+    const hours = prompt('⏱️ จำนวนชั่วโมง:', '1');
+    if (hours === null) return;
+    
+    const hoursNum = parseFloat(hours) || 0;
+    if (hoursNum <= 0) {
+        showToast('⚠️ กรุณาใส่ชั่วโมงที่ถูกต้อง');
+        return;
+    }
+    
+    const date = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+    const xp = Math.round(hoursNum * 10);
+    const currencyDrop = calculateCurrencyDrop('subQuest');
+    
+    const logObj = {
+        id: Date.now(),
+        type: type,
+        val: hoursNum,
+        hours: hoursNum,
+        note: note || 'บันทึกกิจกรรม',
+        date: date,
+        logDateKey: getTodayKey(),
+        xpEarned: xp,
+        currency: {
+            chaos: currencyDrop.chaos,
+            exalted: currencyDrop.exalted,
+            divine: currencyDrop.divine
+        }
+    };
+    
+    if (type === 'art') {
+        if (!S.artLogs) S.artLogs = [];
+        S.artLogs.unshift(logObj);
+        S.artHours = (S.artHours || 0) + hoursNum;
+    } else {
+        if (!S.fitLogs) S.fitLogs = [];
+        S.fitLogs.unshift(logObj);
+        S.fitHours = (S.fitHours || 0) + hoursNum;
+        S.lastFitDate = new Date().toISOString();
+    }
+    
+    // เพิ่ม XP
+    S.xp = (S.xp || 0) + xp;
+    S.totalXp = (S.totalXp || 0) + xp;
+    
+    // เพิ่ม Currency
+    if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+    S.currency.chaos = (S.currency.chaos || 0) + currencyDrop.chaos;
+    S.currency.exalted = (S.currency.exalted || 0) + currencyDrop.exalted;
+    S.currency.divine = (S.currency.divine || 0) + currencyDrop.divine;
+    
+    // อัปเดต History
+    const k = getTodayKey();
+    if (!S.history[k]) S.history[k] = { daily: [], weekly: [], monthly: [], rest: [], done: false, rewards: {}, perfectDayBonus: {} };
+    if (type === 'art') {
+        S.history[k].artHours = (S.history[k].artHours || 0) + hoursNum;
+    } else {
+        S.history[k].fitHours = (S.history[k].fitHours || 0) + hoursNum;
+    }
+    
+    recalculateLevel();
+    save();
+    
+    // อัปเดต UI
+    renderStashArtLogs();
+    renderStashFitLogs();
     updateXpBar();
-    updateNodes();
-    updateTodayDisplay();
     updateCurrencyDisplay();
     updateHoursDisplay();
     updateDimensionDisplay();
-    checkDecay();
+    renderCalendar();
     
-    
-    // 4. Set up auto-save (เมื่อออกจากหน้า)
-    window.addEventListener('beforeunload', () => {
-        quickSync(true);
-    });
-    
-    
-    setInterval(() => {
-    if (navigator.onLine && !document.hidden) {
-      backgroundCloudRefresh();
+    showToast(`✅ บันทึกสำเร็จ! +${xp} XP, +${hoursNum} ชม.`);
+}
+
+// ===== Edit Log Entry =====
+function editLogEntry(type, id) {
+    const form = document.getElementById(`edit-form-${type}-${id}`);
+    if (form) {
+        form.classList.toggle('show');
     }
-  }, 3 * 60 * 1000);
+}
+
+function saveLogEdit(type, id) {
+    const textarea = document.getElementById(`edit-note-${type}-${id}`);
+    if (!textarea) return;
     
-    // ✅ เพิ่ม: โหลดทันทีเมื่อกลับมา online
-    window.addEventListener('online', () => {
-        console.log('🌐 Back online');
-        setTimeout(backgroundCloudRefresh, 2000);
+    const newNote = textarea.value.trim() || 'บันทึกกิจกรรม';
+    const logs = type === 'art' ? S.artLogs : S.fitLogs;
+    const log = logs.find(l => l.id === id);
+    
+    if (log) {
+        log.note = newNote;
+        save();
+        if (type === 'art') renderStashArtLogs();
+        else renderStashFitLogs();
+        showToast('✅ บันทึกการแก้ไขสำเร็จ');
+    }
+}
+
+function cancelLogEdit(type, id) {
+    const form = document.getElementById(`edit-form-${type}-${id}`);
+    if (form) form.classList.remove('show');
+}
+
+// ===== Delete Log Entry =====
+function deleteLogEntry(type, id) {
+    if (!confirm(`🗑️ ลบบันทึกนี้?`)) return;
+    
+    const logs = type === 'art' ? S.artLogs : S.fitLogs;
+    const idx = logs.findIndex(l => l.id === id);
+    if (idx === -1) return;
+    
+    const log = logs[idx];
+    const hours = log.hours || log.val || 0;
+    const xp = log.xpEarned || 0;
+    const currency = log.currency || {};
+    
+    // หักชั่วโมง
+    if (type === 'art') {
+        S.artHours = Math.max(0, (S.artHours || 0) - hours);
+    } else {
+        S.fitHours = Math.max(0, (S.fitHours || 0) - hours);
+    }
+    
+    // หัก XP
+    S.xp = Math.max(0, (S.xp || 0) - xp);
+    S.totalXp = Math.max(0, (S.totalXp || 0) - xp);
+    
+    // หัก Currency
+    if (S.currency) {
+        S.currency.chaos = Math.max(0, (S.currency.chaos || 0) - (currency.chaos || 0));
+        S.currency.exalted = Math.max(0, (S.currency.exalted || 0) - (currency.exalted || 0));
+        S.currency.divine = Math.max(0, (S.currency.divine || 0) - (currency.divine || 0));
+    }
+    
+    logs.splice(idx, 1);
+    
+    recalculateLevel();
+    save();
+    
+    if (type === 'art') renderStashArtLogs();
+    else renderStashFitLogs();
+    
+    updateXpBar();
+    updateCurrencyDisplay();
+    updateHoursDisplay();
+    updateDimensionDisplay();
+    renderCalendar();
+    
+    showToast(`🗑️ ลบบันทึกสำเร็จ! -${xp} XP, -${hours.toFixed(1)} ชม.`);
+}
+
+// ===== Stash Vault =====
+function renderStashVault() {
+    const container = document.getElementById('stash-vault-grid');
+    if (!container) return;
+    
+    const items = S.vaultItems || [];
+    document.getElementById('stash-vault-count').textContent = items.length;
+    
+    if (items.length === 0) {
+        container.innerHTML = '<div style="color:var(--muted); text-align:center; padding:40px; font-size:12px;">ยังไม่มีผลงานใน Dream Vault<br>เริ่มเก็บสะสมผลงานของคุณ!</div>';
+        return;
+    }
+    
+    container.innerHTML = items.map(item => `
+        <div class="vault-card">
+            <div class="vault-title">
+                <span>${item.name || 'ผลงาน'}</span>
+                <span style="font-size:10px; color:var(--muted);">${item.progress || 0}%</span>
+            </div>
+            <div class="vault-progress-bar">
+                <div class="vault-progress-fill" style="width: ${item.progress || 0}%"></div>
+            </div>
+            <div class="vault-meta">
+                <span>ความคืบหน้า</span>
+                <span>${item.progress || 0}/100</span>
+            </div>
+            ${item.detail ? `<div style="font-size:10px; color:var(--muted); margin-top:4px;">${item.detail}</div>` : ''}
+        </div>
+    `).join('');
+}
+
+// Override renderVaultGrid to use both places
+const originalRenderVaultGrid = renderVaultGrid;
+renderVaultGrid = function() {
+    originalRenderVaultGrid();
+    renderStashVault();
+};
+
+// Override renderVaultItems
+const originalRenderVaultItems = renderVaultItems;
+renderVaultItems = function() {
+    originalRenderVaultItems();
+    renderStashVault();
+};
+// ===== Toggle Preset Panel (แสดง/ซ่อน) =====
+let presetPanelVisible = false;
+let editPresetPanelVisible = false;
+
+// ===== Toggle Edit Mode with Preset Panel =====
+
+function toggleEditModeWithPreset() {
+    editPresetPanelVisible = !editPresetPanelVisible;
+    
+    const panel = document.getElementById('edit-preset-panel');
+    const btn = document.getElementById('btn-toggle-edit-preset');
+    const editBtn = document.getElementById('btn-toggle-edit');
+    
+    if (panel) {
+        panel.style.display = editPresetPanelVisible ? 'block' : 'none';
+    }
+    
+    if (btn) {
+        btn.textContent = editPresetPanelVisible ? '✕ ปิดแก้ไข' : '✎ แก้ไข & Presets';
+        btn.classList.toggle('active', editPresetPanelVisible);
+    }
+    
+    // ✅ เปิด/ปิด Edit Mode ของระบบด้วย
+    if (editPresetPanelVisible) {
+        S.editMode = true;
+        if (editBtn) editBtn.textContent = '✕ ยกเลิกแก้ไข';
+        if (editBtn) editBtn.classList.add('active');
+    } else {
+        S.editMode = false;
+        if (editBtn) editBtn.textContent = '✎ แก้ไข';
+        if (editBtn) editBtn.classList.remove('active');
+    }
+    
+    // ✅ บันทึกสถานะ panel
+    S.editPresetPanelVisible = editPresetPanelVisible;
+    save();
+    renderDailyTab();
+}
+
+// ===== Override toggleEditMode ให้ทำงานร่วมกับ preset panel =====
+function toggleEditMode() {
+    // ถ้า panel เปิดอยู่ ให้ปิดก่อน
+    if (editPresetPanelVisible) {
+        toggleEditModeWithPreset();
+        return;
+    }
+    
+    S.editMode = !S.editMode;
+    const editBtn = document.getElementById('btn-toggle-edit');
+    if (editBtn) {
+        editBtn.textContent = S.editMode ? '✕ ยกเลิกแก้ไข' : '✎ แก้ไข';
+        editBtn.classList.toggle('active', S.editMode);
+    }
+    save();
+    renderDailyTab();
+}
+
+// ===== Delete Selected Preset =====
+function deleteSelectedPreset() {
+    const select = document.getElementById('preset-select');
+    if (!select || !select.value) {
+        showToast('⚠️ กรุณาเลือก Preset ที่ต้องการลบ');
+        return;
+    }
+    
+    const index = parseInt(select.value);
+    if (!S.questPresets || !S.questPresets[index]) {
+        showToast('❌ ไม่พบ Preset');
+        return;
+    }
+    
+    const name = S.questPresets[index].name;
+    if (!confirm(`🗑️ ลบ Preset "${name}"?`)) return;
+    
+    // ✅ ลบ Preset
+    S.questPresets.splice(index, 1);
+    save();
+    
+    // ✅ อัปเดต UI ทันที
+    renderPresetDropdown();
+    renderDailyTab();
+    showToast(`🗑️ ลบ Preset "${name}" แล้ว`);
+}
+
+// ===== Override renderPresetDropdown ให้แสดงแบบมีปุ่มลบ =====
+// REPLACE THIS FUNCTION ด้วยอันนี้
+function renderPresetDropdown() {
+    const container = document.getElementById('preset-dropdown-container');
+    if (!container) return;
+    
+    if (!S.questPresets || S.questPresets.length === 0) {
+        container.innerHTML = '<span style="font-size:9px; color:var(--muted);">ไม่มี Preset</span>';
+        return;
+    }
+    
+    let html = `<select id="preset-select" style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:2px 6px;font-size:9px;font-family:'Space Mono',monospace;" onchange="if(this.value) loadQuestPreset(parseInt(this.value))">
+        <option value="">📋 เลือก Preset</option>`;
+    
+    S.questPresets.forEach((p, i) => {
+        const dateStr = p.date ? ` (${p.date})` : '';
+        html += `<option value="${i}">${p.name}${dateStr}</option>`;
     });
     
-    // ✅ เพิ่ม: โหลดเมื่อแท็บกลับมา active (ถ้าห่างจากครั้งล่าสุด > 5 นาที)
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-            const timeSinceLastSync = Date.now() - lastSyncTime;
-            if (timeSinceLastSync > 5 * 60 * 1000) {
-                console.log('👁️ Tab visible after long absence, refreshing...');
-                setTimeout(backgroundCloudRefresh, 1000);
-            }
-        }
-    });
-    
-    // 8. Check version
-    checkAppVersion();
-    
-    console.log('✅ App initialized');
+    html += `</select>`;
+    container.innerHTML = html;
 }
             // ========== Global Flag สำหรับป้องกัน Race Condition ==========
 let isSaving = false;
@@ -12548,5 +14107,196 @@ async function restoreFromBackupPrompt() {
     
     await restoreBackup(index);
 }
+
+// ==========================================
+// BOTTOM NAV - HIDE ON SCROLL
+// ==========================================
+
+let lastScrollY = 0;
+let scrollTimeout = null;
+const SCROLL_THRESHOLD = 50; // ระยะทางที่ต้องเลื่อนก่อนซ่อน
+const SCROLL_DEBOUNCE = 100; // ms
+
+function handleBottomNavScroll() {
+    const bottomNav = document.getElementById('bottom-nav');
+    if (!bottomNav) return;
+    
+    const currentScrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    
+    // ✅ ถ้าอยู่ที่ด้านบนสุด (scrollY = 0) ให้แสดงเสมอ
+    if (currentScrollY <= 10) {
+        bottomNav.classList.remove('hidden');
+        bottomNav.classList.add('visible');
+        lastScrollY = currentScrollY;
+        return;
+    }
+    
+    // ✅ ถ้าเลื่อนถึง底部 ให้แสดง (ใกล้จบหน้า)
+    if (currentScrollY + windowHeight >= documentHeight - 100) {
+        bottomNav.classList.remove('hidden');
+        bottomNav.classList.add('visible');
+        lastScrollY = currentScrollY;
+        return;
+    }
+    
+    // ✅ หา top nav bar (ถ้ามี)
+    const tabs = document.querySelector('.tabs');
+    let topNavBottom = 0;
+    if (tabs) {
+        const rect = tabs.getBoundingClientRect();
+        topNavBottom = rect.bottom;
+    }
+    
+    // ✅ ถ้า top nav อยู่ใน viewport และ visibility เปลี่ยน
+    const isTopNavVisible = topNavBottom > 0 && topNavBottom < windowHeight;
+    
+    // ✅ ใช้ setTimeout เพื่อป้องกันการกระพริบ
+    clearTimeout(scrollTimeout);
+    
+    scrollTimeout = setTimeout(() => {
+        const scrollDiff = currentScrollY - lastScrollY;
+        
+        // ✅ ถ้า top nav ปรากฏอยู่ → ซ่อน bottom nav
+        if (isTopNavVisible && scrollDiff > 10) {
+            bottomNav.classList.add('hidden');
+            bottomNav.classList.remove('visible');
+        } 
+        // ✅ ถ้าเลื่อนขึ้น → แสดง bottom nav
+        else if (scrollDiff < -10) {
+            bottomNav.classList.remove('hidden');
+            bottomNav.classList.add('visible');
+        }
+        // ✅ ถ้าอยู่ด้านบน → แสดง
+        else if (currentScrollY <= 50) {
+            bottomNav.classList.remove('hidden');
+            bottomNav.classList.add('visible');
+        }
+        
+        lastScrollY = currentScrollY;
+    }, SCROLL_DEBOUNCE);
+}
+
+// ✅ ใช้ requestAnimationFrame แทน throttle (ปลอดภัยกว่า)
+let ticking = false;
+
+function onScroll() {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            handleBottomNavScroll();
+            ticking = false;
+        });
+        ticking = true;
+    }
+}
+
+// ✅ Register scroll event
+window.addEventListener('scroll', onScroll, { passive: true });
+
+// ✅ เมื่อ resize หน้าจอ ให้ตรวจสอบสถานะใหม่
+window.addEventListener('resize', () => {
+    handleBottomNavScroll();
+}, { passive: true });
+
+// ✅ เมื่อโหลดหน้าเสร็จ ให้ตรวจสอบสถานะ
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(handleBottomNavScroll, 500);
+});
+
+// ✅ เมื่อ tab เปลี่ยน ให้ตรวจสอบสถานะ
+const originalSwitchTab = switchTab;
+switchTab = function(tabName) {
+    originalSwitchTab(tabName);
+    setTimeout(handleBottomNavScroll, 300);
+};
+
+
+            // ========== Init App ==========
+let autoLoadInterval = null;
+
+async function initApp() {
+    console.log('🚀 Initializing Donlee Quest Log v' + APP_VERSION);
+    
+    // 1. Load data
+    await load();
+    
+    // 2. Run Migration
+    S = migrateData(S);
+    ensureDefaultValues();
+
+    // ✅ ตรวจสอบและอัปเดต App Version
+    if (S.appVersion !== APP_VERSION) {
+        console.log(`[Version] Updating from ${S.appVersion || 'unknown'} to ${APP_VERSION}`);
+        S.appVersion = APP_VERSION;
+        // ✅ ลบ sessionStorage flag เพื่อให้แสดง Modal อัปเดต
+        sessionStorage.removeItem('dismissed_version_' + APP_VERSION);
+        save();
+    }
+
+    // ✅ โหลดสถานะ allQuestsCollapsed จาก S
+    if (S.allQuestsCollapsed !== undefined) {
+        allQuestsCollapsed = S.allQuestsCollapsed;
+    }
+    
+    // ✅ โหลดสถานะ editPresetPanelVisible (ถ้ามี)
+    if (S.editPresetPanelVisible !== undefined) {
+        editPresetPanelVisible = S.editPresetPanelVisible;
+    }
+    
+    // 3. Render UI
+    renderDailyTab();
+    renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+    renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+    renderCalendar();
+    renderSocialChannels();
+    renderVaultItems();
+    renderDiaryLogs();
+    updateXpBar();
+    updateNodes();
+    updateTodayDisplay();
+    updateCurrencyDisplay();
+    updateHoursDisplay();
+    updateDimensionDisplay();
+    checkDecay();
+
+    setTimeout(handleBottomNavScroll, 500);
+    
+    
+    // 4. Set up auto-save (เมื่อออกจากหน้า)
+    window.addEventListener('beforeunload', () => {
+        quickSync(true);
+    });
+    
+    
+    setInterval(() => {
+    if (navigator.onLine && !document.hidden) {
+      backgroundCloudRefresh();
+    }
+  }, 3 * 60 * 1000);
+    
+    // ✅ เพิ่ม: โหลดทันทีเมื่อกลับมา online
+    window.addEventListener('online', () => {
+        console.log('🌐 Back online');
+        setTimeout(backgroundCloudRefresh, 2000);
+    });
+    
+    // ✅ เพิ่ม: โหลดเมื่อแท็บกลับมา active (ถ้าห่างจากครั้งล่าสุด > 5 นาที)
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            const timeSinceLastSync = Date.now() - lastSyncTime;
+            if (timeSinceLastSync > 5 * 60 * 1000) {
+                console.log('👁️ Tab visible after long absence, refreshing...');
+                setTimeout(backgroundCloudRefresh, 1000);
+            }
+        }
+    });
+    
+    // 8. Check version
+    checkAppVersion();
+    
+    console.log('✅ App initialized');
+}
+
             initApp();
     </script>

@@ -130,16 +130,7 @@
             text-transform: uppercase;
         }
 
-        .sp-badge {
-            background: rgba(124, 110, 245, .2);
-            border: 1px solid var(--accent2);
-            color: var(--accent2);
-            font-family: 'Space Mono', monospace;
-            font-size: 11px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
+        
 
         .stats-grid {
             display: grid;
@@ -156,22 +147,7 @@
             transition: all .2s;
         }
 
-        .stat-item.can-upgrade {
-            border-color: var(--gold);
-            animation: pgold 1.5s infinite;
-        }
-
-        @keyframes pgold {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(240, 192, 64, .3);
-            }
-
-            50% {
-                box-shadow: 0 0 0 4px rgba(240, 192, 64, 0);
-            }
-        }
+        
 
         .stat-name {
             font-family: 'Space Mono', monospace;
@@ -208,135 +184,6 @@
             margin-bottom: 14px;
         }
 
-        .nodes-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-
-        .node-card {
-            background: var(--surface);
-            border-radius: 12px;
-            padding: 14px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .node-card.art {
-            border: 1px solid var(--accent);
-        }
-
-        .node-card.fit {
-            border: 1px solid #e05c8a;
-        }
-
-        .node-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-        }
-
-        .node-card.art::before {
-            background: linear-gradient(90deg, var(--accent2), var(--accent));
-        }
-
-        .node-card.fit::before {
-            background: linear-gradient(90deg, #e05c8a, var(--red));
-        }
-
-        .node-type {
-            font-family: 'Space Mono', monospace;
-            font-size: 8px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 3px;
-        }
-
-        .node-card.art .node-type {
-            color: var(--accent);
-        }
-
-        .node-card.fit .node-type {
-            color: #e05c8a;
-        }
-
-        .rank-badge {
-            font-family: 'Space Mono', monospace;
-            font-size: 9px;
-            padding: 2px 7px;
-            border-radius: 10px;
-            margin-bottom: 6px;
-            display: inline-block;
-        }
-
-        .node-card.art .rank-badge {
-            background: rgba(200, 169, 110, .15);
-            color: var(--gold);
-        }
-
-        .node-card.fit .rank-badge {
-            background: rgba(224, 92, 138, .15);
-            color: #e05c8a;
-        }
-
-        .node-hours {
-            font-family: 'Space Mono', monospace;
-            font-size: 24px;
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        .node-card.art .node-hours {
-            color: var(--gold);
-        }
-
-        .node-card.fit .node-hours {
-            color: #e05c8a;
-        }
-
-        .node-sub {
-            font-size: 10px;
-            color: var(--muted);
-            margin: 2px 0 8px;
-        }
-
-        .node-bar {
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-bottom: 8px;
-        }
-
-        .node-bar-fill {
-            height: 100%;
-            border-radius: 2px;
-        }
-
-        .node-card.art .node-bar-fill {
-            background: linear-gradient(90deg, var(--accent2), var(--gold));
-        }
-
-        .node-card.fit .node-bar-fill {
-            background: linear-gradient(90deg, #e05c8a, var(--red));
-        }
-
-        .rank-progress {
-            font-size: 9px;
-            color: var(--muted);
-            margin-bottom: 8px;
-        }
-
-        .node-input-row {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 6px;
-            flex-wrap: wrap;
-        }
 
         .n-input {
             background: var(--surface2);
@@ -917,241 +764,7 @@
             font-weight: 700;
         }
 
-        .tree-lane {
-            margin-bottom: 26px;
-        }
-
-        .tree-lane-hdr {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .tree-lane-ttl {
-            font-family: 'Space Mono', monospace;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .tree-lane-line {
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        .t-node {
-            display: flex;
-            align-items: stretch;
-            gap: 0;
-            margin-bottom: 0;
-        }
-
-        .t-conn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 22px;
-            flex-shrink: 0;
-        }
-
-        .t-dot {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            background: var(--bg);
-            flex-shrink: 0;
-            transition: all .3s;
-            margin-top: 13px;
-        }
-
-        .t-dot.unlocked {
-            background: var(--green);
-            border-color: var(--green);
-            box-shadow: 0 0 7px rgba(78, 203, 113, .5);
-        }
-
-        .t-dot.available {
-            background: var(--gold);
-            border-color: var(--gold);
-            animation: pgold 1.5s infinite;
-        }
-
-        .t-line {
-            width: 2px;
-            flex: 1;
-            background: var(--border);
-            margin: 0 auto;
-        }
-
-        .t-line.lit {
-            background: var(--green);
-        }
-
-        .t-card {
-            flex: 1;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 11px 13px;
-            margin: 3px 0 3px 7px;
-            transition: all .3s;
-        }
-
-        .t-card.unlocked {
-            border-color: var(--green);
-            background: rgba(78, 203, 113, .04);
-        }
-
-        .t-card.available {
-            border-color: var(--gold);
-            background: rgba(240, 192, 64, .04);
-            cursor: pointer;
-        }
-
-        .t-card.available:hover {
-            background: rgba(240, 192, 64, .09);
-        }
-
-        .t-card.locked {
-            opacity: .38;
-        }
-
-        .t-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3px;
-        }
-
-        .t-name {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .t-card.unlocked .t-name {
-            color: var(--green);
-        }
-
-        .t-card.available .t-name {
-            color: var(--gold);
-        }
-
-        .t-size {
-            font-family: 'Space Mono', monospace;
-            font-size: 8px;
-            padding: 2px 5px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        .sz-small {
-            background: rgba(129, 140, 248, .15);
-            color: #818cf8;
-        }
-
-        .sz-medium {
-            background: rgba(200, 169, 110, .15);
-            color: var(--accent);
-        }
-
-        .sz-large {
-            background: rgba(240, 192, 64, .15);
-            color: var(--gold);
-        }
-
-        .sz-keystone {
-            background: rgba(240, 171, 252, .15);
-            color: #f0abfc;
-        }
-
-        .t-desc {
-            font-size: 11px;
-            color: var(--muted);
-            margin-bottom: 4px;
-        }
-
-        .t-reward {
-            font-size: 10px;
-            color: var(--accent2);
-            font-family: 'Space Mono', monospace;
-        }
-
-        .t-cond {
-            font-size: 10px;
-            color: var(--muted);
-            margin-top: 3px;
-        }
-
-        .t-cond.met {
-            color: var(--green);
-        }
-
-        .t-prog {
-            height: 3px;
-            background: var(--border);
-            border-radius: 2px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .t-prog-fill {
-            height: 100%;
-            border-radius: 2px;
-            background: var(--accent);
-            transition: width .4s;
-        }
-
-        .unlock-btn {
-            margin-top: 7px;
-            background: var(--gold);
-            color: #1a1a00;
-            border: none;
-            border-radius: 6px;
-            padding: 4px 13px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: 'Sarabun', sans-serif;
-        }
-
-        .cross-node {
-            background: var(--surface);
-            border: 1px solid #f0abfc;
-            border-radius: 10px;
-            padding: 11px 13px;
-            margin-bottom: 9px;
-            opacity: .45;
-            transition: all .3s;
-        }
-
-        .cross-node.unlocked {
-            opacity: 1;
-            border-color: var(--green);
-        }
-
-        .cross-node.available {
-            opacity: 1;
-            animation: pgold 1.5s infinite;
-        }
-
-        .cross-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #f0abfc;
-            margin-bottom: 3px;
-        }
-
-        .cross-node.unlocked .cross-title {
-            color: var(--green);
-        }
-
-        .cross-req {
-            font-size: 10px;
-            color: var(--muted);
-        }
+        
 
         .sum-grid {
             display: grid;
@@ -4458,287 +4071,7 @@ body, html {
     margin: 4px 0;
     font-weight: 700;
 }
-/* ========================================================
-   🌳 PASSIVE SKILL TREE - FINAL CSS
-   ======================================================== */
 
-/* ========== MODAL LAYOUT ========== */
-#skill-tree-modal {
-    display: none !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 99999;
-    background: #0a0a0a;
-    flex-direction: column !important;
-}
-
-#skill-tree-modal.active {
-    display: flex !important;
-}
-
-/* Header */
-.st-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background: linear-gradient(180deg, #2a2015 0%, #1a1410 100%);
-    border-bottom: 2px solid #c8aa6e;
-    flex-shrink: 0;
-    height: 56px;
-}
-
-.st-title { color: #c8aa6e; margin: 0; font-family: 'Cinzel', serif; font-size: 22px; }
-.st-sp { color: #c8aa6e; font-size: 16px; }
-.st-sp-val { color: #fff8e1; font-size: 26px; font-weight: bold; margin-left: 8px; text-shadow: 0 0 10px rgba(255,248,225,0.5); }
-.st-close {
-    background: #3a3025; border: 2px solid #c8aa6e; color: #c8aa6e;
-    padding: 6px 14px; cursor: pointer; border-radius: 4px; font-size: 13px;
-}
-.st-close:hover { background: #4a4035; color: #fff8e1; }
-
-/* ========== CONTAINER ========== */
-.st-container {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    cursor: grab;
-    background: radial-gradient(ellipse at center, #151010 0%, #080808 100%);min-height: 600px;
-}
-.st-container:active { cursor: grabbing; }
-
-/* SVG */
-#skill-tree-svg {
-    width: 100% !important;
-    height: 100% !important;
-    display: block !important;
-    transform-origin: 0 0 !important;
-}
-#skill-tree-modal .modal-footer {
-    flex-shrink: 0 !important;
-    padding: 12px 24px !important;
-    background: #1a1410 !important;
-    border-top: 2px solid #c8aa6e !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    min-height: 50px !important;
-    z-index: 10 !important;
-}
-
-/* Zoom */
-.st-zoom {
-    position: absolute; bottom: 20px; right: 20px;
-    display: flex; flex-direction: column; gap: 6px; z-index: 100;
-}
-.st-zoom-btn {
-    width: 36px; height: 36px; background: #2a2015; border: 2px solid #c8aa6e;
-    color: #c8aa6e; font-size: 18px; cursor: pointer; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-}
-.st-zoom-btn:hover { background: #3a3025; color: #fff8e1; }
-
-/* Locked */
-.node-circle {
-    cursor: pointer;
-    transition: filter 0.3s ease, stroke-width 0.3s ease, opacity 0.3s ease;
-}
-.node-circle.locked { fill: #2a2520; stroke: #5a5045; stroke-width: 2; opacity: 0.65; }
-.node-circle.locked:hover { opacity: 1; stroke: #9a9085; stroke-width: 3; }
-/* Available */
-.node-circle.available {
-    fill: #3a3025; stroke: #ffd700; stroke-width: 3;
-    animation: stPulse 2s infinite;
-}
-.node-circle.available:hover { stroke-width: 4; filter: drop-shadow(0 0 12px rgba(255,215,0,1)); }
-/* Allocated by branch */
-.node-circle.allocated.type-art { fill: #9b6dff; stroke: #d4b8ff; stroke-width: 3; filter: drop-shadow(0 0 8px #9b6dff); }
-.node-circle.allocated.type-body { fill: #ff4444; stroke: #ff9999; stroke-width: 3; filter: drop-shadow(0 0 8px #ff4444); }
-.node-circle.allocated.type-mind { fill: #00bfff; stroke: #99e6ff; stroke-width: 3; filter: drop-shadow(0 0 8px #00bfff); }
-.node-circle.allocated.type-origin { fill: #ffd700; stroke: #fff8e1; stroke-width: 4; filter: drop-shadow(0 0 16px rgba(255,215,0,0.9)); }
-.node-circle.keystone { stroke-width: 4; }
-/* Keystone */
-.node-circle.keystone { stroke-width: 4; }
-.node-circle.keystone.available { animation: stKsPulse 1.5s infinite; }
-@keyframes stPulse {
-    0%, 100% { filter: drop-shadow(0 0 4px rgba(255,215,0,0.5)); }
-    50% { filter: drop-shadow(0 0 12px rgba(255,215,0,1)); }
-}
-@keyframes stKsPulse {
-    0%, 100% { filter: drop-shadow(0 0 8px rgba(255,248,225,0.7)); }
-    50% { filter: drop-shadow(0 0 20px rgba(255,248,225,1)); }
-}
-/* Lines */
-.conn-line { stroke: #4a4035; stroke-width: 2; fill: none; opacity: 0.45; transition: all 0.3s ease; }
-.conn-line.active { stroke: #c8aa6e; stroke-width: 3; opacity: 1; filter: drop-shadow(0 0 4px rgba(200,170,110,0.6)); }
-
-/* ========== TOOLTIP ========== */
-#skill-tooltip {
-    position: fixed; background: linear-gradient(180deg, #1a1410, #0a0a0a);
-    border: 2px solid #c8aa6e; border-radius: 4px; padding: 10px 14px;
-    color: #e8d9a8; font-size: 13px; max-width: 300px;
-    pointer-events: none; z-index: 100000; display: none;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.9);
-}
-
-.tooltip-name {
-    color: #c8aa6e;
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 6px;
-    text-shadow: 0 0 8px rgba(200, 170, 110, 0.4);
-}
-
-.tooltip-type {
-    color: #888;
-    font-size: 11px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    letter-spacing: 1px;
-}
-
-.tooltip-desc {
-    color: #aaa;
-    margin-bottom: 8px;
-    font-style: italic;
-    line-height: 1.4;
-    font-size: 12px;
-}
-
-.tooltip-effects {
-    margin: 8px 0;
-}
-
-.tooltip-effect {
-    color: #88ff88;
-    margin: 3px 0;
-    font-size: 13px;
-}
-
-.tooltip-cost {
-    color: #ffaa44;
-    margin-top: 8px;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.tooltip-status {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid #4a4035;
-    font-size: 12px;
-}
-
-.tooltip-status.available { color: #ffaa44; }
-.tooltip-status.allocated { color: #88ff88; }
-.tooltip-status.locked {
-    color: #ff6666;
-    font-style: italic;
-}
-
-/* ========== FOOTER ========== */
-.st-footer {
-    padding: 10px 20px; background: #1a1410; border-top: 2px solid #c8aa6e;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-shrink: 0; height: 48px;
-}
-
-.respec-btn {
-    background: #3a3025;
-    border: 2px solid #af6025;
-    color: #af6025;
-    padding: 8px 16px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 13px;
-    font-family: 'Fontin', serif;
-    transition: all 0.2s ease;
-}
-
-.respec-btn:hover {
-    background: linear-gradient(180deg, #4a4035 0%, #2a2015 100%);
-    color: #ff8844;
-    border-color: #ff8844;
-}
-
-.legend {
-    display: flex;
-    gap: 20px;
-    font-size: 13px;
-    color: #c8aa6e;
-}
-/* ✅ ใช้ transform แทน left/top */
-.tab-content {
-    transform: translateZ(0); /* GPU Acceleration */
-    will-change: transform;
-}
-
-/* ✅ CSS Containment */
-.career-section {
-    contain: layout style paint;
-}
-
-/* ✅ ลดความซับซ้อนของ Animation */
-@keyframes pgold {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
-/* ✅ Debounce Scroll */
-.tab-nav {
-    overflow-x: auto;
-    scroll-behavior: smooth;
-}
-
-/* ========== RESPONSIVE (มือถือ) ========== */
-@media (max-width: 768px) {
-    .skill-tree-title {
-        font-size: 18px;
-    }
-    
-    .skill-points-value {
-        font-size: 22px;
-    }
-    
-    .skill-tree-header {
-        padding: 10px 15px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .skill-tree-footer {
-        padding: 10px 15px;
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .legend {
-        flex-wrap: wrap;
-        gap: 12px;
-        justify-content: center;
-        font-size: 11px;
-    }
-    
-    .zoom-controls {
-        bottom: 20px;
-        right: 15px;
-    }
-    
-    .zoom-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
-    }
-    
-    #skill-tooltip {
-        max-width: 260px;
-        font-size: 12px;
-        padding: 10px 12px;
-    }
-}
 /* ==========================================
    PERFORMANCE OPTIMIZATION
    ========================================== */
@@ -4851,6 +4184,384 @@ img.loaded, .lazy-load.loaded {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+/* ==========================================
+   SOCIAL HUB STYLES
+   ========================================== */
+
+.social-hub-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 18px;
+}
+
+.social-hub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+}
+
+.social-hub-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff6b9d;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.social-hub-subtitle {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.quick-action-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.quick-action-btn:hover {
+    border-color: #ff6b9d;
+    background: rgba(255, 107, 157, 0.1);
+}
+
+/* Pipeline */
+.pipeline-section {
+    margin-bottom: 20px;
+}
+
+.pipeline-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pipeline-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .pipeline-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.pipeline-card {
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.pipeline-card:hover {
+    transform: translateY(-2px);
+    border-color: #ff6b9d;
+    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.2);
+}
+
+.pipeline-card.active {
+    border-color: #ff6b9d;
+    background: rgba(255, 107, 157, 0.1);
+}
+
+.pipeline-card.completed {
+    border-color: var(--green);
+    background: rgba(78, 203, 113, 0.1);
+}
+
+.pipeline-icon { font-size: 24px; margin-bottom: 6px; }
+.pipeline-name { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
+.pipeline-count { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: #ff6b9d; }
+.pipeline-label { font-size: 9px; color: var(--muted); }
+
+/* Platforms */
+.platforms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.platform-card {
+    background: linear-gradient(135deg, var(--surface2), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    transition: all 0.3s;
+}
+
+.platform-card:hover {
+    border-color: #4dabf7;
+    box-shadow: 0 4px 15px rgba(77, 171, 247, 0.2);
+}
+
+.platform-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.platform-name {
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.platform-icon { font-size: 18px; }
+.platform-edit-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 12px; }
+
+.platform-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.platform-stat {
+    text-align: center;
+    padding: 6px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 6px;
+}
+
+.platform-stat-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: #4dabf7;
+}
+
+.platform-stat-label {
+    font-size: 9px;
+    color: var(--muted);
+}
+
+.platform-input-row {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.platform-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 4px 6px;
+    text-align: center;
+}
+
+.platform-input:focus {
+    outline: none;
+    border-color: #4dabf7;
+}
+
+/* Content Calendar */
+.content-calendar {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 20px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.calendar-nav-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day-header {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    text-align: center;
+    padding: 4px 0;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    min-height: 40px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    font-size: 10px;
+}
+
+.calendar-day:hover { border-color: #ff6b9d; }
+.calendar-day.today { border-color: var(--gold); background: rgba(240, 192, 64, 0.1); }
+.calendar-day.has-content { border-color: #4dabf7; background: rgba(77, 171, 247, 0.1); }
+.calendar-day-number { font-family: 'Space Mono', monospace; font-size: 10px; }
+.calendar-day-indicator { width: 4px; height: 4px; border-radius: 50%; background: #ff6b9d; margin-top: 2px; }
+
+/* Content List */
+.content-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.content-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.content-item:hover { border-color: #9775fa; }
+
+.content-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.content-status.idea { background: var(--muted); }
+.content-status.filming { background: #ffa94d; }
+.content-status.editing { background: #4dabf7; }
+.content-status.uploading { background: #9775fa; }
+.content-status.posted { background: var(--green); }
+
+.content-info { flex: 1; min-width: 0; }
+.content-title { font-size: 12px; font-weight: 600; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.content-meta { font-size: 9px; color: var(--muted); font-family: 'Space Mono', monospace; }
+.content-platform { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: rgba(77, 171, 247, 0.2); color: #4dabf7; flex-shrink: 0; }
+
+/* Campaigns */
+.campaign-card {
+    background: linear-gradient(135deg, var(--surface2), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+}
+
+.campaign-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.campaign-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #9775fa;
+}
+
+.campaign-progress-bar {
+    height: 6px;
+    background: var(--bg);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.campaign-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b9d, #9775fa);
+    border-radius: 3px;
+    transition: width 0.5s;
+}
+
+.campaign-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+/* Form Styles */
+.form-group { margin-bottom: 12px; text-align: left; }
+.form-label { font-size: 10px; color: var(--muted); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block; }
+.form-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 8px 10px; font-family: 'Sarabun', sans-serif; font-size: 13px; }
+.form-input:focus { outline: none; border-color: var(--accent); }
+.form-select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 8px 10px; font-family: 'Sarabun', sans-serif; font-size: 13px; }
+
+/* Button Colors */
+.btn-social { background: #ff6b9d; color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-weight: 600; }
+.btn-blue { background: #4dabf7; color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-weight: 600; }
+.btn-purple { background: #9775fa; color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-weight: 600; }
+
+/* Color Variables */
+:root {
+    --social-pink: #ff6b9d;
+    --social-blue: #4dabf7;
+    --social-purple: #9775fa;
+    --social-orange: #ffa94d;
+}
+
     </style>
 </head>
 
@@ -4967,8 +4678,8 @@ img.loaded, .lazy-load.loaded {
 
 <div class="tabs">
     <div class="tab active" onclick="switchTab('quests')">📜 Piety's Missions</div>
-    <div class="tab" onclick="switchTab('skills')">🌳 Passive Skills</div>
     <div class="tab" onclick="switchTab('career')">🌍 Atlas of Worlds</div>
+    <div class="tab" onclick="switchTab('social')">📱 Social Hub</div>
     <div class="tab" onclick="switchTab('stash')">📦 The Stash</div>
     <div class="tab" onclick="switchTab('settings')">⚙️ Settings</div>
 </div>
@@ -5075,6 +4786,109 @@ img.loaded, .lazy-load.loaded {
     </div>
 
 </div>  <!-- ✅ ปิด quests-tab ตรงนี้เท่านั้น -->
+
+    <!-- ==========================================
+     TAB: SOCIAL HUB (เพิ่มใหม่)
+     ========================================== -->
+    <div id="social-tab" class="tab-content">
+        <div class="social-hub-container">
+            <!-- Header -->
+            <div class="social-hub-header">
+                <div>
+                    <div class="social-hub-title">📱 Social Hub</div>
+                    <div class="social-hub-subtitle">Content Creator Command Center</div>
+                </div>
+                <button class="btn-s btn-social" onclick="openContentModal()">+ New Content</button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="logPipelineActivity('idea')">💡 Log Idea</button>
+                <button class="quick-action-btn" onclick="logPipelineActivity('filming')">🎥 Log Filming</button>
+                <button class="quick-action-btn" onclick="logPipelineActivity('editing')">✂️ Log Editing</button>
+                <button class="quick-action-btn" onclick="logPipelineActivity('upload')">⬆️ Log Upload</button>
+                <button class="quick-action-btn" onclick="logPipelineActivity('posted')">📢 Log Post</button>
+                <button class="quick-action-btn" onclick="openContentModal()">📝 New Content</button>
+                <button class="quick-action-btn" onclick="saveContentTemplate()" style="border-color:var(--gold);">📋 Save Template</button>
+            </div>
+
+            <!-- Content Pipeline Tracker -->
+            <div class="pipeline-section">
+                <div class="pipeline-title">
+                    <span>🎬 Content Pipeline</span>
+                    <span style="font-size:9px; color:var(--muted);">This Week</span>
+                </div>
+                <div class="pipeline-grid" id="pipeline-grid">
+                    <div class="pipeline-card" onclick="showPipelineDetails('idea')">
+                        <div class="pipeline-icon">💡</div>
+                        <div class="pipeline-name">Ideas</div>
+                        <div class="pipeline-count" id="count-idea">0</div>
+                        <div class="pipeline-label">brainstormed</div>
+                    </div>
+                    <div class="pipeline-card" onclick="showPipelineDetails('filming')">
+                        <div class="pipeline-icon">🎥</div>
+                        <div class="pipeline-name">Filming</div>
+                        <div class="pipeline-count" id="count-filming">0</div>
+                        <div class="pipeline-label">footage captured</div>
+                    </div>
+                    <div class="pipeline-card" onclick="showPipelineDetails('editing')">
+                        <div class="pipeline-icon">✂️</div>
+                        <div class="pipeline-name">Editing</div>
+                        <div class="pipeline-count" id="count-editing">0</div>
+                        <div class="pipeline-label">in progress</div>
+                    </div>
+                    <div class="pipeline-card" onclick="showPipelineDetails('upload')">
+                        <div class="pipeline-icon">⬆️</div>
+                        <div class="pipeline-name">Upload</div>
+                        <div class="pipeline-count" id="count-upload">0</div>
+                        <div class="pipeline-label">ready to post</div>
+                    </div>
+                    <div class="pipeline-card" onclick="showPipelineDetails('posted')">
+                        <div class="pipeline-icon">📢</div>
+                        <div class="pipeline-name">Posted</div>
+                        <div class="pipeline-count" id="count-posted">0</div>
+                        <div class="pipeline-label">this week</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Platform Analytics -->
+            <div class="sec-title">
+                <span>📊 Platform Analytics</span>
+                <button class="btn-s" style="font-size:9px; padding:2px 8px;" onclick="openPlatformModal()">+ Add Platform</button>
+            </div>
+            <div class="platforms-grid" id="platforms-grid"></div>
+
+            <!-- Content Calendar -->
+            <div class="sec-title">
+                <span>📅 Content Calendar</span>
+                <span id="calendar-month-label" style="font-size:10px; color:var(--muted);">July 2026</span>
+            </div>
+            <div class="content-calendar">
+                <div class="calendar-header">
+                    <div class="calendar-nav">
+                        <button class="calendar-nav-btn" onclick="changeSocialMonth(-1)">◀</button>
+                        <button class="calendar-nav-btn" onclick="changeSocialMonth(1)">▶</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="social-calendar-grid"></div>
+            </div>
+
+            <!-- Active Content -->
+            <div class="sec-title">
+                <span>📝 Active Content</span>
+                <span style="font-size:9px; color:var(--muted);">Click to update status</span>
+            </div>
+            <div class="content-list" id="active-content-list"></div>
+
+            <!-- Campaigns / Projects -->
+            <div class="sec-title">
+                <span>🎯 Campaigns & Projects</span>
+                <button class="btn-s" style="font-size:9px; padding:2px 8px;" onclick="openCampaignModal()">+ New Campaign</button>
+            </div>
+            <div id="campaigns-list"></div>
+        </div>
+    </div>
 
     <!-- ==========================================
      TAB 3: ATLAS OF WORLDS (CAREER)
@@ -5282,6 +5096,12 @@ img.loaded, .lazy-load.loaded {
                         onclick="importHistoryAndQuests()">
                         📜 Import ประวัติ + เควส (คำนวณใหม่)
                     </button>
+                    <button class="btn-s" style="background:rgba(33, 150, 243, 0.2); color:#2196F3; border:1px solid #2196F3;" onclick="viewBackups()">
+                        📦 ดู Backup
+                    </button>
+                    <button class="btn-s" style="background:rgba(33, 150, 243, 0.2); color:#2196F3; border:1px solid #2196F3;" onclick="restoreFromBackupPrompt()">
+                        🔄 กู้คืน Backup
+                    </button>
                 </div>
             </div>
         </div>
@@ -5366,76 +5186,103 @@ img.loaded, .lazy-load.loaded {
         </div>
     </div>
 </div>
-
-
-<div class="toast" id="toast">บันทึกข้อมูลเรียบร้อย</div>
-<!-- 🌳 PASSIVE SKILL TREE MODAL -->
-<div id="skill-tree-modal" style="display:none;">
-    <div class="st-header">
-        <h2 class="st-title"> Passive Skill Tree</h2>
-        <div class="st-sp"><span>Skill Points:</span><span id="sp-available" class="st-sp-val">0</span></div>
-        <button onclick="closeSkillTree()" class="st-close">✕ ปิด</button>
-    </div>
-
-    <!-- ✅ ส่วนที่ 1: เพิ่ม Character Status Display -->
-    <div class="status-section" style="padding: 12px 20px; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--border);">
-        <div class="section-hdr" style="margin-bottom: 8px;">
-            <div class="section-ttl" style="font-size: 12px;">📊 Character Status (Base + Bonus)</div>
+<!-- Content Modal -->
+<div class="modal-overlay" id="content-modal">
+    <div class="modal" style="max-width:420px;">
+        <div class="modal-title">🎬 New Content</div>
+        <div class="form-group">
+            <label class="form-label">📋 Use Template (optional)</label>
+            <select class="form-select" id="content-template" onchange="applyContentTemplate()" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
+                <option value="">-- Manual Entry --</option>
+            </select>
         </div>
-        <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr); gap: 8px;">
-            <div class="stat-item">
-                <div class="stat-name">STR</div>
-                <div class="stat-val" id="st-val-STR">10</div>
-                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-STR" style="background:#f87171;width:10%"></div></div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-name">AGI</div>
-                <div class="stat-val" id="st-val-AGI">10</div>
-                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-AGI" style="background:#34d399;width:10%"></div></div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-name">INT</div>
-                <div class="stat-val" id="st-val-INT">10</div>
-                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-INT" style="background:#818cf8;width:10%"></div></div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-name">VIT</div>
-                <div class="stat-val" id="st-val-VIT">10</div>
-                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-VIT" style="background:#fbbf24;width:10%"></div></div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-name">CRE</div>
-                <div class="stat-val" id="st-val-CRE">10</div>
-                <div class="stat-bar"><div class="stat-bar-fill" id="st-bar-CRE" style="background:#f0abfc;width:10%"></div></div>
-            </div>
+        <div style="border-top:1px solid var(--border); margin:8px 0 12px;"></div>
+        <div class="form-group">
+            <label class="form-label">Content Title</label>
+            <input type="text" class="form-input" id="content-title" placeholder="e.g., Speedpaint: Cyberpunk Character" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
         </div>
-    </div>
-
-    <!-- ✅ ส่วนที่ 2: Skill Tree Container (แก้โครงสร้าง SVG) -->
-    <div class="st-container" id="skill-tree-container">
-        <!-- SVG ว่างเปล่าให้ JS วาดรูปเติมทีหลัง -->
-        <svg id="skill-tree-svg" viewBox="0 0 1000 1100" preserveAspectRatio="xMidYMid meet"></svg>
-        
-        <!-- ปุ่ม Zoom ต้องอยู่นอก SVG -->
-        <div class="st-zoom">
-            <button class="st-zoom-btn" onclick="zoomIn()">+</button>
-            <button class="st-zoom-btn" onclick="zoomOut()">−</button>
-            <button class="st-zoom-btn" onclick="resetZoom()" style="font-size:14px;">⌂</button>
+        <div class="form-group">
+            <label class="form-label">Platform</label>
+            <select class="form-select" id="content-platform" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
+                <option value="tiktok">TikTok</option>
+                <option value="youtube">YouTube</option>
+                <option value="instagram">Instagram</option>
+                <option value="x">X (Twitter)</option>
+                <option value="facebook">Facebook</option>
+                <option value="twitch">Twitch</option>
+            </select>
         </div>
-    </div>
-
-    <div id="skill-tooltip"></div>
-    
-    <div class="st-footer">
-        <button class="st-respec" onclick="respecTree()">🔄 Respec</button>
-        <div class="st-legend">
-            <span><span class="st-dot st-dot-art"></span>Art</span>
-            <span><span class="st-dot st-dot-body"></span>Body</span>
-            <span><span class="st-dot st-dot-mind"></span>Mind</span>
-            <span><span class="st-dot st-dot-ks"></span>Keystone</span>
+        <div class="form-group">
+            <label class="form-label">Content Type</label>
+            <select class="form-select" id="content-type" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
+                <option value="speedpaint">Speedpaint</option>
+                <option value="tutorial">Tutorial</option>
+                <option value="vlog">Vlog</option>
+                <option value="cover">Song Cover</option>
+                <option value="review">Review</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Estimated Duration</label>
+            <input type="text" class="form-input" id="content-duration" placeholder="e.g., 3-5 min" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="content-status" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
+                <option value="idea">💡 Idea</option>
+                <option value="filming">🎥 Filming</option>
+                <option value="editing">✂️ Editing</option>
+                <option value="uploading">⬆️ Uploading</option>
+                <option value="posted">📢 Posted</option>
+            </select>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="btn-s btn-social" style="flex:1; background:var(--social-pink);color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;" onclick="saveContent()">Create Content</button>
+            <button class="btn-s" style="flex:1; background:var(--muted);border:none;border-radius:6px;padding:10px;cursor:pointer;" onclick="closeModal('content-modal')">Cancel</button>
         </div>
     </div>
 </div>
+
+<!-- Platform Modal -->
+<div class="modal-overlay" id="platform-modal">
+    <div class="modal" style="max-width:400px;">
+        <div class="modal-title">📱 Add Platform</div>
+        <div class="form-group">
+            <label class="form-label">Platform Name</label>
+            <input type="text" class="form-input" id="platform-name" placeholder="e.g., TikTok" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Icon Emoji</label>
+            <input type="text" class="form-input" id="platform-icon" placeholder="🎵" value="🎵" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
+        </div>
+        <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="btn-s btn-blue" style="flex:1; background:var(--social-blue);color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;" onclick="savePlatform()">Add Platform</button>
+            <button class="btn-s" style="flex:1; background:var(--muted);border:none;border-radius:6px;padding:10px;cursor:pointer;" onclick="closeModal('platform-modal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign Modal -->
+<div class="modal-overlay" id="campaign-modal">
+    <div class="modal" style="max-width:400px;">
+        <div class="modal-title">🎯 New Campaign</div>
+        <div class="form-group">
+            <label class="form-label">Campaign Name</label>
+            <input type="text" class="form-input" id="campaign-name" placeholder="e.g., 30 Days of Art" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Target Content Count</label>
+            <input type="number" class="form-input" id="campaign-target" value="10" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);">
+        </div>
+        <div style="display:flex; gap:8px; margin-top:16px;">
+            <button class="btn-s btn-purple" style="flex:1; background:var(--social-purple);color:white;border:none;border-radius:6px;padding:10px;cursor:pointer;" onclick="saveCampaign()">Create Campaign</button>
+            <button class="btn-s" style="flex:1; background:var(--muted);border:none;border-radius:6px;padding:10px;cursor:pointer;" onclick="closeModal('campaign-modal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
 <!-- ========== Version Update Modal ========== -->
 <div id="version-update-modal" class="modal-overlay">
     <div class="modal-content" style="
@@ -5528,7 +5375,7 @@ img.loaded, .lazy-load.loaded {
 </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5zqX7G_HV3N76fGjw1ysfb9OCWpx4JCBWY-fW1zXTcAEGU6mkKzxL_cXjOVn87KG-/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyF2jxtvL1zvqHKZW9AUwuhgm2IaYjH5JFs3Y4iw5XY3Vfx9t2OCRmdfO7GETZV0NhL/exec';
 
         let DAILY_QUESTS = [{ id: 'd1', text: 'ฝึกวาดรูปศึกษาอนาโตมี่และคู่สีตรงข้ามสไตล์สีน้ำมันดิบ', xp: 15, stat: 'CRE' }, { id: 'd2', text: 'ฝึกซ้อมพลังเสียงและไดนามิกการร้องเพลงสไตล์ดิบดุดันแบบ Ado', xp: 15, stat: 'AGI' }, { id: 'd3', text: 'Weight Training หรือเวทเทรนนิ่งเพื่อเพิ่มความแข็งแกร่งกล้ามเนื้อแกนกลาง', xp: 20, stat: 'STR' }, { id: 'd4', text: 'Cardio ขี่จักรยาน หรือวิ่งโซน 2 เพื่อเพิ่มความฟิตและปอดในการร้องเพลง', xp: 20, stat: 'VIT' }, { id: 'd5', text: 'อัปเดตไอเดียสตอรี่บอร์ดงานอาร์ตลงคลังสมุดบันทึกส่วนตัว', xp: 10, stat: 'INT' }];
         let WEEKLY_QUESTS = [{ id: 'w1', text: 'ตัดต่อและโพสต์วิดีโอ Speedpainting หรือคลิปร้องเพลงสั้นลง TikTok', xp: 40, stat: 'CRE' }, { id: 'w2', text: 'เขียนเนื้อร้อง/ทำนองเพลงเดโม่ หรือทบทวนทฤษฎีดนตรีเพื่อต่อยอดไอเดีย', xp: 50, stat: 'INT' }, { id: 'w3', text: 'ออกกำลังกายสะสมครบ 3 วันในรอบสัปดาห์เพื่อชะล้างสถานะค่าพลังลดถอย', xp: 40, stat: 'VIT' }];
@@ -5588,140 +5435,6 @@ const REWARD_CONFIG = {
     }
 };
 
-// ========== 🌳 AUTO-LAYOUT SYSTEM - Spider Web Style ==========
-const SKILL_TREE_CONFIG = (() => {
-    const nodes = {};
-    
-    const N = (id, type, branch, cost, x, y, connections, effects, name, desc) => {
-        nodes[id] = { type, branch, cost, x, y, connections, effects, name, desc };
-    };
-    
-    // ===== ปรับค่าคงที่ใหม่ให้พอดี ViewBox =====
-    const ORIGIN_X = 500;  // ✅ ปรับจาก 600 → 500 (อยู่กลาง)
-    const ORIGIN_Y = 500;  // ✅ ปรับจาก 550 → 500
-    const TRUNK_SPACING = 50;  // ✅ ลดจาก 70 → 50
-    const BRANCH_SPACING = 60;  // ✅ ลดจาก 85 → 60
-    const BRANCH_ANGLE_OFFSET = 25;
-    
-    // ===== 🌟 ORIGIN NODE (ต้องสร้าง!) =====
-    N("origin", "keystone", "origin", 0, ORIGIN_X, ORIGIN_Y,
-      ["art_1", "body_1", "mind_1"],
-      {},  // ✅ Origin ไม่มี effect
-      "The Exile's Birth", "จุดเริ่มต้นของการเดินทาง");
-    
-    // ===== 🎨 ART BRANCH (ซ้ายบน -150°) =====
-    const ART_ANGLE = -150;
-    const ART_RAD = ART_ANGLE * Math.PI / 180;
-    
-    for (let i = 1; i <= 10; i++) {
-        const x = ORIGIN_X + (Math.cos(ART_RAD) * (TRUNK_SPACING * i));
-        const y = ORIGIN_Y + (Math.sin(ART_RAD) * (TRUNK_SPACING * i));
-        
-        const leftBranchAngle = (ART_ANGLE - BRANCH_ANGLE_OFFSET) * Math.PI / 180;
-        const leftX = x + (Math.cos(leftBranchAngle) * (BRANCH_SPACING * 1.5));
-        const leftY = y + (Math.sin(leftBranchAngle) * (BRANCH_SPACING * 1.5));
-        
-        // ✅ แก้ connections: art_1 เชื่อม origin + art_2 + art_1_left
-        const connections = [];
-        if (i === 1) connections.push("origin");
-        if (i > 1) connections.push(`art_${i-1}`);
-        if (i < 10) connections.push(`art_${i+1}`);
-        if (i <= 8) connections.push(`art_${i}_left`);
-        if (i === 10) connections.push("art_ks");
-        
-        N(`art_${i}`, "small", "art", 1, x, y, connections,
-          { CRE: i % 3 === 0 ? 2 : 1 },
-          `Art Node ${i}`, `+${i % 3 === 0 ? 2 : 1} CRE`);
-        
-        if (i <= 8) {
-            N(`art_${i}_left`, "small", "art", 1, leftX, leftY,
-              [`art_${i}`], { INT: 1 }, `Art Branch ${i}`, "+1 INT");
-        }
-    }
-    
-    const artKsX = ORIGIN_X + (Math.cos(ART_RAD) * (TRUNK_SPACING * 11));
-    const artKsY = ORIGIN_Y + (Math.sin(ART_RAD) * (TRUNK_SPACING * 11));
-    // ✅ แยก effects เป็น additive/multiplicative
-    N("art_ks", "keystone", "art", 10, artKsX, artKsY,
-      ["art_10", "art_8_left"],
-      { add: { CRE: 10, INT: 5 }, mult: { CRE: 1.5, INT: 1.3, STR: 0.8 } },
-      "🎨 Creative Ascendancy", "CRE+50% INT+30% STR-20%");
-    
-    // ===== 💪 BODY BRANCH (ขวาบน -30°) =====
-    const BODY_ANGLE = -30;
-    const BODY_RAD = BODY_ANGLE * Math.PI / 180;
-    
-    for (let i = 1; i <= 10; i++) {
-        const x = ORIGIN_X + (Math.cos(BODY_RAD) * (TRUNK_SPACING * i));
-        const y = ORIGIN_Y + (Math.sin(BODY_RAD) * (TRUNK_SPACING * i));
-        
-        const leftBranchAngle = (BODY_ANGLE - BRANCH_ANGLE_OFFSET) * Math.PI / 180;
-        const leftX = x + (Math.cos(leftBranchAngle) * (BRANCH_SPACING * 1.5));
-        const leftY = y + (Math.sin(leftBranchAngle) * (BRANCH_SPACING * 1.5));
-        
-        const connections = [];
-        if (i === 1) connections.push("origin");
-        if (i > 1) connections.push(`body_${i-1}`);
-        if (i < 10) connections.push(`body_${i+1}`);
-        if (i <= 8) connections.push(`body_${i}_left`);
-        if (i === 10) connections.push("body_ks");
-        
-        N(`body_${i}`, "small", "body", 1, x, y, connections,
-          { STR: i % 3 === 0 ? 2 : 1 },
-          `Body Node ${i}`, `+${i % 3 === 0 ? 2 : 1} STR`);
-        
-        if (i <= 8) {
-            N(`body_${i}_left`, "small", "body", 1, leftX, leftY,
-              [`body_${i}`], { VIT: 1 }, `Body Branch ${i}`, "+1 VIT");
-        }
-    }
-    
-    const bodyKsX = ORIGIN_X + (Math.cos(BODY_RAD) * (TRUNK_SPACING * 11));
-    const bodyKsY = ORIGIN_Y + (Math.sin(BODY_RAD) * (TRUNK_SPACING * 11));
-    N("body_ks", "keystone", "body", 10, bodyKsX, bodyKsY,
-      ["body_10", "body_8_left"],
-      { add: { STR: 10, VIT: 10 }, mult: { STR: 1.5, VIT: 1.5, AGI: 0.8 } },
-      "💪 Juggernaut Ascendancy", "STR+50% VIT+50% AGI-20%");
-    
-    // ===== 🧠 MIND BRANCH (ล่าง 90°) =====
-    const MIND_ANGLE = 90;
-    const MIND_RAD = MIND_ANGLE * Math.PI / 180;
-    
-    for (let i = 1; i <= 10; i++) {
-        const x = ORIGIN_X + (Math.cos(MIND_RAD) * (TRUNK_SPACING * i));
-        const y = ORIGIN_Y + (Math.sin(MIND_RAD) * (TRUNK_SPACING * i));
-        
-        const leftBranchAngle = (MIND_ANGLE - BRANCH_ANGLE_OFFSET) * Math.PI / 180;
-        const leftX = x + (Math.cos(leftBranchAngle) * (BRANCH_SPACING * 1.5));
-        const leftY = y + (Math.sin(leftBranchAngle) * (BRANCH_SPACING * 1.5));
-        
-        const connections = [];
-        if (i === 1) connections.push("origin");
-        if (i > 1) connections.push(`mind_${i-1}`);
-        if (i < 10) connections.push(`mind_${i+1}`);
-        if (i <= 8) connections.push(`mind_${i}_left`);
-        if (i === 10) connections.push("mind_ks");
-        
-        N(`mind_${i}`, "small", "mind", 1, x, y, connections,
-          { INT: i % 3 === 0 ? 2 : 1 },
-          `Mind Node ${i}`, `+${i % 3 === 0 ? 2 : 1} INT`);
-        
-        if (i <= 8) {
-            N(`mind_${i}_left`, "small", "mind", 1, leftX, leftY,
-              [`mind_${i}`], { AGI: 1 }, `Mind Branch ${i}`, "+1 AGI");
-        }
-    }
-    
-    const mindKsX = ORIGIN_X + (Math.cos(MIND_RAD) * (TRUNK_SPACING * 11));
-    const mindKsY = ORIGIN_Y + (Math.sin(MIND_RAD) * (TRUNK_SPACING * 11));
-    // ✅ ลบ + 50 ออก (ทำให้ Y เกิน viewBox)
-    N("mind_ks", "keystone", "mind", 10, mindKsX, mindKsY,
-      ["mind_10", "mind_8_left"],
-      { add: { INT: 10, AGI: 10 }, mult: { INT: 1.5, AGI: 1.5, VIT: 0.8 } },
-      "🧠 Ascendant Scholar", "INT+50% AGI+50% VIT-20%");
-    
-    return { version: "5.2.0", nodes, removedNodes: {} };
-})();
         // ==========================================
         // PATCH v4: Data Structure & Migration
         // ==========================================
@@ -5744,7 +5457,7 @@ let S = {
     // === PoE Economy ===
     currency: { chaos: 0, exalted: 0, divine: 0 },
     skillPoints: 1,
-    skillTree: { 'origin': true },
+    
     ascendancyPoints: 0,
     streakDays: 0,
     
@@ -5803,19 +5516,39 @@ let S = {
     monthlyTrials: 0,
     trialCompletion: {},
 
-    // === Legacy Fields ===
-    history: {}, 
-    followers: {}, 
-    lastFitDate: null,
-    goalIncome: 15000, 
-    goalJobs: 6,
-    savingGoals: [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }],
-    vaultItems: [],
-    socialChannels: [
-        { id: "tk", name: "TikTok (EATLAEWSHOP)", subs: 0, vids: 0 },
-        { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
-    ]
 };
+// ==========================================
+// SOCIAL HUB - Data & Functions
+// ==========================================
+
+// ===== Social Hub Default Data =====
+const DEFAULT_SOCIAL_DATA = {
+    socialPlatforms: [
+        { id: 'tk', name: 'TikTok', icon: '🎵', followers: 0, posts: 0, engagement: 0 },
+        { id: 'yt', name: 'YouTube', icon: '▶️', followers: 0, posts: 0, engagement: 0 },
+        { id: 'ig', name: 'Instagram', icon: '📷', followers: 0, posts: 0, engagement: 0 },
+        { id: 'x', name: 'X', icon: '🐦', followers: 0, posts: 0, engagement: 0 },
+        { id: 'fb', name: 'Facebook', icon: '👍', followers: 0, posts: 0, engagement: 0 },
+        { id: 'tw', name: 'Twitch', icon: '🟣', followers: 0, posts: 0, engagement: 0 }
+    ],
+    contentItems: [],
+    pipelineStats: { idea: 0, filming: 0, editing: 0, upload: 0, posted: 0 },
+    campaigns: [],
+    contentTemplates: [
+        { id: 'template_1', name: 'Speedpaint (Short)', type: 'speedpaint', duration: '15-30s', platform: 'tiktok' },
+        { id: 'template_2', name: 'Speedpaint (Long)', type: 'speedpaint', duration: '1-3min', platform: 'youtube' },
+        { id: 'template_3', name: 'Tutorial', type: 'tutorial', duration: '3-10min', platform: 'youtube' },
+        { id: 'template_4', name: 'Day Vlog', type: 'vlog', duration: '1-5min', platform: 'instagram' },
+        { id: 'template_5', name: 'Song Cover', type: 'cover', duration: '2-4min', platform: 'youtube' },
+        { id: 'template_6', name: 'Art Review', type: 'review', duration: '2-5min', platform: 'youtube' },
+        { id: 'template_7', name: 'WIP Update', type: 'other', duration: '30s-1min', platform: 'tiktok' },
+        { id: 'template_8', name: 'Art Challenge', type: 'other', duration: '2-5min', platform: 'youtube' },
+        { id: 'template_9', name: 'Live Sketch', type: 'other', duration: '15-60min', platform: 'twitch' },
+        { id: 'template_10', name: 'Commission Showcase', type: 'other', duration: '1-3min', platform: 'instagram' }
+    ],
+    contentCalendar: {}
+};
+
 //// ==========================================
 // COMPACT: migrateData()
 // ==========================================
@@ -5880,6 +5613,14 @@ function migrateData(oldS) {
         weeklyQuests: getArr('weeklyQuests', []),
         monthlyQuests: getArr('monthlyQuests', []),
 
+                // === Social Hub ===
+        socialPlatforms: getArr('socialPlatforms', DEFAULT_SOCIAL_DATA.socialPlatforms),
+        contentItems: getArr('contentItems', []),
+        pipelineStats: getObj('pipelineStats', { idea: 0, filming: 0, editing: 0, upload: 0, posted: 0 }),
+        campaigns: getArr('campaigns', []),
+        contentTemplates: getArr('contentTemplates', DEFAULT_SOCIAL_DATA.contentTemplates),
+        contentCalendar: getObj('contentCalendar', {}),
+
         // === Stash & Rewards ===
         stashRedemptions: getArr('stashRedemptions', []),
         perfectDays: (() => {
@@ -5894,12 +5635,6 @@ function migrateData(oldS) {
             exalted: oldS?.currency?.exalted ?? oldS?.orbs?.exalted ?? 0,
             divine: oldS?.currency?.divine ?? oldS?.orbs?.divine ?? 0
         },
-        skillTree: getObj('skillTree', {}),
-        skillPoints: (() => {
-            // ✅ รวม sp เก่าเข้า skillPoints และป้องกันค่าติดลบ
-            const sp = (get('skillPoints', 0) ?? 0) + (get('sp', 0) ?? 0);
-            return Math.max(0, sp);
-        })(),
         ascendancyPoints: get('ascendancyPoints', 0),
         streakDays: get('streakDays', 0),
 
@@ -5968,13 +5703,6 @@ function migrateData(oldS) {
         followers: getObj('followers', {}),
         lastFitDate: get('lastFitDate', null),
 
-        // === Career ===
-        goalIncome: get('goalIncome', 15000),
-        goalJobs: get('goalJobs', 6),
-
-        // === Goals & Vault ===
-        savingGoals: getArr('savingGoals', [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }]),
-        vaultItems: getArr('vaultItems', []),
 
         // === Social ===
         socialChannels: getArr('socialChannels', [
@@ -5993,30 +5721,6 @@ function migrateData(oldS) {
     if (newData.xp < 0) newData.xp = 0;
     if (newData.skillPoints < 0) newData.skillPoints = 0;
 
-    // ✅ 2. ตรวจสอบว่า skillTree มี origin เสมอ
-    if (!newData.skillTree || typeof newData.skillTree !== 'object') {
-        newData.skillTree = {};
-    }
-    if (!newData.skillTree['origin']) {
-        newData.skillTree['origin'] = true;
-        console.log('✅ Origin unlocked in migration');
-    }
-
-    // ✅ 3. ลบ node ที่ไม่มีใน SKILL_TREE_CONFIG
-    if (typeof SKILL_TREE_CONFIG !== 'undefined' && SKILL_TREE_CONFIG.nodes) {
-        let refundedSP = 0;
-        Object.keys(newData.skillTree).forEach(nodeId => {
-            if (nodeId !== 'origin' && !SKILL_TREE_CONFIG.nodes[nodeId]) {
-                refundedSP += 1;
-                delete newData.skillTree[nodeId];
-                console.warn(`[Migration] Removed unknown node: ${nodeId}`);
-            }
-        });
-        if (refundedSP > 0) {
-            newData.skillPoints = (newData.skillPoints ?? 0) + refundedSP;
-            console.warn(`[Migration] Refunded ${refundedSP} SP for removed nodes`);
-        }
-    }
 
     // ✅ 4. ตรวจสอบ currency
     if (!newData.currency) {
@@ -6087,460 +5791,6 @@ function migrateData(oldS) {
 }
 
 
-/** Apply/Remove effects ของ Node */
-function applyNodeEffects(effects, multiplier) {
-  if (!effects) return;
-  Object.entries(effects).forEach(([stat, value]) => {
-    if (["CRE","STR","INT","VIT","AGI"].includes(stat)) {
-      // Stat multiplier (keystone) หรือ flat bonus
-      if (value > 10) {
-        // น่าจะเป็น multiplier เช่น 1.5 = +50%
-        // เก็บเป็น % bonus แยกไว้
-        S[`_bonus_${stat}`] = (S[`_bonus_${stat}`] ?? 0) + (value - 1) * 100 * multiplier;
-      } else {
-        // Flat bonus
-        S[stat] = (S[stat] ?? 10) + value * multiplier;
-      }
-    }
-  });
-}
-
-/** คำนวณ Stat รวม (Base + Tree Bonus) */
-function calculateDerivedStats() {
-  const base = {
-    STR: S.STR ?? 10, AGI: S.AGI ?? 10, INT: S.INT ?? 10,
-    VIT: S.VIT ?? 10, CRE: S.CRE ?? 10
-  };
-  const result = { ...base };
-  
-  // Apply % bonus จาก Keystone
-  ["STR","AGI","INT","VIT","CRE"].forEach(stat => {
-    const bonus = S[`_bonus_${stat}`] ?? 0;
-    result[stat] = Math.floor(base[stat] * (1 + bonus / 100));
-  });
-  
-  return result;
-}
-
-// ========== 4. SVG Rendering (Data-Driven) ==========
-
-// ========== SKILL TREE FUNCTIONS ==========
-
-let panZoomState = { scale: 1.0, panX: 0, panY: 0, isPanning: false, startX: 0, startY: 0 };
-
-function renderSkillTree() {
-    console.log('🌳 Rendering Skill Tree...');
-
-    if (!S.skillTree) S.skillTree = {};
-    if (!S.skillTree['origin']) { S.skillTree['origin'] = true; save(); }
-    
-    const svg = document.getElementById('skill-tree-svg');
-    if (!svg) {
-        console.error('❌ SVG not found');
-        return;
-    }
-    
-     const spEl = document.getElementById('sp-available');
-    if (spEl) spEl.textContent = S.skillPoints || 0;
-    
-    svg.innerHTML = '';
-
-    const svgNS = 'http://www.w3.org/2000/svg';
-
-    if (!SKILL_TREE_CONFIG || !SKILL_TREE_CONFIG.nodes) {
-        console.error('❌ SKILL_TREE_CONFIG not found');
-        return;
-    }
-    
-    // ✅ ประกาศแค่ครั้งเดียว
-    const skillNodes = SKILL_TREE_CONFIG.nodes;
-    
-    // คำนวณ bounding box
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    
-    Object.values(skillNodes).forEach(node => {
-        if (node.x < minX) minX = node.x;
-        if (node.y < minY) minY = node.y;
-        if (node.x > maxX) maxX = node.x;
-        if (node.y > maxY) maxY = node.y;
-    });
-
-    // เพิ่ม padding 50px รอบๆ
-    const padding = 50;
-    minX -= padding;
-    minY -= padding;
-    maxX += padding;
-    maxY += padding;
-
-    const viewBox = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
-    svg.setAttribute('viewBox', viewBox);
-
-// Background
-const bg = document.createElementNS(svgNS, 'rect');
-bg.setAttribute('x', minX);
-bg.setAttribute('y', minY);
-bg.setAttribute('width', maxX - minX);
-bg.setAttribute('height', maxY - minY);
-bg.setAttribute('fill', '#0a0a0a');
-svg.appendChild(bg);
-    
-    // Lines - ใช้ CSS class แทน inline attributes
-    const drawn = new Set();
-    Object.entries(skillNodes).forEach(([id, node]) => {
-        if (!Array.isArray(node.connections)) return;
-        node.connections.forEach(cid => {
-            const key = [id, cid].sort().join('-');
-            if (drawn.has(key)) return;
-            drawn.add(key);
-            const c = skillNodes[cid];
-            if (!c) return;
-            
-            const line = document.createElementNS(svgNS, 'line');
-            line.setAttribute('x1', node.x); line.setAttribute('y1', node.y);
-            line.setAttribute('x2', c.x);    line.setAttribute('y2', c.y);
-            
-            // ✅ ใช้ CSS class แทน inline style
-            const isActive = S.skillTree[id] && S.skillTree[cid];
-            line.setAttribute('class', 'conn-line' + (isActive ? ' active' : ''));
-            svg.appendChild(line);
-        });
-    });
-    
-    // Nodes - ใช้ CSS class แทน inline attributes
-    Object.entries(skillNodes).forEach(([id, node]) => {
-        const isAlloc = (id === 'origin') || (S.skillTree[id] === true);
-        const isAvail = canAllocateNode(id);
-        
-        const circle = document.createElementNS(svgNS, 'circle');
-        circle.setAttribute('cx', node.x);
-        circle.setAttribute('cy', node.y);
-        circle.setAttribute('r', node.type === 'keystone' ? 20 : node.type === 'origin' ? 28 : 12);
-        
-        // ✅ สร้าง class string (ไม่มี inline fill/stroke)
-        const cls = ['node-circle', `type-${node.branch || 'origin'}`];
-        if (node.type === 'keystone') cls.push('keystone');
-        cls.push(isAlloc ? 'allocated' : isAvail ? 'available' : 'locked');
-        circle.setAttribute('class', cls.join(' '));
-        
-        circle.addEventListener('click', e => { 
-    e.stopPropagation(); 
-    toggleSkillNode(id);  // ✅ ใช้ toggleSkillNode แทน
-});
-        circle.addEventListener('mouseenter', e => showTooltip(e, id));
-        circle.addEventListener('mouseleave', hideTooltip);
-        circle.addEventListener('mousemove', moveTooltip);
-        svg.appendChild(circle);
-        
-        // Icon text
-        if (node.type === 'origin' || node.type === 'keystone') {
-            const t = document.createElementNS(svgNS, 'text');
-            t.setAttribute('x', node.x);
-            t.setAttribute('y', node.y + (node.type === 'origin' ? 8 : 6));
-            t.setAttribute('text-anchor', 'middle');
-            t.setAttribute('fill', '#fff8e1');
-            t.setAttribute('font-size', node.type === 'origin' ? '20' : '14');
-            t.setAttribute('pointer-events', 'none');
-            t.textContent = node.type === 'origin' ? '🌟' : (node.branch === 'art' ? '🎨' : node.branch === 'body' ? '💪' : '🧠');
-            svg.appendChild(t);
-        }
-    });
-    
-    console.log('✅ Rendered:', Object.keys(skillNodes).length, 'nodes');
-}
-
-function canAllocateNode(nodeId) {
-    if (nodeId === 'origin') return false;
-    if (S.skillTree[nodeId] === true) return false;
-    
-    const node = SKILL_TREE_CONFIG.nodes[nodeId];
-    if (!node) return false;
-    if (node.cost > (S.skillPoints || 0)) return false;
-    
-    return node.connections.some(connId => {
-        if (connId === 'origin') return true;
-        return S.skillTree[connId] === true;
-    });
-}
-
-function handleNodeClick(nodeId) {
-    const node = SKILL_TREE_CONFIG?.nodes?.[nodeId];
-    if (!node) {
-        showToast('❌ Node ไม่ถูกต้อง');
-        return;
-    }
-    
-    const isAllocated = S.skillTree?.[nodeId] === true;
-    const cost = node.cost ?? (node.type === 'keystone' ? 10 : 1);
-    
-    if (isAllocated) {
-        // Dealloc
-        if (cost > 0) {
-            S.skillPoints = (S.skillPoints ?? 0) + cost;
-        }
-        delete S.skillTree[nodeId];
-        showToast(`🔄 คืน Node: ${node.name} (+${cost} SP)`);
-    } else {
-        // Alloc
-        if (cost > 0 && (S.skillPoints ?? 0) < cost) {
-            showToast(`❌ ต้องการ ${cost} Skill Points`);
-            return;
-        }
-        
-        // เช็ก connections
-        if (nodeId !== 'origin') {
-            const hasConnection = node.connections?.some(connId => S.skillTree?.[connId] === true);
-            if (!hasConnection) {
-                showToast('❌ ต้อง alloc node ที่เชื่อมต่อก่อน');
-                return;
-            }
-        }
-        
-        if (cost > 0) {
-            S.skillPoints = (S.skillPoints ?? 0) - cost;
-        }
-        if (!S.skillTree) S.skillTree = {};
-        S.skillTree[nodeId] = true;
-        showToast(`✅ Alloc Node: ${node.name} (-${cost} SP)`);
-    }
-    
-    // ✅ สำคัญ: ต้องเรียก 3 ฟังก์ชันนี้!
-    save();
-    renderStats();      // ← อัปเดต status
-    renderSkillTree();  // ← อัปเดต UI tree
-}
-
-function allocateNode(nodeId) {
-    if (nodeId === 'origin') return false;
-    if (!canAllocateNode(nodeId)) {
-        showToast("❌ ไม่สามารถเปิด Node นี้ได้");
-        return false;
-    }
-    
-    const node = SKILL_TREE_CONFIG.nodes[nodeId];
-    S.skillTree[nodeId] = true;
-    S.skillPoints -= node.cost;
-    save();
-    renderSkillTree();
-    showToast(`✨ เปิด "${node.name}" แล้ว!`);
-    return true;
-}
-
-function deallocateNode(nodeId) {
-    if (nodeId === 'origin') return false;
-    if (!S.skillTree[nodeId]) return false;
-    
-    const node = SKILL_TREE_CONFIG.nodes[nodeId];
-    const dependents = Object.entries(SKILL_TREE_CONFIG.nodes)
-        .filter(([id, n]) => id !== nodeId && S.skillTree[id])
-        .filter(([id, n]) => isOnlyPathToOrigin(id, nodeId));
-    
-    if (dependents.length > 0) {
-        showToast("⚠️ ต้องปิด Node ปลายทางก่อน");
-        return false;
-    }
-    
-    delete S.skillTree[nodeId];
-    S.skillPoints += node.cost;
-    save();
-    renderSkillTree();
-    showToast(`🔄 ปิด "${node.name}" แล้ว!`);
-    return true;
-}
-
-function isOnlyPathToOrigin(dependentId, removedId) {
-    const visited = new Set();
-    const queue = [dependentId];
-    while (queue.length > 0) {
-        const curr = queue.shift();
-        if (curr === 'origin') return false;
-        if (visited.has(curr)) continue;
-        visited.add(curr);
-        const node = SKILL_TREE_CONFIG.nodes[curr];
-        if (!node) continue;
-        node.connections.forEach(connId => {
-            if (connId !== removedId && !visited.has(connId)) {
-                queue.push(connId);
-            }
-        });
-    }
-    return true;
-}
-
-function respecTree() {
-    if (!confirm("⚠️ รีเซ็ต Skill Tree ทั้งหมด?")) return;
-    
-    let totalRefund = 0;
-    Object.keys(S.skillTree).forEach(nodeId => {
-        const node = SKILL_TREE_CONFIG.nodes[nodeId];
-        if (node && nodeId !== 'origin') {
-            totalRefund += node.cost;
-        }
-    });
-    
-    S.skillTree = { 'origin': true };
-    S.skillPoints = (S.skillPoints || 0) + totalRefund;
-    save();
-    renderSkillTree();
-    showToast(`🔄 Respec สำเร็จ! คืน ${totalRefund} SP`);
-}
-
-
-function showTooltip(e, nodeId) {
-    const node = SKILL_TREE_CONFIG.nodes[nodeId];
-    if (!node) return;
-    const tt = document.getElementById('skill-tooltip');
-    if (!tt) return;
-    
-    const isAllocated = (nodeId === 'origin') || (S.skillTree[nodeId] === true);
-    const isAvailable = canAllocateNode(nodeId);
-    
-    let effectsHtml = '';
-    Object.entries(node.effects || {}).forEach(([stat, val]) => {
-        let display = '';
-        if (['CRE','STR','INT','VIT','AGI'].includes(stat)) {
-            display = val > 10 ? `${stat} +${Math.round((val-1)*100)}%` : `${stat} +${val}`;
-        } else if (stat === 'xpBonus') {
-            display = `XP +${Math.round(val*100)}%`;
-        } else if (stat === 'orbDrop') {
-            display = `Orb +${Math.round(val*100)}%`;
-        } else if (stat === 'streakBonus') {
-            display = `Streak +${Math.round(val*100)}%`;
-        }
-        effectsHtml += `<div style="color:#88ff88; margin:2px 0;">✦ ${display}</div>`;
-    });
-    
-    let statusHtml = '';
-    if (isAllocated) statusHtml = '<div style="color:#88ff88;">✓ เปิดแล้ว</div>';
-    else if (isAvailable) statusHtml = `<div style="color:#ffaa44;">⚡ คลิกเพื่อเปิด (${node.cost} SP)</div>`;
-    else statusHtml = '<div style="color:#ff6666;">🔒 ต้องเปิด Node ที่เชื่อมก่อน</div>';
-    
-    tt.innerHTML = `
-        <div style="color:#c8aa6e; font-size:16px; font-weight:bold; margin-bottom:4px;">${node.name}</div>
-        <div style="color:#888; font-size:11px; margin-bottom:6px;">${node.type} ${node.branch ? '• ' + node.branch.toUpperCase() : ''}</div>
-        ${node.desc ? `<div style="color:#aaa; margin-bottom:6px;">${node.desc}</div>` : ''}
-        ${effectsHtml}
-        <div style="color:#ffaa44; margin-top:6px; font-size:12px;">Cost: ${node.cost} SP</div>
-        <div style="margin-top:8px; padding-top:8px; border-top:1px solid #4a4035;">${statusHtml}</div>
-    `;
-    
-    tt.style.display = 'block';
-    moveTooltip(e);
-}
-
-function moveTooltip(e) {
-    const tt = document.getElementById('skill-tooltip');
-    if (!tt) return;
-    tt.style.left = Math.min(e.clientX + 15, window.innerWidth - 320) + 'px';
-    tt.style.top = Math.min(e.clientY + 15, window.innerHeight - tt.offsetHeight - 10) + 'px';
-}
-
-function hideTooltip() {
-    const tt = document.getElementById('skill-tooltip');
-    if (tt) tt.style.display = 'none';
-}
-
-// Pan & Zoom
-function initPanZoom() {
-    const container = document.getElementById('skill-tree-container');
-    if (!container) {
-        console.warn('❌ Container not found');
-        return;
-    }
-    // ✅ อัปเดต Transform
-    updateTransform();
-    
-    // ✅ Event Listeners
-    container.addEventListener('mousedown', (e) => {
-        if (e.target.tagName === 'circle' || e.target.tagName === 'text') return;
-        panZoomState.isPanning = true;
-        panZoomState.startX = e.clientX - panZoomState.panX;
-        panZoomState.startY = e.clientY - panZoomState.panY;
-        container.style.cursor = 'grabbing';
-    });
-    
-    window.addEventListener('mousemove', (e) => {
-        if (!panZoomState.isPanning) return;
-        panZoomState.panX = e.clientX - panZoomState.startX;
-        panZoomState.panY = e.clientY - panZoomState.startY;
-        updateTransform();
-    });
-    
-    window.addEventListener('mouseup', () => {
-        panZoomState.isPanning = false;
-        container.style.cursor = 'grab';
-    });
-    
-    container.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? 0.9 : 1.1;
-        panZoomState.scale = Math.max(0.5, Math.min(3, panZoomState.scale * delta));
-        updateTransform();
-    }, { passive: false });
-    
-    console.log('✅ Pan/Zoom initialized');
-}
-function updateTransform() {
-    const svg = document.getElementById('skill-tree-svg');
-    console.log('SVG found:', svg);
-console.log('SVG children count:', svg?.children?.length);
-console.log('SVG innerHTML length:', svg?.innerHTML?.length);
-    if (!svg) return;
-    svg.style.transform = `translate(${panZoomState.panX}px, ${panZoomState.panY}px) scale(${panZoomState.scale})`;
-    svg.style.transformOrigin = '0 0';
-}
-
-function zoomIn() {
-    panZoomState.scale = Math.min(3, panZoomState.scale * 1.2);
-    updateTransform();
-}
-
-function zoomOut() {
-    panZoomState.scale = Math.max(0.5, panZoomState.scale * 0.8);
-    updateTransform();
-}
-
-function resetZoom() {
-    panZoomState.scale = 1.0;
-    panZoomState.panX = 0;
-    panZoomState.panY = 0;
-    updateTransform();
-}
-function openSkillTree() {
-    const modal = document.getElementById('skill-tree-modal');
-    if (!modal) return;
-    modal.style.display = 'flex';
-    modal.style.flexDirection = 'column';
-    modal.classList.add('active');
-    
-    const svg = document.getElementById('skill-tree-svg');
-    if (svg) {
-        svg.setAttribute('viewBox', '0 0 1000 1000');
-        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    }
-    
-    renderSkillTree();
-    setTimeout(() => initPanZoom(), 100);
-}
-
-function closeSkillTree() {
-    const modal = document.getElementById('skill-tree-modal');
-    if (modal) {
-        modal.style.display = 'none';
-        modal.classList.remove('active');
-    }
-}
-const _originalSwitchTab = window.switchTab;
-window.switchTab = function(tabName) {
-    if (tabName === 'skills') {
-        openSkillTree();
-        return;
-    }
-    if (_originalSwitchTab) _originalSwitchTab(tabName);
-};
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeSkillTree();
-});
 
 // ========== 8. Helper: showToast ==========
 function showToast(msg) {
@@ -6585,17 +5835,13 @@ const debouncedRenderCalendar = debounce(() => {
     if (typeof renderCalendar === 'function') renderCalendar();
 }, 250);
 
-const debouncedRenderSkillTree = debounce(() => {
-    if (typeof renderSkillTree === 'function') renderSkillTree();
-}, 250);
-
 const throttledScrollHandler = throttle(() => {
     // Handle scroll events (ถ้ามี)
 }, 100);
 
 // ✅ Register event listeners แบบ optimized
 window.addEventListener('resize', debouncedRenderCalendar);
-window.addEventListener('resize', debouncedRenderSkillTree);
+
 window.addEventListener('scroll', throttledScrollHandler, { passive: true });
 
 // ==========================================
@@ -6622,8 +5868,8 @@ window.addEventListener('storage', (e) => {
                 // เรียกฟังก์ชัน Render ใหม่ (เลือกเฉพาะอันที่จำเป็น)
                 if (typeof renderDailyTab === 'function') renderDailyTab();
                 if (typeof updateXpBar === 'function') updateXpBar();
-                if (typeof renderStats === 'function') renderStats();
-                if (typeof renderSkillTree === 'function') renderSkillTree();
+                
+                
             });
         }
     }
@@ -6632,22 +5878,22 @@ window.addEventListener('storage', (e) => {
         // ========== IndexedDB (Local Database) - OPTIMIZED ==========
 const DB_NAME = 'DolQuestDB';
 // ========== App Version Control ==========
-const APP_VERSION = '4.1.0'; // ✅ อัปเดตเวอร์ชันที่นี่ทุกครั้งที่ deploy แพทช์ใหม่
+const APP_VERSION = '5.0.0'; // ✅ อัปเดตเวอร์ชันที่นี่ทุกครั้งที่ deploy แพทช์ใหม่
 const APP_VERSION_KEY = 'dol_quest_app_version';
 
 // Changelog สำหรับแต่ละเวอร์ชัน (แสดงใน Modal)
 const VERSION_CHANGELOG = {
+    '5.0.0': [
+        '🆕 เพิ่มระบบsocial hub',
+        '🐛 แก้ไข ระบบsync save load ปลอดภัยขึ้น',
+        'ลบ passive skill tree',
+        'compact code'
+    ],
     '4.1.0': [
         '🆕 เพิ่มระบบแจ้งเตือนเวอร์ชันอัตโนมัติ',
         '🐛 แก้ไข Race Condition (Multi-Tab)',
         '⚡ เพิ่ม Auto-Load จาก Cloud ทุก 30 วินาที',
         ' ปรับปรุง UI Modal สไตล์ PoE'
-    ],
-    '4.0.0': [
-        '🆕 เพิ่มระบบ PoE Economy (Orbs)',
-        ' เพิ่ม Passive Skill Tree',
-        ' เพิ่ม Atlas of Worlds',
-        '🔄 อัปเกรดเป็น Google Drive Sync'
     ]
 };
 const STORE_NAME = 'appState';
@@ -6953,12 +6199,12 @@ async function clearIndexedDB() {
                             Object.keys(importedData).forEach(k => { S[k] = importedData[k]; });
                             lastSyncedDataStr = JSON.stringify(S);
                             save();
-                            checkDecay(); updateXpBar(); updateNodes(); renderStats();
+                            checkDecay(); updateXpBar(); updateNodes(); 
                             renderHourLog('art'); renderHourLog('fit'); renderDailyTab();
                             renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
                             renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-                            renderIncomeLogs(); renderDiaryLogs(); renderSocialChannels();
-                            renderVaultItems(); renderSavingGoals(); renderCalendar();
+                            renderDiaryLogs(); renderSocialChannels();
+                            renderVaultItems(); renderCalendar();
                             showToast('📤 Import ข้อมูลสำเร็จ');
                         }
                     } catch (err) {
@@ -7065,138 +6311,7 @@ function updateXpBar() {
     if (lvlText) lvlText.textContent = `LV ${currentLevel}`;
     
     }
-// ==========================================
-// คำนวณ Stat Bonus จาก Skill Tree Nodes
-// ==========================================
-function calculateStatBonusFromSkillTree() {
-    const bonus = { STR: 0, AGI: 0, INT: 0, VIT: 0, CRE: 0 };
-    
-    if (!S.skillTree || typeof S.skillTree !== 'object') return bonus;
-    if (typeof SKILL_TREE_CONFIG === 'undefined' || !SKILL_TREE_CONFIG?.nodes) return bonus;
-    
-    // ✅ คำนวณ additive bonus ก่อน
-    const addBonus = { STR: 0, AGI: 0, INT: 0, VIT: 0, CRE: 0 };
-    // ✅ คำนวณ multiplicative bonus
-    const multBonus = { STR: 1, AGI: 1, INT: 1, VIT: 1, CRE: 1 };
-    
-    Object.keys(S.skillTree).forEach(nodeId => {
-        if (S.skillTree[nodeId] !== true) return;
-        
-        const node = SKILL_TREE_CONFIG.nodes[nodeId];
-        if (!node || !node.effects) return;
-        
-        // ✅ รองรับทั้ง 2 รูปแบบ
-        if (node.effects.add) {
-            // รูปแบบใหม่: { add: {...}, mult: {...} }
-            Object.keys(node.effects.add).forEach(stat => {
-                if (stat in addBonus) {
-                    addBonus[stat] += node.effects.add[stat];
-                }
-            });
-            if (node.effects.mult) {
-                Object.keys(node.effects.mult).forEach(stat => {
-                    if (stat in multBonus) {
-                        multBonus[stat] *= node.effects.mult[stat];
-                    }
-                });
-            }
-        } else {
-            // รูปแบบเก่า: { CRE: 1 } (additive ล้วน)
-            Object.keys(node.effects).forEach(stat => {
-                if (stat in addBonus) {
-                    addBonus[stat] += node.effects[stat];
-                }
-            });
-        }
-    });
-    
-    // ✅ คำนวณผลรวม: (base + add) * mult - base
-    Object.keys(bonus).forEach(stat => {
-        const base = S[stat] ?? 10;
-        const total = (base + addBonus[stat]) * multBonus[stat];
-        bonus[stat] = Math.round(total - base);
-    });
-    
-    return bonus;
-}
-// ==========================================
-// Render Stats (Base + Bonus from Skill Tree)
-// ==========================================
-function renderStats() {
-    const bonus = calculateStatBonusFromSkillTree();
-    
-    ['STR', 'AGI', 'INT', 'VIT', 'CRE'].forEach(st => {
-        const base = S[st] ?? 10;
-        const total = base + (bonus[st] ?? 0);
-        const barWidth = Math.min((total / 100) * 100, 100) + '%';
-        
-        // หน้าแรก (ถ้ามี element)
-        const valEl = document.getElementById(`val-${st}`);
-        const barEl = document.getElementById(`bar-${st}`);
-        if (valEl) valEl.textContent = total;
-        if (barEl) barEl.style.width = barWidth;
-        
-        // Skill Tree Modal (ใช้ st- prefix)
-        const stValEl = document.getElementById(`st-val-${st}`);
-        const stBarEl = document.getElementById(`st-bar-${st}`);
-        if (stValEl) stValEl.textContent = total;
-        if (stBarEl) stBarEl.style.width = barWidth;
-    });
-    
-    // อัปเดต Skill Points display
-    const spDisplay = document.getElementById('sp-available');
-    if (spDisplay) spDisplay.textContent = S.skillPoints ?? 0;
-}
-// ==========================================
-// Toggle Skill Node (Alloc/Dealloc)
-// ==========================================
-function toggleSkillNode(nodeId) {
-    const node = SKILL_TREE_CONFIG?.nodes?.[nodeId];
-    if (!node) {
-        showToast('❌ Node ไม่ถูกต้อง');
-        return;
-    }
-    
-    const isAllocated = S.skillTree?.[nodeId] === true;
-    
-    // ✅ ใช้ node.cost แทน hardcode
-    const cost = node.cost ?? (node.type === 'keystone' ? 10 : 1);
-    
-    if (isAllocated) {
-        // Dealloc
-        if (cost > 0) {
-            S.skillPoints = (S.skillPoints ?? 0) + cost;
-        }
-        delete S.skillTree[nodeId];
-        showToast(`🔄 คืน Node: ${node.name} (+${cost} SP)`);
-    } else {
-        // Alloc
-        if (cost > 0 && (S.skillPoints ?? 0) < cost) {
-            showToast(`❌ ต้องการ ${cost} Skill Points`);
-            return;
-        }
-        
-        // เช็ก connections
-        if (nodeId !== 'origin') {
-            const hasConnection = node.connections?.some(connId => S.skillTree?.[connId] === true);
-            if (!hasConnection) {
-                showToast('❌ ต้อง alloc node ที่เชื่อมต่อก่อน');
-                return;
-            }
-        }
-        
-        if (cost > 0) {
-            S.skillPoints = (S.skillPoints ?? 0) - cost;
-        }
-        if (!S.skillTree) S.skillTree = {};
-        S.skillTree[nodeId] = true;
-        showToast(`✅ Alloc Node: ${node.name} (-${cost} SP)`);
-    }
-    
-    save();
-    renderStats();
-    renderSkillTree();
-}
+
 
 // ===== Decay System =====
 function checkDecay() {
@@ -7216,7 +6331,7 @@ function checkDecay() {
             S.AGI = Math.max(10, (S.AGI ?? 10) - loss);
             S.VIT = Math.max(10, (S.VIT ?? 10) - loss);
             document.getElementById('decay-alert')?.classList.add('show');
-            renderStats();
+            
             save();
         }
     } else {
@@ -7353,7 +6468,7 @@ function deleteLog(type, id) {
     updateCurrencyDisplay();
     renderHourLog(type);
     renderCalendar();
-    renderStats();  // ✅ เพิ่ม: อัปเดต stats หลังลบ
+    
     
     save();
     showToast(`🗑️ ลบบันทึกสำเร็จ! -${xpToRemove} XP, -${hoursToRemove.toFixed(1)} ชม.`);
@@ -7950,7 +7065,7 @@ function toggleQuest(type, id) {
     
     save();
     renderDailyTab();
-    renderStats();
+    
     updateXpBar();
     updateCurrencyDisplay();
 }
@@ -8031,7 +7146,7 @@ function toggleQuestType(type,id){
     
     // ✅ อัปเดต UI
     save();
-    renderStats();
+    
     updateXpBar();
     updateCurrencyDisplay();
     
@@ -8542,64 +7657,6 @@ function changeMonth(dir) {
                     renderCalendar();
                 }
 
-
-function updateCareerDisplay() {
-                    let totalIncome = 0, totalJobs = 0;
-                    S.incomeLogs.forEach(l => {
-                        totalIncome += l.amount;
-                        if (l.isJob) totalJobs++;
-                    });
-                    document.getElementById('c-current-income').textContent = totalIncome.toLocaleString();
-                    document.getElementById('c-current-jobs').textContent = totalJobs;
-                    document.getElementById('c-goal-income').textContent = (S.goalIncome || 15000).toLocaleString();
-                    document.getElementById('c-goal-jobs').textContent = S.goalJobs || 6;
-                    renderSavingGoals();
-                }
-
-function renderIncomeLogs() {
-                    const container = document.getElementById('income-log');
-                    if (!container) {
-        console.warn('⚠️ income-log element not found, skipping render');
-        return; // ✅ ออกก่อนถ้าไม่มี element
-    }
-                    container.innerHTML = '';
-                    S.incomeLogs.slice(0, 10).forEach(x => {
-                        const e = document.createElement('div');
-                        e.className = 'income-entry';
-                        e.innerHTML = `<span class="income-date">${x.date} - ${x.note} ${x.isJob ? '(✓ รูปสำเร็จ)' : ''}</span><span class="income-amount">+${x.amount.toLocaleString()}฿</span><button class="del-btn" onclick="deleteIncome(${x.id})">✕</button>`;
-                        container.appendChild(e);
-                    });
-                }
-
-function deleteIncome(id) {
-                    if (!confirm('ลบประวัติรายได้นี้?')) return;
-                    const idx = S.incomeLogs.findIndex(l => l.id === id);
-                    if (idx !== -1) {
-                        S.incomeLogs.splice(idx, 1);
-                        updateCareerDisplay();
-                        renderIncomeLogs();
-                        save();
-                        showToast('ลบเรียบร้อย');
-                    }
-                }
-
-function addIncome(isJobComplete) {
-                    const amtIn = document.getElementById('inc-amount');
-                    const noteIn = document.getElementById('inc-note');
-                    const amount = parseInt(amtIn.value);
-                    const note = noteIn.value.trim() || 'งานศิลปะคอมมิชชันอิสระ';
-                    if (isNaN(amount) || amount <= 0) { alert('กรุณาระบุจำนวนรายได้ที่ถูกต้อง'); return; }
-                    const log = { id: Date.now(), amount, note, isJob: isJobComplete, date: new Date().toLocaleDateString('th-TH') };
-                    S.incomeLogs.unshift(log);
-                    addXp(Math.min(amount * 0.1, 100));
-                    amtIn.value = '';
-                    noteIn.value = '';
-                    updateCareerDisplay();
-                    renderIncomeLogs();
-                    save();
-                    showToast(`บันทึกรายรับ +${amount}฿ สำเร็จ!`);
-                }
-
 function renderSocialChannels() {
                     const container = document.getElementById('follower-grid-container');
                     if (!container) {
@@ -8680,66 +7737,6 @@ function addSocialChannel() {
                     save();
                 }
 
-function renderSavingGoals() {
-                    const container = document.getElementById('saving-goals-list');
-                    if (!container) return;
-                    container.innerHTML = '';
-                    S.savingGoals.forEach((goal, idx) => {
-                        const highlightStyle = goal.highlighted ? 'color:var(--gold);font-weight:bold;' : '';
-                        container.innerHTML += `<div class="dash-row" style="${highlightStyle}"><span>${goal.name} :</span><span class="dash-val">${goal.goal.toLocaleString()}฿</span>${goal.highlighted ? ' 🌟' : ''}</div>`;
-                    });
-                }
-
-function openSavingManager() { document.getElementById('saving-manager-modal').classList.add('show'); renderSavingManagerList(); }
-function closeSavingManager() { document.getElementById('saving-manager-modal').classList.remove('show'); }
-
-function renderSavingManagerList() {
-                    const container = document.getElementById('saving-list-container');
-                    container.innerHTML = '';
-                    S.savingGoals.forEach((goal, idx) => {
-                        const div = document.createElement('div');
-                        div.className = 'qm-row-item';
-                        div.innerHTML = `<input type="text" value="${goal.name}" class="qm-input" style="flex:2" id="saving-name-${idx}"><input type="number" value="${goal.goal}" class="qm-input" style="width:100px" id="saving-goal-${idx}"><button class="btn-s btn-art" onclick="updateSavingGoal(${idx})">💾</button><button class="btn-s ${goal.highlighted ? 'btn-fit' : 'btn-art'}" onclick="setHighlightSaving(${idx})">🌟 ไฮไลต์</button><button class="del-btn" onclick="deleteSavingGoal(${idx})">✕</button>`;
-                        container.appendChild(div);
-                    });
-                }
-
-function updateSavingGoal(idx) {
-                    const newName = document.getElementById(`saving-name-${idx}`).value;
-                    const newGoal = parseInt(document.getElementById(`saving-goal-${idx}`).value);
-                    if (newName) S.savingGoals[idx].name = newName;
-                    if (!isNaN(newGoal)) S.savingGoals[idx].goal = newGoal;
-                    renderSavingManagerList();
-                    renderSavingGoals();
-                    save();
-                }
-
-function setHighlightSaving(idx) {
-                    S.savingGoals.forEach((g, i) => { g.highlighted = (i === idx); });
-                    renderSavingManagerList();
-                    renderSavingGoals();
-                    save();
-                }
-
-function deleteSavingGoal(idx) {
-                    S.savingGoals.splice(idx, 1);
-                    if (S.savingGoals.length === 0) S.savingGoals.push({ name: "เป้าหมายใหม่", goal: 10000, highlighted: true });
-                    renderSavingManagerList();
-                    renderSavingGoals();
-                    save();
-                }
-
-function addSavingGoal() {
-                    const name = document.getElementById('new-saving-name').value;
-                    const goal = parseInt(document.getElementById('new-saving-goal').value);
-                    if (!name || isNaN(goal)) return;
-                    S.savingGoals.push({ name, goal, highlighted: false });
-                    renderSavingManagerList();
-                    renderSavingGoals();
-                    document.getElementById('new-saving-name').value = '';
-                    document.getElementById('new-saving-goal').value = '';
-                    save();
-                }
 
 function renderVaultItems() {
                     const container = document.getElementById('vault-grid-container');
@@ -8886,33 +7883,13 @@ function deleteDiary(id) {
                     }
                 }
 
-function openCareerManager() {
-                    document.getElementById('cm-goal-income-input').value = S.goalIncome || 15000;
-                    document.getElementById('cm-goal-jobs-input').value = S.goalJobs || 6;
-                    document.getElementById('cm-modal').classList.add('show');
-                }
-
-function saveCareerManager() {
-                    S.goalIncome = parseInt(document.getElementById('cm-goal-income-input').value) || 15000;
-                    S.goalJobs = parseInt(document.getElementById('cm-goal-jobs-input').value) || 6;
-                    document.getElementById('c-goal-income').textContent = S.goalIncome.toLocaleString();
-                    document.getElementById('c-goal-jobs').textContent = S.goalJobs;
-                    closeCareerManager();
-                    save();
-                    showToast('ปรับปรุงเป้าหมายสำเร็จ');
-                }
-
-function closeCareerManager() {
-                    document.getElementById('cm-modal').classList.remove('show');
-                }
-
 // ========== LAZY LOAD: Track ว่า render tab ไหนไปแล้วบ้าง ==========
 const tabRendered = {
     quests: false,
-    skills: false,
     career: false,
     stash: false,
-    settings: false
+    settings: false,
+    social: false
 };
 
 function switchTab(tabName) {
@@ -8935,12 +7912,6 @@ function switchTab(tabName) {
         btn.classList.remove('active');
     });
 
-    if (tabName === 'skills') {
-        openSkillTree();
-        tabRendered.skills = true; // ✅ Mark ว่า render แล้ว
-        return;
-    }
-
     // 3. แสดง tab ที่เลือก
     const selectedTab = document.getElementById(`${tabName}-tab`);
     if (selectedTab) {
@@ -8948,17 +7919,24 @@ function switchTab(tabName) {
         selectedTab.classList.add('active');
     } else {
         console.error(`Tab not found: ${tabName}-tab`);
-        return; // ✅ ออกก่อนถ้าไม่มี tab นี้
+        return;
     }
 
     // 4. ใส่ active ให้ปุ่ม tab ที่คลิก
-// ✅ ป้องกัน: เช็ก event อย่างปลอดภัย (เพราะอาจถูกเรียกจาก forceRenderTab โดยไม่มี event)
-try {
-    const clickedTab = event?.target;
-    if (clickedTab && clickedTab.classList && clickedTab.classList.contains('tab')) {
-        clickedTab.classList.add('active');
-    } else {
-        // ถ้าไม่มี event หรือ target ไม่ใช่ tab → หาจากชื่อ tabName
+    try {
+        const clickedTab = event?.target;
+        if (clickedTab && clickedTab.classList && clickedTab.classList.contains('tab')) {
+            clickedTab.classList.add('active');
+        } else {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                if (tab?.textContent?.toLowerCase()?.includes(tabName)) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+    } catch (e) {
+        console.warn('⚠️ Event handling failed, using fallback');
         const tabs = document.querySelectorAll('.tab');
         tabs.forEach(tab => {
             if (tab?.textContent?.toLowerCase()?.includes(tabName)) {
@@ -8966,16 +7944,7 @@ try {
             }
         });
     }
-} catch (e) {
-    // ✅ Fallback: ถ้า event มีปัญหา → หาจากชื่อ tabName
-    console.warn('⚠️ Event handling failed, using fallback');
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-        if (tab?.textContent?.toLowerCase()?.includes(tabName)) {
-            tab.classList.add('active');
-        }
-    });
-}
+
     // ✅ LAZY LOAD: Render เฉพาะ tab ที่ยังไม่เคย render
     const shouldRender = !tabRendered[tabName];
     
@@ -8988,13 +7957,14 @@ try {
             renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
             renderCalendar();
             updateXpBar();
-        } else if (tabName === 'skills') {
-            renderSkillTree();
         } else if (tabName === 'career') {
             renderAtlas();
         } else if (tabName === 'stash') {
             renderStash();
+        } else if (tabName === 'social') {
+            renderSocialHub();
         }
+        
         // ✅ Mark ว่า render แล้ว
         tabRendered[tabName] = true;
     } else {
@@ -9011,22 +7981,20 @@ try {
 function forceRenderTab(tabName) {
     console.log(`🔄 Force rendering ${tabName} tab...`);
 
-    // ✅ ป้องกัน: เช็กว่า tabRendered มีอยู่ไหม
     if (typeof tabRendered === 'undefined' || !tabRendered) {
         console.warn('⚠️ tabRendered not defined, skipping force render');
         return;
     }
-     // ✅ ตรวจสอบว่า tabName ถูกต้องไหม
+    
     if (!tabName || !(tabName in tabRendered)) {
         console.warn(`⚠️ Invalid tab name: ${tabName}`);
         return;
     }
-    tabRendered[tabName] = false; // Reset flag
     
-    // ✅ ป้องกัน: เช็กว่า element มีอยู่จริงไหม
+    tabRendered[tabName] = false;
+    
     const selectedTab = document.getElementById(`${tabName}-tab`);
     if (selectedTab && selectedTab.classList.contains('active')) {
-        // ✅ สำคัญ: เรียก switchTab โดยไม่พึ่ง event
         try {
             switchTab(tabName);
         } catch (err) {
@@ -9488,10 +8456,26 @@ function save() {
     // ✅ อัปเดต timestamp
     S._lastModified = Date.now();
     
+    // ✅ สร้าง Backup ก่อนบันทึก (เฉพาะเมื่อมีข้อมูลเปลี่ยนแปลง)
+    createRotatingBackup(S, 'pre_save')
+        .then(result => {
+            if (result.success) {
+                console.log(`✅ Backup created: ${result.backupId}`);
+            }
+        })
+        .catch(err => console.warn('[Backup] Warning:', err));
+    
+    // ✅ บันทึกหลัก (พร้อม timestamp comparison)
     dbSave(S)
+        .then(() => {
+            // ✅ อัปเดต lastSyncTime เมื่อ save สำเร็จ
+            if (navigator.onLine) {
+                lastSyncTime = Date.now();
+                updateSyncStatus();
+            }
+        })
         .catch(err => console.error("IndexedDB save error:", err))
         .finally(() => {
-            // ✅ ปลด flag หลัง save เสร็จ (รอ 2 วินาทีเพื่อให้ Cloud sync เสร็จ)
             setTimeout(() => {
                 isSaving = false;
             }, 2000);
@@ -9500,9 +8484,8 @@ function save() {
     localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
     quickSync(false);
 
-    // ✅ เพิ่มบรรทัดนี้! (อัปเดต Cloud Cache)
+    // ✅ อัปเดต Cloud Cache
     saveCloudCache(S).catch(err => console.warn('[CloudCache] Update failed:', err));
-    
 }
 
 async function load() {
@@ -9532,14 +8515,21 @@ async function load() {
     
     // Run Migration
     S = migrateData(S);
+
+        // ✅ Social Hub Default Values
+        ensureDefaultValues();
+    if (!S.socialPlatforms) S.socialPlatforms = DEFAULT_SOCIAL_DATA.socialPlatforms;
+    if (!S.contentItems) S.contentItems = [];
+    if (!S.pipelineStats) S.pipelineStats = { idea: 0, filming: 0, editing: 0, upload: 0, posted: 0 };
+    if (!S.campaigns) S.campaigns = [];
+    if (!S.contentTemplates) S.contentTemplates = DEFAULT_SOCIAL_DATA.contentTemplates;
+    if (!S.contentCalendar) S.contentCalendar = {};
     
     // Default values
-    if(!S.savingGoals) S.savingGoals=[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}];
     if(!S.vaultItems) S.vaultItems=[];
     if(!S.socialChannels) S.socialChannels=[];
     if(!S.orbs) S.orbs = { chaos: 0, exalted: 0, divine: 0 };
     if(!S.skillPoints) S.skillPoints = 0;
-    if(!S.skillTree) S.skillTree = {};
     if(!S.ascendancyPoints) S.ascendancyPoints = 0;
     if(!S.streakDays) S.streakDays = 0;
     if(!S.atlasProgress) S.atlasProgress = {};
@@ -9551,27 +8541,51 @@ function quickSync(isClosing = false) {
     clearTimeout(syncTimeout);
 
     const doSync = () => {
+        // ✅ ป้องกันการ sync ซ้อนกัน
+        if (isSyncing && !isClosing) {
+            console.log('⏸️ Sync already in progress, skipping...');
+            return;
+        }
+        
         trimLogs();
         const currentDataStr = JSON.stringify(S);
 
-        if (currentDataStr === lastSyncedDataStr) return;
+        if (currentDataStr === lastSyncedDataStr) {
+            console.log('⏭️ No changes to sync');
+            return;
+        }
 
-        if (!isClosing) setSyncStatus('loading', '⚡ Quick Syncing...');
+        // ✅ ตรวจสอบ timestamp ก่อนส่ง
+        const localVersion = S._version ?? 0;
+        const localTimestamp = S._lastModified ?? 0;
+        
+        const payload = {
+            data: S,
+            version: localVersion,
+            timestamp: localTimestamp,
+            clientId: 'web_' + Date.now()
+        };
+
+        isSyncing = true;
+        if (!isClosing) setSyncStatus('loading', '☁️ Syncing...');
 
         if (isClosing && navigator.sendBeacon) {
-            const blob = new Blob([currentDataStr], { type: 'text/plain' });
+            const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain' });
             const success = navigator.sendBeacon(SCRIPT_URL, blob);
             if (success) {
                 lastSyncedDataStr = currentDataStr;
+                lastSyncTime = Date.now();
+                updateSyncStatus();
                 console.log('✅ Beacon sent successfully on pagehide');
             }
+            isSyncing = false;
             return;
         }
 
         fetch(SCRIPT_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: currentDataStr
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         })
             .then(res => {
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -9580,15 +8594,32 @@ function quickSync(isClosing = false) {
             .then(result => {
                 if (result.status === 'success') {
                     lastSyncedDataStr = currentDataStr;
-                    if (!isClosing) setSyncStatus('ok', ' Synced ' + new Date().toLocaleTimeString('th-TH'));
+                    lastSyncTime = Date.now();
+                    
+                    // ✅ อัปเดต version จาก response
+                    if (result.version) {
+                        S._version = result.version;
+                    }
+                    
+                    if (!isClosing) {
+                        setSyncStatus('ok', '☁️ Synced');
+                        updateSyncStatus();
+                    }
+                    syncErrorCount = 0;
+                    console.log('✅ Sync successful');
                 } else {
                     console.error('Sync Error:', result.error);
-                    if (!isClosing) setSyncStatus('err', 'Sync Failed');
+                    syncErrorCount++;
+                    if (!isClosing) setSyncStatus('err', '⚠️ Sync Failed');
                 }
             })
             .catch(err => {
                 console.error('QuickSync Network Error:', err);
-                if (!isClosing) setSyncStatus('err', 'Offline');
+                syncErrorCount++;
+                if (!isClosing) setSyncStatus('err', '📡 Offline');
+            })
+            .finally(() => {
+                isSyncing = false;
             });
     };
 
@@ -9634,85 +8665,146 @@ async function manualSave() {
         showToast('❌ บันทึกขึ้น Cloud ล้มเหลว');
     }
 }
+// ==========================================
+// ENSURE DEFAULT VALUES
+// ==========================================
+
+function ensureDefaultValues() {
+    // === Social Hub ===
+    if (!S.socialPlatforms) S.socialPlatforms = DEFAULT_SOCIAL_DATA.socialPlatforms;
+    if (!S.contentItems) S.contentItems = [];
+    if (!S.pipelineStats) S.pipelineStats = { idea: 0, filming: 0, editing: 0, upload: 0, posted: 0 };
+    if (!S.campaigns) S.campaigns = [];
+    if (!S.contentTemplates) S.contentTemplates = DEFAULT_SOCIAL_DATA.contentTemplates;
+    if (!S.contentCalendar) S.contentCalendar = {};
+    
+    // === Core ===
+    if (!S.vaultItems) S.vaultItems = [];
+    if (!S.socialChannels) S.socialChannels = [];
+    if (!S.currency) S.currency = { chaos: 0, exalted: 0, divine: 0 };
+    if (!S.skillPoints) S.skillPoints = 0;
+    if (!S.ascendancyPoints) S.ascendancyPoints = 0;
+    if (!S.streakDays) S.streakDays = 0;
+    if (!S.atlasProgress) S.atlasProgress = {};
+    if (!S.goalIncome) S.goalIncome = 15000;
+    if (!S.goalJobs) S.goalJobs = 6;
+    if (!S.savingGoals) S.savingGoals = [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }];
+}
 
 // ========== Manual Load from Cloud (ปุ่ม Load ที่หน้าแรก) ==========
 async function manualLoad() {
+    // ✅ ป้องกันการ load ขณะกำลัง sync
+    if (isSyncing) {
+        showToast('⏸️ กำลัง sync อยู่ กรุณารอสักครู่');
+        return;
+    }
+    
     const statusDiv = document.getElementById('sync-status');
     statusDiv.className = 'sync-status loading';
-    statusDiv.textContent = 'กำลังโหลดจาก Cloud...';
+    statusDiv.textContent = '📥 Loading from Cloud...';
     
     try {
         const response = await fetch(SCRIPT_URL);
-        
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         
-        const data = await response.json();
+        const cloudResponse = await response.json();
         
-        if (data && typeof data === 'object' && Object.keys(data).length > 0) {
-            // Merge ข้อมูลจาก Cloud
-            Object.keys(data).forEach(k => { 
-                if (data[k] !== undefined) {
-                    S[k] = data[k]; 
-                }
-            });
-            
-            // Run Migration
-            S = migrateData(S);
-            
-            // Set default values
-            if(!S.savingGoals) S.savingGoals=[{name:"Xiaomi Pad 8 Pro Matte", goal:25000, highlighted:true}];
-            if(!S.vaultItems) S.vaultItems=[];
-            if(!S.socialChannels) S.socialChannels=[];
-            if(!S.orbs) S.orbs = { chaos: 0, exalted: 0, divine: 0 };
-            if(!S.skillPoints) S.skillPoints = 0;
-            if(!S.skillTree) S.skillTree = {};
-            if(!S.ascendancyPoints) S.ascendancyPoints = 0;
-            if(!S.streakDays) S.streakDays = 0;
-            if(!S.atlasProgress) S.atlasProgress = {};
-            
-            lastSyncedDataStr = JSON.stringify(S);
-            
-            // Save to local
-            await dbSave(S);
-            localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
-            
-            // Re-render UI
-             try {
-                checkDecay(); 
-                updateXpBar(); 
-                updateNodes(); 
-                renderStats();
-                renderHourLog('art'); 
-                renderHourLog('fit'); 
-                renderDailyTab();
-                renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
-                renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-                renderIncomeLogs(); 
-                renderDiaryLogs(); 
-                renderSocialChannels(); 
-                renderVaultItems(); 
-                renderSavingGoals(); 
-                renderCalendar();
-                
-                // เช็กว่ามีฟังก์ชันเหล่านี้ไหมก่อนเรียก
-                if (typeof renderOrbsDisplay === 'function') renderOrbsDisplay();
-                if (typeof renderSkillTree === 'function') renderSkillTree();
-                if (typeof renderAtlas === 'function') renderAtlas();
-            } catch (renderErr) {
-                console.error('Render error:', renderErr);
-                // ไม่หยุดการทำงาน แค่ log ไว้
-            }
-            
-            statusDiv.className = 'sync-status ok';
-            statusDiv.textContent = ' Loaded ' + new Date().toLocaleTimeString('th-TH');
-            showToast('✅ ดึงข้อมูลจาก Google Drive สำเร็จ');
-        } else {
+        // ✅ รองรับทั้ง format เก่า (data ตรง) และ format ใหม่ (มี metadata)
+        let cloudData = cloudResponse;
+        let cloudVersion = 0;
+        let cloudTimestamp = 0;
+        
+        if (cloudResponse.data) {
+            // Format ใหม่: { data: {...}, version: 123, timestamp: 123456 }
+            cloudData = cloudResponse.data;
+            cloudVersion = cloudResponse.version || 0;
+            cloudTimestamp = cloudResponse.timestamp || 0;
+        }
+        
+        if (!cloudData || Object.keys(cloudData).length === 0) {
             throw new Error('No data in Google Drive');
         }
+        
+        // ✅ TIMESTAMP COMPARISON
+        const localTimestamp = S._lastModified || 0;
+        const cloudTimestampFinal = cloudTimestamp || cloudData._lastModified || 0;
+        
+        console.log(`⏰ Local: ${new Date(localTimestamp).toLocaleString()}`);
+        console.log(`⏰ Cloud: ${new Date(cloudTimestampFinal).toLocaleString()}`);
+        
+        if (cloudTimestampFinal < localTimestamp) {
+            // ✅ Cloud เก่ากว่า Local → เตือนก่อน overwrite
+            const confirmMsg = `⚠️ ข้อมูลใน Cloud เก่ากว่าข้อมูลในเครื่องของคุณ!\n\n` +
+                `📅 Local: ${new Date(localTimestamp).toLocaleString()}\n` +
+                `📅 Cloud: ${new Date(cloudTimestampFinal).toLocaleString()}\n\n` +
+                `คุณแน่ใจหรือไม่ที่จะแทนที่ข้อมูลใหม่กว่าด้วยข้อมูลเก่ากว่า?`;
+            
+            if (!confirm(confirmMsg)) {
+                statusDiv.className = 'sync-status ok';
+                statusDiv.textContent = '☁️ Cancelled (Local is newer)';
+                showToast('⏸️ ยกเลิกการโหลด (ข้อมูลในเครื่องใหม่กว่า)');
+                return;
+            }
+        }
+        
+        // ✅ SANITY CHECK - ตรวจสอบจำนวนข้อมูล
+        const sanityResult = checkDataSanity(cloudData);
+        if (!sanityResult.passed) {
+            const confirmMsg = `⚠️ ตรวจพบข้อมูลผิดปกติ!\n\n` +
+                `${sanityResult.warnings.join('\n')}\n\n` +
+                `คุณแน่ใจหรือไม่ที่จะโหลดข้อมูลนี้? (แนะนำให้ดู backup ก่อน)`;
+            
+            if (!confirm(confirmMsg)) {
+                statusDiv.className = 'sync-status err';
+                statusDiv.textContent = '⚠️ Load cancelled (sanity check)';
+                showToast('⏸️ ยกเลิกการโหลด (Sanity Check Failed)');
+                return;
+            }
+        }
+        
+        // ✅ สร้าง Backup ก่อน overwrite
+        await createRotatingBackup(S, 'pre_manual_load');
+        console.log('✅ Backup created before manual load');
+        
+        // ✅ Merge ข้อมูลจาก Cloud
+        Object.keys(cloudData).forEach(k => {
+            if (cloudData[k] !== undefined) {
+                S[k] = cloudData[k];
+            }
+        });
+        
+        // ✅ อัปเดต version และ timestamp
+        if (cloudVersion > 0) {
+            S._version = cloudVersion;
+        }
+        S._lastModified = cloudTimestampFinal;
+        
+        // ✅ Run Migration
+        S = migrateData(S);
+        
+        // ✅ Set default values
+        ensureDefaultValues();
+        
+        lastSyncedDataStr = JSON.stringify(S);
+        lastSyncTime = Date.now();
+        
+        // ✅ Save to local
+        await dbSave(S);
+        localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
+        
+        // ✅ Re-render UI
+        forceRenderAllTabs();
+        updateDimensionDisplay();
+        updateSyncStatus();
+        
+        statusDiv.className = 'sync-status ok';
+        statusDiv.textContent = '☁️ Loaded';
+        showToast('✅ ดึงข้อมูลจาก Google Drive สำเร็จ');
+        
     } catch (err) {
         console.error('Load error:', err);
         statusDiv.className = 'sync-status err';
-        statusDiv.textContent = 'โหลดล้มเหลว';
+        statusDiv.textContent = '❌ Load failed';
         showToast('❌ โหลดจาก Cloud ล้มเหลว');
     }
 }
@@ -9754,7 +8846,7 @@ function importWithMerge() {
                     // === Core ===
                     'totalXp', 'xp', 'lvl',
                     'STR', 'AGI', 'INT', 'VIT', 'CRE',
-                    'skillPoints', 'skillTree',
+                    'skillPoints',
                     'ascendancyPoints', 'streakDays',
                     
                     // === Currency ===
@@ -9781,10 +8873,6 @@ function importWithMerge() {
                     'weeklyMedallions', 'weeklyCompletion',
                     'monthlyTrials', 'trialCompletion',
                     
-                    // === Vault & Goals ===
-                    'vaultItems', 'savingGoals',
-                    'socialChannels',
-                    'goalIncome', 'goalJobs',
                     
                     // === Logs ===
                     'incomeLogs', 'diaryLogs',
@@ -9896,10 +8984,7 @@ function importHistoryAndQuests() {
                     'weeklyCompletion', 'trialCompletion',
                     'weeklyMedallions', 'monthlyTrials',
                     
-                    // Vault & Goals
-                    'vaultItems', 'savingGoals',
-                    'socialChannels',
-                    'goalIncome', 'goalJobs',
+                    
                     
                     // UI State
                     'editMode', 'selectedDateKey',
@@ -9921,7 +9006,6 @@ function importHistoryAndQuests() {
                 S.xp = 0;
                 S.lvl = 1;
                 S.skillPoints = 1;
-                S.skillTree = { 'origin': true };
                 S.currency = { chaos: 0, exalted: 0, divine: 0 };
                 S.ascendancyPoints = 0;
                 S.streakDays = 0;
@@ -10128,7 +9212,6 @@ function recalculateAllFromHistory() {
     S.xp = 0;
     S.lvl = 1;
     S.skillPoints = 1;
-    S.skillTree = { 'origin': true };
     S.currency = { chaos: 0, exalted: 0, divine: 0 };
     S.ascendancyPoints = 0;
     S.streakDays = 0;
@@ -10242,7 +9325,7 @@ function createCleanSave() {
         xp: 0,
         lvl: 1,
         skillPoints: 1,
-        skillTree: { 'origin': true },
+        
         
         // Stats - ค่าเริ่มต้น
         STR: 10, AGI: 10, INT: 10, VIT: 10, CRE: 10,
@@ -10259,7 +9342,7 @@ function createCleanSave() {
         weeklyQuests: S.weeklyQuests || [],
         monthlyQuests: S.monthlyQuests || [],
         vaultItems: S.vaultItems || [],
-        savingGoals: S.savingGoals || [],
+        
         socialChannels: S.socialChannels || [],
         artLogs: S.artLogs || [],
         fitLogs: S.fitLogs || [],
@@ -10309,7 +9392,7 @@ function repairSave() {
     }
     
     // ✅ เก็บ Settings ก่อน
-    const settingsBackup = {
+        const settingsBackup = {
         editMode: S.editMode || false,
         selectedDateKey: S.selectedDateKey || null,
         currentYear: S.currentYear || new Date().getFullYear(),
@@ -10327,7 +9410,7 @@ function repairSave() {
     S.xp = 0;
     S.lvl = 1;
     S.skillPoints = 1;
-    S.skillTree = { 'origin': true };
+    
     
     // ✅ รีเซ็ต Stats
     S.STR = 10;
@@ -10421,123 +9504,10 @@ function updateCurrencyDisplay() {
                     if (divineEl) divineEl.textContent = S.currency?.divine ?? 0;
                 }
 
+
             
 
-            function isNodeAvailable(node) {
-                // เช็คว่ามี SP พอไหม
-                if ((S.skillPoints || 0) < node.cost) return false;
-
-                // เช็คว่า unlock แล้วหรือยัง
-                if (S.allocatedSkills?.includes(node.id)) return false;
-
-                // เช็คว่า prerequisite unlock แล้วหรือยัง
-                if (node.req && node.req.length > 0) {
-                    return node.req.every(reqId => S.allocatedSkills?.includes(reqId));
-                }
-
-                // Origin node หรือไม่มี requirement
-                return true;
-            }
-
-            function allocateSkill(nodeId) {
-                const node = S.skillTreeNodes?.[nodeId];
-                if (!node) return;
-
-                // ตรวจสอบอีกครั้ง
-                if ((S.skillPoints || 0) < node.cost) {
-                    showToast('❌ ไม่พอ Skill Points!');
-                    return;
-                }
-
-                // ลด SP
-                S.skillPoints -= node.cost;
-
-                // เพิ่มใน allocatedSkills
-                if (!S.allocatedSkills) S.allocatedSkills = [];
-                S.allocatedSkills.push(nodeId);
-
-                // เพิ่ม Stats bonus
-                if (node.bonus) {
-                    Object.entries(node.bonus).forEach(([stat, value]) => {
-                        S[stat] = (S[stat] || 10) + value;
-                    });
-                }
-
-                // Special effects
-                if (node.special === 'art_xp_10') {
-                    showToast('🎨 ปลดล็อก: +10% Art XP!');
-                } else if (node.special === 'all_xp_5') {
-                    showToast('🧠 ปลดล็อก: +5% All XP!');
-                }
-
-                save();
-                renderSkillTree();
-                renderStats();
-                showToast(`✅ ปลดล็อก: ${node.name}!`);
-            }
-
-            function resetSkillTree() {
-                if (!confirm('⚠️ ต้องการรีเซ็ต Skill Tree ทั้งหมด?\nคุณจะได้ Skill Points กลับคืนมา')) {
-                    return;
-                }
-
-                // คำนวณ SP ที่จะได้รับคืน
-                let totalSP = 0;
-                (S.allocatedSkills || []).forEach(skillId => {
-                    const node = S.skillTreeNodes?.[skillId];
-                    if (node) totalSP += node.cost;
-                });
-
-                // รีเซ็ต
-                S.allocatedSkills = [];
-                S.skillPoints = (S.skillPoints || 0) + totalSP;
-
-                // รีเซ็ต Stats ที่เพิ่มจาก skill tree (แบบง่าย - รีเซ็ตทั้งหมดแล้วคำนวณใหม่)
-                S.STR = 10;
-                S.AGI = 10;
-                S.INT = 10;
-                S.VIT = 10;
-                S.CRE = 10;
-
-                // คำนวณ Stats ใหม่จาก skills ที่ allocate (ตอนนี้ไม่มีแล้ว)
-                // ในอนาคตอาจต้องมี logic ที่ซับซ้อนกว่านี้
-
-                save();
-                renderSkillTree();
-                renderStats();
-                showToast('🔄 รีเซ็ต Skill Tree เรียบร้อย');
-            }
-
-            function formatBonus(bonus) {
-                return Object.entries(bonus).map(([stat, value]) => {
-                    const sign = value > 0 ? '+' : '';
-                    return `${stat} ${sign}${value}`;
-                }).join(', ');
-            }
-
-            function showNodeTooltip(e, node) {
-                const tooltip = document.createElement('div');
-                tooltip.className = 'node-tooltip show';
-                tooltip.id = 'node-tooltip';
-                tooltip.innerHTML = `
-        <div class="tooltip-title">${node.name}</div>
-        <div class="tooltip-desc">${node.desc}</div>
-        ${node.req ? `<div class="tooltip-req">ต้องการ: ${node.req.join(', ')}</div>` : ''}
-    `;
-
-                document.body.appendChild(tooltip);
-
-                // ตำแหน่ง tooltip
-                const rect = e.target.getBoundingClientRect();
-                tooltip.style.left = `${rect.left + window.scrollX}px`;
-                tooltip.style.top = `${rect.bottom + window.scrollY + 10}px`;
-            }
-
-            function hideNodeTooltip() {
-                const tooltip = document.getElementById('node-tooltip');
-                if (tooltip) tooltip.remove();
-            }
-
+            
             // ==========================================
             // PATCH v4: Edit Mode & Quest Management
             // ==========================================
@@ -10633,8 +9603,8 @@ function recalculateLevel() {
     // ✅ อัปเดต UI
     updateXpBar();
     updateNodes();
-    renderStats();
-    renderSkillTree();
+    
+    
 }
 // ==========================================
 // LEVEL UP NOTIFICATION
@@ -11259,7 +10229,7 @@ function fightAtlasBoss() {
     
     save();
     renderAtlas();
-    renderSkillTree();
+    
     
     showToast(`⚔️ Atlas Boss พิชิตแล้ว! +${config.ascendancyPoints} Ascendancy Points, +${config.divine} Divine Orbs`);
 }
@@ -11774,7 +10744,7 @@ function resetMonthlyTrial() {
     updateMonthlyTrialDisplay();
     updateTrialRequirementsDisplay();
     updateCurrencyDisplay();
-    renderStats();
+    
     
     showToast('🔄 ย้อนคืน Ascendancy Trial สำเร็จ!');
 }
@@ -11807,7 +10777,7 @@ function forceCompleteTrial() {
     updateMonthlyTrialDisplay();
     updateTrialRequirementsDisplay();
     updateCurrencyDisplay();
-    renderStats();
+    
     showAscendancyRewardNotification(exaltedAmount, divineAmount, ascendancyPoints);
     
     console.log('✅ บังคับเข้า Ascendancy Trial สำเร็จ!');
@@ -11890,10 +10860,12 @@ updateHoursDisplay();
     if (!confirm('ยืนยันครั้งสุดท้าย: ลบข้อมูลทั้งหมดจริงๆ ใช่ไหม?')) {
         return;
     }
+    await createRotatingBackup(S, 'pre_reset');
+    console.log('✅ Backup created before reset');
 
     try {
         // ✅ เก็บ Settings ก่อนลบ
-        const settingsBackup = {
+         const settingsBackup = {
             schemaVersion: 4,
             appVersion: APP_VERSION,
             editMode: false,
@@ -11902,10 +10874,7 @@ updateHoursDisplay();
             currentMonth: new Date().getMonth(),
             goalIncome: S.goalIncome || 15000,
             goalJobs: S.goalJobs || 6,
-            socialChannels: S.socialChannels || [
-                { id: "tk", name: "TikTok (EATLAEWSHOP)", subs: 0, vids: 0 },
-                { id: "yt", name: "YouTube Artist Channel", subs: 0, vids: 0 }
-            ],
+            socialChannels: S.socialChannels || [],
             savingGoals: S.savingGoals || [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }]
         };
         // 1. ล้าง IndexedDB
@@ -11931,7 +10900,8 @@ updateHoursDisplay();
             goalIncome: settingsBackup.goalIncome,
             goalJobs: settingsBackup.goalJobs,
             socialChannels: settingsBackup.socialChannels,
-            savingGoals: settingsBackup.savingGoals,
+            savingGoals: settingsBackup.savingGoals,  // ✅ เพิ่มบรรทัดนี้
+            
             _lastModified: Date.now(),
             
             // === Character Core (รีเซ็ต) ===
@@ -11956,7 +10926,7 @@ updateHoursDisplay();
             // === PoE Economy (รีเซ็ต) ===
             currency: { chaos: 0, exalted: 0, divine: 0 },
             skillPoints: 1,
-            skillTree: { 'origin': true },
+            
             ascendancyPoints: 0,
             streakDays: 0,
             
@@ -12281,6 +11251,514 @@ function updateDimensionDisplay() {
     }
 }
 
+let socialCurrentMonth = new Date().getMonth();
+let socialCurrentYear = new Date().getFullYear();
+
+// ===== Social Hub: Pipeline =====
+function logPipelineActivity(stage) {
+    const weekKey = getWeekKey();
+    if (!S.pipelineStats) S.pipelineStats = { idea: 0, filming: 0, editing: 0, upload: 0, posted: 0 };
+
+    S.pipelineStats[stage] = (S.pipelineStats[stage] || 0) + 1;
+
+    const xpGain = { idea: 5, filming: 15, editing: 10, upload: 5, posted: 10 };
+    addXP(xpGain[stage] || 5);
+
+    save();
+    renderPipeline();
+    showToast(`✅ Logged ${stage}! +${xpGain[stage] || 5} XP`);
+}
+
+function renderPipeline() {
+    const stages = ['idea', 'filming', 'editing', 'upload', 'posted'];
+    stages.forEach(stage => {
+        const el = document.getElementById('count-' + stage);
+        if (el) el.textContent = S.pipelineStats?.[stage] || 0;
+    });
+}
+
+function showPipelineDetails(stage) {
+    const items = S.contentItems?.filter(c => c.status === stage) || [];
+    if (items.length === 0) {
+        showToast(`No items in ${stage} stage`);
+        return;
+    }
+    showToast(`${items.length} items in ${stage} stage`);
+}
+
+// ===== Social Hub: Platforms =====
+function renderPlatforms() {
+    const grid = document.getElementById('platforms-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    (S.socialPlatforms || []).forEach((platform, idx) => {
+        const card = document.createElement('div');
+        card.className = 'platform-card';
+        card.innerHTML = `
+            <div class="platform-header">
+                <div class="platform-name">
+                    <span class="platform-icon">${platform.icon || '📱'}</span>
+                    ${platform.name || 'Platform'}
+                </div>
+                <button class="platform-edit-btn" onclick="editPlatform(${idx})">✎</button>
+            </div>
+            <div class="platform-stats">
+                <div class="platform-stat">
+                    <div class="platform-stat-value" id="plat-followers-${idx}">${platform.followers || 0}</div>
+                    <div class="platform-stat-label">Followers</div>
+                </div>
+                <div class="platform-stat">
+                    <div class="platform-stat-value" id="plat-posts-${idx}">${platform.posts || 0}</div>
+                    <div class="platform-stat-label">Posts</div>
+                </div>
+            </div>
+            <div class="platform-input-row">
+                <input type="number" class="platform-input" id="input-followers-${idx}" placeholder="Followers">
+                <input type="number" class="platform-input" id="input-posts-${idx}" placeholder="Posts">
+                <button class="btn-s btn-blue" style="padding:4px 8px; font-size:9px;" onclick="updatePlatform(${idx})">Update</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function updatePlatform(idx) {
+    const followersInput = document.getElementById(`input-followers-${idx}`);
+    const postsInput = document.getElementById(`input-posts-${idx}`);
+
+    if (!S.socialPlatforms[idx]) return;
+
+    if (followersInput?.value) {
+        S.socialPlatforms[idx].followers = parseInt(followersInput.value) || 0;
+    }
+    if (postsInput?.value) {
+        S.socialPlatforms[idx].posts = parseInt(postsInput.value) || 0;
+    }
+
+    save();
+    renderPlatforms();
+    showToast('📊 Platform updated!');
+}
+
+function editPlatform(idx) {
+    const platform = S.socialPlatforms[idx];
+    if (!platform) return;
+
+    const newName = prompt('Platform name:', platform.name);
+    if (newName) {
+        platform.name = newName;
+        save();
+        renderPlatforms();
+    }
+}
+
+function openPlatformModal() {
+    openModal('platform-modal');
+}
+
+function savePlatform() {
+    const name = document.getElementById('platform-name').value.trim();
+    const icon = document.getElementById('platform-icon').value.trim() || '📱';
+
+    if (!name) {
+        showToast('Please enter platform name');
+        return;
+    }
+
+    if (!S.socialPlatforms) S.socialPlatforms = [];
+    S.socialPlatforms.push({
+        id: 'plat_' + Date.now(),
+        name,
+        icon,
+        followers: 0,
+        posts: 0,
+        engagement: 0
+    });
+
+    save();
+    renderPlatforms();
+    closeModal('platform-modal');
+    showToast(`✅ Added ${name}!`);
+}
+
+// ===== Social Hub: Calendar =====
+function renderSocialCalendar() {
+    const grid = document.getElementById('social-calendar-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    days.forEach(day => {
+        const header = document.createElement('div');
+        header.className = 'calendar-day-header';
+        header.textContent = day;
+        grid.appendChild(header);
+    });
+
+    const firstDay = new Date(socialCurrentYear, socialCurrentMonth, 1);
+    const lastDay = new Date(socialCurrentYear, socialCurrentMonth + 1, 0);
+    const startingDay = firstDay.getDay();
+    const totalDays = lastDay.getDate();
+
+    for (let i = 0; i < startingDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'calendar-day';
+        empty.style.opacity = '0.3';
+        grid.appendChild(empty);
+    }
+        const today = new Date();
+    for (let day = 1; day <= totalDays; day++) {
+        const dateKey = `${socialCurrentYear}-${String(socialCurrentMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day';
+
+        if (day === today.getDate() && 
+            socialCurrentMonth === today.getMonth() && 
+            socialCurrentYear === today.getFullYear()) {
+            dayEl.classList.add('today');
+        }
+
+        const content = S.contentCalendar?.[dateKey];
+        if (content && content.length > 0) {
+            dayEl.classList.add('has-content');
+        }
+
+        dayEl.innerHTML = `
+            <div class="calendar-day-number">${day}</div>
+            ${content && content.length > 0 ? `<div class="calendar-day-indicator"></div>` : ''}
+        `;
+
+        dayEl.onclick = () => showDayContent(dateKey);
+        grid.appendChild(dayEl);
+    }
+
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                      'July', 'August', 'September', 'October', 'November', 'December'];
+    const label = document.getElementById('calendar-month-label');
+    if (label) label.textContent = `${monthNames[socialCurrentMonth]} ${socialCurrentYear}`;
+}
+
+function changeSocialMonth(dir) {
+    socialCurrentMonth += dir;
+    if (socialCurrentMonth > 11) { socialCurrentMonth = 0; socialCurrentYear++; }
+    if (socialCurrentMonth < 0) { socialCurrentMonth = 11; socialCurrentYear--; }
+    renderSocialCalendar();
+}
+
+function showDayContent(dateKey) {
+    const content = S.contentCalendar?.[dateKey];
+    if (!content || content.length === 0) {
+        showToast(`No content scheduled for ${dateKey}`);
+        return;
+    }
+    showToast(`${content.length} items on ${dateKey}`);
+}
+
+// ===== Social Hub: Active Content =====
+function renderActiveContent() {
+    const list = document.getElementById('active-content-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const activeItems = (S.contentItems || []).filter(c => c.status !== 'posted').slice(0, 10);
+
+    if (activeItems.length === 0) {
+        list.innerHTML = '<div style="color:var(--muted); text-align:center; padding:12px; font-size:11px;">No active content. Create something!</div>';
+        return;
+    }
+
+    activeItems.forEach((item, idx) => {
+        const el = document.createElement('div');
+        el.className = 'content-item';
+        el.onclick = () => cycleContentStatus(idx);
+
+        const statusColors = {
+            idea: 'idea',
+            filming: 'filming',
+            editing: 'editing',
+            uploading: 'uploading',
+            posted: 'posted'
+        };
+
+        el.innerHTML = `
+            <div class="content-status ${statusColors[item.status] || 'idea'}"></div>
+            <div class="content-info">
+                <div class="content-title">${item.title}</div>
+                <div class="content-meta">${item.type} • ${formatDate(item.created)}</div>
+            </div>
+            <div class="content-platform">${getPlatformIcon(item.platform)}</div>
+        `;
+
+        list.appendChild(el);
+    });
+}
+
+function cycleContentStatus(idx) {
+    if (!S.contentItems[idx]) return;
+
+    const statuses = ['idea', 'filming', 'editing', 'uploading', 'posted'];
+    const currentIdx = statuses.indexOf(S.contentItems[idx].status);
+    const nextIdx = (currentIdx + 1) % statuses.length;
+    const newStatus = statuses[nextIdx];
+
+    S.contentItems[idx].status = newStatus;
+
+    if (!S.pipelineStats) S.pipelineStats = {};
+    S.pipelineStats[newStatus] = (S.pipelineStats[newStatus] || 0) + 1;
+
+    if (newStatus === 'posted') {
+        const dateKey = getTodayKey();
+        if (!S.contentCalendar) S.contentCalendar = {};
+        if (!S.contentCalendar[dateKey]) S.contentCalendar[dateKey] = [];
+        S.contentCalendar[dateKey].push({
+            title: S.contentItems[idx].title,
+            platform: S.contentItems[idx].platform
+        });
+
+        const plat = S.socialPlatforms?.find(p => p.id === S.contentItems[idx].platform);
+        if (plat) plat.posts = (plat.posts || 0) + 1;
+
+        addXP(25);
+    }
+
+    save();
+    renderActiveContent();
+    renderPipeline();
+    renderSocialCalendar();
+    renderPlatforms();
+
+    showToast(`Updated to ${newStatus}!`);
+}
+
+function getPlatformIcon(platformId) {
+    const platform = S.socialPlatforms?.find(p => p.id === platformId);
+    return platform ? platform.icon : '📱';
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return 'Recently';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('th-TH', { month: 'short', day: 'numeric' });
+}
+
+// ===== Social Hub: Campaigns =====
+function renderCampaigns() {
+    const container = document.getElementById('campaigns-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!S.campaigns || S.campaigns.length === 0) {
+        container.innerHTML = '<div style="color:var(--muted); text-align:center; padding:12px; font-size:11px;">No campaigns yet. Start a project!</div>';
+        return;
+    }
+
+    S.campaigns.forEach((campaign, idx) => {
+        const relatedContent = (S.contentItems || []).filter(c => c.campaignId === campaign.id);
+        const completed = relatedContent.filter(c => c.status === 'posted').length;
+        const progress = campaign.target > 0 ? (completed / campaign.target) * 100 : 0;
+
+        const card = document.createElement('div');
+        card.className = 'campaign-card';
+        card.innerHTML = `
+            <div class="campaign-header">
+                <div class="campaign-name">${campaign.name}</div>
+                <button class="btn-s btn-danger" style="font-size:9px; padding:2px 8px;" onclick="deleteCampaign(${idx})">✕</button>
+            </div>
+            <div class="campaign-progress-bar">
+                <div class="campaign-progress-fill" style="width: ${Math.min(progress, 100)}%"></div>
+            </div>
+            <div class="campaign-stats">
+                <span>${completed} / ${campaign.target} posted</span>
+                <span>${Math.floor(progress)}% complete</span>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function openCampaignModal() {
+    openModal('campaign-modal');
+}
+
+function saveCampaign() {
+    const name = document.getElementById('campaign-name').value.trim();
+    const target = parseInt(document.getElementById('campaign-target').value) || 10;
+
+    if (!name) {
+        showToast('Please enter campaign name');
+        return;
+    }
+
+    if (!S.campaigns) S.campaigns = [];
+    S.campaigns.push({
+        id: 'camp_' + Date.now(),
+        name,
+        target,
+        created: new Date().toISOString()
+    });
+
+    save();
+    renderCampaigns();
+    closeModal('campaign-modal');
+    showToast(`🎯 Campaign "${name}" created!`);
+}
+
+function deleteCampaign(idx) {
+    if (!confirm('Delete this campaign?')) return;
+    S.campaigns.splice(idx, 1);
+    save();
+    renderCampaigns();
+}
+
+// ===== Social Hub: Content Creation =====
+function openContentModal() {
+    renderTemplateOptions();
+    openModal('content-modal');
+}
+
+function saveContent() {
+    const title = document.getElementById('content-title').value.trim();
+    const platform = document.getElementById('content-platform').value;
+    const type = document.getElementById('content-type').value;
+    const status = document.getElementById('content-status').value;
+    const duration = document.getElementById('content-duration')?.value?.trim() || '';
+
+    let finalTitle = title;
+    if (!title) {
+        const templateId = document.getElementById('content-template')?.value;
+        if (templateId) {
+            const templates = S.contentTemplates || [];
+            const template = templates.find(t => t.id === templateId);
+            if (template) {
+                const dateStr = new Date().toISOString().slice(0,10);
+                finalTitle = `${template.name} - ${dateStr}`;
+            }
+        }
+    }
+
+    if (!finalTitle) {
+        showToast('Please enter content title or use a template');
+        return;
+    }
+
+    if (!S.contentItems) S.contentItems = [];
+    S.contentItems.unshift({
+        id: 'content_' + Date.now(),
+        title: finalTitle,
+        platform,
+        type,
+        status,
+        duration,
+        created: new Date().toISOString()
+    });
+
+    if (!S.pipelineStats) S.pipelineStats = {};
+    S.pipelineStats[status] = (S.pipelineStats[status] || 0) + 1;
+
+    addXP(10);
+
+    document.getElementById('content-title').value = '';
+    document.getElementById('content-duration').value = '';
+    document.getElementById('content-template').value = '';
+
+    save();
+    renderActiveContent();
+    renderPipeline();
+    closeModal('content-modal');
+    showToast(`🎬 "${finalTitle}" created!`);
+}
+
+// ===== Social Hub: Templates =====
+function renderTemplateOptions() {
+    const select = document.getElementById('content-template');
+    if (!select) return;
+
+    const templates = S.contentTemplates || [];
+    select.innerHTML = '<option value="">-- Manual Entry --</option>';
+    templates.forEach(t => {
+        const option = document.createElement('option');
+        option.value = t.id;
+        option.textContent = `${t.name} (${t.platform})`;
+        select.appendChild(option);
+    });
+}
+
+function applyContentTemplate() {
+    const select = document.getElementById('content-template');
+    const templateId = select.value;
+    if (!templateId) return;
+
+    const templates = S.contentTemplates || [];
+    const template = templates.find(t => t.id === templateId);
+    if (!template) return;
+
+    const titleInput = document.getElementById('content-title');
+    const platformSelect = document.getElementById('content-platform');
+    const typeSelect = document.getElementById('content-type');
+    const durationInput = document.getElementById('content-duration');
+
+    if (titleInput && template.name) {
+        const dateStr = new Date().toISOString().slice(0,10);
+        titleInput.placeholder = `${template.name} - ${dateStr}`;
+        titleInput.value = '';
+    }
+
+    if (platformSelect && template.platform) {
+        platformSelect.value = template.platform;
+    }
+
+    if (typeSelect && template.type) {
+        typeSelect.value = template.type;
+    }
+
+    if (durationInput && template.duration) {
+        durationInput.value = template.duration;
+    }
+
+    showToast(`📋 Template "${template.name}" applied`);
+}
+
+function saveContentTemplate() {
+    const name = prompt('Template name:', 'My Template');
+    if (!name) return;
+
+    const type = prompt('Content type (speedpaint/tutorial/vlog/cover/review/other):', 'speedpaint') || 'other';
+    const platform = prompt('Platform (tiktok/youtube/instagram/x/facebook/twitch):', 'youtube') || 'youtube';
+    const duration = prompt('Estimated duration:', '3-5 min') || '3-5 min';
+
+    if (!S.contentTemplates) S.contentTemplates = [];
+    S.contentTemplates.push({
+        id: 'template_' + Date.now(),
+        name,
+        type,
+        platform,
+        duration
+    });
+
+    save();
+    renderTemplateOptions();
+    showToast(`✅ Template "${name}" saved!`);
+}
+
+function deleteContentTemplate(templateId) {
+    if (!confirm('Delete this template?')) return;
+    S.contentTemplates = (S.contentTemplates || []).filter(t => t.id !== templateId);
+    save();
+    renderTemplateOptions();
+    showToast('🗑️ Template deleted');
+}
+
+// ===== Social Hub: Render All =====
+function renderSocialHub() {
+    renderPipeline();
+    renderPlatforms();
+    renderSocialCalendar();
+    renderActiveContent();
+    renderCampaigns();
+    renderDiaryLogs();
+}
+
             // ========== Initialization ==========
             async function initApp() {
                 loadCustomQuestDbs();
@@ -12306,11 +11784,11 @@ function updateDimensionDisplay() {
                 checkDecay(); updateTodayDisplay(); renderDailyTab();
                 renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
                 renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-                renderStats();
                 updateDimensionDisplay();
                 updateXpBar(); updateNodes();
                 renderHourLog('art'); renderHourLog('fit'); renderCalendar();
-                renderSocialChannels(); renderVaultItems(); renderSavingGoals();
+                renderSocialChannels(); renderVaultItems();
+                startSyncStatusUpdater();
 
                 setInterval(() => quickSync(false), 60 * 1000);
                 setInterval(() => {
@@ -12508,6 +11986,322 @@ function backgroundCloudRefresh() {
             console.warn('[BackgroundRefresh] Failed:', err);
         });
 }
+// ==========================================
+// BACKUP & SYNC CONFIG
+// ==========================================
+const BACKUP_ROTATION_COUNT = 5;
+const BACKUP_PREFIX = 'backup_';
+const SYNC_STATUS_UPDATE_INTERVAL = 30000; // 30 วินาที
 
+let lastSyncTime = null;
+let isSyncing = false;
+let syncErrorCount = 0;
+const MAX_SYNC_ERRORS = 3;
+
+// ==========================================
+// ROTATING BACKUP FUNCTIONS
+// ==========================================
+
+async function createRotatingBackup(data, reason = 'auto') {
+    try {
+        const timestamp = Date.now();
+        const backupId = `${BACKUP_PREFIX}${timestamp}`;
+        const backupEntry = {
+            id: backupId,
+            timestamp: timestamp,
+            reason: reason,
+            data: data,
+            version: data._version || 0
+        };
+        
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        
+        // บันทึก backup
+        store.put(backupEntry);
+        
+        // ลบ backup ที่เก่าเกินไป (เก็บแค่ 5 ชุด)
+        const allBackups = await new Promise((resolve, reject) => {
+            const req = store.getAll();
+            req.onsuccess = (e) => resolve(e.target.result);
+            req.onerror = (e) => reject(e.target.error);
+        });
+        
+        const backups = allBackups
+            .filter(item => item.id && item.id.startsWith(BACKUP_PREFIX))
+            .sort((a, b) => a.timestamp - b.timestamp);
+        
+        // ลบส่วนเกิน
+        while (backups.length > BACKUP_ROTATION_COUNT) {
+            const oldest = backups.shift();
+            store.delete(oldest.id);
+            console.log(`🗑️ Removed old backup: ${oldest.id}`);
+        }
+        
+        return { success: true, backupId };
+    } catch (err) {
+        console.error('[Backup] Failed:', err);
+        return { success: false, error: err };
+    }
+}
+
+async function getLatestBackup() {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        
+        const all = await new Promise((resolve, reject) => {
+            const req = store.getAll();
+            req.onsuccess = (e) => resolve(e.target.result);
+            req.onerror = (e) => reject(e.target.error);
+        });
+        
+        const backups = all
+            .filter(item => item.id && item.id.startsWith(BACKUP_PREFIX))
+            .sort((a, b) => b.timestamp - a.timestamp);
+        
+        return backups[0] || null;
+    } catch (err) {
+        console.error('[Backup] Get latest failed:', err);
+        return null;
+    }
+}
+
+async function getAllBackups() {
+    try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        
+        const all = await new Promise((resolve, reject) => {
+            const req = store.getAll();
+            req.onsuccess = (e) => resolve(e.target.result);
+            req.onerror = (e) => reject(e.target.error);
+        });
+        
+        return all
+            .filter(item => item.id && item.id.startsWith(BACKUP_PREFIX))
+            .sort((a, b) => b.timestamp - a.timestamp);
+    } catch (err) {
+        console.error('[Backup] GetAll failed:', err);
+        return [];
+    }
+}
+// ==========================================
+// SANITY CHECK - ป้องกันข้อมูลเสียหาย
+// ==========================================
+
+function checkDataSanity(data) {
+    const warnings = [];
+    
+    // ✅ 1. ตรวจสอบว่า data เป็น object
+    if (!data || typeof data !== 'object') {
+        return { passed: false, warnings: ['❌ ข้อมูลไม่ถูกต้อง (ไม่ใช่ object)'] };
+    }
+    
+    // ✅ 2. ตรวจสอบ dailyQuests
+    const dailyQuests = data.dailyQuests || [];
+    if (dailyQuests.length === 0) {
+        warnings.push('⚠️ Daily Quests: 0 รายการ (อาจเป็นข้อมูลผิดปกติ)');
+    } else if (dailyQuests.length < 2) {
+        warnings.push(`⚠️ Daily Quests: เหลือ ${dailyQuests.length} รายการ (น้อยผิดปกติ)`);
+    }
+    
+    // ✅ 3. ตรวจสอบ weeklyQuests
+    const weeklyQuests = data.weeklyQuests || [];
+    if (weeklyQuests.length === 0) {
+        warnings.push('⚠️ Weekly Quests: 0 รายการ (อาจเป็นข้อมูลผิดปกติ)');
+    } else if (weeklyQuests.length < 2) {
+        warnings.push(`⚠️ Weekly Quests: เหลือ ${weeklyQuests.length} รายการ (น้อยผิดปกติ)`);
+    }
+    
+    // ✅ 4. ตรวจสอบ monthlyQuests
+    const monthlyQuests = data.monthlyQuests || [];
+    if (monthlyQuests.length === 0) {
+        warnings.push('⚠️ Monthly Quests: 0 รายการ (อาจเป็นข้อมูลผิดปกติ)');
+    } else if (monthlyQuests.length < 1) {
+        warnings.push(`⚠️ Monthly Quests: เหลือ ${monthlyQuests.length} รายการ (น้อยผิดปกติ)`);
+    }
+    
+    // ✅ 5. ตรวจสอบ XP (ไม่ควรเป็น NaN หรือน้อยเกินไป)
+    const xp = data.xp ?? 0;
+    const totalXp = data.totalXp ?? 0;
+    if (isNaN(xp) || isNaN(totalXp)) {
+        warnings.push('❌ XP หรือ TotalXP มีค่า NaN (ข้อมูลเสียหาย)');
+    }
+    if (totalXp < 0) {
+        warnings.push('❌ TotalXP ติดลบ (ข้อมูลเสียหาย)');
+    }
+    
+    // ✅ 6. ตรวจสอบ Level
+    const lvl = data.lvl ?? 1;
+    if (isNaN(lvl) || lvl < 1 || lvl > 100) {
+        warnings.push(`⚠️ Level: ${lvl} (ผิดปกติ)`);
+    }
+    
+    // ✅ 7. ตรวจสอบ Currency
+    const currency = data.currency || { chaos: 0, exalted: 0, divine: 0 };
+    if (isNaN(currency.chaos) || isNaN(currency.exalted) || isNaN(currency.divine)) {
+        warnings.push('⚠️ Currency มีค่า NaN (ข้อมูลเสียหาย)');
+    }
+    
+    // ✅ 8. ตรวจสอบว่ามี data ครบถ้วน (ไม่ควรขาด field สำคัญ)
+    const essentialFields = ['xp', 'lvl', 'STR', 'AGI', 'INT', 'VIT', 'CRE', 'artHours', 'fitHours'];
+    essentialFields.forEach(field => {
+        if (data[field] === undefined) {
+            warnings.push(`⚠️ Missing field: ${field}`);
+        }
+    });
+    
+    // ✅ 9. ตรวจสอบความสมเหตุสมผลของข้อมูล (ไม่ควรมีค่าไร้สาระ)
+    if (data.artHours && data.artHours > 100000) {
+        warnings.push('⚠️ Art Hours > 100,000 (อาจเป็นข้อมูลผิดพลาด)');
+    }
+    if (data.fitHours && data.fitHours > 100000) {
+        warnings.push('⚠️ Fit Hours > 100,000 (อาจเป็นข้อมูลผิดพลาด)');
+    }
+    
+    // ✅ 10. ตรวจสอบว่าไม่มีการสูญหายเกิน 30% (กรณีมีข้อมูลเดิม)
+    if (S && S.dailyQuests && S.dailyQuests.length > 0) {
+        const oldCount = S.dailyQuests.length;
+        const newCount = dailyQuests.length;
+        const lossRatio = (oldCount - newCount) / oldCount;
+        
+        if (lossRatio > 0.3 && newCount > 0) {
+            warnings.push(`⚠️ Daily Quests หายไป ${Math.round(lossRatio * 100)}% (${oldCount} → ${newCount})`);
+        }
+    }
+    
+    return {
+        passed: warnings.length === 0 || warnings.every(w => !w.includes('❌')),
+        warnings: warnings,
+        severity: warnings.some(w => w.includes('❌')) ? 'critical' : 'warning'
+    };
+}
+// ==========================================
+// SYNC STATUS DISPLAY
+// ==========================================
+
+function updateSyncStatus() {
+    const statusEl = document.getElementById('sync-status');
+    if (!statusEl) return;
+    
+    // ✅ ใช้ lastSyncTime แทน "Ready"
+    if (lastSyncTime) {
+        const now = Date.now();
+        const diff = now - lastSyncTime;
+        let timeAgo = '';
+        
+        if (diff < 60000) {
+            timeAgo = `${Math.floor(diff / 1000)}s`;
+        } else if (diff < 3600000) {
+            timeAgo = `${Math.floor(diff / 60000)}m`;
+        } else {
+            timeAgo = `${Math.floor(diff / 3600000)}h`;
+        }
+        
+        const date = new Date(lastSyncTime);
+        const timeStr = date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+        
+        statusEl.textContent = `☁️ ${timeStr} (${timeAgo} ago)`;
+        statusEl.className = 'sync-status ok';
+    } else {
+        statusEl.textContent = '☁️ Ready';
+        statusEl.className = 'sync-status ok';
+    }
+}
+
+// ✅ เรียกอัปเดตทุก 30 วินาที
+function startSyncStatusUpdater() {
+    updateSyncStatus();
+    setInterval(updateSyncStatus, SYNC_STATUS_UPDATE_INTERVAL);
+}
+
+// ==========================================
+// UTILITY: ดูและจัดการ Backups
+// ==========================================
+
+async function viewBackups() {
+    const backups = await getAllBackups();
+    
+    if (backups.length === 0) {
+        console.log('📭 No backups found');
+        showToast('📭 ไม่มี Backup');
+        return;
+    }
+    
+    console.log('📦 === BACKUPS ===');
+    backups.forEach((b, i) => {
+        console.log(`  ${i+1}. ${b.id} | ${new Date(b.timestamp).toLocaleString()} | ${b.reason || 'unknown'} | v${b.version || '?'}`);
+    });
+    
+    // แสดงใน UI
+    let msg = `📦 มี ${backups.length} ชุด Backup\n`;
+    backups.slice(0, 5).forEach((b, i) => {
+        const date = new Date(b.timestamp).toLocaleString('th-TH');
+        msg += `\n${i+1}. ${date} | ${b.reason || 'auto'}`;
+    });
+    showToast(msg);
+}
+
+async function restoreBackup(index) {
+    const backups = await getAllBackups();
+    if (index < 0 || index >= backups.length) {
+        showToast('❌ ไม่พบ Backup ที่ระบุ');
+        return;
+    }
+    
+    const backup = backups[index];
+    if (!confirm(`⚠️ กู้คืน Backup จาก ${new Date(backup.timestamp).toLocaleString()}?\n\nเหตุผล: ${backup.reason || 'unknown'}\n\nข้อมูลปัจจุบันจะถูกแทนที่!`)) {
+        return;
+    }
+    
+    // ✅ สร้าง Backup ของปัจจุบันก่อนกู้คืน
+    await createRotatingBackup(S, 'pre_restore');
+    
+    // ✅ กู้คืนข้อมูล
+    Object.keys(backup.data).forEach(k => {
+        if (backup.data[k] !== undefined) {
+            S[k] = backup.data[k];
+        }
+    });
+    
+    S._lastModified = Date.now();
+    save();
+    
+    // ✅ รีเฟรช UI
+    forceRenderAllTabs();
+    updateDimensionDisplay();
+    
+    showToast(`✅ กู้คืน Backup จาก ${new Date(backup.timestamp).toLocaleString()} สำเร็จ`);
+}
+async function restoreFromBackupPrompt() {
+    const backups = await getAllBackups();
+    if (backups.length === 0) {
+        showToast('📭 ไม่มี Backup ให้กู้คืน');
+        return;
+    }
+    
+    // สร้าง prompt แบบง่าย
+    let msg = '📦 เลือก Backup ที่ต้องการกู้คืน:\n\n';
+    backups.slice(0, 5).forEach((b, i) => {
+        const date = new Date(b.timestamp).toLocaleString('th-TH');
+        msg += `${i+1}. ${date} (${b.reason || 'auto'})\n`;
+    });
+    msg += `\nกรอกหมายเลข 1-${Math.min(5, backups.length)}:`;
+    
+    const choice = prompt(msg);
+    if (!choice) return;
+    
+    const index = parseInt(choice) - 1;
+    if (isNaN(index) || index < 0 || index >= backups.length) {
+        showToast('❌ หมายเลขไม่ถูกต้อง');
+        return;
+    }
+    
+    await restoreBackup(index);
+}
             initApp();
     </script>

@@ -5375,7 +5375,7 @@ img.loaded, .lazy-load.loaded {
 </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby0IAdV_HibIWvgKVRV77TbPGMZdEnpN37SaXSJxF_PbrK6l_qVg8ahCdxdVQbVkbk/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKbT3WpgNLAGIRLUCiMDi2hJVLkQfDwlRLL8iw59E1UdmJHhUtyMpyohwTHRmp3mwQ/exec';
 
         let DAILY_QUESTS = [{ id: 'd1', text: 'ฝึกวาดรูปศึกษาอนาโตมี่และคู่สีตรงข้ามสไตล์สีน้ำมันดิบ', xp: 15, stat: 'CRE' }, { id: 'd2', text: 'ฝึกซ้อมพลังเสียงและไดนามิกการร้องเพลงสไตล์ดิบดุดันแบบ Ado', xp: 15, stat: 'AGI' }, { id: 'd3', text: 'Weight Training หรือเวทเทรนนิ่งเพื่อเพิ่มความแข็งแกร่งกล้ามเนื้อแกนกลาง', xp: 20, stat: 'STR' }, { id: 'd4', text: 'Cardio ขี่จักรยาน หรือวิ่งโซน 2 เพื่อเพิ่มความฟิตและปอดในการร้องเพลง', xp: 20, stat: 'VIT' }, { id: 'd5', text: 'อัปเดตไอเดียสตอรี่บอร์ดงานอาร์ตลงคลังสมุดบันทึกส่วนตัว', xp: 10, stat: 'INT' }];
         let WEEKLY_QUESTS = [{ id: 'w1', text: 'ตัดต่อและโพสต์วิดีโอ Speedpainting หรือคลิปร้องเพลงสั้นลง TikTok', xp: 40, stat: 'CRE' }, { id: 'w2', text: 'เขียนเนื้อร้อง/ทำนองเพลงเดโม่ หรือทบทวนทฤษฎีดนตรีเพื่อต่อยอดไอเดีย', xp: 50, stat: 'INT' }, { id: 'w3', text: 'ออกกำลังกายสะสมครบ 3 วันในรอบสัปดาห์เพื่อชะล้างสถานะค่าพลังลดถอย', xp: 40, stat: 'VIT' }];
@@ -8535,8 +8535,9 @@ async function load() {
     if(!S.atlasProgress) S.atlasProgress = {};
 }
 
-// ========== Quicksync (Auto-sync with Google Drive) ==========
+<!-- ====================== SYNC SYSTEM (เวอร์ชันแก้ไข) ====================== -->
 
+// ========== Quicksync (Auto-sync) ==========
 function quickSync(isClosing = false) {
     clearTimeout(syncTimeout);
 
@@ -8567,28 +8568,25 @@ function quickSync(isClosing = false) {
         isSyncing = true;
         if (!isClosing) setSyncStatus('loading', '☁️ Syncing...');
 
-        // ✅ ใช้ JSONP อย่างเดียว (ไม่มี iframe/Form POST)
         const payloadStr = JSON.stringify(payload);
-        saveWithJsonpGet(payloadStr)
+
+        // ✅ ลอง POST ก่อน (ดีที่สุด)
+        saveWithPost(payloadStr)
             .then(result => {
-                if (result && result.status === 'success') {
-                    lastSyncedDataStr = currentDataStr;
-                    lastSyncTime = Date.now();
-                    if (result.version) S._version = result.version;
-                    if (!isClosing) {
-                        setSyncStatus('ok', '☁️ Synced');
-                        updateSyncStatus();
-                    }
-                    syncErrorCount = 0;
-                    console.log('✅ Sync successful');
-                } else {
-                    throw new Error(result?.error || 'Sync failed');
-                }
+                handleSyncSuccess(result, currentDataStr);
             })
             .catch(err => {
-                console.error('Sync error:', err);
-                syncErrorCount++;
-                if (!isClosing) setSyncStatus('err', '⚠️ Sync Failed');
+                console.warn('⚠️ POST failed, trying JSONP fallback...', err);
+                // Fallback ไป JSONP
+                saveWithJsonpGet(payloadStr)
+                    .then(result => {
+                        handleSyncSuccess(result, currentDataStr);
+                    })
+                    .catch(fallbackErr => {
+                        console.error('❌ Both methods failed:', fallbackErr);
+                        syncErrorCount++;
+                        if (!isClosing) setSyncStatus('err', '⚠️ Sync Failed');
+                    });
             })
             .finally(() => {
                 isSyncing = false;
@@ -8599,6 +8597,22 @@ function quickSync(isClosing = false) {
         doSync();
     } else {
         syncTimeout = setTimeout(doSync, 2000);
+    }
+}
+
+// ========== Helper: Success Handler ==========
+function handleSyncSuccess(result, currentDataStr) {
+    if (result && result.status === 'success') {
+        lastSyncedDataStr = currentDataStr;
+        lastSyncTime = Date.now();
+        if (result.version) S._version = result.version;
+        
+        setSyncStatus('ok', '☁️ Synced');
+        updateSyncStatus();
+        syncErrorCount = 0;
+        console.log('✅ Sync successful');
+    } else {
+        throw new Error(result?.error || 'Sync failed');
     }
 }
 
@@ -8614,9 +8628,7 @@ async function manualSave() {
     
     try {
         const dataStr = JSON.stringify(S);
-        
-        // ✅ ใช้ JSONP อย่างเดียว (ไม่มี iframe)
-        await saveWithJsonpGet(dataStr);
+        await saveWithPost(dataStr);
         
         lastSyncTime = Date.now();
         updateSyncStatus('ok', '☁️ Saved ' + new Date().toLocaleTimeString('th-TH'));
@@ -8631,7 +8643,38 @@ async function manualSave() {
     }
 }
 
-// ✅ Save ด้วย JSONP GET (ส่ง data ผ่าน URL)
+// ========== POST (หลัก) ==========
+async function saveWithPost(dataStr) {
+    return new Promise((resolve, reject) => {
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'text/plain;charset=utf-8' 
+            },
+            body: dataStr,                    // ควรเป็น JSON string
+            redirect: 'follow'
+        })
+        .then(async response => {
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(`HTTP ${response.status}: ${text}`);
+            }
+            
+            // พยายาม parse JSON
+            try {
+                return await response.json();
+            } catch (e) {
+                return { status: 'success' };   // ถ้า parse ไม่ได้ แต่ status 200 ถือว่าสำเร็จ
+            }
+        })
+        .then(result => resolve(result))
+        .catch(err => {
+            console.error('POST Error:', err);
+            reject(err);
+        });
+    });
+}
+// ========== JSONP GET (Fallback) ==========
 function saveWithJsonpGet(dataStr) {
     return new Promise((resolve, reject) => {
         const callbackName = 'dol_save_' + Date.now();
@@ -8657,7 +8700,7 @@ function saveWithJsonpGet(dataStr) {
             if (script.parentNode) script.parentNode.removeChild(script);
         }
         
-        // ✅ ส่ง data ผ่าน URL parameter (base64 encoded)
+        // Base64 encode
         const encodedData = btoa(unescape(encodeURIComponent(dataStr)));
         script.src = SCRIPT_URL + 
             '?callback=' + callbackName + 

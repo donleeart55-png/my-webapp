@@ -5375,7 +5375,7 @@ img.loaded, .lazy-load.loaded {
 </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyF2jxtvL1zvqHKZW9AUwuhgm2IaYjH5JFs3Y4iw5XY3Vfx9t2OCRmdfO7GETZV0NhL/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby0IAdV_HibIWvgKVRV77TbPGMZdEnpN37SaXSJxF_PbrK6l_qVg8ahCdxdVQbVkbk/exec';
 
         let DAILY_QUESTS = [{ id: 'd1', text: 'ฝึกวาดรูปศึกษาอนาโตมี่และคู่สีตรงข้ามสไตล์สีน้ำมันดิบ', xp: 15, stat: 'CRE' }, { id: 'd2', text: 'ฝึกซ้อมพลังเสียงและไดนามิกการร้องเพลงสไตล์ดิบดุดันแบบ Ado', xp: 15, stat: 'AGI' }, { id: 'd3', text: 'Weight Training หรือเวทเทรนนิ่งเพื่อเพิ่มความแข็งแกร่งกล้ามเนื้อแกนกลาง', xp: 20, stat: 'STR' }, { id: 'd4', text: 'Cardio ขี่จักรยาน หรือวิ่งโซน 2 เพื่อเพิ่มความฟิตและปอดในการร้องเพลง', xp: 20, stat: 'VIT' }, { id: 'd5', text: 'อัปเดตไอเดียสตอรี่บอร์ดงานอาร์ตลงคลังสมุดบันทึกส่วนตัว', xp: 10, stat: 'INT' }];
         let WEEKLY_QUESTS = [{ id: 'w1', text: 'ตัดต่อและโพสต์วิดีโอ Speedpainting หรือคลิปร้องเพลงสั้นลง TikTok', xp: 40, stat: 'CRE' }, { id: 'w2', text: 'เขียนเนื้อร้อง/ทำนองเพลงเดโม่ หรือทบทวนทฤษฎีดนตรีเพื่อต่อยอดไอเดีย', xp: 50, stat: 'INT' }, { id: 'w3', text: 'ออกกำลังกายสะสมครบ 3 วันในรอบสัปดาห์เพื่อชะล้างสถานะค่าพลังลดถอย', xp: 40, stat: 'VIT' }];
@@ -6203,7 +6203,7 @@ async function clearIndexedDB() {
                             renderHourLog('art'); renderHourLog('fit'); renderDailyTab();
                             renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
                             renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-                            renderDiaryLogs(); renderSocialChannels();
+                            renderDiaryLogs();
                             renderVaultItems(); renderCalendar();
                             showToast('📤 Import ข้อมูลสำเร็จ');
                         }
@@ -8541,7 +8541,6 @@ function quickSync(isClosing = false) {
     clearTimeout(syncTimeout);
 
     const doSync = () => {
-        // ✅ ป้องกันการ sync ซ้อนกัน
         if (isSyncing && !isClosing) {
             console.log('⏸️ Sync already in progress, skipping...');
             return;
@@ -8555,7 +8554,6 @@ function quickSync(isClosing = false) {
             return;
         }
 
-        // ✅ ตรวจสอบ timestamp ก่อนส่ง
         const localVersion = S._version ?? 0;
         const localTimestamp = S._lastModified ?? 0;
         
@@ -8569,38 +8567,14 @@ function quickSync(isClosing = false) {
         isSyncing = true;
         if (!isClosing) setSyncStatus('loading', '☁️ Syncing...');
 
-        if (isClosing && navigator.sendBeacon) {
-            const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain' });
-            const success = navigator.sendBeacon(SCRIPT_URL, blob);
-            if (success) {
-                lastSyncedDataStr = currentDataStr;
-                lastSyncTime = Date.now();
-                updateSyncStatus();
-                console.log('✅ Beacon sent successfully on pagehide');
-            }
-            isSyncing = false;
-            return;
-        }
-
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-            .then(res => {
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                return res.json();
-            })
+        // ✅ ใช้ JSONP อย่างเดียว (ไม่มี iframe/Form POST)
+        const payloadStr = JSON.stringify(payload);
+        saveWithJsonpGet(payloadStr)
             .then(result => {
-                if (result.status === 'success') {
+                if (result && result.status === 'success') {
                     lastSyncedDataStr = currentDataStr;
                     lastSyncTime = Date.now();
-                    
-                    // ✅ อัปเดต version จาก response
-                    if (result.version) {
-                        S._version = result.version;
-                    }
-                    
+                    if (result.version) S._version = result.version;
                     if (!isClosing) {
                         setSyncStatus('ok', '☁️ Synced');
                         updateSyncStatus();
@@ -8608,15 +8582,13 @@ function quickSync(isClosing = false) {
                     syncErrorCount = 0;
                     console.log('✅ Sync successful');
                 } else {
-                    console.error('Sync Error:', result.error);
-                    syncErrorCount++;
-                    if (!isClosing) setSyncStatus('err', '⚠️ Sync Failed');
+                    throw new Error(result?.error || 'Sync failed');
                 }
             })
             .catch(err => {
-                console.error('QuickSync Network Error:', err);
+                console.error('Sync error:', err);
                 syncErrorCount++;
-                if (!isClosing) setSyncStatus('err', '📡 Offline');
+                if (!isClosing) setSyncStatus('err', '⚠️ Sync Failed');
             })
             .finally(() => {
                 isSyncing = false;
@@ -8632,39 +8604,76 @@ function quickSync(isClosing = false) {
 
 // ========== Manual Save to Cloud (ปุ่ม Save ที่หน้าแรก) ==========
 async function manualSave() {
-    const statusDiv = document.getElementById('sync-status');
-    statusDiv.className = 'sync-status loading';
-    statusDiv.textContent = 'กำลังบันทึกขึ้น Cloud...';
+    if (isSyncing) {
+        showToast('⏸️ กำลัง sync');
+        return;
+    }
+    
+    isSyncing = true;
+    updateSyncStatus('loading', 'กำลังบันทึก...');
     
     try {
-        trimLogs();
-        const currentDataStr = JSON.stringify(S);
+        const dataStr = JSON.stringify(S);
         
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: currentDataStr
-        });
+        // ✅ ใช้ JSONP อย่างเดียว (ไม่มี iframe)
+        await saveWithJsonpGet(dataStr);
         
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        lastSyncTime = Date.now();
+        updateSyncStatus('ok', '☁️ Saved ' + new Date().toLocaleTimeString('th-TH'));
+        showToast('✅ บันทึกสำเร็จ');
         
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            lastSyncedDataStr = currentDataStr;
-            statusDiv.className = 'sync-status ok';
-            statusDiv.textContent = '☁ Saved ' + new Date().toLocaleTimeString('th-TH');
-            showToast('✅ บันทึกขึ้น Google Drive สำเร็จ');
-        } else {
-            throw new Error(result.error || 'Unknown error');
-        }
     } catch (err) {
-        console.error('Manual Save Error:', err);
-        statusDiv.className = 'sync-status err';
-        statusDiv.textContent = 'บันทึกล้มเหลว';
-        showToast('❌ บันทึกขึ้น Cloud ล้มเหลว');
+        console.error('Save error:', err);
+        updateSyncStatus('err', '❌ Save failed');
+        showToast('❌ บันทึกล้มเหลว');
+    } finally {
+        isSyncing = false;
     }
 }
+
+// ✅ Save ด้วย JSONP GET (ส่ง data ผ่าน URL)
+function saveWithJsonpGet(dataStr) {
+    return new Promise((resolve, reject) => {
+        const callbackName = 'dol_save_' + Date.now();
+        const script = document.createElement('script');
+        
+        window[callbackName] = function(response) {
+            cleanup();
+            if (response && response.status === 'success') {
+                resolve(response);
+            } else {
+                reject(new Error(response?.error || 'Save failed'));
+            }
+        };
+        
+        const timeout = setTimeout(() => {
+            cleanup();
+            reject(new Error('Save timeout'));
+        }, 15000);
+        
+        function cleanup() {
+            clearTimeout(timeout);
+            delete window[callbackName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+        }
+        
+        // ✅ ส่ง data ผ่าน URL parameter (base64 encoded)
+        const encodedData = btoa(unescape(encodeURIComponent(dataStr)));
+        script.src = SCRIPT_URL + 
+            '?callback=' + callbackName + 
+            '&action=save' +
+            '&data=' + encodedData +
+            '&_=' + Date.now();
+        
+        script.onerror = () => {
+            cleanup();
+            reject(new Error('Save script failed'));
+        };
+        
+        document.head.appendChild(script);
+    });
+}
+
 // ==========================================
 // ENSURE DEFAULT VALUES
 // ==========================================
@@ -8691,121 +8700,55 @@ function ensureDefaultValues() {
     if (!S.savingGoals) S.savingGoals = [{ name: "Xiaomi Pad 8 Pro Matte", goal: 25000, highlighted: true }];
 }
 
-// ========== Manual Load from Cloud (ปุ่ม Load ที่หน้าแรก) ==========
+// ========== Load from Cloud (JSONP) ==========
 async function manualLoad() {
-    // ✅ ป้องกันการ load ขณะกำลัง sync
-    if (isSyncing) {
-        showToast('⏸️ กำลัง sync อยู่ กรุณารอสักครู่');
+    if (isSyncing || isAutoLoading) {
+        showToast('⏸️ กำลัง sync');
         return;
     }
     
-    const statusDiv = document.getElementById('sync-status');
-    statusDiv.className = 'sync-status loading';
-    statusDiv.textContent = '📥 Loading from Cloud...';
+    isAutoLoading = true;
+    updateSyncStatus('loading', '📥 Loading...');
     
     try {
-        const response = await fetch(SCRIPT_URL);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const cloudData = await loadWithJsonp(SCRIPT_URL);
         
-        const cloudResponse = await response.json();
-        
-        // ✅ รองรับทั้ง format เก่า (data ตรง) และ format ใหม่ (มี metadata)
-        let cloudData = cloudResponse;
-        let cloudVersion = 0;
-        let cloudTimestamp = 0;
-        
-        if (cloudResponse.data) {
-            // Format ใหม่: { data: {...}, version: 123, timestamp: 123456 }
-            cloudData = cloudResponse.data;
-            cloudVersion = cloudResponse.version || 0;
-            cloudTimestamp = cloudResponse.timestamp || 0;
+        if (!cloudData || typeof cloudData !== 'object') {
+            throw new Error('No data');
         }
         
-        if (!cloudData || Object.keys(cloudData).length === 0) {
-            throw new Error('No data in Google Drive');
+        if (cloudData.status === 'error') {
+            throw new Error(cloudData.error || 'Server error');
         }
         
-        // ✅ TIMESTAMP COMPARISON
-        const localTimestamp = S._lastModified || 0;
-        const cloudTimestampFinal = cloudTimestamp || cloudData._lastModified || 0;
+        const localTime = S._lastModified || 0;
+        const cloudTime = cloudData._lastModified || 0;
         
-        console.log(`⏰ Local: ${new Date(localTimestamp).toLocaleString()}`);
-        console.log(`⏰ Cloud: ${new Date(cloudTimestampFinal).toLocaleString()}`);
+        if (cloudTime <= localTime) {
+            updateSyncStatus('ok', '☁️ Up to date');
+            showToast('✅ ข้อมูลปัจจุบัน');
+            return;
+        }
         
-        if (cloudTimestampFinal < localTimestamp) {
-            // ✅ Cloud เก่ากว่า Local → เตือนก่อน overwrite
-            const confirmMsg = `⚠️ ข้อมูลใน Cloud เก่ากว่าข้อมูลในเครื่องของคุณ!\n\n` +
-                `📅 Local: ${new Date(localTimestamp).toLocaleString()}\n` +
-                `📅 Cloud: ${new Date(cloudTimestampFinal).toLocaleString()}\n\n` +
-                `คุณแน่ใจหรือไม่ที่จะแทนที่ข้อมูลใหม่กว่าด้วยข้อมูลเก่ากว่า?`;
-            
-            if (!confirm(confirmMsg)) {
-                statusDiv.className = 'sync-status ok';
-                statusDiv.textContent = '☁️ Cancelled (Local is newer)';
-                showToast('⏸️ ยกเลิกการโหลด (ข้อมูลในเครื่องใหม่กว่า)');
+        if (localTime > cloudTime) {
+            if (!confirm('⚠️ ข้อมูลเครื่องใหม่กว่า\nแทนที่ด้วยข้อมูลเก่า?')) {
+                updateSyncStatus('ok', '☁️ Cancelled');
                 return;
             }
         }
         
-        // ✅ SANITY CHECK - ตรวจสอบจำนวนข้อมูล
-        const sanityResult = checkDataSanity(cloudData);
-        if (!sanityResult.passed) {
-            const confirmMsg = `⚠️ ตรวจพบข้อมูลผิดปกติ!\n\n` +
-                `${sanityResult.warnings.join('\n')}\n\n` +
-                `คุณแน่ใจหรือไม่ที่จะโหลดข้อมูลนี้? (แนะนำให้ดู backup ก่อน)`;
-            
-            if (!confirm(confirmMsg)) {
-                statusDiv.className = 'sync-status err';
-                statusDiv.textContent = '⚠️ Load cancelled (sanity check)';
-                showToast('⏸️ ยกเลิกการโหลด (Sanity Check Failed)');
-                return;
-            }
-        }
-        
-        // ✅ สร้าง Backup ก่อน overwrite
-        await createRotatingBackup(S, 'pre_manual_load');
-        console.log('✅ Backup created before manual load');
-        
-        // ✅ Merge ข้อมูลจาก Cloud
-        Object.keys(cloudData).forEach(k => {
-            if (cloudData[k] !== undefined) {
-                S[k] = cloudData[k];
-            }
-        });
-        
-        // ✅ อัปเดต version และ timestamp
-        if (cloudVersion > 0) {
-            S._version = cloudVersion;
-        }
-        S._lastModified = cloudTimestampFinal;
-        
-        // ✅ Run Migration
-        S = migrateData(S);
-        
-        // ✅ Set default values
-        ensureDefaultValues();
-        
-        lastSyncedDataStr = JSON.stringify(S);
-        lastSyncTime = Date.now();
-        
-        // ✅ Save to local
-        await dbSave(S);
-        localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
-        
-        // ✅ Re-render UI
-        forceRenderAllTabs();
-        updateDimensionDisplay();
-        updateSyncStatus();
-        
-        statusDiv.className = 'sync-status ok';
-        statusDiv.textContent = '☁️ Loaded';
-        showToast('✅ ดึงข้อมูลจาก Google Drive สำเร็จ');
+        mergeCloudData(cloudData);
+        save();
+        updateSyncStatus('ok', '☁️ Loaded');
+        showToast('✅ โหลดสำเร็จ');
+        location.reload();
         
     } catch (err) {
         console.error('Load error:', err);
-        statusDiv.className = 'sync-status err';
-        statusDiv.textContent = '❌ Load failed';
-        showToast('❌ โหลดจาก Cloud ล้มเหลว');
+        updateSyncStatus('err', '❌ Load failed');
+        showToast('❌ โหลดล้มเหลว');
+    } finally {
+        isAutoLoading = false;
     }
 }
 // ==========================================
@@ -11034,11 +10977,37 @@ function compareVersions(v1, v2) {
 
 async function checkAppVersion() {
     try {
-        // ดึงข้อมูลจาก Cloud เพื่อเช็กเวอร์ชัน
-        const response = await fetch(SCRIPT_URL);
-        if (!response.ok) return;
+        // ✅ ใช้ JSONP แทน fetch
+        const cloudData = await new Promise((resolve, reject) => {
+            const callbackName = 'versionCheckCallback_' + Date.now();
+            const script = document.createElement('script');
+            
+            window[callbackName] = function(data) {
+                cleanup();
+                resolve(data);
+            };
+            
+            const timeout = setTimeout(() => {
+                cleanup();
+                reject(new Error('JSONP timeout'));
+            }, 10000);
+            
+            function cleanup() {
+                clearTimeout(timeout);
+                delete window[callbackName];
+                if (script.parentNode) script.parentNode.removeChild(script);
+            }
+            
+            const url = SCRIPT_URL + '?callback=' + callbackName + '&_=' + Date.now();
+            script.src = url;
+            script.onerror = () => {
+                cleanup();
+                reject(new Error('JSONP failed'));
+            };
+            
+            document.head.appendChild(script);
+        });
         
-        const cloudData = await response.json();
         if (!cloudData || Object.keys(cloudData).length === 0) return;
         
         const cloudVersion = cloudData.appVersion ?? '1.0.0';
@@ -11759,232 +11728,474 @@ function renderSocialHub() {
     renderDiaryLogs();
 }
 
-            // ========== Initialization ==========
-            async function initApp() {
-                loadCustomQuestDbs();
-                await load();
+            // ========== Init App ==========
+let autoLoadInterval = null;
 
-                 // ✅ เพิ่ม: เช็กเวอร์ชันแอป
-                if (navigator.onLine) {
-                    await checkAppVersion();
-                }
-
-                // ✅ เพิ่ม: ดึงข้อมูลจาก Cloud อัตโนมัติ (ถ้ามี internet)
-                if (navigator.onLine) {
-                    console.log('🌐 Online detected, syncing from Cloud...');
-                    try {
-                        await autoLoadFromCloud();
-                    } catch (err) {
-                        console.warn('⚠️ Cloud sync failed, using local data');
-        }
+async function initApp() {
+    console.log('🚀 Initializing Donlee Quest Log v' + APP_VERSION);
+    
+    // 1. Load data
+    await load();
+    
+    // 2. Run Migration
+    S = migrateData(S);
+    ensureDefaultValues();
+    
+    // 3. Render UI
+    renderDailyTab();
+    renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+    renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+    renderCalendar();
+    renderSocialChannels();
+    renderVaultItems();
+    renderDiaryLogs();
+    updateXpBar();
+    updateNodes();
+    updateTodayDisplay();
+    updateCurrencyDisplay();
+    updateHoursDisplay();
+    updateDimensionDisplay();
+    checkDecay();
+    
+    
+    // 4. Set up auto-save (เมื่อออกจากหน้า)
+    window.addEventListener('beforeunload', () => {
+        quickSync(true);
+    });
+    
+    
+    setInterval(() => {
+    if (navigator.onLine && !document.hidden) {
+      backgroundCloudRefresh();
     }
-
-                lastSyncedDataStr = JSON.stringify(S);
-
-                checkDecay(); updateTodayDisplay(); renderDailyTab();
-                renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
-                renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
-                updateDimensionDisplay();
-                updateXpBar(); updateNodes();
-                renderHourLog('art'); renderHourLog('fit'); renderCalendar();
-                renderSocialChannels(); renderVaultItems();
-                startSyncStatusUpdater();
-
-                setInterval(() => quickSync(false), 60 * 1000);
-                setInterval(() => {
-        if (navigator.onLine && typeof autoLoadFromCloud === 'function') {
-            autoLoadFromCloud().catch(err => console.warn('Polling failed:', err));
-        }
-    }, 30000);
-                window.addEventListener('pagehide', () => quickSync(true));
+  }, 3 * 60 * 1000);
+    
+    // ✅ เพิ่ม: โหลดทันทีเมื่อกลับมา online
+    window.addEventListener('online', () => {
+        console.log('🌐 Back online');
+        setTimeout(backgroundCloudRefresh, 2000);
+    });
+    
+    // ✅ เพิ่ม: โหลดเมื่อแท็บกลับมา active (ถ้าห่างจากครั้งล่าสุด > 5 นาที)
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            const timeSinceLastSync = Date.now() - lastSyncTime;
+            if (timeSinceLastSync > 5 * 60 * 1000) {
+                console.log('👁️ Tab visible after long absence, refreshing...');
+                setTimeout(backgroundCloudRefresh, 1000);
             }
+        }
+    });
+    
+    // 8. Check version
+    checkAppVersion();
+    
+    console.log('✅ App initialized');
+}
             // ========== Global Flag สำหรับป้องกัน Race Condition ==========
 let isSaving = false;
 let lastSaveTime = 0;
+let isAutoLoading = false;
+
+
+
+// ========== Auto-Load from Cloud (with retry logic) ==========
+let autoLoadRetryCount = 0;
+const MAX_AUTO_LOAD_RETRIES = 3;
+const AUTO_LOAD_RETRY_DELAYS = [5000, 15000, 30000]; // 5s, 15s, 30s
 
 async function autoLoadFromCloud() {
-    // ✅ ป้องกัน: ไม่ดึงข้อมูลระหว่างกำลัง save
-    if (typeof isSaving !== 'undefined' && isSaving) {
-        console.log('⏸️ Skipping autoLoad - save in progress');
+    // ✅ ป้องกันการเรียกซ้ำขณะกำลังทำงาน
+    if (isSyncing || isAutoLoading) {
+        console.log('⏸️ Skip auto-load: already in progress');
         return;
     }
     
-    // ✅ ป้องกัน: ไม่ดึงข้อมูลทันทีหลัง save
-    if (typeof lastSaveTime !== 'undefined' && Date.now() - lastSaveTime < 5000) {
-        console.log('⏸️ Skipping autoLoad - too soon after save');
-        return;
-    }
+    isAutoLoading = true;
     
     try {
-        // ✅ ขั้นที่ 1: เช็ก Cloud Cache ก่อน (เร็วมาก!)
-        const cache = await loadCloudCache();
-        
-        if (cache && cache.age < CLOUD_CACHE_MAX_AGE) {
-            console.log(`✅ Using Cloud Cache (age: ${Math.round(cache.age / 1000)}s)`);
-            
-            const cloudData = cache.data;
-            const cloudTime = cloudData._lastModified ?? 0;
-            const localTime = S._lastModified ?? 0;
-            
-            if (cloudTime > localTime) {
-                console.log('☁️ Cache is newer, updating from cache...');
-                
-                const currentVersion = S._version ?? 0;
-                const currentLastModified = S._lastModified ?? 0;
-                
-                Object.keys(cloudData).forEach(k => { 
-                    if (cloudData[k] !== undefined) {
-                        S[k] = cloudData[k]; 
-                    }
-                });
-                
-                S._version = currentVersion;
-                S._lastModified = Math.max(currentLastModified, cloudTime);
-                S = migrateData(S);
-                S._version = currentVersion + 1;
-                
-                await dbSave(S);
-                localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
-                
-                if (typeof forceRenderAllTabs === 'function') {
-                    try {
-                        forceRenderAllTabs();
-                    } catch (err) {
-                        console.error('[ForceRender] Error:', err);
-                    }
-                }
-                
-                if (typeof updateDimensionDisplay === 'function') {
-                    updateDimensionDisplay();
-                }
-                
-                showToast('☁️ ซิงค์จาก Cache สำเร็จ (เร็ว!)');
-            } else {
-                console.log('✅ Local data is newer than cache');
-            }
-            
-            // ✅ ขั้นที่ 2: Background refresh (ดึงข้อมูลใหม่จาก Cloud แบบไม่บล็อก UI)
-            backgroundCloudRefresh();
+        // ✅ เช็กว่าออนไลน์ไหมก่อน
+        if (!navigator.onLine) {
+            console.log('📡 Offline, skip auto-load');
             return;
         }
         
-        // ✅ ขั้นที่ 3: ไม่มี cache หรือ cache เก่า → fetch จาก Cloud
-        console.log('🌐 No valid cache, fetching from Cloud...');
-        const response = await fetch(SCRIPT_URL);
-        if (!response.ok) return;
-        
-        const cloudData = await response.json();
-        if (!cloudData || Object.keys(cloudData).length === 0) return;
-        
-        // ✅ บันทึกลง cache ทันที
-        await saveCloudCache(cloudData);
-        
-        const cloudTime = cloudData._lastModified ?? 0;
-        const localTime = S._lastModified ?? 0;
-        
-        if (cloudTime > localTime) {
-            console.log('☁️ Cloud data is newer, updating...');
-            
-            const currentVersion = S._version ?? 0;
-            const currentLastModified = S._lastModified ?? 0;
-            
-            Object.keys(cloudData).forEach(k => { 
-                if (cloudData[k] !== undefined) {
-                    S[k] = cloudData[k]; 
-                }
-            });
-            
-            S._version = currentVersion;
-            S._lastModified = Math.max(currentLastModified, cloudTime);
-            S = migrateData(S);
-            S._version = currentVersion + 1;
-            
-            await dbSave(S);
-            localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
-            
-            if (typeof forceRenderAllTabs === 'function') {
-                try {
-                    forceRenderAllTabs();
-                } catch (err) {
-                    console.error('[ForceRender] Error:', err);
-                }
-            }
-            
-            if (typeof updateDimensionDisplay === 'function') {
-                updateDimensionDisplay();
-            }
-            
-            showToast('☁️ ซิงค์จาก Cloud สำเร็จ');
-        } else {
-            console.log('✅ Local data is newer or equal');
+        // ✅ เช็ก cache ก่อน (ไม่ต้องโหลดถี่เกินไป)
+        const cache = await loadCloudCache();
+        if (cache && cache.age < CLOUD_CACHE_MAX_AGE) {
+            console.log('✅ Using fresh cache, skip auto-load');
+            return;
         }
+        
+        // ✅ ใช้ JSONP แทน fetch (รองรับ CORS ดีกว่า)
+        const cloudData = await loadFromCloudWithJSONP();
+        
+        if (!cloudData || Object.keys(cloudData).length === 0) {
+            console.log('ℹ️ No data in cloud');
+            return;
+        }
+        
+        // ✅ เปรียบเทียบเวอร์ชัน (เหมือน manualLoad)
+        const localTimestamp = S._lastModified || 0;
+        const cloudTimestamp = cloudData._lastModified || 0;
+        
+        if (cloudTimestamp <= localTimestamp) {
+            console.log('✅ Local data is up to date');
+            return;
+        }
+        
+        console.log(`🔄 Cloud data is newer by ${((cloudTimestamp - localTimestamp)/1000).toFixed(0)}s`);
+        
+        // ✅ Merge ข้อมูล (ไม่ overwrite ทั้งหมด)
+        await mergeCloudData(cloudData);
+        
+        // ✅ รีเซ็ต retry count
+        autoLoadRetryCount = 0;
+        
     } catch (err) {
-        console.warn('[AutoLoad] Failed:', err);
+        console.error('Auto-load error:', err);
+        
+        // ✅ Exponential backoff retry
+        if (autoLoadRetryCount < MAX_AUTO_LOAD_RETRIES) {
+            const delay = AUTO_LOAD_RETRY_DELAYS[autoLoadRetryCount] || 60000;
+            autoLoadRetryCount++;
+            console.log(`⏳ Retry ${autoLoadRetryCount}/${MAX_AUTO_LOAD_RETRIES} in ${delay/1000}s...`);
+            setTimeout(autoLoadFromCloud, delay);
+        } else {
+            console.warn('❌ Max auto-load retries reached, stopping until next interval');
+            autoLoadRetryCount = 0;
+        }
+    } finally {
+        isAutoLoading = false;
     }
 }
+// ✅ ฟังก์ชันใหม่: โหลดด้วย JSONP (รองรับ CORS)
+function loadFromCloudWithJSONP() {
+    return new Promise((resolve, reject) => {
+        const callbackName = 'autoLoadCallback_' + Date.now();
+        const script = document.createElement('script');
+        
+        // Timeout handler
+        const timeout = setTimeout(() => {
+            cleanup();
+            reject(new Error('JSONP timeout'));
+        }, 10000);
+        
+        function cleanup() {
+            clearTimeout(timeout);
+            delete window[callbackName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+        }
+        
+        // Callback function
+        window[callbackName] = function(data) {
+            cleanup();
+            resolve(data);
+        };
+        
+        // Error handler
+        script.onerror = () => {
+            cleanup();
+            reject(new Error('JSONP load error'));
+        };
+        
+        // Build URL with cache buster
+        const url = SCRIPT_URL + '?callback=' + callbackName + '&_=' + Date.now();
+        script.src = url;
+        
+        document.head.appendChild(script);
+    });
+}
 
-// ✅ ฟังก์ชัน Background Refresh (ดึงข้อมูลใหม่แบบไม่บล็อก UI)
-function backgroundCloudRefresh() {
-    console.log('🔄 Background refresh started...');
+// ✅ ฟังก์ชันใหม่: Merge ข้อมูลจาก Cloud (ไม่ overwrite ทั้งหมด)
+// ========== Helper: Merge ข้อมูลจาก Cloud ==========
+function mergeCloudData(cloudData) {
+  const fields = [
+    'history', 'artLogs', 'fitLogs', 'diaryLogs', 'incomeLogs',
+    'stashRedemptions', 'customRewards', 'perfectDays',
+    'weeklyCompletion', 'trialCompletion', 'atlasProgress',
+    'artHours', 'fitHours', 'artDays', 'totalXp', 'xp', 'lvl',
+    'currency', 'skillPoints', 'ascendancyPoints', 'streakDays',
+    'dailyQuests', 'weeklyQuests', 'monthlyQuests'
+  ];
+  
+  fields.forEach(field => {
+    if (cloudData[field] === undefined) return;
     
-    fetch(SCRIPT_URL)
-        .then(response => response.json())
-        .then(async cloudData => {
-            if (!cloudData || Object.keys(cloudData).length === 0) return;
-            
-            // ✅ อัปเดต cache
-            await saveCloudCache(cloudData);
-            
-            const cloudTime = cloudData._lastModified ?? 0;
-            const localTime = S._lastModified ?? 0;
-            
-            if (cloudTime > localTime) {
-                console.log('☁️ Background: Cloud data is newer, updating...');
-                
-                const currentVersion = S._version ?? 0;
-                const currentLastModified = S._lastModified ?? 0;
-                
-                Object.keys(cloudData).forEach(k => { 
-                    if (cloudData[k] !== undefined) {
-                        S[k] = cloudData[k]; 
-                    }
-                });
-                
-                S._version = currentVersion;
-                S._lastModified = Math.max(currentLastModified, cloudTime);
-                S = migrateData(S);
-                S._version = currentVersion + 1;
-                
-                await dbSave(S);
-                localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
-                
-                if (typeof forceRenderAllTabs === 'function') {
-                    try {
-                        forceRenderAllTabs();
-                    } catch (err) {
-                        console.error('[ForceRender] Error:', err);
-                        // ✅ Fallback: อัปเดตเฉพาะส่วนที่จำเป็น
-                        try {
-                            if (typeof updateDimensionDisplay === 'function') updateDimensionDisplay();
-                            if (typeof renderDailyTab === 'function') renderDailyTab();
-                            if (typeof updateXpBar === 'function') updateXpBar();
-                        } catch (fallbackErr) {
-                            console.error('[BackgroundRefresh] Fallback render also failed:', fallbackErr);
-                        }
-                    }
+    if (field === 'history' && typeof cloudData[field] === 'object') {
+      S[field] = S[field] || {};
+      Object.keys(cloudData[field]).forEach(key => {
+        const cloudEntry = cloudData[field][key];
+        const localEntry = S[field][key];
+        if (!localEntry || (cloudEntry._lastModified > (localEntry._lastModified || 0))) {
+          S[field][key] = cloudEntry;
+        }
+      });
+    } else {
+      S[field] = cloudData[field];
+    }
+  });
+  
+  S._lastModified = Date.now();
+}
+
+// ========== Background Cloud Refresh (Fixed) ==========
+let bgRefreshRetryCount = 0;
+const BG_REFRESH_MAX_RETRIES = 3;
+
+async function backgroundCloudRefresh() {
+    if (isSyncing || isAutoLoading || !navigator.onLine) {
+        console.log('[AutoSync] Skip: busy or offline');
+        return;
+    }
+    
+    isAutoLoading = true;
+    
+    try {
+        console.log('[AutoSync] Loading via JSONP...');
+        
+        // ✅ ใช้ JSONP อย่างเดียว (ไม่ต้องอ่าน iframe)
+        const cloudData = await loadWithJsonp(SCRIPT_URL);
+        
+        if (!cloudData || typeof cloudData !== 'object') {
+            console.log('[AutoSync] No valid data');
+            return;
+        }
+        
+        // ✅ ตรวจสอบว่าเป็น error response หรือไม่
+        if (cloudData.status === 'error') {
+            console.error('[AutoSync] Server error:', cloudData.error);
+            return;
+        }
+        
+        // ✅ ตรวจสอบเวลา
+        const localTime = S._lastModified || 0;
+        const cloudTime = cloudData._lastModified || 0;
+        
+        if (cloudTime <= localTime) {
+            console.log('[AutoSync] Local is up to date');
+            return;
+        }
+        
+        console.log(`[AutoSync] Cloud newer by ${((cloudTime - localTime)/1000).toFixed(0)}s`);
+        
+        // ✅ Merge ข้อมูล
+        mergeCloudData(cloudData);
+        save();
+        
+        // ✅ รีเฟรช UI
+        refreshActiveTab();
+        
+        bgRefreshRetryCount = 0;
+        
+    } catch (err) {
+        console.error('[AutoSync] Failed:', err.message);
+        
+        if (bgRefreshRetryCount < BG_REFRESH_MAX_RETRIES) {
+            const delay = Math.pow(2, bgRefreshRetryCount) * 10000; // 10s, 20s, 40s
+            bgRefreshRetryCount++;
+            console.log(`[AutoSync] Retry ${bgRefreshRetryCount}/${BG_REFRESH_MAX_RETRIES} in ${delay/1000}s`);
+            setTimeout(backgroundCloudRefresh, delay);
+        } else {
+            console.warn('[AutoSync] Max retries reached');
+            bgRefreshRetryCount = 0;
+        }
+    } finally {
+        isAutoLoading = false;
+    }
+}
+// ========== Helper: Refresh UI ==========
+function refreshActiveTab() {
+    const activeTab = document.querySelector('.tab-content.active');
+    if (!activeTab) return;
+    
+    const tabName = activeTab.id.replace('-tab', '');
+    
+    if (tabName === 'quests') {
+        renderDailyTab();
+        renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+        renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+        renderCalendar();
+    } else if (tabName === 'career') {
+        renderAtlas();
+    } else if (tabName === 'stash') {
+        renderStashShop();
+    }
+    
+    updateXpBar();
+    updateCurrencyDisplay();
+    updateHoursDisplay();
+}
+// ========== Helper: Form POST ผ่าน iframe ==========
+function postWithIframe(url, data) {
+  return new Promise((resolve, reject) => {
+    const iframeId = 'post-iframe-' + Date.now();
+    const iframe = document.createElement('iframe');
+    iframe.name = iframeId;
+    iframe.style.display = 'none';
+    
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+    form.target = iframeId;
+    form.style.display = 'none';
+    
+    // เพิ่ม input fields
+    Object.keys(data).forEach(key => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = data[key];
+      form.appendChild(input);
+    });
+    
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error('POST timeout'));
+    }, 15000);
+    
+    function cleanup() {
+      clearTimeout(timeout);
+      if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+      if (form.parentNode) form.parentNode.removeChild(form);
+    }
+    
+    iframe.onload = () => {
+      cleanup();
+      resolve();
+    };
+    
+    iframe.onerror = () => {
+      cleanup();
+      reject(new Error('POST failed'));
+    };
+    
+    document.body.appendChild(iframe);
+    document.body.appendChild(form);
+    form.submit();
+  });
+}
+// ========== Helper: JSONP GET ==========
+function loadWithJsonp(url) {
+    return new Promise((resolve, reject) => {
+        const callbackName = 'dol_cb_' + Date.now();
+        const script = document.createElement('script');
+        
+        // ✅ ตั้งค่า callback เป็น global function
+        window[callbackName] = function(response) {
+            console.log('[JSONP] Response received');
+            cleanup();
+            resolve(response);
+        };
+        
+        // Timeout handler
+        const timeout = setTimeout(() => {
+            cleanup();
+            reject(new Error('JSONP timeout (15s)'));
+        }, 15000);
+        
+        function cleanup() {
+            clearTimeout(timeout);
+            delete window[callbackName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+        }
+        
+        // ✅ สร้าง URL ด้วย callback parameter
+        const separator = url.includes('?') ? '&' : '?';
+        script.src = url + separator + 'callback=' + callbackName + '&_=' + Date.now();
+        
+        script.onerror = () => {
+            cleanup();
+            reject(new Error('JSONP script load failed'));
+        };
+        
+        document.head.appendChild(script);
+        console.log('[JSONP] Script injected:', script.src);
+    });
+}
+
+// ✅ ฟังก์ชันใหม่: ประมวลผลข้อมูลจาก Cloud
+async function processCloudData(data) {
+    const cloudTime = data._lastModified || 0;
+    const localTime = S._lastModified || 0;
+    
+    if (cloudTime <= localTime) {
+        console.log('[BackgroundRefresh] Local data is up to date');
+        return;
+    }
+    
+    console.log(`[BackgroundRefresh] Newer data found by ${((cloudTime - localTime)/1000).toFixed(0)}s, merging...`);
+    
+    // ✅ Merge แบบ smart (ไม่ overwrite ทั้งหมด)
+    const mergeFields = [
+        'history', 'artLogs', 'fitLogs', 'diaryLogs', 'incomeLogs',
+        'stashRedemptions', 'customRewards', 'perfectDays',
+        'weeklyCompletion', 'trialCompletion', 'atlasProgress',
+        'artHours', 'fitHours', 'artDays', 'totalXp', 'xp', 'lvl',
+        'currency', 'skillPoints', 'ascendancyPoints', 'streakDays'
+    ];
+    
+    mergeFields.forEach(field => {
+        if (data[field] === undefined) return;
+        
+        if (field === 'history' && typeof data[field] === 'object') {
+            // Merge history แบบ per-key
+            S[field] = S[field] || {};
+            Object.keys(data[field]).forEach(key => {
+                const cloudEntry = data[field][key];
+                const localEntry = S[field][key];
+                if (!localEntry || (cloudEntry._lastModified > localEntry._lastModified)) {
+                    S[field][key] = cloudEntry;
                 }
-                if (typeof updateDimensionDisplay === 'function') {
-                    updateDimensionDisplay();
-                }
-                
-                showToast('☁️ อัปเดตข้อมูลล่าสุดจาก Cloud');
-            } else {
-                console.log('✅ Background: Local data is up to date');
-            }
-        })
-        .catch(err => {
-            console.warn('[BackgroundRefresh] Failed:', err);
-        });
+            });
+        } else if (Array.isArray(data[field])) {
+            // สำหรับ logs: รวมเข้าด้วยกันแล้ว sort ตาม id/timestamp
+            const combined = [...(S[field] || []), ...data[field]];
+            // เอาอันที่ id ไม่ซ้ำ (ถ้ามี)
+            const seen = new Set();
+            S[field] = combined.filter(item => {
+                const key = item.id || item.timestamp || JSON.stringify(item);
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+        } else {
+            S[field] = data[field];
+        }
+    });
+    
+    // อัปเดต metadata
+    S._lastModified = Date.now();
+    lastSyncedDataStr = JSON.stringify(S);
+    lastSyncTime = Date.now();
+    
+    // บันทึก
+    await dbSave(S);
+    localStorage.setItem('dol_quest_log_v3', JSON.stringify(S));
+    
+    // อัปเดต UI
+    updateSyncStatus();
+    
+    // รีเฟรชเฉพาะแท็บที่ active
+    const activeTab = document.querySelector('.tab-content.active');
+    if (activeTab) {
+        const tabName = activeTab.id.replace('-tab', '');
+        if (tabName === 'quests') {
+            renderDailyTab();
+            renderQuests(WEEKLY_QUESTS, null, 'weekly-quests');
+            renderQuests(MONTHLY_QUESTS, null, 'monthly-quests');
+            renderCalendar();
+        } else if (tabName === 'career') {
+            renderAtlas();
+        } else if (tabName === 'stash') {
+            renderStashShop();
+        }
+        updateXpBar();
+        updateCurrencyDisplay();
+        updateHoursDisplay();
+    }
+    
+    console.log('[BackgroundRefresh] Success: Data merged and UI updated');
 }
 // ==========================================
 // BACKUP & SYNC CONFIG
@@ -12184,32 +12395,23 @@ function checkDataSanity(data) {
 // SYNC STATUS DISPLAY
 // ==========================================
 
-function updateSyncStatus() {
-    const statusEl = document.getElementById('sync-status');
-    if (!statusEl) return;
+// ========== Helper: Update Sync Status ==========
+function updateSyncStatus(state, msg) {
+    const el = document.getElementById('sync-status');
+    if (!el) return;
     
-    // ✅ ใช้ lastSyncTime แทน "Ready"
-    if (lastSyncTime) {
-        const now = Date.now();
-        const diff = now - lastSyncTime;
-        let timeAgo = '';
-        
-        if (diff < 60000) {
-            timeAgo = `${Math.floor(diff / 1000)}s`;
-        } else if (diff < 3600000) {
-            timeAgo = `${Math.floor(diff / 60000)}m`;
-        } else {
-            timeAgo = `${Math.floor(diff / 3600000)}h`;
-        }
-        
-        const date = new Date(lastSyncTime);
-        const timeStr = date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-        
-        statusEl.textContent = `☁️ ${timeStr} (${timeAgo} ago)`;
-        statusEl.className = 'sync-status ok';
+    if (state && msg) {
+        el.className = 'sync-status ' + state;
+        el.textContent = msg;
     } else {
-        statusEl.textContent = '☁️ Ready';
-        statusEl.className = 'sync-status ok';
+        const timeSince = Date.now() - lastSyncTime;
+        if (timeSince < 60000) {
+            el.className = 'sync-status ok';
+            el.textContent = '☁️ Synced';
+        } else {
+            el.className = 'sync-status ok';
+            el.textContent = '☁️ Ready';
+        }
     }
 }
 
